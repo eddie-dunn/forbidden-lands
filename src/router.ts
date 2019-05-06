@@ -1,6 +1,7 @@
-import Vue from "vue"
-import Router from "vue-router"
+import CharacterCreatorView from "./views/CharacterCreatorView.vue"
 import Home from "./views/Home.vue"
+import Router from "vue-router"
+import Vue from "vue"
 
 Vue.use(Router)
 
@@ -9,9 +10,15 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: "/",
+      path: "/home",
       name: "home",
       component: Home,
+    },
+    {
+      path: "/",
+      alias: "/character-list",
+      name: "character_list",
+      component: () => import("./views/CharacterListView.vue"),
     },
     {
       path: "/about",
@@ -21,6 +28,14 @@ export default new Router({
       // which is lazy-loaded when the route is visited.
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/About.vue"),
+    },
+    {
+      path: "/character-creator/:id?",
+      props: true,
+      // name: "character_creator",
+      /* webpackChunkName: "character_creator" */
+      // component: () => import("./views/CharacterCreatorView.vue"),
+      component: CharacterCreatorView,
     },
   ],
 })
