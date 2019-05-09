@@ -3,7 +3,10 @@
 ## Features
 
 - Character Creator
-  - Will help you create a new character
+  - Will help you create a new character in accordance with the rules in the
+    Player's Handbook
+  - .
+- .
 
 Planned features
 

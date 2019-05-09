@@ -1,10 +1,11 @@
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator"
+import { Component, Vue, Watch } from "vue-property-decorator"
 import Card from "@/components/Card.vue"
 import CharacterCard from "@/components/CharacterCard.vue"
 import {
   removeCharacter,
-  loadCharacterListFromLocalStorage,
+  loadAllCharactersFromLocalStorage,
+  Store,
 } from "@/characterStorage"
 
 @Component({
@@ -12,36 +13,28 @@ import {
     Card,
     CharacterCard,
   },
-  computed: {
-    characterList2() {
-      const list = loadCharacterListFromLocalStorage()
-      // console.log("list", list)
-      return list
-    },
-  },
 })
-export default class Home extends Vue {
-  remove = (character: any) => {
-    removeCharacter(character.metadata.id)
-    this.characterList = loadCharacterListFromLocalStorage()
-    // add error handling
-  }
+export default class CharacterListView extends Vue {
+  idKey = 1
+  store: Store = new Store()
 
-  characterList = loadCharacterListFromLocalStorage()
+  removeCard(characterId: any) {
+    this.store.removeCharacter(characterId, true)
+    this.idKey = this.store.length()
+  }
 }
 </script>
 
 <template>
   <div class="character-list-container">
     <h1>Character List</h1>
-    <div v-if="characterList.length >= 1" class="character-list">
+    <div :key="idKey" v-if="true" class="character-list">
       <div
-        v-for="character in characterList"
-        v-bind:key="'key_' + character.name"
+        v-for="character in store.storage"
+        v-bind:key="'key_' + character.metadata.id"
         class="character-card-container"
       >
-        <CharacterCard :charData="character" />
-        <button @click.self="remove(character)">Remove</button>
+        <CharacterCard :charData="character" @remove-card="removeCard" />
       </div>
       <div>
         <CharacterCard />
