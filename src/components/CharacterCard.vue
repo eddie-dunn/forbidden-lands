@@ -21,14 +21,24 @@ export default Vue.extend({
       sign: "",
     }
   },
+  computed: {
+    characterId(): string {
+      if (!this.charData) return ""
+      return this.charData.metadata.id
+    },
+    cardLink(): string {
+      return `/character-creator/${this.characterId}`
+    },
+  },
   methods: {
     cardClicked() {
-      if (!this.charData) {
-        this.$router.push(`/character-creator/`)
-        return
-      }
-      this.$router.push(`/character-creator/${this.charData.name}`)
+      this.$router.push(`/character-creator/${this.characterId}`)
       window.scrollTo(0, 0)
+    },
+    remove() {
+      if (this.charData) {
+        this.$emit("remove-card", this.charData.metadata.id)
+      }
     },
   },
 })
@@ -40,14 +50,18 @@ export default Vue.extend({
       <h3>Create new character</h3>
     </div>
   </div>
-  <div v-else class="stat-card row-full" @click="cardClicked()">
-    <img class="top" :src="charData.portrait" />
-    <!-- <div class="portrait top"></div> -->
+  <div v-else class="stat-card row-full">
+    <a>
+      <img class="top" :src="charData.portrait" @click.self="cardClicked()" />
+    </a>
     <div class="header">
       <div class="card-contents">
         <h3>{{ charData.name }}</h3>
       </div>
     </div>
+    <button @click.self="remove()">
+      Remove
+    </button>
     <!-- <div class="body">
       {{ charData.kin }}
       {{ charData.class }}
@@ -56,9 +70,7 @@ export default Vue.extend({
   </div>
 </template>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
-// @click="$router.push(`/character-creator/${charData.name}`)"
 @import "~Style/colors.less";
 
 h1,
@@ -84,28 +96,10 @@ h3 {
   align-items: center;
   justify-content: center;
   height: 400px;
+  transition: 0.2s ease;
   &:hover {
     background: ~"@{pastel-green}99";
   }
-}
-.portrait {
-  img > {
-    object-fit: contain;
-    min-width: 200px;
-    max-height: 400px;
-    // height: 400px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  // width: 400px;
-  // width: auto;
-  max-width: 400px;
-  height: 400px;
-
-  // display: inline-block;
-  overflow: hidden;
-  cursor: pointer;
 }
 
 .top {
@@ -113,6 +107,10 @@ h3 {
   object-position: top;
   max-height: 400px;
   cursor: pointer;
+  transition: 0.2s ease;
+  &:hover {
+    opacity: 0.3;
+  }
 }
 
 .header {
