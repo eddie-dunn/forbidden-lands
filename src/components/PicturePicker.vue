@@ -10,6 +10,7 @@ function importAll(r: any) {
 const IMAGES = importAll(
   require.context("../assets/portraits", false, /\.(png|jpe?g|svg)$/)
 )
+const PLACEHOLDER = require("@/assets/300x500-placeholder.png")
 
 const AppProps = Vue.extend({
   props: {
@@ -142,18 +143,15 @@ export default class PicturePicker extends AppProps {
       <div slot="footer"></div>
     </Modal>
 
-    <div @click="showPicker()">
+    <div>
       <img
-        v-if="selected_portrait"
+        @click="showPicker()"
+        v-if="selected_portrait || true"
         class="portrait chosen-portrait"
         :src="selected_portrait || getPlaceHolder()"
         alt="Character Portrait"
       />
-      <img
-        v-else
-        class="chosen-portrait placeholder"
-        src="https://via.placeholder.com/300x500.png?text=Click+to+select+portrait"
-      />
+      <img v-else class="chosen-portrait portrait placeholder" src="" />
     </div>
   </div>
 </template>
@@ -261,7 +259,10 @@ export default class PicturePicker extends AppProps {
 .placeholder {
   height: 500px;
   width: 300px;
-  background: #aaaaaa;
+  // background: #fafafafa;
+  &::before {
+    content: "foo";
+  }
 }
 
 // Tooltip from http://www.menucool.com/tooltip/css-tooltip

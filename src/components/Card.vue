@@ -1,5 +1,10 @@
 <script lang="ts">
 import Vue from "vue"
+
+// TODO change to something else later, boolean probably
+const VALID = "✓"
+const INVALID = "✖"
+
 export default Vue.extend({
   name: "CharacterCreatorCard",
   props: {
@@ -10,22 +15,31 @@ export default Vue.extend({
   },
   created() {
     this.$on("card-sign", (message: any) => {
-      this.sign = message
+      if (message === INVALID) {
+        this.sign = INVALID
+        this.valid = false
+      } else {
+        this.sign = VALID
+        this.valid = true
+      }
     })
   },
   data() {
     return {
       sign: "",
+      valid: false,
     }
   },
 })
 </script>
 
 <template>
-  <div class="stat-card row-full">
+  <div :class="['stat-card', valid ? '' : 'stat-card-invalid', 'row-full']">
     <div class="header">
-      <h3>{{ title }}</h3>
-      <span>{{ sign }}</span>
+      <h3 v-if="title">{{ title }}</h3>
+      <span :class="['card-sign', valid ? '' : 'card-sign-invalid']">
+        {{ sign }}
+      </span>
     </div>
     <p v-if="subtitle" class="subtitle">{{ subtitle }}</p>
     <div class="card-contents">
@@ -37,6 +51,8 @@ export default Vue.extend({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
+@import "~Style/colors.less";
+
 h1,
 h2,
 h3 {
@@ -45,6 +61,18 @@ h3 {
   text-align: center;
   &::first-letter {
     text-transform: uppercase;
+  }
+}
+
+.card-sign {
+  margin-left: auto;
+  // margin-bottom: -3rem;
+  font-size: 2rem;
+  color: @pastel-green;
+
+  &-invalid {
+    color: @pastel-red;
+    // background-color: black;
   }
 }
 
@@ -82,6 +110,9 @@ h3 {
   // border: solid gray 2px;
   // border: solid rgba(66, 185, 131, 0.3) 2px;
   border: solid #42b98344 2px;
+  // &-invalid {
+  //   border: solid ~"@{pastel-red}44" 2px;
+  // }
   border-radius: 1rem;
   padding: 1rem;
   // align-content: center;

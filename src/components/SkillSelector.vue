@@ -26,6 +26,7 @@ function calcSkillPoints(age) {
 
 export default Vue.extend({
   props: {
+    // TODO: Send in characterData object instead
     age: {
       type: String,
       required: true,
@@ -34,11 +35,8 @@ export default Vue.extend({
       },
     },
     profession: {
-      type: String,
+      // type: String,
       required: true,
-      validator: function(value) {
-        return Object.values(CLASS).indexOf(value) !== -1
-      },
     },
     lang: {
       type: String,
@@ -56,25 +54,25 @@ export default Vue.extend({
       return calcSkillPoints(this.age)
     },
     valid() {
-      return this.validate()
+      return this.skillPoints - this.pointsSpent() === 0
     },
   },
   watch: {
     valid: {
       immediate: true,
       handler() {
-        const valid = this.validate() ? "✓" : "✖"
+        const valid = this.valid ? "✓" : "✖"
         this.$parent.$emit("card-sign", valid)
       },
     },
   },
   methods: {
     pointsSpent() {
-      const reducer = (accumulator, currentValue) =>
-        Number(accumulator) + currentValue
       return Object.entries(this.skills)
         .map(item => item[1].rank)
-        .reduce(reducer)
+        .reduce(
+          (accumulator, currentValue) => Number(accumulator) + currentValue
+        )
     },
     allPointsSpent() {
       return this.skillPoints - this.pointsSpent() <= 0
@@ -84,9 +82,6 @@ export default Vue.extend({
     },
     isClassSkill(skillId, profession) {
       return isClassSkill(skillId, profession)
-    },
-    validate() {
-      return this.skillPoints - this.pointsSpent() === 0
     },
   },
 })
@@ -109,6 +104,7 @@ export default Vue.extend({
           min="0"
           :max="getSkillMaxRank(skill.id)"
           v-model.number="skills[skill.id].rank"
+          :ref="skill.id"
         />
         <label
           :for="skill.id"

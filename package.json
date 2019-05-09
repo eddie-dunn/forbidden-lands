@@ -13,6 +13,8 @@
   "dependencies": {
     "core-js": "^2.6.5",
     "register-service-worker": "^1.6.2",
+    "ts-interface-checker": "^0.1.7",
+    "uuid": "^3.3.2",
     "vue": "^2.6.10",
     "vue-class-component": "^7.0.2",
     "vue-i18n": "^8.0.0",
@@ -23,6 +25,7 @@
   "devDependencies": {
     "@kazupon/vue-i18n-loader": "^0.3.0",
     "@types/jest": "^23.1.4",
+    "@types/uuid": "^3.4.4",
     "@types/webpack": "^4.4.0",
     "@vue/cli-plugin-babel": "^3.6.0",
     "@vue/cli-plugin-e2e-cypress": "^3.6.0",
@@ -42,6 +45,7 @@
     "less-loader": "^4.1.0",
     "lint-staged": "^8.1.5",
     "prettier-eslint": "^8.8.2",
+    "ts-interface-builder": "^0.1.8",
     "ts-jest": "^23.0.0",
     "typescript": "^3.4.3",
     "vue-cli-plugin-i18n": "^0.6.0",

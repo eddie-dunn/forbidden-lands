@@ -6,7 +6,8 @@
 import { AGE, KIN } from "@/keys.ts"
 import { Age, KinName } from "@/types"
 
-export function getAttributePoints(age: Age): number {
+export function getAttributePoints(age: Age | null): number {
+  if (!age) return -1
   return { [AGE.YOUNG]: 15, [AGE.ADULT]: 14, [AGE.OLD]: 13 }[age]
 }
 
@@ -36,16 +37,26 @@ export function getAgeRange(kin: KinName | null): string {
   return ""
 }
 
+export function getReputation(ageType: Age) {
+  if (ageType === "old") return 2
+  if (ageType === "adult") return 1
+  return 0
+}
+
 export function getAgeType(age: number | null, kin: KinName | null): Age {
   if (!age || !kin) return AGE.YOUNG
+
   if (kin === KIN.ELF) return AGE.ADULT
   if (age < table[kin][1]) return AGE.YOUNG
   if (age >= table[kin][2]) return AGE.OLD
   return AGE.ADULT
 }
 
-export function getNumberOfStartingTalents(age: number, kin: KinName): number {
+export function getStartingTalents(
+  age: number | null,
+  kin: KinName | null
+): number {
   const ageType = getAgeType(age, kin)
   const talentMap = { [AGE.YOUNG]: 1, [AGE.ADULT]: 2, [AGE.OLD]: 3 }
-  return talentMap[ageType]
+  return talentMap[ageType] || -1
 }

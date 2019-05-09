@@ -3,10 +3,11 @@
 import { AGE, CLASS, KIN } from "@/keys.ts"
 import { GENERAL_TALENTS, getClassTalents, getKinTalent } from "@/talents.ts"
 import { capitalize } from "@/util"
-import { getAgeRange } from "@/age"
+import { getAgeType, getAgeRange, getReputation } from "@/age"
 import { CLASS as PROFESSION } from "@/classes"
 import Vue from "vue"
 import { CharacterData } from "@/characterData"
+import VueI18n from "vue-i18n"
 
 export default Vue.extend({
   props: {
@@ -59,6 +60,12 @@ export default Vue.extend({
         !!this.mdata.class
       )
     },
+    ageType(): VueI18n.TranslateResult {
+      return this.$t(getAgeType(this.mdata.age, this.mdata.kin))
+    },
+    reputation(): number {
+      return getReputation(getAgeType(this.mdata.age, this.mdata.kin))
+    },
   },
   watch: {
     // mdata: {
@@ -106,7 +113,6 @@ export default Vue.extend({
     <div class="cell">
       <label for="sex">{{ capitalize($t("sex")) }}</label>
       <span id="sex">
-        <!-- <input type="radio" v-model="selected_sex" v-bind:value="selected_sex"> -->
         <input
           type="radio"
           id="male"
@@ -126,7 +132,7 @@ export default Vue.extend({
       </span>
     </div>
 
-    <div class="cell">
+    <div class="cell full-width">
       <label for="age">{{ $t("age") }}</label>
       <input
         id="age"
@@ -136,6 +142,9 @@ export default Vue.extend({
         class="smallnumber"
         min="1"
       />
+      <span v-if="this.mdata.age" class="capitalize"
+        >{{ this.ageType }} Reputation: {{ this.reputation }}</span
+      >
     </div>
     <div class="cell">
       <label for="character-kin">{{ $t("kin") }}</label>
@@ -186,9 +195,19 @@ export default Vue.extend({
 </template>
 
 <style scoped lang="less">
-label {
+label,
+.capitalize {
   text-transform: capitalize;
 }
+
+.capitalize {
+  margin: 0 1rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
 .contentgroup {
   display: flex;
   flex-wrap: wrap;

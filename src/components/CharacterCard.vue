@@ -5,7 +5,11 @@ import { CharacterData } from "@/characterData"
 export default Vue.extend({
   name: "CharacterCreatorCard",
   props: {
-    charData: Object as () => CharacterData,
+    charData: Object as () => CharacterData | null,
+    empty: {
+      type: Boolean,
+      default: false,
+    },
   },
   created() {
     this.$on("card-sign", (message: any) => {
@@ -19,6 +23,10 @@ export default Vue.extend({
   },
   methods: {
     cardClicked() {
+      if (!this.charData) {
+        this.$router.push(`/character-creator/`)
+        return
+      }
       this.$router.push(`/character-creator/${this.charData.name}`)
       window.scrollTo(0, 0)
     },
@@ -27,19 +35,23 @@ export default Vue.extend({
 </script>
 
 <template>
-  <div class="stat-card row-full">
-    <img class="top" :src="charData.portrait" @click.self="cardClicked()" />
+  <div v-if="!this.charData" class="stat-card row-full">
+    <div class="placeholder" @click="cardClicked()">
+      <h3>Create new character</h3>
+    </div>
+  </div>
+  <div v-else class="stat-card row-full" @click="cardClicked()">
+    <img class="top" :src="charData.portrait" />
     <!-- <div class="portrait top"></div> -->
     <div class="header">
       <div class="card-contents">
         <h3>{{ charData.name }}</h3>
       </div>
     </div>
-    <div class="body">
-      <!-- <div class="portrait"></div> -->
+    <!-- <div class="body">
       {{ charData.kin }}
       {{ charData.class }}
-    </div>
+    </div> -->
     <div class="card-footer"></div>
   </div>
 </template>
@@ -47,6 +59,8 @@ export default Vue.extend({
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
 // @click="$router.push(`/character-creator/${charData.name}`)"
+@import "~Style/colors.less";
+
 h1,
 h2,
 h3 {
@@ -58,6 +72,22 @@ h3 {
   }
 }
 
+.placeholder {
+  cursor: pointer;
+  // background: #fafafa;
+  background: @pastel-green;
+  color: white;
+  border-radius: 0 0 1rem 1rem;
+  // max-height: 90%;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  &:hover {
+    background: ~"@{pastel-green}99";
+  }
+}
 .portrait {
   img > {
     object-fit: contain;
@@ -82,6 +112,7 @@ h3 {
   object-fit: cover;
   object-position: top;
   max-height: 400px;
+  cursor: pointer;
 }
 
 .header {
@@ -126,6 +157,7 @@ h3 {
   // justify-items: baseline;
   // align-items: baseline;
   // box-shadow: 3px 3px 5px 6px #cccccc80;
+  height: 100%;
 }
 
 // .row-full {

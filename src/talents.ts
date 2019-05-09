@@ -1,24 +1,45 @@
 import { CLASS, KIN, TALENT } from "@/keys.ts"
-import { KinName, Profession, TalentAll, TalentProfession } from "@/types"
+import {
+  KinName,
+  Profession,
+  TalentAll,
+  TalentGeneral,
+  TalentKin,
+  TalentProfession,
+} from "@/types"
 
 export interface Talent {
   id: string
   name?: string
-  description: string
+  description_id?: string
+}
+
+export interface TalentObj {
+  id: string
+  rank: number
+}
+export function getTalentObjects(talentList: TalentAll[]): TalentObj[] {
+  const talentObj = talentList.map((talentName: TalentAll) => {
+    return {
+      id: talentName,
+      rank: -1,
+    }
+  })
+  /* eslint-disable no-console */
+  console.log("talentobj", talentObj)
+  return talentObj
 }
 
 export const transformToTranslationKey = (s: string) =>
   s.replace(/ /g, "_").toUpperCase()
 
-function makeTalent(name: string, description = ""): Talent {
-  return { id: transformToTranslationKey(name), name, description }
+function makeTalent(name: string, description_id = ""): Talent {
+  return { id: transformToTranslationKey(name), name, description_id }
 }
 
-interface KinTalent {
-  dwarf?: Talent
-}
-
+type KinTalentMap = { [key in KinName]: TalentKin }
 export const KIN_TALENTS = {
+  //TODO: remove
   [KIN.DWARF]: makeTalent("True Grit"),
   [KIN.ELF]: makeTalent("Inner Peace"),
   [KIN.GOBLIN]: makeTalent("Sneaky"),
@@ -29,8 +50,38 @@ export const KIN_TALENTS = {
   [KIN.WOLFKIN]: makeTalent("Hunting Instincts"),
 }
 
-export function getKinTalent(kin: KinName): Talent {
+export const KIN_TALENTS2: KinTalentMap = {
+  human: "Adaptive",
+  halfling: "Hard to Catch",
+  wolfkin: "Hunting Instincts",
+  elf: "Inner Peace",
+  halfelf: "Psychic Power",
+  goblin: "Sneaky",
+  dwarf: "True Grit",
+  orc: "Unbreakable",
+}
+
+export function getKinTalent(kin: KinName | null): Talent | null {
+  if (!kin) return null
   return KIN_TALENTS[kin]
+}
+
+type ProfessionTalentMap = { [key in Profession]: TalentProfession[] }
+
+export const PROFESSION_TALENTS: ProfessionTalentMap = {
+  druid: ["Path of Healing", "Path of Shifting Shapes", "Path of Sight"],
+  fighter: ["Path of the Blade", "Path of the Enemy", "Path of the Shield"],
+  hunter: ["Path of the Arrow", "Path of the Beast", "Path of the Forest"],
+  minstrel: ["Path of the Hymn", "Path of the Song", "Path of the Warcry"],
+  peddler: ["Path of Gold", "Path of Lies", "Path of Many Things"],
+  rider: ["Path of the Companion", "Path of the Knight", "Path of the Plains"],
+  rogue: ["Path of the Face", "Path of the Killer", "Path of Poison"],
+  sorcerer: [
+    "Path of Blood",
+    "Path of Death",
+    "Path of Signs",
+    "Path of Stone",
+  ],
 }
 
 export const CLASS_TALENTS = {
@@ -89,14 +140,18 @@ export const CLASS_TALENTS = {
   },
 }
 
+export function getTalentsForProfession(
+  profession: Profession | null
+): TalentProfession[] {
+  if (!profession) return []
+  return PROFESSION_TALENTS[profession]
+}
+
 export const GENERAL_TALENTS = {
   [TALENT.AMBIDEXTROUS]: {
-    id: "AMBIDEXTROUS",
+    id: [TALENT.AMBIDEXTROUS],
     name: "Ambidextrous",
-    description: "",
-    level1: "Level 1 description",
-    level2: "Level 2 description",
-    level3: "Level 3 description",
+    description_id: "",
   },
   [TALENT.AXE_FIGHTER]: {
     name: "Axe fighter",
@@ -164,13 +219,63 @@ export const GENERAL_TALENTS = {
   [TALENT.WANDERER]: { name: "Wanderer" },
 }
 
+export const GENERAL_TALENTS2: TalentGeneral[] = [
+  "Ambidextrous",
+  "Axe Fighter",
+  "Berserker",
+  "Bowyer",
+  "Brawler",
+  "Builder",
+  "Chef",
+  "Cold Blooded",
+  "Defender",
+  "Dragonslayer",
+  "Executioner",
+  "Fast Footwork",
+  "Fast Shooter",
+  "Fearless",
+  "Firm Grip",
+  "Fisher",
+  "Hammer Fighter",
+  "Herbalist",
+  "Horseback Fighter",
+  "Incorruptible",
+  "Knife Fighter",
+  "Lightning Fast",
+  "Lockpicker",
+  "Lucky",
+  "Master of the Hunt",
+  "Melee Charge",
+  "Pack Rat",
+  "Pain Resistant",
+  "Pathfinder",
+  "Poisoner",
+  "Quartermaster",
+  "Quickdraw",
+  "Sailor",
+  "Sharpshooter",
+  "Sharp Tongue",
+  "Shield Fighter",
+  "Sixth Sense",
+  "Smith",
+  "Spear Fighter",
+  "Steady Feet",
+  "Sword Fighter",
+  "Tailor",
+  "Tanner",
+  "Threatening",
+  "Throwing Arm",
+  "Wanderer",
+]
+
 export const ALL_TALENTS = {
   ...KIN_TALENTS,
   ...CLASS_TALENTS,
   ...GENERAL_TALENTS,
 }
 
-export function getClassTalents(className: Profession) {
+export function getClassTalents(className: Profession | null) {
+  if (!className) return null
   return CLASS_TALENTS[className]
 }
 

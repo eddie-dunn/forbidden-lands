@@ -2,7 +2,10 @@
 import { Component, Vue } from "vue-property-decorator"
 import Card from "@/components/Card.vue"
 import CharacterCard from "@/components/CharacterCard.vue"
-import { loadCharacterListFromLocalStorage } from "@/characterData"
+import {
+  removeCharacter,
+  loadCharacterListFromLocalStorage,
+} from "@/characterStorage"
 
 @Component({
   components: {
@@ -10,14 +13,22 @@ import { loadCharacterListFromLocalStorage } from "@/characterData"
     CharacterCard,
   },
   computed: {
-    characterList() {
+    characterList2() {
       const list = loadCharacterListFromLocalStorage()
-      console.log("list", list)
+      // console.log("list", list)
       return list
     },
   },
 })
-export default class Home extends Vue {}
+export default class Home extends Vue {
+  remove = (character: any) => {
+    removeCharacter(character.metadata.id)
+    this.characterList = loadCharacterListFromLocalStorage()
+    // add error handling
+  }
+
+  characterList = loadCharacterListFromLocalStorage()
+}
 </script>
 
 <template>
@@ -30,6 +41,10 @@ export default class Home extends Vue {}
         class="character-card-container"
       >
         <CharacterCard :charData="character" />
+        <button @click.self="remove(character)">Remove</button>
+      </div>
+      <div>
+        <CharacterCard />
       </div>
     </div>
     <Card v-else>

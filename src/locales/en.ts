@@ -1,6 +1,7 @@
 import {
   AgeTranslations,
   AttributeTranslations,
+  GearDescriptionTranslations,
   KinTranslations,
   ProfessionTranslations,
   SkillTranslations,
@@ -166,6 +167,44 @@ const skills: SkillTranslations = {
   "survival": "survival",
 }
 
+const GearDescriptions: GearDescriptionTranslations = {
+  gear_druid: `
+    Staff or knife, one item of your choice from the list of trade goods
+    (see page 182 in the Player's Handbook)
+  `,
+  gear_fighter: `
+    A one-handed weapon of your choice, studded leather armor, one item of
+    your choice from the list of trade goods
+    (see page 182 in the Player's Handbook)
+  `,
+  gear_hunter: `
+    Bow or sling, two items of your choice from the list of trade goods
+    (see page 182 in the Player's Handbook)
+  `,
+  gear_minstrel: `
+    Lute or flute, knife, one item of your choice from the list of trade goods
+    (see page 182 in the Player's Handbook)
+  `,
+  gear_peddler: `
+    Knife, three items of your choice from the list of trade goods
+    (see page 182 in the Player's Handbook)
+  `,
+  gear_rider: `
+    A riding horse (choose one from the Forbidden Lands custom card deck if you
+    have it), spear or handaxe, short bow or sling, one item of your choice from
+    the list of trade goods
+    (see page 182 in the Player's Handbook)
+  `,
+  gear_rogue: `
+    Dagger, two items of your choice from the list of trade goods
+    (see page 182 in the Player's Handbook)
+  `,
+  gear_sorcerer: `
+    Staff or knife, one item of your choice from the list of trade goods
+    (see page 182 in the Player's Handbook)
+  `,
+}
+
 export default {
   "Base data": "Base data",
   ...age,
@@ -174,6 +213,7 @@ export default {
   ...professions,
   ...skills,
   ...talents,
+  ...GearDescriptions,
 
   "Class talent": "Class talent",
   "Class": "Class",

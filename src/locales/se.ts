@@ -168,19 +168,41 @@ const talents = {
 
 const GearDescriptions: GearDescriptionTranslations = {
   gear_druid: `
-    Stav eller kniv, ett valfritt föremål ur listan
-    över bruksföremål på sidan 176 i Spelarboken.
+    Stav eller kniv, ett valfritt föremål ur listan över bruksföremål
+    (s 176 i Spelarboken).
   `,
   gear_fighter: `
     Valfritt enhandsvapen, nitläder, ett valfritt föremål ur listan över
-    bruksföremål.
+    bruksföremål
+    (s 176 i Spelarboken)
   `,
-  gear_hunter: "",
-  gear_minstrel: "",
-  gear_peddler: "",
-  gear_rider: "",
-  gear_rogue: "",
-  gear_sorcerer: "",
+  gear_hunter: `
+    Valfri pilbåge eller slunga, kniv, två valfria föremål ur listan över
+    bruksföremål
+    (s 176 i Spelarboken).
+  `,
+  gear_minstrel: `
+    Lyra eller flöjt, kniv, ett föremål ur listan över bruksföremål
+    (s 176 i Spelarboken).
+  `,
+  gear_peddler: `
+    Kniv, tre valfria föremål ur listan över bruksföremål
+    (s 176 i Spelarboken).
+  `,
+  gear_rider: `
+    Ridhäst (välj en ur kortleken till Svärdets sång om ni har den), spjut
+    eller yxa, kortbåge eller slunga, ett valfritt föremål ur listan över
+    bruksföremål
+    (s 176 i Spelarboken).
+  `,
+  gear_rogue: `
+    Dolk, två valfria föremål ur listan över bruksföremål
+    (s 176 i Spelarboken).
+  `,
+  gear_sorcerer: `
+    Stav eller kniv, ett valfritt föremål ur listan över bruksföremål
+    (s 176 i Spelarboken).
+  `,
 }
 
 export default {

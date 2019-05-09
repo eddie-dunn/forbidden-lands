@@ -1,18 +1,18 @@
 <script lang="ts">
-/* eslint-disable no-console */
 import Vue from "vue"
 import { AGE, ATTRIBUTE, CLASS, KIN } from "@/keys.ts"
 import { getAttributePoints, getAgeType } from "@/age"
-import { Attribute, KinName, Profession } from "@/types"
+import { Attribute, KinName, Profession, Age } from "@/types"
 import { CLASS as PROFESSION_MAP } from "@/classes"
 import { KIN as KIN_MAP } from "@/kin"
+import { validateAttributes, CharacterData } from "@/characterData"
 
 function getMaxAttribLevel(
   attribute: Attribute,
-  kin: KinName,
-  profession: Profession
+  kin: KinName | null,
+  profession: Profession | null
 ): number {
-  if (!kin) return 0
+  if (!kin || !profession) return -1
   const kinMod = KIN_MAP[kin].key_attribute === attribute ? 1 : 0
   const professionMod =
     PROFESSION_MAP[profession].key_attribute === attribute ? 1 : 0
@@ -28,87 +28,63 @@ interface AttributeInterface {
 
 export default Vue.extend({
   props: {
-    kin: {
-      type: String as () => KinName,
+    charData: {
+      type: Object as () => CharacterData,
       required: true,
     },
-    profession: {
-      type: String as () => Profession,
-      required: true,
-    },
-    age: {
-      type: Number,
-      required: true,
-    },
-    attributes: Object,
+  },
+  created() {
+    this.charData.ageType = getAgeType(this.charData.age, this.charData.kin)
   },
   computed: {
     pointsLeft(): number {
       return this.pointsAvailable() - this.pointsSpent()
     },
-    exportAttributes(): AttributeInterface {
-      console.log(this.attributes)
-      if (!this.attributes) {
-        return {
-          strength: null,
-          agility: null,
-          wits: null,
-          empathy: null,
-        }
-      }
-      const x = {
-        strength: this.attributes.strength.value,
-        agility: this.attributes.agility.value,
-        wits: this.attributes.wits.value,
-        empathy: this.attributes.empathy.value,
-      }
-      return x
+    ageType(): Age {
+      return getAgeType(this.charData.age, this.charData.kin)
     },
   },
   methods: {
+    validateAttributes,
     getAttribArray(attribute: Attribute): number[] {
       return [1, 2, 3, 4, 5, 6].slice(0, this.getMax(attribute))
     },
     getMax(attribute: Attribute): number {
-      return getMaxAttribLevel(attribute, this.kin, this.profession)
+      return getMaxAttribLevel(
+        attribute,
+        this.charData.kin,
+        this.charData.class
+      )
     },
     pointsAvailable() {
-      return getAttributePoints(getAgeType(this.age, this.kin))
+      // return getAttributePoints(getAgeType(this.age, this.kin))
+      return getAttributePoints(
+        getAgeType(this.charData.age, this.charData.kin)
+      )
     },
     pointsSpent(): number {
       return Number(
-        Object.entries(this.attributes)
+        Object.entries(this.charData.attributes)
           .map(attribute => attribute[1])
           .reduce((sum, value) => Number(sum) + Number(value))
       )
     },
     validate() {
-      return this.pointsSpent() === this.pointsAvailable()
+      return this.charData && this.validateAttributes(this.charData)
+      // return this.pointsSpent() === this.pointsAvailable()
     },
   },
   data() {
     return {
-      // Attributes
-      // attributes: {
-      //   [ATTRIBUTE.STRENGTH]: { value: null, id: ATTRIBUTE.STRENGTH },
-      //   [ATTRIBUTE.AGILITY]: { value: null, id: ATTRIBUTE.AGILITY },
-      //   [ATTRIBUTE.WITS]: { value: null, id: ATTRIBUTE.WITS },
-      //   [ATTRIBUTE.EMPATHY]: { value: null, id: ATTRIBUTE.EMPATHY },
-      //   // [ATTRIBUTE.STRENGTH]: null,
-      //   // [ATTRIBUTE.AGILITY]: null,
-      //   // [ATTRIBUTE.WITS]: null,
-      //   // [ATTRIBUTE.EMPATHY]: null,
-      // },
-      // Constants used in template
       ATTRIBUTE,
     }
   },
   watch: {
-    attributes: {
+    charData: {
       immediate: true,
       deep: true,
       handler(newValue, oldValue) {
-        this.$emit("attributes-updated", this.attributes)
+        this.$emit("attributes-updated", this.charData.attributes)
         const valid = this.validate() ? "✓" : "✖"
         this.$parent.$emit("card-sign", valid)
       },
@@ -119,13 +95,14 @@ export default Vue.extend({
 
 <template>
   <div class="attribute-selector-content">
-    <div>
-      Points available: {{ pointsAvailable() - pointsSpent() }} | Points spent:
+    <span>Points available: {{ pointsAvailable() - pointsSpent() }} |</span>
+    <span>
+      Points spent:
       {{ pointsSpent() }}
-    </div>
-    <div>Valid: {{ validate() }}</div>
+    </span>
+    <span>Valid: {{ validate() }}</span>
     <div
-      v-for="attribute in Object.keys(attributes)"
+      v-for="attribute in Object.keys(charData.attributes)"
       class="attribute-item"
       :key="attribute"
     >
@@ -138,7 +115,7 @@ export default Vue.extend({
         :placeholder="'1-' + getMax(attribute)"
         min="1"
         :max="getMax(attribute)"
-        v-model.number="attributes[attribute]"
+        v-model.number="charData.attributes[attribute]"
       />
       <label :for="attribute" class="attribute-item-label">
         {{ $t(attribute) }}

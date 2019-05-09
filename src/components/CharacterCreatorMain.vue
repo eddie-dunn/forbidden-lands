@@ -13,9 +13,12 @@ import { getAgeType } from "@/age.ts"
 import {
   getNewCharacterData,
   CharacterData,
-  loadCharacterFromLocalStorage,
-  saveToLocalStorage,
+  validateNewCharacter,
 } from "@/characterData"
+import {
+  loadCharacterFromLocalStorage,
+  saveCharacterToLocalStorage,
+} from "@/characterStorage"
 import Vue from "vue"
 // import { workerData } from "worker_threads" // ???
 
@@ -43,11 +46,12 @@ const CharacterCreatorMain = Vue.extend({
     }
   },
   methods: {
+    canActivateCharacter: validateNewCharacter,
     saveClicked(event: any) {
       if (event && this.characterData.name) {
-        saveToLocalStorage(this.characterData)
+        saveCharacterToLocalStorage(this.characterData)
+        this.$router.push("/character-list")
       }
-      this.$router.push("/character-list")
     },
     resetClicked(event: any) {
       if (event) event.preventDefault()
@@ -60,6 +64,7 @@ const CharacterCreatorMain = Vue.extend({
       this.characterData.attributes = attributes
     },
     updateTalents(talents: any) {
+      console.log("new talents", talents)
       this.characterData.talents = talents
     },
     setImgSource(img: any) {
@@ -78,21 +83,16 @@ export default CharacterCreatorMain
         <BaseSelector :data="characterData" />
       </Card>
 
-      <Card :title="$t('Portrait')">
-        <div>
-          <PicturePicker
-            :portrait="characterData.portrait"
-            @pickedPicture="setImgSource"
-          />
-        </div>
+      <Card>
+        <PicturePicker
+          :portrait="characterData.portrait"
+          @pickedPicture="setImgSource"
+        />
       </Card>
 
       <Card :title="$t('attributes')">
         <AttributesSelector
-          :profession="characterData.class"
-          :age="characterData.age || -1"
-          :kin="characterData.kin"
-          :attributes="characterData.attributes"
+          :charData="characterData"
           @attributes-updated="updateAttributes"
         />
       </Card>
@@ -104,6 +104,7 @@ export default CharacterCreatorMain
           :age="characterData.age || -1"
           :kin="characterData.kin"
           :intalents="characterData.talents"
+          :charData="characterData"
           @talents-updated="updateTalents"
         />
       </Card>
@@ -154,6 +155,7 @@ export default CharacterCreatorMain
         </Card>
       </div>
 
+      Can activate: {{ canActivateCharacter(characterData) }}
       <!-- <div class="action-bar row-card row-full row-flex"> -->
       <div class="action-bar">
         <button v-on:click="resetClicked">Reset</button>
@@ -213,12 +215,12 @@ label {
 
 .character_creator-form {
   margin: auto;
-  margin-top: 1rem;
   row-gap: 0.5rem;
   column-gap: 0.5rem; // only seems to work in firefox
   display: flex;
   flex-wrap: wrap;
   margin: 0 -0.25rem;
+  margin-top: 1rem;
 }
 
 .action-bar {
