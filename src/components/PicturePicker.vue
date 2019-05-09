@@ -11,6 +11,8 @@ const IMAGES = importAll(
   require.context("../assets/portraits", false, /\.(png|jpe?g|svg)$/)
 )
 const PLACEHOLDER = require("@/assets/300x500-placeholder.png")
+const getRandomPictureFromGallery = (gallery: string[]) =>
+  gallery[~~(Math.random() * gallery.length)]
 
 const AppProps = Vue.extend({
   props: {
@@ -19,8 +21,11 @@ const AppProps = Vue.extend({
     },
   },
   watch: {
-    selected_portrait: function(newVal): void {
-      this.$emit("pickedPicture", newVal)
+    selected_portrait: {
+      immediate: true,
+      handler(newVal) {
+        this.$emit("pickedPicture", newVal)
+      },
     },
   },
 })
@@ -40,7 +45,8 @@ export default class PicturePicker extends AppProps {
   externalImage: string = ""
   //"https://via.placeholder.com/400x600.png?text=Click+to+select+portrait"
 
-  selected_portrait = this.portrait
+  // for now, set a picture at random with getRandomPictureFromGallery
+  selected_portrait = this.portrait || getRandomPictureFromGallery(IMAGES)
 
   showPicker() {
     this.showModal = true
