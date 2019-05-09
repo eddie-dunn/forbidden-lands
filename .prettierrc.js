@@ -8,4 +8,5 @@ module.exports = {
   printWidth: 80,
   tabWidth: 2,
   jsxBracketSameLine: false,
+  arrowParens: "always",
 }
