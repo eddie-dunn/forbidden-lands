@@ -206,7 +206,6 @@ const GearDescriptions: GearDescriptionTranslations = {
 }
 
 export default {
-  "Base data": "Base data",
   ...age,
   ...attributes,
   ...kin,
@@ -215,13 +214,22 @@ export default {
   ...talents,
   ...GearDescriptions,
 
+  "Arrows": "Arrows",
+  "Base data": "Base data",
   "Class talent": "Class talent",
-  "Class": "Class",
+  "Class talents": "Class talents",
+  "D": "D",
   "Female": "Female",
+  "Food": "Food",
+  "Gear": "Gear",
   "General talent": "General talent",
+  "General talents": "General talents",
   "Kin talent": "Kin talent",
   "Male": "Male",
   "Name": "Name",
+  "Roll dice before session starts":
+    "Kasta tärning efter att karaktären skapats",
+  "Water": "Water",
   "class": "class",
   "female": "female",
   "hello": "hello en",
