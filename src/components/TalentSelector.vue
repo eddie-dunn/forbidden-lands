@@ -34,7 +34,7 @@ const TalentSelector = Vue.extend({
   data() {
     return {
       GENERAL_TALENTS2,
-      selectedTalents: this.charData.talents.map(talent => talent.id),
+      selectedTalents: this.charData.talents.map((talent) => talent.id),
       talentRanks: {
         classRank: {
           value: 1,
@@ -76,7 +76,7 @@ const TalentSelector = Vue.extend({
           talent: any // any for now
         ) => Number(talent.value))
         // .reduce((prevSum, value) => prevSum + value)
-        .filter(value => value === 2)
+        .filter((value) => value === 2)
       console.log(sum, "sum")
       return sum.length
     },
@@ -85,7 +85,8 @@ const TalentSelector = Vue.extend({
     validated(): boolean {
       const talentsRequired = this.generalTalentsAllowed + 1
       console.log("selected", this.selectedTalents)
-      const talentsSelected = this.selectedTalents.filter(item => !!item).length
+      const talentsSelected = this.selectedTalents.filter((item) => !!item)
+        .length
       return talentsRequired === talentsSelected
     },
     tName(name: string): TranslateResult {

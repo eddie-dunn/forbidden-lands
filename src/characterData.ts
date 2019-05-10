@@ -108,7 +108,7 @@ export function validateAttributes({
 }: CharacterData): boolean {
   const attribPointsSpent = Number(
     Object.entries(attributes)
-      .map(attribute => attribute[1])
+      .map((attribute) => attribute[1])
       .reduce((sum, value) => Number(sum) + Number(value))
   )
   const attributePointsRequired = getAttributePoints(ageType || null)
@@ -119,7 +119,7 @@ export function validateSkills({ skills, age, kin }: CharacterData): boolean {
   const reducer = (accumulator: number, currentValue: number) =>
     Number(accumulator) + currentValue
   const skillRanksSpent = Object.entries(skills)
-    .map(item => item[1].rank)
+    .map((item) => item[1].rank)
     .reduce(reducer)
   return skillRanksSpent === calcNewCharSkillPoints(getAgeType(age, kin))
 }
@@ -129,15 +129,15 @@ export function validateTalents({ age, kin, talents }: CharacterData): boolean {
   const requiredNumberOfTalents = getStartingTalents(age, kin) + 2
 
   // Check for talent id existing? Use keys (lol)
-  return talents.filter(item => !!item).length === requiredNumberOfTalents
+  return talents.filter((item) => !!item).length === requiredNumberOfTalents
 }
 
 export function validateNewCharacter(character: CharacterData): boolean {
   // check if all stats add up OR if character has been activated before
   return (
     [validateBase, validateAttributes, validateSkills, validateTalents]
-      .map(validate => validate(character))
-      .filter(item => item === false).length === 0 ||
+      .map((validate) => validate(character))
+      .filter((item) => item === false).length === 0 ||
     (character.metadata && character.metadata.hasBeenActivated) ||
     false
   )

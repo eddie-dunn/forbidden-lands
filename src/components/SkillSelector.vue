@@ -69,7 +69,7 @@ export default Vue.extend({
   methods: {
     pointsSpent() {
       return Object.entries(this.skills)
-        .map(item => item[1].rank)
+        .map((item) => item[1].rank)
         .reduce(
           (accumulator, currentValue) => Number(accumulator) + currentValue
         )

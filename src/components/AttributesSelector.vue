@@ -65,7 +65,7 @@ export default Vue.extend({
     pointsSpent(): number {
       return Number(
         Object.entries(this.charData.attributes)
-          .map(attribute => attribute[1])
+          .map((attribute) => attribute[1])
           .reduce((sum, value) => Number(sum) + Number(value))
       )
     },
