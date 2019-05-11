@@ -48,14 +48,18 @@ export interface CharacterData {
   talents: TalentData[]
   portrait: string | null
   metadata: MetaData
+  experience: number
+  willpower: number
 }
 
 export function getNewCharacterData(): CharacterData {
   return {
     name: "",
-    age: null,
-    ageType: "young",
-    sex: "male",
+    // age: null,
+    age: 33,
+    ageType: "",
+    sex: null,
+    // kin: null,
     kin: "human",
     attributes: {
       strength: null,
@@ -63,13 +67,16 @@ export function getNewCharacterData(): CharacterData {
       wits: null,
       empathy: null,
     },
-    class: null,
+    // class: null,
+    class: "druid",
     skills: getSkills(),
     talents: [],
 
     description: "",
     reputation: 0,
     portrait: null, // require("./assets/500.png"),
+    experience: 0,
+    willpower: 0,
 
     // metadata
     metadata: {
@@ -81,7 +88,7 @@ export function getNewCharacterData(): CharacterData {
 }
 
 export function calcNewCharSkillPoints(age: Age | null) {
-  if (!age) return -1
+  if (!age) return 0
   return (
     {
       [AGE.YOUNG]: 8,

@@ -7,12 +7,14 @@ import { CLASS as PROFESSION_MAP } from "@/classes"
 import { KIN as KIN_MAP } from "@/kin"
 import { validateAttributes, CharacterData } from "@/characterData"
 
+const acrobatic = require("@/assets/icons/acrobatic.svg")
+
 function getMaxAttribLevel(
   attribute: Attribute,
   kin: KinName | null,
   profession: Profession | null
 ): number {
-  if (!kin || !profession) return -1
+  if (!kin || !profession) return 1
   const kinMod = KIN_MAP[kin].key_attribute === attribute ? 1 : 0
   const professionMod =
     PROFESSION_MAP[profession].key_attribute === attribute ? 1 : 0
@@ -42,6 +44,9 @@ export default Vue.extend({
     },
     ageType(): Age {
       return getAgeType(this.charData.age, this.charData.kin)
+    },
+    acrobatic() {
+      return acrobatic
     },
   },
   methods: {
@@ -73,6 +78,9 @@ export default Vue.extend({
       return this.charData && this.validateAttributes(this.charData)
       // return this.pointsSpent() === this.pointsAvailable()
     },
+    iconFor(attribute: string) {
+      return "{}"
+    },
   },
   data() {
     return {
@@ -94,20 +102,27 @@ export default Vue.extend({
 </script>
 
 <template>
-  <div class="attribute-selector-content">
-    <span>Points available: {{ pointsAvailable() - pointsSpent() }} |</span>
-    <span>
-      Points spent:
-      {{ pointsSpent() }}
-    </span>
-    <span>Valid: {{ validate() }}</span>
+  <div v-if="!charData.age || !charData.kin || !charData.class">
+    {{ $t("Please select the following in") }} {{ $t("Base data") }}:
+    <ul>
+      <li class="capitalize" v-if="!charData.age">{{ $t("age") }}</li>
+      <li class="capitalize" v-if="!charData.kin">{{ $t("kin") }}</li>
+      <li class="capitalize" v-if="!charData.class">{{ $t("Profession") }}</li>
+    </ul>
+  </div>
+  <div v-else class="attribute-selector-content">
+    <div>{{ acrobatic }}</div>
+    <span>{{ $t("Remaining") }}: {{ pointsAvailable() - pointsSpent() }}</span>
     <div
       v-for="attribute in Object.keys(charData.attributes)"
       class="attribute-item"
       :key="attribute"
     >
+      <label :for="attribute" class="attribute-item-label">
+        {{ iconFor(attribute) }}{{ $t(attribute) }}
+      </label>
       <input
-        class="attribute-input with-checkbox"
+        class="attribute-input"
         :id="attribute"
         :name="attribute"
         type="number"
@@ -117,9 +132,7 @@ export default Vue.extend({
         :max="getMax(attribute)"
         v-model.number="charData.attributes[attribute]"
       />
-      <label :for="attribute" class="attribute-item-label">
-        {{ $t(attribute) }}
-      </label>
+      <span class="attribute-damage">******</span>
     </div>
   </div>
 </template>
@@ -140,18 +153,28 @@ export default Vue.extend({
 
 .attribute-item {
   display: flex;
-  // flex-grow: 1;
-  // flex-direction: row-reverse;
-  justify-content: space-between;
+  flex-grow: 0;
+  justify-content: space-around;
   align-items: baseline;
   margin: 0.25rem;
 }
 
+.attribute-input {
+  width: 2.1rem;
+  height: 1rem;
+  margin-right: 2rem;
+  flex-basis: 2;
+  flex-grow: 0;
+}
+
+.attribute-damage {
+  flex-basis: 2;
+  flex-grow: 1;
+}
+
 .attribute-item-label {
-  margin-left: 1rem;
   margin-right: 1rem;
-  // margin-right: auto;
-  flex-grow: 2;
+  flex: 0 0 20%;
   text-transform: capitalize;
 }
 
@@ -159,10 +182,10 @@ export default Vue.extend({
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
-  * > {
-    margin-right: 1rem;
-    // margin-left: 1rem;
-  }
+  // * > {
+  //   margin-right: 1rem;
+  //   // margin-left: 1rem;
+  // }
 }
 
 // input[type="number"].with-checkbox {

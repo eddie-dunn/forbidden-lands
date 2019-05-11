@@ -44,7 +44,7 @@ export function getReputation(ageType: Age) {
 }
 
 export function getAgeType(age: number | null, kin: KinName | null): Age {
-  if (!age || !kin) return AGE.YOUNG
+  if (!age || !kin) return ""
 
   if (kin === KIN.ELF) return AGE.ADULT
   if (age < table[kin][1]) return AGE.YOUNG
@@ -57,6 +57,12 @@ export function getStartingTalents(
   kin: KinName | null
 ): number {
   const ageType = getAgeType(age, kin)
-  const talentMap = { [AGE.YOUNG]: 1, [AGE.ADULT]: 2, [AGE.OLD]: 3 }
-  return talentMap[ageType] || -1
+  // const talentMap: 1 | 2 | 3 = { [AGE.YOUNG]: 1, [AGE.ADULT]: 2, [AGE.OLD]: 3}
+  const talentMap = {
+    "young": 1,
+    "adult": 2,
+    "old": 3,
+    "": 0,
+  }
+  return talentMap[ageType] || 0
 }

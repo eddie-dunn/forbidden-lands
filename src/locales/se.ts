@@ -8,10 +8,11 @@ import {
 } from "./localetypes"
 
 const age: AgeTranslations = {
-  age: "ålder",
-  adult: "medelålders",
-  old: "gammal",
-  young: "ung",
+  "age": "ålder",
+  "adult": "medelålders",
+  "old": "gammal",
+  "young": "ung",
+  "": "?",
 }
 
 const attributes: AttributeTranslations = {
@@ -226,15 +227,19 @@ export default {
   "General talents": "Allmänna talanger",
   "Kin talent": "Släktestalang",
   "Male": "Man",
+  "Please select the following in": "Vänligen välj följande i",
   "Name": "Namn",
+  "Profession": "Yrke",
   "Portrait": "Porträtt",
+  "Remaining": "Återstående",
+  "Reputation": "Rykte",
   "Roll dice before session starts":
     "Kasta tärning efter att karaktären skapats",
   "Roll dice": "Kasta tärning",
   "Water": "Vatten",
-  "class": "yrke",
   "female": "kvinna",
   "male": "man",
   "sex": "kön",
   "talents": "talanger",
+  "Torches": "Facklor",
 }

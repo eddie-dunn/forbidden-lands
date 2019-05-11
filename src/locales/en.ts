@@ -8,10 +8,11 @@ import {
 } from "./localetypes"
 
 const age: AgeTranslations = {
-  age: "age",
-  adult: "adult",
-  old: "old",
-  young: "young",
+  "age": "age",
+  "adult": "adult",
+  "old": "old",
+  "young": "young",
+  "": "?",
 }
 
 const professions: ProfessionTranslations = {
@@ -227,10 +228,12 @@ export default {
   "Kin talent": "Kin talent",
   "Male": "Male",
   "Name": "Name",
+  "Profession": "Profession",
+  "Reputation": "Reputation",
   "Roll dice before session starts":
     "Kasta tärning efter att karaktären skapats",
+  "Torches": "Torches",
   "Water": "Water",
-  "class": "class",
   "female": "female",
   "hello": "hello en",
   "male": "male",

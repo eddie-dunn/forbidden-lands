@@ -12,9 +12,7 @@ export default Vue.extend({
     },
   },
   created() {
-    this.$on("card-sign", (message: any) => {
-      this.sign = message
-    })
+    this.$on("card-sign", (message: any) => (this.sign = message))
   },
   data() {
     return {
@@ -32,7 +30,7 @@ export default Vue.extend({
   },
   methods: {
     cardClicked() {
-      this.$router.push(`/character-creator/${this.characterId}`)
+      this.$router.push(this.cardLink)
       window.scrollTo(0, 0)
     },
     remove() {
@@ -51,9 +49,7 @@ export default Vue.extend({
     </div>
   </div>
   <div v-else class="stat-card row-full">
-    <a>
-      <img class="top" :src="charData.portrait" @click.self="cardClicked()" />
-    </a>
+    <img class="top" :src="charData.portrait" @click.self="cardClicked()" />
     <div class="header">
       <div class="card-contents">
         <h3>{{ charData.name }}</h3>
@@ -132,7 +128,10 @@ h3 {
 }
 
 .stat-card {
-  cursor: pointer;
+  &:active {
+    transform: translateY(4px);
+  }
+  // cursor: pointer;
   // width: 50vw;
   // background: #fafafa;
   // margin: 0.5rem;

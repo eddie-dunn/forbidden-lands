@@ -13,7 +13,7 @@ export default Vue.extend({
     <div class="navbar">
       <div class="route-links">
         <router-link to="/">Home</router-link> |
-        <router-link to="/character-creator">Character Creator </router-link> |
+        <router-link to="/character-creator">Create new</router-link> |
         <router-link to="/about">About</router-link>
       </div>
       <div class="route-links">
@@ -65,5 +65,13 @@ export default Vue.extend({
   // // width: 100vw;
   // max-width: 1024px;
   // // max-width: 768px;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+input[type="number"] {
+  height: 1rem;
 }
 </style>

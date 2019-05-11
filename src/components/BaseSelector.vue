@@ -95,22 +95,10 @@ export default Vue.extend({
     },
   },
 })
-</script>
 
-<template>
-  <div class="contentgroup">
-    <div class="cell">
-      <label for="character-name">{{ $t("Name") }}</label>
-      <input
-        id="character-name"
-        type="text"
-        v-model="mdata.name"
-        :placeholder="nameSuggestion()"
-        required
-      />
-    </div>
+/*
 
-    <div class="cell">
+    <div class="cell" style="display: none;">
       <label for="sex">{{ capitalize($t("sex")) }}</label>
       <span id="sex">
         <input
@@ -131,21 +119,23 @@ export default Vue.extend({
         <label for="female">{{ $t("Female") }}</label>
       </span>
     </div>
+*/
+</script>
 
+<template>
+  <div class="contentgroup">
     <div class="cell full-width">
-      <label for="age">{{ $t("age") }}</label>
+      <label for="character-name">{{ $t("Name") }}</label>
       <input
-        id="age"
-        type="number"
-        v-model.number="mdata.age"
-        :placeholder="ageRange()"
-        class="smallnumber"
-        min="1"
+        id="character-name"
+        class="input-max-width"
+        type="text"
+        v-model="mdata.name"
+        :placeholder="nameSuggestion()"
+        required
       />
-      <span v-if="this.mdata.age" class="capitalize"
-        >{{ this.ageType }} Reputation: {{ this.reputation }}</span
-      >
     </div>
+
     <div class="cell">
       <label for="character-kin">{{ $t("kin") }}</label>
       <select id="character-kin" v-model="mdata.kin">
@@ -156,14 +146,52 @@ export default Vue.extend({
     </div>
 
     <div class="cell">
-      <label for="character-class">{{ $t("class") }}</label>
+      <label for="character-class">{{ $t("Profession") }}</label>
       <select id="character-class" v-model="mdata.class">
         <option v-for="c in class_select" :key="c.id" v-bind:value="c.id">{{
           capitalize($t(c.id)) || c.name
         }}</option>
       </select>
     </div>
+
+    <div class="cell full-width">
+      <span>
+        <label for="age">{{ $t("age") }}</label>
+        <input
+          id="age"
+          type="number"
+          v-model.number="mdata.age"
+          :placeholder="ageRange()"
+          class="smallnumber"
+          min="1"
+        />
+      </span>
+      <span v-if="this.mdata.age" class="capitalize">
+        {{ this.ageType }}
+      </span>
+      <span v-if="this.mdata.age" class="capitalize">
+        {{ $t("Reputation") }}: {{ this.reputation }}
+      </span>
+    </div>
+
     <div v-if="this.mdata.class">
+      <h4>{{ $t("Gear") }}</h4>
+      <div>
+        {{ $t(PROFESSION[this.mdata.class].gear_description) }}
+      </div>
+      <p>
+        Silver:
+        {{
+          $t("D") +
+            PROFESSION[this.mdata.class].starting_resources.silver +
+            " (" +
+            $t("Roll dice before session starts") +
+            ")"
+        }}
+      </p>
+    </div>
+
+    <div class="consumables" v-if="this.mdata.class">
       <div>
         {{ $t("Food") }}:
         {{ $t("D") + PROFESSION[this.mdata.class].starting_resources.food }}
@@ -173,23 +201,16 @@ export default Vue.extend({
         {{ $t("D") + PROFESSION[this.mdata.class].starting_resources.water }}
       </div>
       <div>
-        Silver:
-        {{
-          $t("D") +
-            PROFESSION[this.mdata.class].starting_resources.silver +
-            " (" +
-            $t("Roll dice before session starts") +
-            ")"
-        }}
-      </div>
-      <div v-if="PROFESSION[this.mdata.class].starting_resources.arrows">
         {{ $t("Arrows") }}: D{{
           PROFESSION[this.mdata.class].starting_resources.arrows
         }}
       </div>
-
-      <h4>{{ $t("Gear") }}</h4>
-      {{ $t(PROFESSION[this.mdata.class].gear_description) }}
+      <div v-if="false">
+        <!-- Add logic to set to true if active character -->
+        {{ $t("Torches") }}: D{{
+          PROFESSION[this.mdata.class].starting_resources.arrows
+        }}
+      </div>
     </div>
   </div>
 </template>
@@ -200,23 +221,21 @@ label,
   text-transform: capitalize;
 }
 
-.capitalize {
-  margin: 0 1rem;
-}
-
 .full-width {
   width: 100%;
+  justify-content: space-between;
 }
 
 .contentgroup {
   display: flex;
   flex-wrap: wrap;
-  // display: grid;
-  // grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
-  // div > {
-  //   margin-top: 0.5rem;
-  //   margin-bottom: 0.5rem;
-  // }
+}
+
+.consumables {
+  display: flex;
+  flex-grow: 1;
+  justify-content: space-between;
+  margin: 1rem;
 }
 
 .cell {
@@ -231,6 +250,10 @@ label,
     margin-left: 0.5rem;
     // margin-right: 0.5rem;
   }
+}
+
+.input-max-width {
+  width: 100%;
 }
 
 .smallnumber {

@@ -30,9 +30,9 @@ export default Vue.extend({
     age: {
       type: String,
       required: true,
-      validator: function(value) {
-        return Object.values(AGE).indexOf(value) !== -1
-      },
+      // validator: function(value) {
+      //   return Object.values(AGE).indexOf(value) !== -1
+      // },
     },
     profession: {
       // type: String,
@@ -89,10 +89,7 @@ export default Vue.extend({
 
 <template>
   <div>
-    <div>
-      Available: {{ skillPoints - pointsSpent() }} | Spent:
-      {{ pointsSpent() }} | Total: {{ skillPoints }} | Valid: {{ this.valid }}
-    </div>
+    <div>Spent: {{ pointsSpent() }}/{{ skillPoints }}</div>
     <div class="skillbox">
       <div v-for="skill in skills" :key="skill.id" class="skillrow">
         <input
@@ -127,14 +124,14 @@ export default Vue.extend({
   display: grid;
 
   // grid-auto-columns: minmax(max-content, 2fr);
-  grid-template-columns: repeat(auto-fit, minmax(20ch, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(16ch, 1fr));
   // grid-template-columns: repeat(auto-fill, minmax(min-content, 1px));
   // grid-auto-columns: max-content;
   grid-gap: 10px;
 }
 
 .skillrow {
-  margin: 0.5rem;
+  // margin: 0.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -147,12 +144,12 @@ export default Vue.extend({
 .skill-name {
   text-transform: capitalize;
   margin-right: auto;
-  margin-left: 0.25rem;
+  margin-left: 0.2rem;
 }
 
 .skill-input {
   height: 1rem;
-  max-width: 3rem;
+  width: 2.1rem;
 }
 
 // input:valid.with-checkbox + span::before {

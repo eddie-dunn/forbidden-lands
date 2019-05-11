@@ -155,13 +155,21 @@ export default CharacterCreatorMain
         </Card>
       </div>
 
-      Can activate: {{ canActivateCharacter(characterData) }}
-      <!-- <div class="action-bar row-card row-full row-flex"> -->
-      <div class="action-bar">
-        <button v-on:click="resetClicked">Reset</button>
-        <button>Import</button>
-        <button>Export</button>
-        <button v-on:click="saveClicked">Save</button>
+      <div class="action-bar-wrapper">
+        <div class="action-bar">
+          <button class="button-action-bar" v-on:click="resetClicked">
+            Reset
+          </button>
+          <button class="button-action-bar" v-on:click="resetClicked">
+            Import
+          </button>
+          <button class="button-action-bar" v-on:click="resetClicked">
+            Export
+          </button>
+          <button class="button-action-bar" v-on:click="saveClicked">
+            Save
+          </button>
+        </div>
       </div>
     </form>
     <div @click="showJSON = !showJSON">
@@ -203,6 +211,10 @@ label {
   margin-right: 0.5rem;
 }
 
+.button-action-bar {
+  margin: 0.5rem;
+}
+
 .button-white {
   background-color: #fff;
   color: #42b983;
@@ -223,15 +235,19 @@ label {
   margin-top: 1rem;
 }
 
-.action-bar {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
+.action-bar-wrapper {
+  display: block;
   width: 100%;
   position: sticky;
-  padding: 0.5rem;
-  // top: 0.5rem;
   bottom: 0;
+  overflow: hidden;
+  margin: 0 0.25rem;
+}
+
+.action-bar {
+  display: flex;
+  overflow: auto;
+  justify-content: space-around;
   background: #fffe;
   border: solid #42b98344 2px;
 }

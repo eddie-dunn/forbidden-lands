@@ -55,6 +55,12 @@ const TalentSelector = Vue.extend({
       },
     }
   },
+  created() {
+    this.selectedTalents[0] = this.kinTalent
+  },
+  // mounted(): {
+  //   this.selectedTalents[0] = this.kinTalent
+  // },
   computed: {
     classTalents(): TalentProfession[] {
       return getTalentsForProfession(this.charData.class)
@@ -87,6 +93,7 @@ const TalentSelector = Vue.extend({
       console.log("selected", this.selectedTalents)
       const talentsSelected = this.selectedTalents.filter((item) => !!item)
         .length
+      console.log("filter selected", talentsSelected)
       return talentsRequired === talentsSelected
     },
     tName(name: string): TranslateResult {
@@ -97,8 +104,7 @@ const TalentSelector = Vue.extend({
       // emit update of map
       console.log(this.talentRanksSum)
       const talentList: TalentAll[] = [
-        this.kinTalent,
-        ...this.selectedTalents.slice(0, 1 + this.generalTalentsAllowed),
+        ...this.selectedTalents.slice(0, 2 + this.generalTalentsAllowed),
       ]
       const exportedTalents = getTalentObjects(talentList)
       console.log("talents emitted", exportedTalents)
@@ -139,9 +145,11 @@ export default TalentSelector
     <div class="talent-item">
       <label for="kin-talent">{{ $t("Kin talent") }}</label>
       <select id="kin-talent" disabled>
-        <option v-bind:value="kinTalent">{{ tName(kinTalent) }}</option>
+        <option v-bind:value="selectedTalents[0]">{{
+          tName(kinTalent)
+        }}</option>
       </select>
-      <span class="toggle">
+      <span class="toggle hidden">
         <input type="radio" name="kinTalentRank" checked="checked" disabled />
         <label for="sizeWeight">1</label>
         <input type="radio" name="kinTalentRank" disabled />
@@ -150,7 +158,7 @@ export default TalentSelector
     </div>
     <div class="talent-item">
       <label for="class-talent">{{ $t("Class talent") }}</label>
-      <select id="class-talent" v-model="selectedTalents[0]" required>
+      <select id="class-talent" v-model="selectedTalents[1]" required>
         <option
           v-for="talent in classTalents"
           :key="talent"
@@ -210,7 +218,7 @@ export default TalentSelector
           :name="'talent' + index"
           v-model.number="talentRanks['talent' + index].value"
           value="2"
-          :disabled="index === generalTalentsAllowed"
+          :disabled="index >= generalTalentsAllowed"
         />
         <label for="'talent + index'">2</label>
         <!-- TODO: Add input for lvl 3 as well when supporting live Character Sheet -->
@@ -232,5 +240,9 @@ export default TalentSelector
 
 .talent-rank {
   max-width: 3rem;
+}
+
+.hidden {
+  visibility: hidden;
 }
 </style>

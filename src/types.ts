@@ -1,5 +1,5 @@
 // Project wide types
-export type Age = "young" | "adult" | "old"
+export type Age = "young" | "adult" | "old" | ""
 
 export type Attribute = "strength" | "agility" | "wits" | "empathy"
 
@@ -43,7 +43,7 @@ export type Skill =
   | "stealth"
   | "survival"
 
-export type Sex = "male" | "female"
+export type Sex = "male" | "female" | "unset"
 
 export type TalentKin =
   | "Adaptive"
