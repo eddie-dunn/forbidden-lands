@@ -6,8 +6,7 @@ import { Attribute, KinName, Profession, Age } from "@/types"
 import { CLASS as PROFESSION_MAP } from "@/classes"
 import { KIN as KIN_MAP } from "@/kin"
 import { validateAttributes, CharacterData } from "@/characterData"
-
-const acrobatic = require("@/assets/icons/acrobatic.svg")
+import SvgIcon from "@/components/SvgIcon.vue"
 
 function getMaxAttribLevel(
   attribute: Attribute,
@@ -29,6 +28,9 @@ interface AttributeInterface {
 }
 
 export default Vue.extend({
+  components: {
+    SvgIcon,
+  },
   props: {
     charData: {
       type: Object as () => CharacterData,
@@ -44,9 +46,6 @@ export default Vue.extend({
     },
     ageType(): Age {
       return getAgeType(this.charData.age, this.charData.kin)
-    },
-    acrobatic() {
-      return acrobatic
     },
   },
   methods: {
@@ -78,8 +77,14 @@ export default Vue.extend({
       return this.charData && this.validateAttributes(this.charData)
       // return this.pointsSpent() === this.pointsAvailable()
     },
-    iconFor(attribute: string) {
-      return "{}"
+    iconFor(attribute: Attribute): string {
+      const map = {
+        [ATTRIBUTE.STRENGTH]: "strong",
+        [ATTRIBUTE.AGILITY]: "acrobatic",
+        [ATTRIBUTE.WITS]: "brain",
+        [ATTRIBUTE.EMPATHY]: "shaking-hands",
+      }
+      return map[attribute] || "close-button"
     },
   },
   data() {
@@ -111,15 +116,19 @@ export default Vue.extend({
     </ul>
   </div>
   <div v-else class="attribute-selector-content">
-    <div>{{ acrobatic }}</div>
     <span>{{ $t("Remaining") }}: {{ pointsAvailable() - pointsSpent() }}</span>
     <div
       v-for="attribute in Object.keys(charData.attributes)"
       class="attribute-item"
       :key="attribute"
     >
+      <SvgIcon
+        :name="iconFor(attribute)"
+        :title="attribute"
+        class="attribute-icon"
+      />
       <label :for="attribute" class="attribute-item-label">
-        {{ iconFor(attribute) }}{{ $t(attribute) }}
+        {{ $t(attribute) }}
       </label>
       <input
         class="attribute-input"
@@ -154,38 +163,37 @@ export default Vue.extend({
 .attribute-item {
   display: flex;
   flex-grow: 0;
-  justify-content: space-around;
-  align-items: baseline;
-  margin: 0.25rem;
+  // justify-content: space-around;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 0.2rem;
 }
 
 .attribute-input {
   width: 2.1rem;
   height: 1rem;
-  margin-right: 2rem;
-  flex-basis: 2;
+  // margin-right: 2rem;
+  flex-basis: 1;
   flex-grow: 0;
 }
 
+.attribute-icon {
+  flex-basis: 1;
+  margin-right: 0.5rem;
+  // flex-grow: 0;
+}
+
 .attribute-damage {
-  flex-basis: 2;
+  visibility: hidden;
+  display: none;
+  flex-basis: 1;
   flex-grow: 1;
 }
 
 .attribute-item-label {
-  margin-right: 1rem;
-  flex: 0 0 20%;
+  // margin-right: 1rem;
+  flex: 0 0 9ch;
   text-transform: capitalize;
-}
-
-.attribute-input-group {
-  display: flex;
-  flex-direction: row-reverse;
-  align-items: center;
-  // * > {
-  //   margin-right: 1rem;
-  //   // margin-left: 1rem;
-  // }
 }
 
 // input[type="number"].with-checkbox {

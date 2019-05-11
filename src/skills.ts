@@ -1,112 +1,146 @@
 import { $t } from "@/i18n"
-import { Attribute } from "@/types"
-import { SKILL as S } from "@/keys.ts"
+import { Attribute, Skill } from "@/types"
+import { ATTRIBUTE, SKILL as S } from "@/keys.ts"
 
 const UNSET = null
 /*
-Might ( STRENGTH )
-Endurance ( STRENGTH )
-Melee ( STRENGTH )
-Crafting ( STRENGTH )
-Stealth ( AGILITY )
-Sleight of Hand ( AGILITY )
-Move ( AGILITY )
-Marksmanship ( AGILITY )
-Scouting ( WITS )
-Lore ( WITS )
-Survival ( WITS )
-Insight ( WITS )
-Manipulation ( EMPATHY )
-Performance ( EMPATHY )
-Healing ( EMPATHY )
 Animal Handling ( EMPATHY )
+Crafting ( STRENGTH )
+Endurance ( STRENGTH )
+Healing ( EMPATHY )
+Insight ( WITS )
+Lore ( WITS )
+Manipulation ( EMPATHY )
+Marksmanship ( AGILITY )
+Melee ( STRENGTH )
+Might ( STRENGTH )
+Move ( AGILITY )
+Performance ( EMPATHY )
+Scouting ( WITS )
+Sleight of Hand ( AGILITY )
+Stealth ( AGILITY )
+Survival ( WITS )
 */
 
-export const SKILLS = {
+interface SkillObj {
+  id: Skill
+  attribute: Attribute
+  rank: number | null
+  name?: string
+}
+
+export interface SkillMap {
+  [propType: string]: SkillObj
+}
+
+export const SKILLS: SkillMap = {
   [S.ANIMAL_HANDLING]: {
     id: S.ANIMAL_HANDLING,
-    name: "animal handling",
-    attribute: "",
+    attribute: "empathy",
     rank: UNSET,
-    description: "",
+    // name: "animal handling",
   },
   [S.CRAFTING]: {
     id: S.CRAFTING,
-    name: "crafting",
+    attribute: "strength",
     rank: UNSET,
+    // name: "crafting",
   },
   [S.ENDURANCE]: {
     id: S.ENDURANCE,
-    name: "endurance",
+    attribute: "strength",
     rank: UNSET,
+    // name: "endurance",
   },
   [S.HEALING]: {
     id: S.HEALING,
-    name: "healing",
     rank: UNSET,
+    attribute: "empathy",
+    // name: "healing",
   },
   [S.INSIGHT]: {
     id: S.INSIGHT,
-    name: "insight",
+    attribute: "wits",
     rank: UNSET,
+    // name: "insight",
   },
   [S.LORE]: {
     id: S.LORE,
-    name: "lore",
+    attribute: "wits",
     rank: UNSET,
+    // name: "lore",
   },
   [S.MANIPULATION]: {
     id: S.MANIPULATION,
-    name: "manipulation",
+    attribute: "empathy",
     rank: UNSET,
+    // name: "manipulation",
   },
   [S.MARKSMANSHIP]: {
     id: S.MARKSMANSHIP,
-    name: "marksmanship",
+    attribute: "agility",
     rank: UNSET,
+    // name: "marksmanship",
   },
   [S.MELEE]: {
     id: S.MELEE,
-    name: "melee",
+    attribute: "strength",
     rank: UNSET,
+    name: "melee",
   },
   [S.MIGHT]: {
     id: S.MIGHT,
-    name: "might",
+    attribute: "strength",
     rank: UNSET,
+    // name: "might",
   },
   [S.MOVE]: {
     id: S.MOVE,
-    name: "move",
+    attribute: "agility",
     rank: UNSET,
+    // name: "move",
   },
   [S.PERFORMANCE]: {
     id: S.PERFORMANCE,
-    name: "performance",
+    attribute: "empathy",
     rank: UNSET,
+    // name: "performance",
   },
   [S.SCOUTING]: {
     id: S.SCOUTING,
-    name: "scouting",
+    attribute: "wits",
     rank: UNSET,
+    name: "scouting",
   },
   [S.SLEIGHT_OF_HAND]: {
     id: S.SLEIGHT_OF_HAND,
-    name: "sleight of hand",
+    attribute: "agility",
     rank: UNSET,
+    // name: "sleight of hand",
   },
   [S.STEALTH]: {
     id: S.STEALTH,
-    name: "stealth",
+    attribute: "agility",
     rank: UNSET,
+    // name: "stealth",
   },
   [S.SURIVAL]: {
     id: S.SURIVAL,
-    name: $t("survival"),
+    attribute: "wits",
     rank: UNSET,
   },
 }
 
-export function getSkills() {
+export function getSkills(): SkillMap {
   return JSON.parse(JSON.stringify(SKILLS))
+}
+
+export function iconFor(attribute: Attribute): string {
+  const map = {
+    [ATTRIBUTE.STRENGTH]: "strong",
+    [ATTRIBUTE.AGILITY]: "acrobatic",
+    [ATTRIBUTE.WITS]: "brain",
+    [ATTRIBUTE.EMPATHY]: "shaking-hands",
+  }
+  return map[attribute] || "close-button"
 }

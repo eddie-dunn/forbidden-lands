@@ -10,8 +10,9 @@ Other skills: Max 1
 Skillmax: 5
 */
 import { AGE, CLASS } from "@/keys.ts"
-import { getSkills } from "@/skills.ts"
+import { getSkills, iconFor, SKILLS } from "@/skills.ts"
 import { getSkillMax, isClassSkill } from "@/classes.ts"
+import SvgIcon from "@/components/SvgIcon.vue"
 import Vue from "vue"
 
 function calcSkillPoints(age) {
@@ -25,28 +26,24 @@ function calcSkillPoints(age) {
 }
 
 export default Vue.extend({
+  components: {
+    SvgIcon,
+  },
   props: {
     // TODO: Send in characterData object instead
     age: {
       type: String,
       required: true,
-      // validator: function(value) {
-      //   return Object.values(AGE).indexOf(value) !== -1
-      // },
+      validator: function(value) {
+        return [...Object.values(AGE), null, ""].indexOf(value) !== -1
+      },
     },
     profession: {
-      // type: String,
       required: true,
     },
-    lang: {
-      type: String,
-      required: true,
-    },
-    // Functions
     skills: {
       type: Object,
       required: true,
-      // default: () => JSON.parse(JSON.stringify(SKILLS)),
     },
   },
   computed: {
@@ -56,6 +53,11 @@ export default Vue.extend({
     valid() {
       return this.skillPoints - this.pointsSpent() === 0
     },
+  },
+  data() {
+    return {
+      SKILLS,
+    }
   },
   watch: {
     valid: {
@@ -67,6 +69,7 @@ export default Vue.extend({
     },
   },
   methods: {
+    iconFor,
     pointsSpent() {
       return Object.entries(this.skills)
         .map((item) => item[1].rank)
@@ -92,6 +95,11 @@ export default Vue.extend({
     <div>Spent: {{ pointsSpent() }}/{{ skillPoints }}</div>
     <div class="skillbox">
       <div v-for="skill in skills" :key="skill.id" class="skillrow">
+        <SvgIcon
+          :name="iconFor(SKILLS[skill.id].attribute)"
+          :title="skill.attribute"
+          class="attribute-icon"
+        />
         <input
           class="skill-input"
           :id="skill.id"
@@ -119,22 +127,18 @@ export default Vue.extend({
 
 <style lang="less" scoped>
 .skillbox {
-  // display: inline-grid;
-  // grid-auto-columns: repeat(3, 1fr);
   display: grid;
-
-  // grid-auto-columns: minmax(max-content, 2fr);
-  grid-template-columns: repeat(auto-fit, minmax(16ch, 1fr));
-  // grid-template-columns: repeat(auto-fill, minmax(min-content, 1px));
-  // grid-auto-columns: max-content;
-  grid-gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(19ch, 1fr));
+  row-gap: 10px;
+  column-gap: 3px;
 }
 
 .skillrow {
-  // margin: 0.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  // flex: 1 1 auto;
+  // flex-basis: 30%;
 }
 
 .class-skill {
@@ -150,6 +154,7 @@ export default Vue.extend({
 .skill-input {
   height: 1rem;
   width: 2.1rem;
+  margin-left: 0.2rem;
 }
 
 // input:valid.with-checkbox + span::before {
