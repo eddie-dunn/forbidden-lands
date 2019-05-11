@@ -157,14 +157,11 @@ export default CharacterCreatorMain
 
       <div class="action-bar-wrapper">
         <div class="action-bar">
-          <button class="button-action-bar" v-on:click="resetClicked">
-            Reset
-          </button>
-          <button class="button-action-bar" v-on:click="resetClicked">
-            Import
-          </button>
-          <button class="button-action-bar" v-on:click="resetClicked">
-            Export
+          <button
+            class="button-action-bar button-white"
+            v-on:click="resetClicked"
+          >
+            Delete
           </button>
           <button class="button-action-bar" v-on:click="saveClicked">
             Save
@@ -218,7 +215,7 @@ label {
 .button-white {
   background-color: #fff;
   color: #42b983;
-  border-radius: 20%;
+  // border-radius: 20%;
   transition: all 0.15s ease;
   box-sizing: border-box;
   border: 1px solid #4fc08d;
