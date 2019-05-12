@@ -4,7 +4,14 @@ import Vue from "vue"
 import Component from "vue-class-component"
 // https://github.com/vuejs/vue-class-component/blob/master/example/src/App.vue
 
-const Props = Vue.extend({})
+const Props = Vue.extend({
+  props: {
+    maximized: {
+      type: Boolean,
+      default: true,
+    },
+  },
+})
 
 export default class Modal extends Props {
   close(param: string): void {
@@ -17,7 +24,12 @@ export default class Modal extends Props {
   <transition name="modal">
     <div>
       <div class="modal-mask" @click.self="close()">
-        <div class="modal-container">
+        <div
+          :class="[
+            'modal-container',
+            this.maximized ? 'modal-container-full' : '',
+          ]"
+        >
           <!-- <span class="button x" @click.self="close()">✖</span> -->
           <span class="close-button" @click="close()">
             <svg
@@ -103,8 +115,8 @@ export default class Modal extends Props {
   // background: #42b983;
   background: @pastel-red;
   margin-left: auto;
-  margin-right: -16px; // Adjust if padding is changed in the modal container
-  margin-top: -16px; // Adjust if padding is changed in the modal container
+  // margin-right: -16px; // Adjust if padding is changed in the modal container
+  // margin-top: -16px; // Adjust if padding is changed in the modal container
   &:hover {
     background: white;
   }
@@ -138,8 +150,16 @@ export default class Modal extends Props {
 
   // width: 90vw; // we should actually slotted item decide size
   // height: 90vh;
-  width: 95%; // we should actually slotted item decide size
-  height: 95%;
+  // width: 95%; // we should actually slotted item decide size
+  // height: 95%;
+  max-width: 70%;
+  max-height: 70%;
+  &-full {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+  }
   // padding: 1rem;
   background-color: #fff;
   border-radius: 2px;
