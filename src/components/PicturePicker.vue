@@ -166,7 +166,7 @@ export default class PicturePicker extends AppProps {
 @import "~Style/colors.less";
 
 .modal-body {
-  overflow-y: scroll;
+  overflow-y: auto;
   max-height: 99%;
   // border: solid #42b98344 2px;
   border-top: solid @pastel-green 5px;
@@ -184,6 +184,7 @@ export default class PicturePicker extends AppProps {
   }
   &-form {
     display: flex;
+    flex-wrap: wrap;
     margin: 1rem 0;
     input > {
       margin-right: 1rem;
@@ -265,10 +266,6 @@ export default class PicturePicker extends AppProps {
 .placeholder {
   height: 500px;
   width: 300px;
-  // background: #fafafafa;
-  &::before {
-    content: "foo";
-  }
 }
 
 // Tooltip from http://www.menucool.com/tooltip/css-tooltip

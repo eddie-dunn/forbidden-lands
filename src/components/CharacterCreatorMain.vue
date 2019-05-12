@@ -1,10 +1,10 @@
 <script lang="ts">
-/* eslint-disable no-console */
 import AttributesSelector from "@/components/AttributesSelector.vue"
 import SkillSelector from "@/components/SkillSelector.vue"
 import TalentSelector from "@/components/TalentSelector.vue"
 import BaseSelector from "@/components/BaseSelector.vue"
 import PicturePicker from "@/components/PicturePicker.vue"
+import FlavorSelector from "@/components/FlavorSelector.vue"
 import Card from "@/components/Card.vue"
 import { AGE, CLASS, KIN } from "@/keys.ts"
 import { getSkills } from "@/skills"
@@ -28,6 +28,7 @@ const CharacterCreatorMain = Vue.extend({
     AttributesSelector,
     BaseSelector,
     Card,
+    FlavorSelector,
     PicturePicker,
     SkillSelector,
     TalentSelector,
@@ -64,11 +65,11 @@ const CharacterCreatorMain = Vue.extend({
       this.characterData.attributes = attributes
     },
     updateTalents(talents: any) {
+      /* eslint-disable-next-line no-console */
       console.log("new talents", talents)
       this.characterData.talents = talents
     },
     setImgSource(img: any) {
-      console.log("setting", img)
       this.characterData.portrait = img
     },
   },
@@ -79,25 +80,25 @@ export default CharacterCreatorMain
 <template>
   <div class="character_creator">
     <form class="character_creator-form" v-on:submit.prevent>
-      <Card :title="$t('Base data')">
+      <Card class="row-half" :title="$t('Base data')">
         <BaseSelector :data="characterData" />
       </Card>
 
-      <Card>
+      <Card class="row-half">
         <PicturePicker
           :portrait="characterData.portrait"
           @pickedPicture="setImgSource"
         />
       </Card>
 
-      <Card :title="$t('attributes')">
+      <Card class="row-half" :title="$t('attributes')">
         <AttributesSelector
           :charData="characterData"
           @attributes-updated="updateAttributes"
         />
       </Card>
 
-      <Card :title="$t('talents')">
+      <Card class="row-half" :title="$t('talents')">
         <TalentSelector
           class="content"
           :profession="characterData.class"
@@ -109,7 +110,7 @@ export default CharacterCreatorMain
         />
       </Card>
 
-      <Card :title="$t('skills')">
+      <Card class="row-half" :title="$t('skills')">
         <SkillSelector
           :profession="characterData.class"
           :age="getAgeType()"
@@ -118,42 +119,7 @@ export default CharacterCreatorMain
         />
       </Card>
 
-      <div class="row-full row-flex">
-        <Card :full-width="true" title="Flavor">
-          <div>
-            <label for="appearance">Appearance</label>
-            <textarea
-              id="appearance"
-              v-model="characterData.appearance"
-              placeholder="Face: Body: Clothing:"
-            ></textarea>
-          </div>
-          <div>
-            <label for="appearance">Pride</label>
-            <textarea
-              id="appearance"
-              v-model="characterData.pride"
-              placeholder="Pride"
-            ></textarea>
-          </div>
-          <div>
-            <label for="appearance">Dark Secret</label>
-            <textarea
-              id="appearance"
-              v-model="characterData.darkSecret"
-              placeholder="Dark secret"
-            ></textarea>
-          </div>
-          <div>
-            <label for="appearance">Relationships</label>
-            <textarea
-              id="appearance"
-              v-model="characterData.relationships"
-              placeholder="Relationships"
-            ></textarea>
-          </div>
-        </Card>
-      </div>
+      <FlavorSelector class="row-full" :data="characterData" />
 
       <div class="action-bar-wrapper">
         <div class="action-bar">
@@ -180,34 +146,6 @@ export default CharacterCreatorMain
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
-h1,
-h2,
-h3 {
-  // margin: 40px 0 0;
-  width: 100%;
-  text-align: center;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-  // color: red;
-}
-p {
-  text-align: left;
-  margin: 0.4rem;
-}
-label {
-  // margin: 0.5rem;
-  margin-right: 0.5rem;
-}
-
 .button-action-bar {
   margin: 0.5rem;
 }
@@ -226,10 +164,15 @@ label {
   margin: auto;
   row-gap: 0.5rem;
   column-gap: 0.5rem; // only seems to work in firefox
-  display: flex;
-  flex-wrap: wrap;
   margin: 0 -0.25rem;
   margin-top: 1rem;
+
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1 1 40%;
+  align-items: stretch;
+  justify-content: space-evenly;
+  align-content: stretch;
 }
 
 .action-bar-wrapper {
@@ -244,7 +187,10 @@ label {
 .action-bar {
   display: flex;
   overflow: auto;
-  justify-content: space-around;
+  justify-content: flex-end;
+  @media (max-width: 400px) {
+    justify-content: space-around;
+  }
   background: #fffe;
   border: solid #42b98344 2px;
 }
@@ -256,34 +202,11 @@ label {
 }
 
 .row-full {
-  width: 100%;
+  flex-basis: 100%;
+  flex-grow: 2;
 }
-
-.row-flex {
-  display: flex;
-  justify-content: space-between;
+.row-half {
+  flex-basis: 40%;
+  flex-grow: 1;
 }
-
-// .content {
-//   flex-grow: 2;
-//   display: flex;
-//   flex-direction: column;
-//   flex-basis: 50%;
-//   // justify-content: wrap;
-//   * > {
-//     display: flex;
-//     justify-content: space-between;
-//     align-items: center;
-//   }
-// }
-
-// input:valid.with-checkbox + span::before {
-//   content: "✓";
-//   // padding-left: 5px;
-// }
-
-// input:invalid.with-checkbox + span::before {
-//   content: "✖";
-//   // padding-left: 5px;
-// }
 </style>

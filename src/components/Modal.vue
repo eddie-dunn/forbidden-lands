@@ -115,7 +115,7 @@ export default class Modal extends Props {
 
 .modal-mask {
   position: fixed;
-  z-index: 1;
+  z-index: 500;
   top: 0;
   left: 0;
   width: 100%;

@@ -151,9 +151,9 @@ export default TalentSelector
       </select>
       <span class="toggle hidden">
         <input type="radio" name="kinTalentRank" checked="checked" disabled />
-        <label for="sizeWeight">1</label>
+        <label for="kinTalentRank">1</label>
         <input type="radio" name="kinTalentRank" disabled />
-        <label for="sizeDimensions">2</label>
+        <label for="kinTalentRank">2</label>
       </span>
     </div>
     <div class="talent-item">
@@ -176,7 +176,7 @@ export default TalentSelector
           checked="checked"
           :disabled="talentRanks.classRank.disabled"
         />
-        <label for="sizeWeight">1</label>
+        <label for="classTalentRank">1</label>
         <input
           type="radio"
           name="classTalentRank"
@@ -184,7 +184,7 @@ export default TalentSelector
           value="2"
           :disabled="talentRanks.classRank.disabled"
         />
-        <label for="sizeDimensions">2</label>
+        <label for="classTalentRank">2</label>
       </span>
     </div>
     <div
@@ -212,7 +212,7 @@ export default TalentSelector
           value="1"
           checked="checked"
         />
-        <label for="'talent' + index">1</label>
+        <label :for="'talent' + index">1</label>
         <input
           type="radio"
           :name="'talent' + index"
@@ -220,7 +220,7 @@ export default TalentSelector
           value="2"
           :disabled="index >= generalTalentsAllowed"
         />
-        <label for="'talent + index'">2</label>
+        <label :for="'talent + index'">2</label>
         <!-- TODO: Add input for lvl 3 as well when supporting live Character Sheet -->
       </span>
     </div>
@@ -232,10 +232,16 @@ export default TalentSelector
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  margin: 0.25rem;
+  margin-top: 0.25rem;
   * > {
-    flex-basis: 50%;
+    flex-basis: 45%;
   }
+}
+
+label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .talent-rank {

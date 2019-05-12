@@ -37,14 +37,14 @@ export default class CharacterListView extends Vue {
         <CharacterCard :charData="character" @remove-card="removeCard" />
       </div>
       <div>
-        <CharacterCard />
+        <CharacterCard :empty="true" />
       </div>
     </div>
     <Card v-else>
       <p>This section will include a card view of all saved characters</p>
       <p>
         No characters found; why not
-        <a href="/character-creator"> create a new one</a>?
+        <a href="/character-creator/new/"> create a new one</a>?
       </p>
     </Card>
   </div>

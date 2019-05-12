@@ -6,10 +6,6 @@ export default Vue.extend({
   name: "CharacterCreatorCard",
   props: {
     charData: Object as () => CharacterData | null,
-    empty: {
-      type: Boolean,
-      default: false,
-    },
   },
   created() {
     this.$on("card-sign", (message: any) => (this.sign = message))
@@ -24,8 +20,16 @@ export default Vue.extend({
       if (!this.charData) return ""
       return this.charData.metadata.id
     },
+    empty(): boolean {
+      return !this.charData
+    },
     cardLink(): string {
-      return `/character-creator/${this.characterId}`
+      if (this.empty) return `/character-creator/new`
+      else if (this.charData) {
+        // check if new
+        return `/character-creator/new/edit/${this.characterId}`
+      }
+      return "#"
     },
   },
   methods: {
@@ -49,10 +53,16 @@ export default Vue.extend({
     </div>
   </div>
   <div v-else class="stat-card row-full">
-    <img class="top" :src="charData.portrait" @click.self="cardClicked()" />
+    <img
+      class="top-image"
+      :src="charData.portrait"
+      @click.self="cardClicked()"
+    />
     <div class="header">
       <div class="card-contents">
-        <h3>{{ charData.name }}</h3>
+        <h3>
+          <a class="inactive-link" :href="cardLink">{{ charData.name }}</a>
+        </h3>
       </div>
     </div>
     <button @click.self="remove()">
@@ -80,25 +90,28 @@ h3 {
   }
 }
 
+.inactive-link {
+  text-decoration: none;
+  color: #2c3e50;
+}
+
 .placeholder {
   cursor: pointer;
-  // background: #fafafa;
-  background: @pastel-green;
-  color: white;
-  border-radius: 0 0 1rem 1rem;
-  // max-height: 90%;
+  color: @pastel-green;
   flex-grow: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 400px;
+  // height: 400px;
+  height: 3rem;
   transition: 0.2s ease;
   &:hover {
-    background: ~"@{pastel-green}99";
+    background: ~"@{pastel-green}ee";
+    color: white;
   }
 }
 
-.top {
+.top-image {
   object-fit: cover;
   object-position: top;
   max-height: 400px;
@@ -129,7 +142,7 @@ h3 {
 
 .stat-card {
   &:active {
-    transform: translateY(4px);
+    transform: translateY(2px);
   }
   // cursor: pointer;
   // width: 50vw;
@@ -146,15 +159,17 @@ h3 {
 
   // border: solid gray 2px;
   // border: solid rgba(66, 185, 131, 0.3) 2px;
-  border: solid #42b98344 3px;
-  border-radius: 1rem;
-  border-radius: 0 0 1rem 1rem;
+  // border: solid #42b98344 3px;
+  // border-radius: 1rem;
+  // border-radius: 0 0 1rem 1rem;
   // padding: 1rem;
   // align-content: center;
   // justify-items: baseline;
   // align-items: baseline;
   // box-shadow: 3px 3px 5px 6px #cccccc80;
   height: 100%;
+  box-shadow: 0px 1px 5px #555;
+  overflow: hidden;
 }
 
 // .row-full {

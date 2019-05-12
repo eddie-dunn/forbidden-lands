@@ -92,7 +92,7 @@ export default Vue.extend({
 
 <template>
   <div>
-    <div>Spent: {{ pointsSpent() }}/{{ skillPoints }}</div>
+    <div>{{ $t("Remaining") }}: {{ skillPoints - pointsSpent() }}</div>
     <div class="skillbox">
       <div v-for="skill in skills" :key="skill.id" class="skillrow">
         <SvgIcon

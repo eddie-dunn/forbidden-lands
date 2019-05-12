@@ -34,7 +34,7 @@ export default Vue.extend({
 </script>
 
 <template>
-  <div :class="['stat-card', valid ? '' : 'stat-card-invalid', 'row-full']">
+  <div :class="['stat-card', valid ? '' : 'stat-card-invalid']">
     <div class="header">
       <h3 v-if="title">{{ title }}</h3>
       <span :class="['card-sign', valid ? '' : 'card-sign-invalid']">
@@ -93,7 +93,6 @@ h3 {
 }
 
 .stat-card {
-  // fix container margin issues:
   margin: 0 0.25rem 0.5rem 0.25rem;
   // width: 50vw;
   // background: #fafafa;
@@ -101,23 +100,24 @@ h3 {
   text-align: left;
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
-  flex-basis: 40%;
+  // flex-grow: 1;
+  // flex-basis: 40%;
   min-width: 18rem;
   justify-content: space-around;
   align-content: space-between;
 
   // border: solid gray 2px;
   // border: solid rgba(66, 185, 131, 0.3) 2px;
-  border: solid #42b98344 2px;
+  // border: solid #42b98344 2px;
   // &-invalid {
   //   border: solid ~"@{pastel-red}44" 2px;
   // }
-  border-radius: 1rem;
+  // border-radius: 1rem;
   padding: 1rem;
   // align-content: center;
   // justify-items: baseline;
   // align-items: baseline;
+  box-shadow: 0px 1px 5px #555;
 }
 
 // .row-full {

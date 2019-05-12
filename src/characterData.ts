@@ -1,8 +1,16 @@
-import { Age, KinName, Profession, Sex, Skill, TalentAll } from "@/types"
+import {
+  Age,
+  Attribute,
+  KinName,
+  Profession,
+  Sex,
+  Skill,
+  TalentAll,
+} from "@/types"
 import { getAgeType, getAttributePoints, getStartingTalents } from "@/age"
 
 import { AGE } from "@/keys"
-import { getSkills } from "@/skills"
+import { getSkills, SkillMap } from "@/skills"
 import uuid1 from "uuid/v1"
 
 // import { CLASS, KIN } from "@/keys"
@@ -19,6 +27,7 @@ export interface SkillData {
   id: Skill // name is gotten from translations via id
   rank: number
   description: string
+  attribute: Attribute
 }
 
 export interface AttributeData {
@@ -44,7 +53,7 @@ export interface CharacterData {
   name: string
   reputation: number
   sex: Sex | null
-  skills: SkillData[] // or object?
+  skills: SkillMap
   talents: TalentData[]
   portrait: string | null
   metadata: MetaData
@@ -123,8 +132,8 @@ export function validateAttributes({
 }
 
 export function validateSkills({ skills, age, kin }: CharacterData): boolean {
-  const reducer = (accumulator: number, currentValue: number) =>
-    Number(accumulator) + currentValue
+  const reducer = (accumulator: number | null, currentValue: number | null) =>
+    Number(accumulator) + Number(currentValue)
   const skillRanksSpent = Object.entries(skills)
     .map((item) => item[1].rank)
     .reduce(reducer)

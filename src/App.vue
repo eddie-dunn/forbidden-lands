@@ -13,7 +13,7 @@ export default Vue.extend({
     <div class="navbar">
       <div class="route-links">
         <router-link to="/">Home</router-link> |
-        <router-link to="/character-creator">Create new</router-link> |
+        <router-link to="/character-creator/new/">Create new</router-link> |
         <router-link to="/about">About</router-link>
       </div>
       <div class="route-links">
@@ -60,11 +60,7 @@ export default Vue.extend({
       color: #42b983;
     }
   }
-  // padding: 1rem;
-  // margin: .5rem;
-  // // width: 100vw;
-  // max-width: 1024px;
-  // // max-width: 768px;
+  z-index: 10;
 }
 
 .capitalize {
@@ -73,5 +69,42 @@ export default Vue.extend({
 
 input[type="number"] {
   height: 1rem;
+}
+
+button::-moz-focus-inner {
+  border: 0;
+}
+
+// &::-moz-focus-outer {
+//   border: 0;
+// }
+
+button,
+.button {
+  &::-moz-focus-inner {
+    border: 0;
+  }
+  outline: 0;
+  text-decoration: none;
+  padding: 0.5em 2em;
+  // border-radius: 2em;
+  border: none;
+  display: inline-block;
+  color: #fff;
+  background-color: #4fc08d;
+  transition: all 0.15s ease;
+  box-sizing: border-box;
+  border: 1px solid #4fc08d;
+  cursor: pointer;
+
+  &:active {
+    // box-shadow: none;
+    transform: translateY(2px);
+  }
+  &:hover {
+    color: #42b983;
+    background-color: #fff;
+    // box-shadow: 0px -5px 5px rgba(255, 229, 255, 0.4) inset;
+  }
 }
 </style>

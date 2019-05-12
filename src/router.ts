@@ -30,9 +30,16 @@ export default new Router({
         import(/* webpackChunkName: "about" */ "./views/About.vue"),
     },
     {
-      path: "/character-creator/:id?",
+      path: "/character-creator/new",
+      name: "character_creator-new",
+      /* webpackChunkName: "character_creator" */
+      component: () => import("./views/CharacterCreatorView.vue"),
+      // component: CharacterCreatorView,
+    },
+    {
+      path: "/character-creator/new/edit/:id",
       props: true,
-      // name: "character_creator",
+      name: "character_creator-edit",
       /* webpackChunkName: "character_creator" */
       // component: () => import("./views/CharacterCreatorView.vue"),
       component: CharacterCreatorView,

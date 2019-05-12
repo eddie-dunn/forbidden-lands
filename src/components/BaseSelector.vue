@@ -175,7 +175,7 @@ export default Vue.extend({
     </div>
 
     <div v-if="this.mdata.class">
-      <h4>{{ $t("Gear") }}</h4>
+      <h4>{{ $t("Starting gear") }}</h4>
       <div>
         {{ $t(PROFESSION[this.mdata.class].gear_description) }}
       </div>
@@ -201,8 +201,11 @@ export default Vue.extend({
         {{ $t("D") + PROFESSION[this.mdata.class].starting_resources.water }}
       </div>
       <div>
-        {{ $t("Arrows") }}: D{{
+        {{ $t("Arrows") }}:
+        {{
           PROFESSION[this.mdata.class].starting_resources.arrows
+            ? $t("D") + PROFESSION[this.mdata.class].starting_resources.arrows
+            : 0
         }}
       </div>
       <div v-if="false">
@@ -232,10 +235,16 @@ label,
 }
 
 .consumables {
-  display: flex;
-  flex-grow: 1;
-  justify-content: space-between;
-  margin: 1rem;
+  // display: flex;
+  // flex: 1 1 100%;
+  // justify-items: stretch;
+  // flex-grow: 1;
+  // justify-content: space-between;
+  // margin: 1rem;
+  div > {
+    display: inline-block;
+    margin-right: 1rem;
+  }
 }
 
 .cell {
