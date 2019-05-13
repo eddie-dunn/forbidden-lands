@@ -170,7 +170,7 @@ export default Vue.extend({
 }
 
 .attribute-input {
-  width: 2.1rem;
+  width: 2.5rem;
   height: 1rem;
   // margin-right: 2rem;
   flex-basis: 1;

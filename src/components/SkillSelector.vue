@@ -153,7 +153,7 @@ export default Vue.extend({
 
 .skill-input {
   height: 1rem;
-  width: 2.1rem;
+  width: 2.5rem;
   margin-left: 0.2rem;
 }
 
