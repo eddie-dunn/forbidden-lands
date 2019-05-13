@@ -1,6 +1,7 @@
 const path = require("path")
 
 module.exports = {
+  publicPath: process.env.NODE_ENV === "production" ? "/fl/cc" : "/",
   configureWebpack: {
     module: {
       rules: [
@@ -27,7 +28,6 @@ module.exports = {
   },
 
   devServer: {
-    // open: process.platform === 'darwin',
     host: "0.0.0.0",
     port: 3000, // CHANGE YOUR PORT HERE!
     // https: false,
