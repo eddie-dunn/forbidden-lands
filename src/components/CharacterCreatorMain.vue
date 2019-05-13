@@ -40,8 +40,10 @@ const CharacterCreatorMain = Vue.extend({
       this.characterData.name = this.charName
     }
   },
-  data: () => {
+  data() {
     return {
+      // TODO: Resolve double request to getNewCharacterData;
+      // loadCharacterFromLocalStorage also calls that method
       characterData: getNewCharacterData(),
       showJSON: false,
     }
@@ -54,10 +56,10 @@ const CharacterCreatorMain = Vue.extend({
         this.$router.push("/character-list")
       }
     },
-    resetClicked(event: any) {
-      if (event) event.preventDefault()
-      this.characterData = getNewCharacterData()
-    },
+    // resetClicked(event: any) {
+    //   if (event) event.preventDefault()
+    //   this.characterData = getNewCharacterData()
+    // },
     getAgeType() {
       return getAgeType(this.characterData.age, this.characterData.kin)
     },
@@ -123,10 +125,7 @@ export default CharacterCreatorMain
 
       <div class="action-bar-wrapper">
         <div class="action-bar">
-          <button
-            class="button-action-bar button-white"
-            v-on:click="resetClicked"
-          >
+          <button class="button-action-bar button-white" v-on:click="() => {}">
             Delete
           </button>
           <button class="button-action-bar" v-on:click="saveClicked">

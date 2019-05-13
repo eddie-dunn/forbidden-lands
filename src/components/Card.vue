@@ -109,15 +109,16 @@ h3 {
   // border: solid gray 2px;
   // border: solid rgba(66, 185, 131, 0.3) 2px;
   // border: solid #42b98344 2px;
+  border: solid #42b98399 2px;
   // &-invalid {
   //   border: solid ~"@{pastel-red}44" 2px;
   // }
-  // border-radius: 1rem;
+  border-radius: 1rem;
   padding: 1rem;
   // align-content: center;
   // justify-items: baseline;
   // align-items: baseline;
-  box-shadow: 0px 1px 5px #555;
+  // box-shadow: 0px 1px 5px #555;
 }
 
 // .row-full {

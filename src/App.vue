@@ -25,12 +25,19 @@ export default Vue.extend({
 </template>
 
 <style lang="less">
+// body {
+//   // background: #2c3e50;
+//   // background: #282c34;
+// }
+
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  // color: white;
+
   display: flex;
   flex-direction: column;
   max-width: 1024px;
@@ -47,10 +54,13 @@ export default Vue.extend({
   position: sticky;
   top: 0px;
   background: white;
+  // border: solid #42b98344 2px;
+  border: solid #42b98399 2px;
+  // background: #2c3e50;
+  // background: #282c34;
 
   // // width: 100%;
   // background: #fafafa;
-  border: solid #42b98344 2px;
   // border-radius: 1rem;
   padding: 10px;
   a {

@@ -70,7 +70,7 @@ const talents = {
   // Kin
   TRUE_GRIT: "Bita ihop", // dwarf
   INNER_PEACE: "Inre frid", // elf
-  SNEAKY: "Sneaky", // goblin
+  SNEAKY: "Lömsk", // goblin
   PSYCHIC_POWER: "Psykisk kraft", // half-elf
   HARD_TO_CATCH: "Kvickfotad", // halfling
   ADAPTIVE: "Adaptiv", // human
@@ -123,7 +123,7 @@ const talents = {
   TANNER: "Garvare",
   THREATENING: "Hotfull",
   THROWING_ARM: "Kastarm",
-  WANDERER: "Stigfinnare",
+  WANDERER: "Vandrare",
 
   // Druid
   PATH_OF_HEALING: "Helandets Väg",
@@ -230,6 +230,7 @@ export default {
   "Gear": "Utrustning",
   "General talent": "Allmän talang",
   "General talents": "Allmänna talanger",
+  "Kin": "Släke",
   "Kin talent": "Släktestalang",
   "Male": "Man",
   "Name": "Namn",
@@ -242,6 +243,7 @@ export default {
   "Reputation": "Rykte",
   "Roll dice": "Kasta tärning",
   "Starting gear": "Utrustning vid start",
+  "Talent": "Talang",
   "Torches": "Facklor",
   "Water": "Vatten",
   "female": "kvinna",

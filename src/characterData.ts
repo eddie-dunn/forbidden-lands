@@ -7,27 +7,19 @@ import {
   Skill,
   TalentAll,
 } from "@/types"
+import { SkillMap, getSkills } from "@/skills"
 import { getAgeType, getAttributePoints, getStartingTalents } from "@/age"
 
 import { AGE } from "@/keys"
-import { getSkills, SkillMap } from "@/skills"
 import uuid1 from "uuid/v1"
 
 // import { CLASS, KIN } from "@/keys"
 // import { stringify } from "querystring"
 
-export interface TalentData {
+export interface CharacerTalent {
   // name is gotten from translations via id
   id: TalentAll
-  description: string
   rank: number
-}
-
-export interface SkillData {
-  id: Skill // name is gotten from translations via id
-  rank: number
-  description: string
-  attribute: Attribute
 }
 
 export interface AttributeData {
@@ -37,7 +29,7 @@ export interface AttributeData {
   empathy: number | null
 }
 
-export interface MetaData {
+export interface CharacterMetaData {
   id: string
   active: boolean
   hasBeenActivated: boolean
@@ -54,15 +46,15 @@ export interface CharacterData {
   reputation: number
   sex: Sex | null
   skills: SkillMap
-  talents: TalentData[]
+  talents: CharacerTalent[]
   portrait: string | null
-  metadata: MetaData
+  metadata: CharacterMetaData
   experience: number
   willpower: number
 }
 
 export function getNewCharacterData(): CharacterData {
-  return {
+  const newCharData: CharacterData = {
     name: "",
     // age: null,
     age: 33,
@@ -94,6 +86,7 @@ export function getNewCharacterData(): CharacterData {
       hasBeenActivated: false,
     },
   }
+  return newCharData
 }
 
 export function calcNewCharSkillPoints(age: Age | null) {

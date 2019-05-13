@@ -1,3 +1,5 @@
+// This shit needs to be seriously refactored, the relationship between keys
+// types and talents in this module is too damn confusing
 import { CLASS, KIN, TALENT } from "@/keys.ts"
 import {
   KinName,
@@ -9,47 +11,61 @@ import {
 } from "@/types"
 
 export interface Talent {
-  id: string
+  id: TalentAll
   name?: string
-  description_id?: string
+  translationKey: string // TODO should be removed, and translations updated
+  description_id?: string[]
 }
 
-export interface TalentObj {
-  id: string
-  rank: number
-}
-export function getTalentObjects(talentList: TalentAll[]): TalentObj[] {
-  const talentObj = talentList.map((talentName: TalentAll) => {
-    return {
-      id: talentName,
-      rank: -1,
-    }
-  })
-  /* eslint-disable no-console */
-  console.log("talentobj", talentObj)
-  return talentObj
-}
-
+// TODO: Remove
 export const transformToTranslationKey = (s: string) =>
   s.replace(/ /g, "_").toUpperCase()
 
-function makeTalent(name: string, description_id = ""): Talent {
-  return { id: transformToTranslationKey(name), name, description_id }
+export const KIN_TALENTS = {
+  //TODO: remove
+  [KIN.DWARF]: {
+    id: "True Grit",
+    translationKey: transformToTranslationKey("True Grit"),
+    description_id: [""],
+  },
+  [KIN.ELF]: {
+    id: "Inner Peace",
+    tra: transformToTranslationKey("Inner Peace"),
+    description_id: [""],
+  },
+  [KIN.GOBLIN]: {
+    id: "Sneaky",
+    translationKey: transformToTranslationKey("Sneaky"),
+    description_id: [""],
+  },
+  [KIN.HALFELF]: {
+    id: "Psychic Power",
+    tra: transformToTranslationKey("Psychich Power"),
+    description_id: [""],
+  },
+  [KIN.HALFLING]: {
+    id: "Hard to Catch",
+    translationKey: transformToTranslationKey("Hard to Catch"),
+    description_id: [""],
+  },
+  [KIN.HUMAN]: {
+    id: "Adaptive",
+    translationKey: transformToTranslationKey("Adaptive"),
+    description_id: [""],
+  },
+  [KIN.ORC]: {
+    id: "Unbreakable",
+    translationKey: transformToTranslationKey("Unbreakable"),
+    description_id: [""],
+  },
+  [KIN.WOLFKIN]: {
+    id: "Hunting Instincts",
+    translationKey: transformToTranslationKey("Hunting Instincts"),
+    description_id: [""],
+  },
 }
 
 type KinTalentMap = { [key in KinName]: TalentKin }
-export const KIN_TALENTS = {
-  //TODO: remove
-  [KIN.DWARF]: makeTalent("True Grit"),
-  [KIN.ELF]: makeTalent("Inner Peace"),
-  [KIN.GOBLIN]: makeTalent("Sneaky"),
-  [KIN.HALFELF]: makeTalent("Psychic Power"),
-  [KIN.HALFLING]: makeTalent("Hard to Catch"),
-  [KIN.HUMAN]: makeTalent("adaptive"),
-  [KIN.ORC]: makeTalent("Unbreakable"),
-  [KIN.WOLFKIN]: makeTalent("Hunting Instincts"),
-}
-
 export const KIN_TALENTS2: KinTalentMap = {
   human: "Adaptive",
   halfling: "Hard to Catch",
@@ -61,13 +77,7 @@ export const KIN_TALENTS2: KinTalentMap = {
   orc: "Unbreakable",
 }
 
-export function getKinTalent(kin: KinName | null): Talent | null {
-  if (!kin) return null
-  return KIN_TALENTS[kin]
-}
-
 type ProfessionTalentMap = { [key in Profession]: TalentProfession[] }
-
 export const PROFESSION_TALENTS: ProfessionTalentMap = {
   druid: ["Path of Healing", "Path of Shifting Shapes", "Path of Sight"],
   fighter: ["Path of the Blade", "Path of the Enemy", "Path of the Shield"],
@@ -84,6 +94,7 @@ export const PROFESSION_TALENTS: ProfessionTalentMap = {
   ],
 }
 
+// TODO: Remove CLASS_TALENTS?
 export const CLASS_TALENTS = {
   [CLASS.DRUID]: {
     [TALENT.PATH_OF_HEALING]: {
@@ -147,14 +158,22 @@ export function getTalentsForProfession(
   return PROFESSION_TALENTS[profession]
 }
 
-export const GENERAL_TALENTS = {
+// Metadata for General Talents
+interface TalentMetaGeneral /* extends TalentMeta */ {
+  id?: string
+  name: TalentGeneral
+  description_id?: string[]
+  rank?: number
+}
+type GeneralTalentMap = { [key: string]: TalentMetaGeneral }
+export const GENERAL_TALENTS: GeneralTalentMap = {
   [TALENT.AMBIDEXTROUS]: {
-    id: [TALENT.AMBIDEXTROUS],
+    id: TALENT.AMBIDEXTROUS,
     name: "Ambidextrous",
-    description_id: "",
+    description_id: [""],
   },
   [TALENT.AXE_FIGHTER]: {
-    name: "Axe fighter",
+    name: "Axe Fighter",
   },
   [TALENT.BERSERKER]: {
     name: "Berserker",
@@ -220,6 +239,8 @@ export const GENERAL_TALENTS = {
 }
 
 export const GENERAL_TALENTS2: TalentGeneral[] = [
+  // An array of Talent IDs
+
   "Ambidextrous",
   "Axe Fighter",
   "Berserker",
@@ -253,8 +274,8 @@ export const GENERAL_TALENTS2: TalentGeneral[] = [
   "Quartermaster",
   "Quickdraw",
   "Sailor",
-  "Sharpshooter",
   "Sharp Tongue",
+  "Sharpshooter",
   "Shield Fighter",
   "Sixth Sense",
   "Smith",
@@ -271,7 +292,7 @@ export const GENERAL_TALENTS2: TalentGeneral[] = [
 export const ALL_TALENTS = {
   ...KIN_TALENTS,
   ...CLASS_TALENTS,
-  ...GENERAL_TALENTS,
+  // ...GENERAL_TALENTS,
 }
 
 export function getClassTalents(className: Profession | null) {
