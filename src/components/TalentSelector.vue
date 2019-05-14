@@ -126,7 +126,9 @@ const TalentSelector = Vue.extend({
       this.$emit("talents-updated", exportedTalents)
     },
     isTalentDisabled(index: number) {
-      return this.talentIncreased || index >= this.generalTalentsAllowed
+      const disabled =
+        this.talentIncreased || index > this.generalTalentsAllowed
+      return disabled
     },
   },
   watch: {
@@ -246,7 +248,7 @@ export default TalentSelector
           :name="'talent' + index"
           v-model.number="talentRanks[index + 1]"
           value="2"
-          :disabled="isTalentDisabled(index)"
+          :disabled="isTalentDisabled(index + 1)"
         />
         <label :for="'talent + index'">2</label>
         <!-- TODO: Add input for lvl 3 as well when supporting live Character Sheet -->
