@@ -8,6 +8,7 @@ import {
   TalentAll,
 } from "@/types"
 import { SkillMap, getSkills } from "@/skills"
+import { getSkillMax } from "@/classes.ts"
 import { getAgeType, getAttributePoints, getStartingTalents } from "@/age"
 
 import { AGE } from "@/keys"
@@ -39,7 +40,7 @@ export interface CharacterData {
   age: number | null
   ageType: Age
   attributes: AttributeData
-  class: Profession | null
+  profession: Profession | null
   description: string
   kin: KinName | null
   name: string
@@ -69,7 +70,7 @@ export function getNewCharacterData(): CharacterData {
       empathy: null,
     },
     // class: null,
-    class: "druid",
+    profession: "druid",
     skills: getSkills(),
     talents: [],
 
@@ -106,7 +107,7 @@ export function validateBase(character: CharacterData): boolean {
     !!character.age &&
     character.age > 0 &&
     !!character.kin &&
-    !!character.class
+    !!character.profession
     // && !!character.sex
   )
 }
@@ -125,13 +126,32 @@ export function validateAttributes({
   return attribPointsSpent === attributePointsRequired
 }
 
-export function validateSkills({ skills, age, kin }: CharacterData): boolean {
-  const reducer = (accumulator: number | null, currentValue: number | null) =>
-    Number(accumulator) + Number(currentValue)
-  const skillRanksSpent = Object.entries(skills)
+export function validateSkills({
+  skills,
+  profession,
+  age,
+  kin,
+}: CharacterData): boolean {
+  const sumReducer = (
+    accumulator: number | null,
+    currentValue: number | null
+  ) => Number(accumulator) + Number(currentValue)
+  const skillList = Object.entries(skills)
+  const skillRanksSpent = skillList
     .map((item) => item[1].rank)
-    .reduce(reducer)
-  return skillRanksSpent === calcNewCharSkillPoints(getAgeType(age, kin))
+    .reduce(sumReducer)
+  const skillRanksInvalid =
+    skillList
+      .map((item) => {
+        const skillMax = getSkillMax(item[1].id, profession)
+        const rank = Number(item[1].rank)
+        return rank > skillMax || rank < 0
+      })
+      .filter((invalid) => !!invalid).length > 0
+  return (
+    !skillRanksInvalid &&
+    skillRanksSpent === calcNewCharSkillPoints(getAgeType(age, kin))
+  )
 }
 
 export function validateTalents({ age, kin, talents }: CharacterData): boolean {

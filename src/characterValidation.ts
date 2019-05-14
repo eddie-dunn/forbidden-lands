@@ -7,7 +7,7 @@ export function validateBaseNew(characterData: CharacterData): boolean {
     // !!characterData.sex &&
     !!characterData.age &&
     !!characterData.kin &&
-    !!characterData.class
+    !!characterData.profession
   return valid
 }
 

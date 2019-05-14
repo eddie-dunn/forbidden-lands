@@ -130,7 +130,7 @@ export default Vue.extend({
 
     <div class="cell">
       <label for="character-class">{{ $t("Profession") }}</label>
-      <select id="character-class" v-model="mdata.class">
+      <select id="character-class" v-model="mdata.profession">
         <option v-for="c in class_select" :key="c.id" v-bind:value="c.id">{{
           capitalize($t(c.id)) || c.name
         }}</option>

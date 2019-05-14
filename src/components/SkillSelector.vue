@@ -59,15 +59,6 @@ export default Vue.extend({
       SKILLS,
     }
   },
-  watch: {
-    valid: {
-      immediate: true,
-      handler() {
-        const valid = this.valid ? "✓" : "✖"
-        this.$parent.$emit("card-sign", valid)
-      },
-    },
-  },
   methods: {
     iconFor,
     pointsSpent() {

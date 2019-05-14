@@ -179,7 +179,11 @@ export const CLASS: ClassList = {
   },
 }
 
-export function getSkillMax(skillId: Skill, professionId: Profession): number {
+export function getSkillMax(
+  skillId: Skill,
+  professionId: Profession | null
+): number {
+  if (!professionId) return 0
   // if (CLASS[professionId].skills.filter(skill => skill === skillId)) return 3;
   if (isClassSkill(skillId, professionId)) return 3
   return 1

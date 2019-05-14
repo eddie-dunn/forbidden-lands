@@ -64,7 +64,7 @@ const TalentSelector = Vue.extend({
       return this.talentsSortedByTranslation2(GENERAL_TALENTS2)
     },
     classTalents(): TalentProfession[] {
-      return getTalentsForProfession(this.charData.class)
+      return getTalentsForProfession(this.charData.profession)
     },
     kinTalent(): TalentKin {
       if (!this.charData.kin) return "Adaptive"

@@ -92,6 +92,11 @@ const CharacterCreatorMain = Vue.extend({
     setImgSource(img: any) {
       this.characterData.portrait = img
     },
+    checkForm(event: any) {
+      // console.log("form submit", event)
+      // TODO: Run applicable validation
+      event.preventDefault()
+    },
   },
 })
 export default CharacterCreatorMain
@@ -99,7 +104,12 @@ export default CharacterCreatorMain
 
 <template>
   <div class="character_creator">
-    <form class="character_creator-form" v-on:submit.prevent>
+    <form
+      class="character_creator-form"
+      @submit="checkForm"
+      action="/character-list"
+      method="get"
+    >
       <Card class="row-half" :title="$t('Base data')" :valid="baseDataValid">
         <BaseSelector :data="characterData" @basedata-updated="updateBase" />
       </Card>
@@ -128,7 +138,7 @@ export default CharacterCreatorMain
 
       <Card class="row-half" :title="$t('skills')" :valid="skillsValid">
         <SkillSelector
-          :profession="characterData.class"
+          :profession="characterData.profession"
           :age="ageType"
           :skills="characterData.skills"
           :lang="$i18n.locale"

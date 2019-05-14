@@ -55,7 +55,7 @@ export default Vue.extend({
       return getMaxAttribLevel(
         attribute,
         this.charData.kin,
-        this.charData.class
+        this.charData.profession
       )
     },
     pointsAvailable() {
@@ -102,12 +102,14 @@ export default Vue.extend({
 </script>
 
 <template>
-  <div v-if="!charData.age || !charData.kin || !charData.class">
+  <div v-if="!charData.age || !charData.kin || !charData.profession">
     {{ $t("Please select the following in") }} {{ $t("Base data") }}:
     <ul>
       <li class="capitalize" v-if="!charData.age">{{ $t("age") }}</li>
       <li class="capitalize" v-if="!charData.kin">{{ $t("kin") }}</li>
-      <li class="capitalize" v-if="!charData.class">{{ $t("Profession") }}</li>
+      <li class="capitalize" v-if="!charData.profession">
+        {{ $t("Profession") }}
+      </li>
     </ul>
   </div>
   <div v-else class="attribute-selector-content">
