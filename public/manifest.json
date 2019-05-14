@@ -1,8 +1,7 @@
 {
-  "name": "forbidden_lands_companion",
-  "short_name": "forbidden_lands_companion",
-  "icons": [
-    {
+  "name": "Forbidden Lands Companion",
+  "short_name": "FLC",
+  "icons": [{
       "src": "./img/icons/android-chrome-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
