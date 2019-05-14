@@ -201,6 +201,7 @@ export default TalentSelector
           v-model.number="talentRanks[1]"
           value="1"
           checked="checked"
+          required
         />
         <label for="classTalentRank">1</label>
         <input

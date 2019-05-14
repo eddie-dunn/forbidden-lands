@@ -25,6 +25,7 @@ import {
   saveCharacterToLocalStorage,
 } from "@/characterStorage"
 import Vue from "vue"
+import ExpandableSection from "@/components/ExpandableSection.vue"
 // import { workerData } from "worker_threads" // ???
 
 const CharacterCreatorMain = Vue.extend({
@@ -33,6 +34,7 @@ const CharacterCreatorMain = Vue.extend({
     AttributesSelector,
     BaseSelector,
     Card,
+    ExpandableSection,
     FlavorSelector,
     PicturePicker,
     SkillSelector,
@@ -149,7 +151,11 @@ export default CharacterCreatorMain
 
       <div class="action-bar-wrapper">
         <div class="action-bar">
-          <button class="button-action-bar button-white" v-on:click="() => {}">
+          <button
+            v-if="false"
+            class="button-action-bar button-white"
+            v-on:click="() => {}"
+          >
             Delete
           </button>
           <button class="button-action-bar" v-on:click="saveClicked">
@@ -158,17 +164,18 @@ export default CharacterCreatorMain
         </div>
       </div>
     </form>
-    <div @click="showJSON = !showJSON">
-      Click to show/hide JSON
-      <div v-if="showJSON">
-        {{ JSON.stringify(characterData, null, 2) }}
-      </div>
-    </div>
+    <ExpandableSection label="JSON Export">
+      {{ JSON.stringify(characterData, null, 2) }}
+    </ExpandableSection>
   </div>
 </template>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
+.character_creator {
+  margin-bottom: 20vh;
+}
+
 .button-action-bar {
   margin: 0.5rem;
 }
@@ -193,7 +200,7 @@ export default CharacterCreatorMain
   display: flex;
   flex-wrap: wrap;
   flex: 1 1 40%;
-  align-items: stretch;
+  // align-items: stretch;
   justify-content: space-evenly;
   align-content: stretch;
 }
@@ -218,16 +225,11 @@ export default CharacterCreatorMain
   border: solid #42b98344 2px;
 }
 
-.row-card {
-  border: solid #42b98344 2px;
-  border-radius: 1rem;
-  padding: 1rem;
-}
-
 .row-full {
   flex-basis: 100%;
   flex-grow: 2;
 }
+
 .row-half {
   flex-basis: 40%;
   flex-grow: 1;
