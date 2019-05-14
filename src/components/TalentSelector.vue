@@ -81,8 +81,8 @@ const TalentSelector = Vue.extend({
     },
     talentIncreased(): boolean {
       return (
-        Object.values(this.talentRanks).filter((rank) => rank || 0 > 1).length >
-        0
+        Object.values(this.talentRanks).filter((rank) => (rank || 0) > 1)
+          .length > 0
       )
     },
     talentRanksSum(): number {
@@ -112,17 +112,6 @@ const TalentSelector = Vue.extend({
       })
       return sortedTalents
     },
-    validated(): boolean {
-      const talentsSelected = this.exportedTalents.filter((item) => !!item)
-        .length
-      const allRanksSet = this.talentRanks
-        .slice(1, 2 + this.generalTalentsAllowed)
-        .filter((rank) => !!rank).length
-      return (
-        allRanksSet === this.totalTalentsAllowed - 1 &&
-        this.totalTalentsAllowed === talentsSelected
-      )
-    },
     tName(name: string): TranslateResult {
       return this.$t(transformToTranslationKey(name))
     },
@@ -134,7 +123,6 @@ const TalentSelector = Vue.extend({
         this.exportedTalents,
         this.talentRanks
       )
-      // console.log("talents emitted", exportedTalents)
       this.$emit("talents-updated", exportedTalents)
     },
     isTalentDisabled(index: number) {

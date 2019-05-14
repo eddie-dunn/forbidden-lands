@@ -29,9 +29,6 @@ export default Vue.extend({
     }
   },
   computed: {
-    valid(): boolean {
-      return true
-    },
     appearancePlaceholder(): string {
       return `${this.$t("Face")}:\n${this.$t("Body")}:\n${this.$t(
         "Clothing"
@@ -42,7 +39,7 @@ export default Vue.extend({
 </script>
 
 <template>
-  <Card :full-width="true" title="Flavor">
+  <Card :full-width="true" :title="$t('Miscellaneous')" :noSign="true">
     <div>
       <label for="appearance">{{ $t("Appearance") }}</label>
       <textarea

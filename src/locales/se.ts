@@ -233,6 +233,7 @@ export default {
   "Kin": "Släke",
   "Kin talent": "Släktestalang",
   "Male": "Man",
+  "Miscellaneous": "Övrigt",
   "Name": "Namn",
   "Please select the following in": "Vänligen välj följande i",
   "Portrait": "Porträtt",

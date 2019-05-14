@@ -233,6 +233,7 @@ export default {
   "Kin": "Kin",
   "Kin talent": "Kin talent",
   "Male": "Male",
+  "Miscellaneous": "Miscellaneous",
   "Name": "Name",
   "Pride": "Pride",
   "Profession": "Profession",
