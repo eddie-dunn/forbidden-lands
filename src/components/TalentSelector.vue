@@ -16,7 +16,7 @@ import {
   TalentProfession,
   TalentAll,
 } from "@/types"
-import { CharacterData } from "@/characterData"
+import { CharacterData, CharacterTalent } from "@/characterData"
 import Vue from "vue"
 import { TranslateResult } from "vue-i18n"
 // import TalentSelect from "@/components/TalentSelect.vue"
@@ -29,14 +29,10 @@ import { TranslateResult } from "vue-i18n"
 // Step one should be to break out the talent-selects to separate components,
 // which can individually deal with sorting by translation
 
-export interface TalentObj {
-  id: string
-  rank: number
-}
 export function getTalentObjects(
   talentList: TalentAll[],
-  talentRanks: number[]
-): TalentObj[] {
+  talentRanks: (number | undefined)[]
+): CharacterTalent[] {
   const talentObj = talentList.map((talentName: TalentAll, index) => {
     return {
       id: talentName,
@@ -85,7 +81,8 @@ const TalentSelector = Vue.extend({
     },
     talentIncreased(): boolean {
       return (
-        Object.values(this.talentRanks).filter((rank) => rank > 1).length > 0
+        Object.values(this.talentRanks).filter((rank) => rank || 0 > 1).length >
+        0
       )
     },
     talentRanksSum(): number {
@@ -139,8 +136,6 @@ const TalentSelector = Vue.extend({
       )
       // console.log("talents emitted", exportedTalents)
       this.$emit("talents-updated", exportedTalents)
-      const valid = this.validated() ? "✓" : "✖"
-      this.$parent.$emit("card-sign", valid)
     },
     isTalentDisabled(index: number) {
       return this.talentIncreased || index >= this.generalTalentsAllowed
@@ -173,7 +168,6 @@ export default TalentSelector
     talents:
     {{ generalTalentsAllowed }}
     talent increased: {{ talentIncreased }}
-    <!-- <TalentSelect /> -->
     <div class="talent-item">
       <label for="kin-talent">{{ $t("Kin") }}</label>
       <select id="kin-talent" disabled>
@@ -188,6 +182,19 @@ export default TalentSelector
         <label for="kinTalentRank">2</label>
       </span>
     </div>
+
+    <!-- <div
+      v-for="index in generalTalentsAllowed"
+      :key="'General' + index"
+      class="talent-item"
+    >
+      <TalentSelect
+        :label="$t('Talent') + index"
+        :talentOptions="generalTalents"
+        :rankDisabled="isTalentDisabled(index)"
+      />
+    </div> -->
+
     <div class="talent-item">
       <label for="class-talent">{{ $t("Profession") }}</label>
       <select id="class-talent" v-model="selectedTalents[1]" required>
@@ -218,6 +225,7 @@ export default TalentSelector
         <label for="classTalentRank">2</label>
       </span>
     </div>
+
     <div
       v-for="index in generalTalentsAllowed"
       :key="index"

@@ -16,10 +16,10 @@ import uuid1 from "uuid/v1"
 // import { CLASS, KIN } from "@/keys"
 // import { stringify } from "querystring"
 
-export interface CharacerTalent {
+export interface CharacterTalent {
   // name is gotten from translations via id
   id: TalentAll
-  rank: number
+  rank: number | undefined
 }
 
 export interface AttributeData {
@@ -46,7 +46,7 @@ export interface CharacterData {
   reputation: number
   sex: Sex | null
   skills: SkillMap
-  talents: CharacerTalent[]
+  talents: CharacterTalent[]
   portrait: string | null
   metadata: CharacterMetaData
   experience: number
@@ -106,8 +106,8 @@ export function validateBase(character: CharacterData): boolean {
     !!character.age &&
     character.age > 0 &&
     !!character.kin &&
-    !!character.class &&
-    !!character.sex
+    !!character.class
+    // && !!character.sex
   )
 }
 
@@ -120,6 +120,7 @@ export function validateAttributes({
       .map((attribute) => attribute[1])
       .reduce((sum, value) => Number(sum) + Number(value))
   )
+  // TODO get str wit emp agi max and compare to entered value
   const attributePointsRequired = getAttributePoints(ageType || null)
   return attribPointsSpent === attributePointsRequired
 }
@@ -134,11 +135,15 @@ export function validateSkills({ skills, age, kin }: CharacterData): boolean {
 }
 
 export function validateTalents({ age, kin, talents }: CharacterData): boolean {
-  // should have correct amount of talents
-  const requiredNumberOfTalents = getStartingTalents(age, kin) + 2
+  // should have correct amount of talents and ranks
+  const talentRanks = talents
+    .map((talent) => talent.rank)
+    .filter((rank) => !!rank)
+    .reduce((sum, val) => Number(sum) + Number(val), 0)
+  const requiredNumberOfTalents = getStartingTalents(age, kin) + 1 // 1: class
 
-  // Check for talent id existing? Use keys (lol)
-  return talents.filter((item) => !!item).length === requiredNumberOfTalents
+  const valid = talentRanks === requiredNumberOfTalents
+  return valid
 }
 
 export function validateNewCharacter(character: CharacterData): boolean {
@@ -146,11 +151,8 @@ export function validateNewCharacter(character: CharacterData): boolean {
   return (
     [validateBase, validateAttributes, validateSkills, validateTalents]
       .map((validate) => validate(character))
-      .filter((item) => item === false).length === 0 ||
-    (character.metadata && character.metadata.hasBeenActivated) ||
-    false
+      .filter((item) => item === false).length === 0 || false
   )
-  // return baseValid(character) && attributesValid(character)
 }
 
 export function parseCharacterData(charData: CharacterData): CharacterData {

@@ -38,14 +38,12 @@ export default Vue.extend({
     },
   },
   created() {
+    // TODO: Check if this is necessary
     this.charData.ageType = getAgeType(this.charData.age, this.charData.kin)
   },
   computed: {
     pointsLeft(): number {
       return this.pointsAvailable() - this.pointsSpent()
-    },
-    ageType(): Age {
-      return getAgeType(this.charData.age, this.charData.kin)
     },
   },
   methods: {
@@ -61,7 +59,6 @@ export default Vue.extend({
       )
     },
     pointsAvailable() {
-      // return getAttributePoints(getAgeType(this.age, this.kin))
       return getAttributePoints(
         getAgeType(this.charData.age, this.charData.kin)
       )
@@ -98,8 +95,6 @@ export default Vue.extend({
       deep: true,
       handler(newValue, oldValue) {
         this.$emit("attributes-updated", this.charData.attributes)
-        const valid = this.validate() ? "✓" : "✖"
-        this.$parent.$emit("card-sign", valid)
       },
     },
   },

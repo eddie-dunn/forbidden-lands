@@ -10,10 +10,15 @@ import { AGE, CLASS, KIN } from "@/keys.ts"
 import { getSkills } from "@/skills"
 import i18n from "@/i18n.ts"
 import { getAgeType } from "@/age.ts"
+import { Age, TalentAll } from "@/types.ts"
 import {
   getNewCharacterData,
   CharacterData,
-  validateNewCharacter,
+  CharacterTalent,
+  validateBase,
+  validateAttributes,
+  validateTalents,
+  validateSkills,
 } from "@/characterData"
 import {
   loadCharacterFromLocalStorage,
@@ -48,28 +53,41 @@ const CharacterCreatorMain = Vue.extend({
       showJSON: false,
     }
   },
+  computed: {
+    ageType(): Age {
+      return getAgeType(this.characterData.age, this.characterData.kin)
+    },
+    baseDataValid(): boolean {
+      return validateBase(this.characterData)
+    },
+    attributesValid(): boolean {
+      return validateAttributes(this.characterData)
+    },
+    talentsValid(): boolean {
+      return validateTalents(this.characterData)
+    },
+    skillsValid(): boolean {
+      return validateSkills(this.characterData)
+    },
+  },
   methods: {
-    canActivateCharacter: validateNewCharacter,
     saveClicked(event: any) {
       if (event && this.characterData.name) {
         saveCharacterToLocalStorage(this.characterData)
         this.$router.push("/character-list")
       }
     },
-    // resetClicked(event: any) {
-    //   if (event) event.preventDefault()
-    //   this.characterData = getNewCharacterData()
-    // },
-    getAgeType() {
-      return getAgeType(this.characterData.age, this.characterData.kin)
+    updateBase(character: CharacterData) {
+      this.characterData.ageType = this.ageType
     },
     updateAttributes(attributes: any) {
-      this.characterData.attributes = attributes
+      this.$set(this.characterData, "attributes", attributes)
     },
-    updateTalents(talents: any) {
+    updateTalents(talents: CharacterTalent[]) {
       /* eslint-disable-next-line no-console */
       console.log("new talents", talents)
-      this.characterData.talents = talents
+      // this.characterData.talents = talents
+      this.$set(this.characterData, "talents", talents)
     },
     setImgSource(img: any) {
       this.characterData.portrait = img
@@ -82,40 +100,36 @@ export default CharacterCreatorMain
 <template>
   <div class="character_creator">
     <form class="character_creator-form" v-on:submit.prevent>
-      <Card class="row-half" :title="$t('Base data')">
-        <BaseSelector :data="characterData" />
+      <Card class="row-half" :title="$t('Base data')" :valid="baseDataValid">
+        <BaseSelector :data="characterData" @basedata-updated="updateBase" />
       </Card>
 
-      <Card class="row-half">
+      <Card class="row-half" :noSign="true">
         <PicturePicker
           :portrait="characterData.portrait"
           @pickedPicture="setImgSource"
         />
       </Card>
 
-      <Card class="row-half" :title="$t('attributes')">
+      <Card class="row-half" :title="$t('attributes')" :valid="attributesValid">
         <AttributesSelector
           :charData="characterData"
           @attributes-updated="updateAttributes"
         />
       </Card>
 
-      <Card class="row-half" :title="$t('talents')">
+      <Card class="row-half" :title="$t('talents')" :valid="talentsValid">
         <TalentSelector
           class="content"
-          :profession="characterData.class"
-          :age="characterData.age || -1"
-          :kin="characterData.kin"
-          :intalents="characterData.talents"
           :charData="characterData"
           @talents-updated="updateTalents"
         />
       </Card>
 
-      <Card class="row-half" :title="$t('skills')">
+      <Card class="row-half" :title="$t('skills')" :valid="skillsValid">
         <SkillSelector
           :profession="characterData.class"
-          :age="getAgeType()"
+          :age="ageType"
           :skills="characterData.skills"
           :lang="$i18n.locale"
         />

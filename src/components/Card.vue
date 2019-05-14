@@ -1,7 +1,6 @@
 <script lang="ts">
 import Vue from "vue"
 
-// TODO change to something else later, boolean probably
 const VALID = "✓"
 const INVALID = "✖"
 
@@ -12,22 +11,36 @@ export default Vue.extend({
     subtitle: String,
     fullWidth: Boolean,
     footer: String,
+    valid: {
+      type: Boolean,
+      default: false,
+    },
+    noSign: {
+      type: Boolean,
+      default: false,
+    },
   },
-  created() {
-    this.$on("card-sign", (message: any) => {
-      if (message === INVALID) {
-        this.sign = INVALID
-        this.valid = false
-      } else {
-        this.sign = VALID
-        this.valid = true
-      }
-    })
+  // created() {
+  //   this.$on("card-sign", (message: any) => {
+  //     if (message === INVALID) {
+  //       this.sign = INVALID
+  //       this.valid = false
+  //     } else {
+  //       this.sign = VALID
+  //       this.valid = true
+  //     }
+  //   })
+  // },
+  computed: {
+    sign(): string {
+      if (this.noSign) return ""
+      return this.valid ? VALID : INVALID
+    },
   },
   data() {
     return {
-      sign: "",
-      valid: false,
+      // sign: "",
+      // valid: false,
     }
   },
 })

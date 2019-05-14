@@ -46,21 +46,13 @@ export default Vue.extend({
         { id: CLASS.ROGUE, name: "rogue" },
         { id: CLASS.SORCERER, name: "sorcerer" },
       ],
-      selected_sex: "male",
+      selected_sex: "",
       PROFESSION,
     }
   },
   computed: {
-    valid(): boolean {
-      return (
-        !!this.mdata.name &&
-        !!this.mdata.sex &&
-        !!this.mdata.age &&
-        !!this.mdata.kin &&
-        !!this.mdata.class
-      )
-    },
     ageType(): VueI18n.TranslateResult {
+      this.$emit("basedata-updated", this.mdata)
       return this.$t(getAgeType(this.mdata.age, this.mdata.kin))
     },
     reputation(): number {
@@ -72,18 +64,9 @@ export default Vue.extend({
     //   immediate: true,
     //   deep: true,
     //   handler(newValue, oldValue) {
-    //     this.$emit("data updated", this.mdata)
+    //     this.$emit("basedata-updated", this.mdata)
     //   },
     // },
-    valid: {
-      immediate: true,
-      // deep: true,
-      handler(newValue, oldValue) {
-        const valid = this.valid ? "✓" : "✖"
-        this.$parent.$emit("card-sign", valid)
-        this.$emit("base-valid")
-      },
-    },
   },
   methods: {
     nameSuggestion() {
