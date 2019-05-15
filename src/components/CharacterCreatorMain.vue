@@ -222,7 +222,7 @@ export default CharacterCreatorMain
     justify-content: space-around;
   }
   background: #fffe;
-  border: solid #42b98344 2px;
+  border: solid #42b98399 2px;
 }
 
 .row-full {
