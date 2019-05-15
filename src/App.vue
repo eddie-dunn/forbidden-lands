@@ -90,7 +90,6 @@ button::-moz-focus-inner {
 //   border: 0;
 // }
 
-button,
 .button {
   &::-moz-focus-inner {
     border: 0;
