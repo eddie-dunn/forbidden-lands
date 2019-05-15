@@ -157,16 +157,16 @@ export default Vue.extend({
       </span>
     </div>
 
-    <div v-if="this.mdata.class">
+    <div v-if="this.mdata.profession">
       <h4>{{ $t("Starting gear") }}</h4>
       <div>
-        {{ $t(PROFESSION[this.mdata.class].gear_description) }}
+        {{ $t(PROFESSION[this.mdata.profession].gear_description) }}
       </div>
       <p>
         Silver:
         {{
           $t("D") +
-            PROFESSION[this.mdata.class].starting_resources.silver +
+            PROFESSION[this.mdata.profession].starting_resources.silver +
             " (" +
             $t("Roll dice before session starts") +
             ")"
