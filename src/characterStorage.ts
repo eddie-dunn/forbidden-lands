@@ -97,7 +97,7 @@ export class Store {
       this.commit()
     }
   }
-  length(): number {
+  get length(): number {
     return Object.keys(this.storage).length
   }
   commit(): void {

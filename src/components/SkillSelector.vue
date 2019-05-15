@@ -140,6 +140,12 @@ export default Vue.extend({
   text-transform: capitalize;
   margin-right: auto;
   margin-left: 0.2rem;
+  overflow-x: scroll;
+  scrollbar-width: none;
+  text-overflow: ellipsis;
+}
+.skill-name::-webkit-scrollbar {
+  display: none; // Safari and Chrome
 }
 
 .skill-input {

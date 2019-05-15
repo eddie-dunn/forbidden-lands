@@ -1,18 +1,19 @@
 <script lang="ts">
 import Vue from "vue"
 import { CharacterData } from "@/characterData"
+import Modal from "@/components/Modal.vue"
 
 export default Vue.extend({
   name: "CharacterCreatorCard",
+  components: {
+    Modal,
+  },
   props: {
     charData: Object as () => CharacterData | null,
   },
-  created() {
-    this.$on("card-sign", (message: any) => (this.sign = message))
-  },
   data() {
     return {
-      sign: "",
+      modalActive: false,
     }
   },
   computed: {
@@ -42,37 +43,54 @@ export default Vue.extend({
         this.$emit("remove-card", this.charData.metadata.id)
       }
     },
+    confirmRemove() {
+      this.modalActive = true
+    },
+    closeModal() {
+      this.modalActive = false
+    },
   },
 })
 </script>
 
 <template>
-  <div v-if="!this.charData" class="stat-card row-full">
-    <div class="placeholder" @click="cardClicked()">
-      <h3>Create new character</h3>
-    </div>
-  </div>
-  <div v-else class="stat-card row-full">
-    <img
-      class="top-image"
-      :src="charData.portrait"
-      @click.self="cardClicked()"
-    />
-    <div class="header">
-      <div class="card-contents">
-        <h3>
-          <a class="inactive-link" :href="cardLink">{{ charData.name }}</a>
-        </h3>
+  <div>
+    <Modal v-if="modalActive" @close="closeModal()" :maximized="false">
+      <div slot="header">Confirm delete</div>
+      <div slot="body"></div>
+      <div class="modal-button-row" slot="footer">
+        <button @click="closeModal()">Cancel</button>
+        <button @click="remove()" class="button-red">OK</button>
+      </div>
+    </Modal>
+    <div v-if="!this.charData" class="stat-card row-full">
+      <div class="placeholder" @click="cardClicked()">
+        <h3>Create new character</h3>
       </div>
     </div>
-    <button @click.self="remove()">
-      Remove
-    </button>
-    <!-- <div class="body">
-      {{ charData.kin }}
-      {{ charData.class }}
-    </div> -->
-    <div class="card-footer"></div>
+    <div v-else class="stat-card row-full">
+      <img
+        class="top-image"
+        :src="charData.portrait"
+        @click.self="cardClicked()"
+      />
+      <div class="header">
+        <div class="card-contents">
+          <h3>
+            <a class="undecorated-link" :href="cardLink">{{ charData.name }}</a>
+          </h3>
+          <div class="header-subtitle capitalize">
+            <i>{{ $t(charData.kin) }}</i>
+            <i>{{ $t(charData.profession) }}</i>
+            <i>{{ $t(this.charData.ageType) }}</i>
+          </div>
+        </div>
+      </div>
+      <button @click="confirmRemove()">
+        Remove
+      </button>
+      <div class="card-footer"></div>
+    </div>
   </div>
 </template>
 
@@ -88,9 +106,11 @@ h3 {
   &::first-letter {
     text-transform: uppercase;
   }
+  // margin-bottom: 0.1rem;
+  margin: 0;
 }
 
-.inactive-link {
+.undecorated-link {
   text-decoration: none;
   color: #2c3e50;
 }
@@ -111,6 +131,10 @@ h3 {
   }
 }
 
+.modal-button-row {
+  margin-top: 1rem;
+}
+
 .top-image {
   object-fit: cover;
   object-position: top;
@@ -123,21 +147,26 @@ h3 {
 }
 
 .header {
-  flex-grow: 0;
+  // flex-grow: 0;
+  // display: flex;
+  // align-items: center;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.header-subtitle {
+  width: 90%;
+  // margin-left: auto;
+  margin: 0.2rem auto;
+  font-style: italic;
   display: flex;
-  align-items: center;
+  justify-content: space-around;
 }
 
 .card-contents {
   flex-grow: 1;
   display: flex;
   flex-wrap: wrap;
-}
-
-.subtitle {
-  font-style: italic;
-  text-align: left;
-  margin: 0.4rem;
 }
 
 .stat-card {

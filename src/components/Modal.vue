@@ -16,39 +16,39 @@ const Props = Vue.extend({
 export default class Modal extends Props {
   close(param: string): void {
     this.$emit("close", param)
+    console.log("emitted close", param)
   }
 }
 </script>
 
 <template>
-  <transition name="modal">
-    <div>
-      <div class="modal-mask" @click.self="close()">
-        <div
-          :class="[
-            'modal-container',
-            this.maximized ? 'modal-container-full' : '',
-          ]"
-        >
-          <!-- <span class="button x" @click.self="close()">✖</span> -->
-          <span class="close-button" @click="close()">
-            <svg
-              class="svg-button"
-              version="1.1"
-              id="Capa_1"
-              xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink"
-              x="0px"
-              y="0px"
-              width="612px"
-              height="612px"
-              viewBox="0 0 612 612"
-              style="enable-background:new 0 0 612 612;"
-              xml:space="preserve"
-            >
-              <g>
-                <path
-                  d="M420.501,218.79c-0.286-6.942-2.868-13.827-8.186-19.125c-5.297-5.298-12.183-7.898-19.125-8.186
+  <transition name="moldal">
+    <div class="modal-mask" @click.self="close()">
+      <div
+        :class="[
+          'modal-container',
+          this.maximized ? 'modal-container-full' : '',
+        ]"
+      >
+        <!-- <span class="button x" @click.self="close()">✖</span> -->
+        <span class="close-button" @click="close()">
+          <svg
+            class="svg-button"
+            version="1.1"
+            id="Capa_1"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            x="0px"
+            y="0px"
+            width="612px"
+            height="612px"
+            viewBox="0 0 612 612"
+            style="enable-background:new 0 0 612 612;"
+            xml:space="preserve"
+          >
+            <g>
+              <path
+                d="M420.501,218.79c-0.286-6.942-2.868-13.827-8.186-19.125c-5.297-5.298-12.183-7.898-19.125-8.186
 				c-7.726-0.325-15.548,2.276-21.438,8.186L306,265.436l-65.752-65.771c-5.909-5.91-13.712-8.492-21.439-8.186
 				c-6.942,0.287-13.827,2.869-19.125,8.186c-5.297,5.298-7.898,12.183-8.186,19.125c-0.325,7.727,2.276,15.529,8.186,21.439
 				L265.436,306l-65.752,65.752c-5.91,5.909-8.492,13.713-8.186,21.438c0.287,6.942,2.869,13.828,8.186,19.125
@@ -58,36 +58,30 @@ export default class Modal extends Props {
 				C137.012,0,0,137.012,0,306s137.012,306,306,306s306-137.012,306-306S474.988,0,306,0z M306,554.625
 				C168.912,554.625,57.375,443.088,57.375,306S168.912,57.375,306,57.375S554.625,168.912,554.625,306S443.088,554.625,306,554.625
 				z"
-                />
-              </g>
-            </svg>
-            <!-- <img
-              class="svg-button"
-              src="../assets/icons/close-button.png"
-              @click.self="close()"
-            /> -->
-          </span>
+              />
+            </g>
+          </svg>
+        </span>
 
-          <div class="__modal-header">
-            <slot name="header">
-              default header
-            </slot>
-          </div>
+        <div class="__modal-header">
+          <slot name="header">
+            default header
+          </slot>
+        </div>
 
-          <div class="__modal-body">
-            <slot name="body">
-              default body
-            </slot>
-          </div>
+        <div class="__modal-body">
+          <slot name="body">
+            default body
+          </slot>
+        </div>
 
-          <div class="__modal-footer">
-            <slot name="footer">
-              default footer
-              <button class="modal-default-button" @click="close()">
-                OK
-              </button>
-            </slot>
-          </div>
+        <div class="__modal-footer">
+          <slot name="footer">
+            default footer
+            <button class="modal-default-button" @click="close()">
+              OK
+            </button>
+          </slot>
         </div>
       </div>
     </div>

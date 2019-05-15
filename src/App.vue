@@ -25,6 +25,7 @@ export default Vue.extend({
 </template>
 
 <style lang="less">
+@import "~Style/colors.less";
 // body {
 //   // background: #2c3e50;
 //   // background: #282c34;
@@ -98,7 +99,6 @@ button,
   text-decoration: none;
   padding: 0.5em 2em;
   // border-radius: 2em;
-  border: none;
   display: inline-block;
   color: #fff;
   background-color: #4fc08d;
@@ -116,5 +116,11 @@ button,
     background-color: #fff;
     // box-shadow: 0px -5px 5px rgba(255, 229, 255, 0.4) inset;
   }
+}
+
+.button-red {
+  color: #fff;
+  background-color: @pastel-red;
+  border: 1px solid @pastel-red;
 }
 </style>
