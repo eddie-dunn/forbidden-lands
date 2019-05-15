@@ -66,6 +66,107 @@ const skills: SkillTranslations = {
   "survival": "överlevnad",
 }
 
+const talents2 = {
+  // Kin
+  "True Grit": "Bita ihop", // dwarf
+  "Inner Peace": "Inre frid", // elf
+  "Sneaky": "Lömsk", // goblin
+  "Psychic Power": "Psykisk kraft", // half-elf
+  "Hard to Catch": "Kvickfotad", // halfling
+  "Adaptive": "Adaptiv", // human
+  "Unbreakable": "Stryktålig", // orc
+  "Hunting Instincts": "Jaktsinne", // wolfkin
+
+  // General
+  "Ambidextrous": "Dubbelhänt",
+  "Axe Fighter": "Yxkämpe",
+  "Berserker": "Bärsärk",
+  "Bowyer": "Bågmakare",
+  "Brawler": "Slagskämpe",
+  "Builder": "Byggare",
+  "Chef": "Kock",
+  "Cold Blooded": "Kallblodig",
+  "Defender": "Defensiv",
+  "Dragonslayer": "Drakdräpare",
+  "Executioner": "Bödel",
+  "Fast Footwork": "Hal som en ål",
+  "Fast Shooter": "Snabbskytt",
+  "Fearless": "Orädd",
+  "Firm Grip": "Järngrepp",
+  "Fisher": "Fiskare",
+  "Hammer Fighter": "Hammarkämpe",
+  "Herbalist": "Örtakännare",
+  "Horseback Fighter": "Ryttarkämpe",
+  "Incorruptible": "Omutlig",
+  "Knife Fighter": "Knivkämpe",
+  "Lightning Fast": "Blixtsnabb",
+  "Lockpicker": "Låsdyrkare",
+  "Lucky": "Tursam",
+  "Master of the Hunt": "Jaktmästare",
+  "Melee Charge": "Stormare",
+  "Pack Rat": "Packåsna",
+  "Pain Resistant": "Smärttålig",
+  "Pathfinder": "Stigfinnare",
+  "Poisoner": "Giftkokare",
+  "Quartermaster": "Kvartermästare",
+  "Quickdraw": "Snabbdrag",
+  "Sailor": "Skeppare",
+  "Sharpshooter": "Prickskytt",
+  "Sharp Tongue": "Vass tunga",
+  "Shield Fighter": "Sköldkämpe",
+  "Sixth Sense": "Ögon i nacken",
+  "Smith": "Smed",
+  "Spear Fighter": "Spjutkämpe",
+  "Steady Feet": "Stadig på foten",
+  "Sword Fighter": "Svärdskämpe",
+  "Tailor": "Skräddare",
+  "Tanner": "Garvare",
+  "Threatening": "Hotfull",
+  "Throwing Arm": "Kastarm",
+  "Wanderer": "Vandrare",
+
+  // Druid
+  "Path of Healing": "Helandets Väg",
+  "Path of Shifting Shapes": "Hamnskiftets Väg",
+  "Path of Sight": "Synens Väg",
+
+  // Fighter
+  "Path of the Blade": "Klingans Väg",
+  "Path of the Enemy": "Fiendens Väg",
+  "Path of the Shield": "Sköldens Väg",
+
+  // HUNTER
+  "Path of the Arrow": "Pilens Väg",
+  "Path of the Beast": "Djurets Väg",
+  "Path of the Forest": "Skogens Väg",
+
+  // MINSTREL
+  "Path of the Hymn": "Hymnens Väg",
+  "Path of the Song": "Stämmans Väg",
+  "Path of the Warcry": "Stridsropets Väg",
+
+  // Peddler
+  "Path of Gold": "Guldets Väg",
+  "Path of Lies": "Lögnens Väg",
+  "Path of many Things": "Kappsäckens Väg",
+
+  // Rider
+  "Path of the Companion": "Följeslagarens Väg",
+  "Path of the Knight": "Riddarens Väg",
+  "Path of the Plains": "Viddernas Väg",
+
+  // Rogue
+  "Path of the Face": "Ansiktets Väg",
+  "Path of the Killer": "Mördarens Väg",
+  "Path of Poison": "Giftets Väg",
+
+  // Sorcerer
+  "Path of Blood": "Blodets Väg",
+  "Path of Death": "Dödens Väg",
+  "Path of Signs": "Tecknets Väg",
+  "Path of Stone": "Stenens Väg",
+}
+
 const talents = {
   // Kin
   TRUE_GRIT: "Bita ihop", // dwarf
@@ -213,6 +314,7 @@ export default {
   ...professions,
   ...skills,
   ...talents,
+  ...talents2,
   ...GearDescriptions,
 
   "Appearance": "Utseende",
@@ -230,8 +332,9 @@ export default {
   "Gear": "Utrustning",
   "General talent": "Allmän talang",
   "General talents": "Allmänna talanger",
-  "Kin": "Släke",
+  "General": "Allmän",
   "Kin talent": "Släktestalang",
+  "Kin": "Släke",
   "Male": "Man",
   "Miscellaneous": "Övrigt",
   "Name": "Namn",

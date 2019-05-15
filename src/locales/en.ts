@@ -148,6 +148,107 @@ const talents = {
   PATH_OF_STONE: "Path of Stone",
 }
 
+const talents2 = {
+  // Kin
+  "True Grit": "Bita ihop", // dwarf
+  "Inner Peace": "Inre frid", // elf
+  "Sneaky": "Lömsk", // goblin
+  "Psychic Power": "Psykisk kraft", // half-elf
+  "Hard to Catch": "Kvickfotad", // halfling
+  "Adaptive": "Adaptiv", // human
+  "Unbreakable": "Stryktålig", // orc
+  "Hunting Instincts": "Jaktsinne", // wolfkin
+
+  // General
+  "Ambidextrous": "Ambidextrous",
+  "Axe Fighter": "Axe Fighter",
+  "Berserker": "Berserker",
+  "Bowyer": "Bowyer",
+  "Brawler": "Brawler",
+  "Builder": "Builder",
+  "Chef": "Chef",
+  "Cold Blooded": "Cold Blooded",
+  "Defender": "Defender",
+  "Dragonslayer": "Dragonslayer",
+  "Executioner": "Executioner",
+  "Fast Footwork": "Fast Footwork",
+  "Fast Shooter": "Fast Shooter",
+  "Fearless": "Fearless",
+  "Firm Grip": "Firm Grip",
+  "Fisher": "Fisher",
+  "Hammer Fighter": "Hammer Fighter",
+  "Herbalist": "Herbalist",
+  "Horseback Fighter": "Horseback Fighter",
+  "Incorruptible": "Incorruptible",
+  "Knife Fighter": "Knife Fighter",
+  "Lightning Fast": "Lightning Fast",
+  "Lockpicker": "Lockpicker",
+  "Lucky": "Lucky",
+  "Master of the Hunt": "Master of the Hunt",
+  "Melee Charge": "Melee Charge",
+  "Pack Rat": "Pack Rat",
+  "Pain Resistant": "Pain Resistant",
+  "Pathfinder": "Pathfinder",
+  "Poisoner": "Poisoner",
+  "Quartermaster": "Quartermaster",
+  "Quickdraw": "Snabbdrag",
+  "Sailor": "Sailor",
+  "Sharpshooter": "Sharpshooter",
+  "Sharp Tongue": "Sharp Tongue",
+  "Shield Fighter": "Shield Fighter",
+  "Sixth Sense": "Sixth Sense",
+  "Smith": "Smith",
+  "Spear Fighter": "Spear Fighter",
+  "Steady Feet": "Steady Feet",
+  "Sword Fighter": "Sword Fighter",
+  "Tailor": "Tailor",
+  "Tanner": "Tanner",
+  "Threatening": "Threatening",
+  "Throwing Arm": "Throwing Arm",
+  "Wanderer": "Wanderer",
+
+  // Druid
+  "Path of Healing": "Path of Healing",
+  "Path of Shifting Shapes": "Path of Shifting Shapes",
+  "Path of Sight": "Path of Sight",
+
+  // Fighter
+  "Path of the Blade": "Path of the Blade",
+  "Path of the Enemy": "Path of the Enemy",
+  "Path of the Shield": "Path of the Shield",
+
+  // HUNTER
+  "Path of the Arrow": "Path of the Arrow",
+  "Path of the Beast": "Path of the Beast",
+  "Path of the Forest": "Path of the Forest",
+
+  // MINSTREL
+  "Path of the Hymn": "Path of the Hymn",
+  "Path of the Song": "Path of the Song",
+  "Path of the Warcry": "Path of the Warcry",
+
+  // Peddler
+  "Path of Gold": "Path of Gold",
+  "Path of Lies": "Path of Lies",
+  "Path of many Things": "Path of many Things",
+
+  // Rider
+  "Path of the Companion": "Path of the Companion",
+  "Path of the Knight": "Path of the Knight",
+  "Path of the Plains": "Path of the Plains",
+
+  // Rogue
+  "Path of the Face": "Path of the Face",
+  "Path of the Killer": "Path of the Killer",
+  "Path of Poison": "Path of Poison",
+
+  // Sorcerer
+  "Path of Blood": "Path of Blood",
+  "Path of Death": "Path of Death",
+  "Path of Signs": "Path of Signs",
+  "Path of Stone": "Path of Stone",
+}
+
 const skills: SkillTranslations = {
   "skills": "skills",
   "animal handling": "animal handling",
@@ -213,6 +314,7 @@ export default {
   ...professions,
   ...skills,
   ...talents,
+  ...talents2,
   ...GearDescriptions,
 
   "Appearance": "Appearance",
@@ -230,8 +332,9 @@ export default {
   "Gear": "Gear",
   "General talent": "General talent",
   "General talents": "General talents",
-  "Kin": "Kin",
+  "General": "General",
   "Kin talent": "Kin talent",
+  "Kin": "Kin",
   "Male": "Male",
   "Miscellaneous": "Miscellaneous",
   "Name": "Name",
@@ -251,4 +354,6 @@ export default {
   "message": "hello i18n !!",
   "name": "name",
   "sex": "sex",
+
+  // Foo
 }

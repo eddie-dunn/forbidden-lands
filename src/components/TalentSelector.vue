@@ -21,6 +21,24 @@ import Vue from "vue"
 import { TranslateResult } from "vue-i18n"
 // import TalentSelect from "@/components/TalentSelect.vue"
 
+function talentsSortedByTranslation(
+  vm: any, // Vue instance with $t function
+  talentIds: string[],
+  idsToExclude: string[] = []
+) {
+  const translationList = talentIds
+    .filter((id) => !idsToExclude.includes(id))
+    .map((id) => {
+      const translation: TranslateResult = vm.$t(id)
+      return { translation, id }
+    })
+
+  const sortedTalents = translationList.sort((item1, item2) => {
+    return item1.translation < item2.translation ? -1 : 1
+  })
+  return sortedTalents
+}
+
 // TODO: The method to map a talent to a translation key is overly complicated
 // and should be fixed; a general talent object should be created which contains
 // the translation keys for each talent, and that should be used instead from
@@ -60,9 +78,6 @@ const TalentSelector = Vue.extend({
     }
   },
   computed: {
-    generalTalents(): any {
-      return this.talentsSortedByTranslation2(GENERAL_TALENTS2)
-    },
     classTalents(): TalentProfession[] {
       return getTalentsForProfession(this.charData.profession)
     },
@@ -93,32 +108,19 @@ const TalentSelector = Vue.extend({
     },
   },
   methods: {
-    talentsSortedByTranslation2(
-      talentIds: string[],
-      idsToExclude: string[] = []
-    ) {
-      // TODO: This really should be simpler; find out if refactor is possible
-      const translationList = talentIds
-        .filter((id) => !idsToExclude.includes(id))
-        .map((id) => {
-          const translation: TranslateResult = this.$t(
-            transformToTranslationKey(id)
-          )
-          return { translation, id }
-        })
-
-      const sortedTalents = translationList.sort((item1, item2) => {
-        return item1.translation < item2.translation ? 0 : 1
-      })
-      return sortedTalents
-    },
-    tName(name: string): TranslateResult {
-      return this.$t(transformToTranslationKey(name))
+    generalTalents(index: number): any {
+      const talentFilter = this.selectedTalents.slice(0, index)
+      return talentsSortedByTranslation(this, GENERAL_TALENTS2, talentFilter)
     },
     talentUpdateHandler() {
       // Remap component-local selected talents to a character-talent, and
       // emit update of map
       this.selectedTalents[0] = this.kinTalent
+
+      // Make sure ranks for all selected talents are at least 1:
+      this.selectedTalents.map((_, index) => {
+        if (!this.talentRanks[index]) this.talentRanks[index] = 1
+      })
       const exportedTalents = getTalentObjects(
         this.exportedTalents,
         this.talentRanks
@@ -154,15 +156,15 @@ export default TalentSelector
 
 <template>
   <div class="talent-contents">
-    Base general talents: {{ baseStartingTalents }} Allowed number of general
+    <!-- Base general talents: {{ baseStartingTalents }} Allowed number of general
     talents:
     {{ generalTalentsAllowed }}
-    talent increased: {{ talentIncreased }}
+    talent increased: {{ talentIncreased }} -->
     <div class="talent-item">
       <label for="kin-talent">{{ $t("Kin") }}</label>
       <select id="kin-talent" disabled>
         <option v-bind:value="selectedTalents[0]">
-          {{ tName(kinTalent) }}
+          {{ $t(kinTalent) }}
         </option>
       </select>
       <span class="toggle hidden">
@@ -193,7 +195,7 @@ export default TalentSelector
           :key="talent"
           v-bind:value="talent"
         >
-          {{ tName(talent) }}
+          {{ $t(talent) }} {{ talentRanks[1] }}
         </option>
       </select>
       <span class="toggle">
@@ -222,15 +224,15 @@ export default TalentSelector
       :key="index"
       class="talent-item"
     >
-      <label for="general-talent">{{ $t("Talent") }} {{ index }}</label>
+      <label for="general-talent">{{ $t("General") }} {{ index }}</label>
       <select id="general-talent" v-model="selectedTalents[index + 1]" required>
         <optgroup :label="$t('General talents')">
           <option
-            v-for="talent in generalTalents"
+            v-for="talent in generalTalents(index + 1)"
             :key="talent.id"
             v-bind:value="talent.id"
           >
-            {{ talent.translation }}
+            {{ talent.translation }} {{ talentRanks[index + 1] }}
           </option>
         </optgroup>
       </select>
@@ -258,14 +260,17 @@ export default TalentSelector
 </template>
 
 <style lang="less" scoped>
+.talent-contents {
+  margin: 1rem auto;
+}
 .talent-item {
   display: flex;
-  justify-content: space-evenly;
   align-items: center;
   margin-top: 0.25rem;
-  select,
-  span > {
+  select > {
+    flex-grow: 1;
     flex-basis: 40%;
+    max-width: 20ch;
   }
 }
 
@@ -273,7 +278,8 @@ label {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  flex-basis: 10ch;
+  // flex-basis: 10ch;
+  flex-basis: 25%;
 }
 
 .talent-rank {
