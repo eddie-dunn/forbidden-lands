@@ -158,7 +158,7 @@ export default CharacterCreatorMain
           >
             Delete
           </button>
-          <button class="button-action-bar" v-on:click="saveClicked">
+          <button class="button button-action-bar" v-on:click="saveClicked">
             Save
           </button>
         </div>

@@ -44,7 +44,7 @@ export default class CharacterListView extends Vue {
       <p>This section will include a card view of all saved characters</p>
       <p>
         No characters found; why not
-        <a href="/character-creator/new/"> create a new one</a>?
+        <a href="character-creator/new/"> create a new one</a>?
       </p>
     </Card>
   </div>

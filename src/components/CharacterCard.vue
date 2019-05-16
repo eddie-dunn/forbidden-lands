@@ -59,8 +59,8 @@ export default Vue.extend({
       <div slot="header">Confirm delete</div>
       <div slot="body"></div>
       <div class="modal-button-row" slot="footer">
-        <button @click="closeModal()">Cancel</button>
-        <button @click="remove()" class="button-red">OK</button>
+        <button @click="closeModal()" class="button">Cancel</button>
+        <button @click="remove()" class="button button-red">OK</button>
       </div>
     </Modal>
     <div v-if="!this.charData" class="stat-card row-full">
@@ -86,7 +86,7 @@ export default Vue.extend({
           </div>
         </div>
       </div>
-      <button @click="confirmRemove()">
+      <button class="button" @click="confirmRemove()">
         Remove
       </button>
       <div class="card-footer"></div>
