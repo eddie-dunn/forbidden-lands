@@ -54,7 +54,6 @@ export type TalentKin =
   | "Sneaky"
   | "True Grit"
   | "Unbreakable"
-  | ""
 
 export type TalentGeneral =
   // General
@@ -119,38 +118,32 @@ export type TalentHunter =
   | "Path of the Arrow"
   | "Path of the Beast"
   | "Path of the Forest"
-  | ""
 
 export type TalentMinstrel =
   | "Path of the Hymn"
   | "Path of the Song"
   | "Path of the Warcry"
-  | ""
 
 export type TalentPeddler =
   | "Path of Gold"
   | "Path of Lies"
   | "Path of Many Things"
-  | ""
 
 export type TalentRider =
   | "Path of the Companion"
   | "Path of the Knight"
   | "Path of the Plains"
-  | ""
 
 export type TalentRogue =
   | "Path of the Face"
   | "Path of the Killer"
   | "Path of Poison"
-  | ""
 
 export type TalentSorcerer =
   | "Path of Blood"
   | "Path of Death"
   | "Path of Signs"
   | "Path of Stone"
-  | ""
 
 export type TalentProfession =
   | TalentDruid

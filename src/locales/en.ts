@@ -5,6 +5,7 @@ import {
   KinTranslations,
   ProfessionTranslations,
   SkillTranslations,
+  TalentTranslations,
 } from "./localetypes"
 
 const age: AgeTranslations = {
@@ -148,7 +149,7 @@ const talents = {
   PATH_OF_STONE: "Path of Stone",
 }
 
-const talents2 = {
+const talents2: TalentTranslations = {
   // Kin
   "True Grit": "Bita ihop", // dwarf
   "Inner Peace": "Inre frid", // elf
@@ -230,7 +231,7 @@ const talents2 = {
   // Peddler
   "Path of Gold": "Path of Gold",
   "Path of Lies": "Path of Lies",
-  "Path of many Things": "Path of many Things",
+  "Path of Many Things": "Path of Many Things",
 
   // Rider
   "Path of the Companion": "Path of the Companion",

@@ -160,7 +160,7 @@ export function validateTalents({ age, kin, talents }: CharacterData): boolean {
     .map((talent) => talent.rank)
     .filter((rank) => !!rank)
     .reduce((sum, val) => Number(sum) + Number(val), 0)
-  const requiredNumberOfTalents = getStartingTalents(age, kin) + 1 // 1: class
+  const requiredNumberOfTalents = getStartingTalents(age, kin) + 2 // 1: class
 
   const valid = talentRanks === requiredNumberOfTalents
   return valid

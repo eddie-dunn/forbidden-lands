@@ -10,6 +10,7 @@ import {
 } from "@/talents.ts"
 import { getStartingTalents } from "@/age.ts"
 import {
+  Age,
   KinName,
   TalentKin,
   Profession,
@@ -78,6 +79,9 @@ const TalentSelector = Vue.extend({
     }
   },
   computed: {
+    ageType(): number | null {
+      return this.charData.age
+    },
     classTalents(): TalentProfession[] {
       return getTalentsForProfession(this.charData.profession)
     },
@@ -86,66 +90,66 @@ const TalentSelector = Vue.extend({
       return KIN_TALENTS2[this.charData.kin]
     },
     baseStartingTalents(): number {
-      return getStartingTalents(this.charData.age, this.charData.kin)
+      return getStartingTalents(this.ageType, this.charData.kin)
     },
     generalTalentsAllowed(): number {
       return this.baseStartingTalents - this.talentRanksSum
     },
     totalTalentsAllowed(): number {
-      return 2 + this.baseStartingTalents - this.talentRanksSum
+      return 2 + this.generalTalentsAllowed
     },
     talentIncreased(): boolean {
-      return (
-        Object.values(this.talentRanks).filter((rank) => (rank || 0) > 1)
-          .length > 0
-      )
+      return this.talentRanks.filter((rank) => (rank || 0) > 1).length > 0
     },
     talentRanksSum(): number {
-      return this.talentIncreased ? 1 : 0
+      return this.talentIncreased ? 1 : 0 // this works for now
     },
     exportedTalents(): TalentAll[] {
       return this.selectedTalents.slice(0, 2 + this.generalTalentsAllowed)
     },
+    exported(): CharacterTalent[] {
+      // this.selectedTalents[0] = this.kinTalent
+      const talentsSelected = [
+        this.kinTalent,
+        ...this.selectedTalents.slice(1, this.totalTalentsAllowed),
+      ]
+      const ranksSelected = this.talentRanks.slice(0, this.totalTalentsAllowed)
+      const charTalents = talentsSelected.map((id, index) => ({
+        id,
+        rank: this.talentRanks[index],
+      }))
+      return charTalents
+    },
   },
   methods: {
     generalTalents(index: number): any {
-      const talentFilter = this.selectedTalents.slice(0, index)
+      const talentFilter = this.selectedTalents.filter(
+        (_, index2) => index !== index2
+      )
       return talentsSortedByTranslation(this, GENERAL_TALENTS2, talentFilter)
     },
-    talentUpdateHandler() {
-      // Remap component-local selected talents to a character-talent, and
-      // emit update of map
-      this.selectedTalents[0] = this.kinTalent
-
-      // Make sure ranks for all selected talents are at least 1:
-      this.selectedTalents.map((_, index) => {
-        if (!this.talentRanks[index]) this.talentRanks[index] = 1
-      })
-      const exportedTalents = getTalentObjects(
-        this.exportedTalents,
-        this.talentRanks
-      )
-      this.$emit("talents-updated", exportedTalents)
-    },
-    isTalentDisabled(index: number) {
-      const disabled =
-        this.talentIncreased || index > this.generalTalentsAllowed
-      return disabled
+    isTalentRankDisabled(index: number): boolean {
+      return this.talentIncreased || index > this.generalTalentsAllowed
     },
   },
   watch: {
     selectedTalents: {
       immediate: true,
-      deep: true,
       handler() {
-        this.talentUpdateHandler()
+        // Set all undefined/falsy talent ranks to 1
+        this.selectedTalents.map((_, index) => {
+          if (!this.talentRanks[index]) this.talentRanks[index] = 1
+        })
       },
     },
-    talentRanks: {
-      deep: true,
-      handler(oldData, newData) {
-        this.talentUpdateHandler()
-        // set all other ranks to 1?
+    ageType() {
+      // Reset all talent ranks to 1 if age is changed
+      this.talentRanks = this.talentRanks.map(() => 1)
+    },
+    exported: {
+      immediate: true,
+      handler() {
+        this.$emit("talents-updated", this.exported)
       },
     },
   },
@@ -156,10 +160,6 @@ export default TalentSelector
 
 <template>
   <div class="talent-contents">
-    <!-- Base general talents: {{ baseStartingTalents }} Allowed number of general
-    talents:
-    {{ generalTalentsAllowed }}
-    talent increased: {{ talentIncreased }} -->
     <div class="talent-item">
       <label for="kin-talent">{{ $t("Kin") }}</label>
       <select id="kin-talent" disabled>
@@ -213,7 +213,7 @@ export default TalentSelector
           name="classTalentRank"
           v-model.number="talentRanks[1]"
           value="2"
-          :disabled="isTalentDisabled(1)"
+          :disabled="isTalentRankDisabled(1)"
         />
         <label for="classTalentRank">2</label>
       </span>
@@ -250,7 +250,7 @@ export default TalentSelector
           :name="'talent' + index"
           v-model.number="talentRanks[index + 1]"
           value="2"
-          :disabled="isTalentDisabled(index + 1)"
+          :disabled="isTalentRankDisabled(index + 1)"
         />
         <label :for="'talent + index'">2</label>
         <!-- TODO: Add input for lvl 3 as well when supporting live Character Sheet -->
