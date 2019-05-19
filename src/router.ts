@@ -30,7 +30,8 @@ export default new Router({
         import(/* webpackChunkName: "about" */ "./views/About.vue"),
     },
     {
-      path: "/character-creator/new",
+      path: "/new",
+      alias: "/character-creator/new",
       name: "character_creator-new",
       /* webpackChunkName: "character_creator" */
       component: () => import("./views/CharacterCreatorView.vue"),

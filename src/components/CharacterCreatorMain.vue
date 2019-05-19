@@ -41,21 +41,32 @@ const CharacterCreatorMain = Vue.extend({
     TalentSelector,
   },
   props: ["charName"],
-  created() {
-    this.characterData = loadCharacterFromLocalStorage(this.charName)
-    if (!this.characterData.name && this.charName) {
-      this.characterData.name = this.charName
-    }
+  // created() {
+  //   this.characterData = loadCharacterFromLocalStorage(this.charName)
+  //   if (!this.characterData.name && this.charName) {
+  //     this.characterData.name = this.charName
+  //   }
+  // },
+  watch: {
+    $route(to, from) {
+      if (to.name === "character_creator-new") {
+        Vue.set(this, "characterData", getNewCharacterData())
+      }
+    },
   },
   data() {
     return {
       // TODO: Resolve double request to getNewCharacterData;
       // loadCharacterFromLocalStorage also calls that method
-      characterData: getNewCharacterData(),
+      // characterData: getNewCharacterData(),
+      characterData: loadCharacterFromLocalStorage(this.charName),
       showJSON: false,
     }
   },
   computed: {
+    id(): string {
+      return this.characterData.metadata.id
+    },
     ageType(): Age {
       return getAgeType(this.characterData.age, this.characterData.kin)
     },
@@ -111,6 +122,7 @@ export default CharacterCreatorMain
       @submit="checkForm"
       action="/character-list"
       method="get"
+      :key="id"
     >
       <Card class="row-half" :title="$t('Base data')" :valid="baseDataValid">
         <BaseSelector :data="characterData" @basedata-updated="updateBase" />
@@ -165,7 +177,7 @@ export default CharacterCreatorMain
       </div>
     </form>
     <ExpandableSection label="JSON Export">
-      {{ JSON.stringify(characterData, null, 2) }}
+      <pre>{{ JSON.stringify(characterData, null, 2) }}</pre>
     </ExpandableSection>
   </div>
 </template>

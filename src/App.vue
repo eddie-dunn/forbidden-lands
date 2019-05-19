@@ -12,8 +12,12 @@ export default Vue.extend({
   <div id="app">
     <div class="navbar">
       <div class="route-links">
-        <router-link to="/">Home</router-link> |
-        <router-link to="/character-creator/new/">Create new</router-link> |
+        <router-link to="/">Home</router-link>
+        |
+        <router-link to="/new">Create new</router-link>
+        <!-- |
+        <router-link to="/dice">{{ $t("Dice") }}</router-link> -->
+        |
         <router-link to="/about">About</router-link>
       </div>
       <div class="route-links">
