@@ -28,7 +28,7 @@ export default class CharacterListView extends Vue {
 <template>
   <div class="character-list-container">
     <h1>Character List</h1>
-    <div :key="idKey" v-if="store.length > 0" class="character-list">
+    <div :key="idKey" v-if="store.length > -1" class="character-list">
       <div
         v-for="character in store.storage"
         v-bind:key="'key_' + character.metadata.id"
@@ -55,7 +55,7 @@ export default class CharacterListView extends Vue {
 
 .character-list {
   display: grid;
-  grid-gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(30ch, 1fr));
+  grid-gap: 0.8rem;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
 }
 </style>

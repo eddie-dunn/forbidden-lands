@@ -142,7 +142,7 @@ export default Vue.extend({
   margin-left: 0.2rem;
   overflow-x: scroll;
   scrollbar-width: none;
-  text-overflow: ellipsis;
+  // text-overflow: ellipsis;
 }
 .skill-name::-webkit-scrollbar {
   display: none; // Safari and Chrome

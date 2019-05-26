@@ -109,6 +109,8 @@ export default class Modal extends Props {
   // background: #42b983;
   background: @pastel-red;
   margin-left: auto;
+  margin-top: 3px;
+  margin-right: 3px;
   // margin-right: -16px; // Adjust if padding is changed in the modal container
   // margin-top: -16px; // Adjust if padding is changed in the modal container
   &:hover {

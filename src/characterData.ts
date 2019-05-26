@@ -8,10 +8,10 @@ import {
   TalentAll,
 } from "@/types"
 import { SkillMap, getSkills } from "@/skills"
-import { getSkillMax } from "@/classes.ts"
 import { getAgeType, getAttributePoints, getStartingTalents } from "@/age"
 
 import { AGE } from "@/keys"
+import { getSkillMax } from "@/classes.ts"
 import uuid1 from "uuid/v1"
 
 // import { CLASS, KIN } from "@/keys"
@@ -41,7 +41,6 @@ export interface CharacterData {
   ageType: Age
   attributes: AttributeData
   profession: Profession | null
-  description: string
   kin: KinName | null
   name: string
   reputation: number
@@ -52,6 +51,11 @@ export interface CharacterData {
   metadata: CharacterMetaData
   experience: number
   willpower: number
+
+  appearance: string
+  pride: string
+  darkSecret: string
+  relationshipts: string
 }
 
 export function getNewCharacterData(): CharacterData {
@@ -74,11 +78,15 @@ export function getNewCharacterData(): CharacterData {
     skills: getSkills(),
     talents: [],
 
-    description: "",
     reputation: 0,
     portrait: null, // require("./assets/500.png"),
     experience: 0,
     willpower: 0,
+
+    appearance: "",
+    pride: "",
+    darkSecret: "",
+    relationshipts: "",
 
     // metadata
     metadata: {

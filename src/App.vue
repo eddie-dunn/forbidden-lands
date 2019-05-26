@@ -10,15 +10,13 @@ export default Vue.extend({
 
 <template>
   <div id="app">
-    <div class="navbar">
+    <div class="navbar navbar-top">
       <div class="route-links">
-        <router-link to="/">Home</router-link>
+        <router-link to="/">{{ $t("List") }}</router-link>
         |
-        <router-link to="/new">Create new</router-link>
-        <!-- |
-        <router-link to="/dice">{{ $t("Dice") }}</router-link> -->
+        <router-link to="/dice">{{ $t("Dice") }}</router-link>
         |
-        <router-link to="/about">About</router-link>
+        <router-link to="/about">{{ $t("About") }}</router-link>
       </div>
       <div class="route-links">
         <LocaleChanger />
@@ -30,10 +28,11 @@ export default Vue.extend({
 
 <style lang="less">
 @import "~Style/colors.less";
-// body {
-//   // background: #2c3e50;
-//   // background: #282c34;
-// }
+body {
+  // background: #2c3e50;
+  // background: #282c34;
+  margin: 0;
+}
 
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
@@ -46,8 +45,7 @@ export default Vue.extend({
   display: flex;
   flex-direction: column;
   max-width: 1024px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0.5rem auto;
 }
 
 .navbar {
@@ -57,7 +55,6 @@ export default Vue.extend({
 
   // Make it follow on scroll
   position: sticky;
-  top: 0px;
   background: white;
   // border: solid #42b98344 2px;
   border: solid #42b98399 2px;
@@ -76,6 +73,14 @@ export default Vue.extend({
     }
   }
   z-index: 10;
+
+  &-top {
+    top: 0px;
+  }
+
+  &-bottom {
+    bottom: 0px;
+  }
 }
 
 .capitalize {
@@ -83,13 +88,20 @@ export default Vue.extend({
 }
 
 input[type="number"] {
-  height: 1rem;
+  min-height: 1rem;
 }
 
 button::-moz-focus-inner {
   border: 0;
 }
 
+select {
+  // background-color: @pastel-green;
+  // color: white;
+  // height: 1.5rem;
+  // border: 0;
+  padding: 0.3rem;
+}
 // &::-moz-focus-outer {
 //   border: 0;
 // }
@@ -109,6 +121,11 @@ button::-moz-focus-inner {
   box-sizing: border-box;
   border: 1px solid #4fc08d;
   cursor: pointer;
+
+  &-white {
+    background-color: white;
+    color: #4fc08d;
+  }
 
   &:active {
     // box-shadow: none;

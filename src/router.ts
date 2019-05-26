@@ -21,6 +21,11 @@ export default new Router({
       component: () => import("./views/CharacterListView.vue"),
     },
     {
+      path: "/dice",
+      name: "dice",
+      component: () => import("@/views/DiceView.vue"),
+    },
+    {
       path: "/about",
       name: "about",
       // route level code-splitting

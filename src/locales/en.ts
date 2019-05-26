@@ -327,6 +327,7 @@ export default {
   "Clothing": "Clothing",
   "D": "D",
   "Dark secret": "Dark secret",
+  "Dice": "Dice",
   "Face": "Face",
   "Female": "Female",
   "Food": "Food",
@@ -341,10 +342,12 @@ export default {
   "Name": "Name",
   "Pride": "Pride",
   "Profession": "Profession",
+  "Push": "Pressa",
   "Relationships": "Relationships",
-  "Remaining": "Återstående",
+  "Remaining": "Remaining",
   "Reputation": "Reputation",
-  "Roll dice before session starts": "Roll dice before session starts",
+  "Reset": "Reset",
+  "Roll dice": "Roll dice",
   "Starting gear": "Starting gear",
   "Talent": "Talent",
   "Torches": "Torches",
@@ -356,5 +359,6 @@ export default {
   "name": "name",
   "sex": "sex",
 
-  // Foo
+  // Longer
+  "Roll dice before session starts": "Roll dice before session starts",
 }
