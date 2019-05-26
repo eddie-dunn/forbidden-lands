@@ -113,6 +113,15 @@ export default class DiceView extends Vue {
     return this.totals.map((item) => item.success).reduce(this.accumulator, 0)
   }
 
+  get totalWhiteSkulls() {
+    return this.totals.length > 0 && this.totals[0] ? this.totals[0].fails : ""
+  }
+
+  get totalBlackSkulls() {
+    return this.totals.length > 0 && this.totals[2] ? this.totals[2].fails : ""
+    // return this.totals[2].fails
+  }
+
   // get totalFailure() {
   //   return this.totals.map((item) => item.fails).reduce(this.accumulator, 0)
   // }
@@ -121,7 +130,7 @@ export default class DiceView extends Vue {
     return [...this.rollResultLog.reverse()]
   }
 
-  pressRoll() {
+  pushRoll() {
     const newRolls = this.rollResult.map((results, index) => {
       return results.map((result) => {
         if (
@@ -148,8 +157,9 @@ export default class DiceView extends Vue {
 
   resetDice() {
     // this.nbrDice = []
-    Vue.set(this, "nbrDice", [])
+    // Vue.set(this, "nbrDice", [])
     this.$set(this, "nbrDice", [])
+    this.rollResult = []
     this.rollResultLog = []
   }
 }
@@ -174,6 +184,7 @@ export default class DiceView extends Vue {
               :num="nbrDice[DiceType.White]"
               :min="0"
               :enterCb="rollDice"
+              :ctrlEnterCb="pushRoll"
             />
           </div>
           <div class="dice-input">
@@ -186,6 +197,7 @@ export default class DiceView extends Vue {
               v-model.number="nbrDice[DiceType.Red]"
               :min="0"
               :enterCb="rollDice"
+              :ctrlEnterCb="pushRoll"
             />
           </div>
           <div class="dice-input">
@@ -202,6 +214,7 @@ export default class DiceView extends Vue {
               v-model.number="nbrDice[DiceType.Black]"
               :min="0"
               :enterCb="rollDice"
+              :ctrlEnterCb="pushRoll"
             />
           </div>
         </div>
@@ -209,7 +222,7 @@ export default class DiceView extends Vue {
       <ExpandableSection label="Artifact Dice">
         <div class="dice-inputs">
           <div class="dice-input">
-            <label for="green-input">
+            <label for="green-input" class="dice-label">
               <SvgIcon
                 name="d8"
                 title="d8-green"
@@ -222,10 +235,11 @@ export default class DiceView extends Vue {
               v-model.number="nbrDice[DiceType.Green]"
               :min="0"
               :enterCb="rollDice"
+              :ctrlEnterCb="pushRoll"
             />
           </div>
           <div class="dice-input">
-            <label for="blue-input">
+            <label for="blue-input" class="dice-label">
               <SvgIcon
                 name="d10"
                 title="d10-blue"
@@ -238,10 +252,11 @@ export default class DiceView extends Vue {
               v-model.number="nbrDice[DiceType.Blue]"
               :min="0"
               :enterCb="rollDice"
+              :ctrlEnterCb="pushRoll"
             />
           </div>
           <div class="dice-input">
-            <label for="orange-input">
+            <label for="orange-input" class="dice-label">
               <SvgIcon
                 name="d12"
                 title="d12-orange"
@@ -254,6 +269,7 @@ export default class DiceView extends Vue {
               v-model.number="nbrDice[DiceType.Orange]"
               :min="0"
               :enterCb="rollDice"
+              :ctrlEnterCb="pushRoll"
             />
           </div>
         </div>
@@ -372,15 +388,26 @@ export default class DiceView extends Vue {
           </span>
         </span>
       </div>
-      <div v-if="rollResultLog.length > 0" class="result-summary">
-        <div class="result-summary">{{ SWORDS }}: {{ totalSuccess }}</div>
+      <div v-if="totals.length > 0" class="result-box">
+        <div class="result-summary">
+          <pre>{{ totalWhiteSkulls }}</pre>
+          <SvgIcon name="skulls-1-inverted" class="dice-icon" />
+        </div>
+        <div class="result-summary">
+          <pre>{{ totalBlackSkulls }}</pre>
+          <SvgIcon name="skulls-1" class="dice-icon dice-black" />
+        </div>
+        <div class="result-summary">
+          <pre>{{ totalSuccess }}</pre>
+          <SvgIcon name="swords-1-inverted" class="dice-icon" />
+        </div>
       </div>
     </div>
     <div class="navbar navbar-bottom">
       <button class="button button-white" @click="resetDice">
         {{ $t("Reset") }}
       </button>
-      <button class="button" @click="pressRoll">{{ $t("Push") }}</button>
+      <button class="button" @click="pushRoll">{{ $t("Push") }}</button>
       <button class="button" @click="rollDice">{{ $t("Roll dice") }}</button>
     </div>
   </div>
@@ -443,6 +470,15 @@ export default class DiceView extends Vue {
 .result-summary {
   // font-size: calc(2.3rem - 1.1vmin);
   font-size: 2.5rem;
+  display: flex;
+  justify-content: baseline;
+  align-items: center;
+}
+
+.result-box {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
 }
 
 .content {
@@ -456,8 +492,11 @@ export default class DiceView extends Vue {
 .dice-input {
   display: flex;
   flex: 1 1 30%;
-  // justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  @media (max-width: 500px) {
+    justify-content: flex-start;
+  }
 }
 
 .dice-inputs {

@@ -11,6 +11,7 @@ export default class ExpandableSection extends Vue {
   @Prop({ default: "" }) min!: string
   @Prop({ default: "" }) num!: string
   @Prop({ default: () => () => {} }) enterCb!: Function
+  @Prop({ default: () => () => {} }) ctrlEnterCb!: Function
 
   // value: number | "" = Number(this.num) || ""
 
@@ -79,8 +80,8 @@ export default class ExpandableSection extends Vue {
       :max="max"
       :min="min"
       @input="inputEvent"
-      v-on:keyup.enter="enterCb"
-      v-on:keydown.space="enterCb"
+      v-on:keyup.ctrl.enter.exact="ctrlEnterCb"
+      v-on:keyup.enter.exact="enterCb"
     />
     <button
       class="fl-number-button shared"
