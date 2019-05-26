@@ -58,7 +58,7 @@ export default Vue.extend({
 </script>
 
 <template>
-  <div>
+  <div class="character-card">
     <Modal v-if="modalActive" @close="closeModal()" :maximized="false">
       <div slot="header">Confirm delete</div>
       <div slot="body"></div>
@@ -121,11 +121,6 @@ h3 {
   }
   // margin-bottom: 0.1rem;
   margin: 0;
-}
-
-.card-button0 {
-  position: relative;
-  top: 0;
 }
 
 .undecorated-link {
