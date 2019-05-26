@@ -7,6 +7,7 @@ import { CLASS as PROFESSION_MAP } from "@/classes"
 import { KIN as KIN_MAP } from "@/kin"
 import { validateAttributes, CharacterData } from "@/characterData"
 import SvgIcon from "@/components/SvgIcon.vue"
+import NumberInput from "@/components/FLNumberInput.vue"
 
 function getMaxAttribLevel(
   attribute: Attribute,
@@ -29,6 +30,7 @@ interface AttributeInterface {
 
 export default Vue.extend({
   components: {
+    // NumberInput,
     SvgIcon,
   },
   props: {
@@ -133,11 +135,22 @@ export default Vue.extend({
         :name="attribute"
         type="number"
         required
-        :placeholder="'1-' + getMax(attribute)"
-        min="1"
+        :placeholder="'2-' + getMax(attribute)"
+        min="2"
         :max="getMax(attribute)"
         v-model.number="charData.attributes[attribute]"
       />
+      <!-- <NumberInput
+        :id="attribute"
+        :name="attribute"
+        type="number"
+        required
+        :placeholder="'1-' + getMax(attribute)"
+        min="1"
+        :max="getMax(attribute)"
+        :num="charData.attributes[attribute]"
+        v-model.number="charData.attributes[attribute]"
+      /> -->
       <span class="attribute-damage">******</span>
     </div>
   </div>

@@ -7,11 +7,12 @@ import {
   Skill,
   TalentAll,
 } from "@/types"
+import { CLASS as PROFESSION_MAP, getSkillMax } from "@/classes.ts"
 import { SkillMap, getSkills } from "@/skills"
 import { getAgeType, getAttributePoints, getStartingTalents } from "@/age"
 
 import { AGE } from "@/keys"
-import { getSkillMax } from "@/classes.ts"
+import { KIN as KIN_MAP } from "@/kin"
 import uuid1 from "uuid/v1"
 
 // import { CLASS, KIN } from "@/keys"
@@ -109,6 +110,18 @@ export function calcNewCharSkillPoints(age: Age | null) {
   )
 }
 
+function getMaxAttribLevel(
+  attribute: Attribute,
+  kin: KinName | null,
+  profession: Profession | null
+): number {
+  if (!kin || !profession) return 1
+  const kinMod = KIN_MAP[kin].key_attribute === attribute ? 1 : 0
+  const professionMod =
+    PROFESSION_MAP[profession].key_attribute === attribute ? 1 : 0
+  return 4 + kinMod + professionMod
+}
+
 export function validateBase(character: CharacterData): boolean {
   return (
     !!character.name &&
@@ -123,15 +136,26 @@ export function validateBase(character: CharacterData): boolean {
 export function validateAttributes({
   attributes,
   ageType,
+  profession,
+  kin,
 }: CharacterData): boolean {
   const attribPointsSpent = Number(
     Object.entries(attributes)
       .map((attribute) => attribute[1])
       .reduce((sum, value) => Number(sum) + Number(value))
   )
-  // TODO get str wit emp agi max and compare to entered value
+  const attribsOutsideRange = Object.entries(attributes)
+    .map((item) => {
+      return (
+        item[1] >= 2 &&
+        item[1] <= getMaxAttribLevel(item[0] as Attribute, kin, profession)
+      )
+    })
+    .filter((item) => !item).length
   const attributePointsRequired = getAttributePoints(ageType || null)
-  return attribPointsSpent === attributePointsRequired
+  return (
+    attribPointsSpent === attributePointsRequired && attribsOutsideRange === 0
+  )
 }
 
 export function validateSkills({
