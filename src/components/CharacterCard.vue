@@ -26,10 +26,10 @@ export default Vue.extend({
       return !this.charData
     },
     cardLink(): string {
-      if (this.empty) return `/character-creator/new`
+      if (this.empty) return `new`
       else if (this.charData) {
         // check if new
-        return `/character-creator/new/edit/${this.characterId}`
+        return `new/edit/${this.characterId}`
       }
       return "#"
     },
