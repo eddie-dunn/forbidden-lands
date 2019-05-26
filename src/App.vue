@@ -131,12 +131,16 @@ select {
     // box-shadow: none;
     transform: translateY(2px);
   }
+
   &:hover {
     color: #42b983;
     background-color: #fff;
     // box-shadow: 0px -5px 5px rgba(255, 229, 255, 0.4) inset;
   }
   &-red {
+    &:hover {
+      color: @pastel-red;
+    }
     color: #fff;
     background-color: @pastel-red;
     border: 1px solid @pastel-red;

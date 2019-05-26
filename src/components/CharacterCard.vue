@@ -14,6 +14,7 @@ export default Vue.extend({
   data() {
     return {
       modalActive: false,
+      actionsActive: false,
     }
   },
   computed: {
@@ -34,9 +35,12 @@ export default Vue.extend({
     },
   },
   methods: {
-    cardClicked() {
+    edit() {
       this.$router.push(this.cardLink)
       window.scrollTo(0, 0)
+    },
+    cardClicked() {
+      this.actionsActive = !this.actionsActive
     },
     remove() {
       if (this.charData) {
@@ -64,31 +68,40 @@ export default Vue.extend({
       </div>
     </Modal>
     <div v-if="!this.charData" class="stat-card row-full">
-      <div class="placeholder" @click="cardClicked()">
+      <div class="placeholder" @click="edit()">
         <h3>Create new character</h3>
       </div>
     </div>
     <div v-else class="stat-card row-full">
-      <img
-        class="top-image"
-        :src="charData.portrait"
-        @click.self="cardClicked()"
-      />
-      <div class="header">
-        <div class="card-contents">
+      <div class="img-section">
+        <div
+          :class="['card-buttons', actionsActive ? '' : 'hidden']"
+          @click="cardClicked"
+        >
+          <button class="button" @click="edit">
+            {{ $t("Edit") }}
+          </button>
+          <button class="button button-red" @click="confirmRemove">
+            {{ $t("Remove") }}
+          </button>
+        </div>
+        <img
+          class="top-image"
+          :src="charData.portrait"
+          @click.self="cardClicked()"
+        />
+        <div class="img-header">
           <h3>
             <a class="undecorated-link" :href="cardLink">{{ charData.name }}</a>
           </h3>
-          <div class="header-subtitle capitalize">
-            <i>{{ $t(charData.kin) }}</i>
-            <i>{{ $t(charData.profession) }}</i>
-            <i>{{ $t(this.charData.ageType) }}</i>
+          <div class="img-header-subtitle capitalize">
+            <span>{{ $t(this.charData.ageType) }}</span>
+            <span>{{ $t(charData.kin) }}</span>
+            <span>{{ $t(charData.profession) }}</span>
           </div>
         </div>
       </div>
-      <button class="button" @click="confirmRemove()">
-        Remove
-      </button>
+      <div class="header"></div>
       <div class="card-footer"></div>
     </div>
   </div>
@@ -110,9 +123,15 @@ h3 {
   margin: 0;
 }
 
+.card-button0 {
+  position: relative;
+  top: 0;
+}
+
 .undecorated-link {
   text-decoration: none;
-  color: #2c3e50;
+  // color: #2c3e50;
+  color: white;
 }
 
 .placeholder {
@@ -138,7 +157,9 @@ h3 {
 .top-image {
   object-fit: cover;
   object-position: top;
-  max-height: 400px;
+  // height: 400px;
+  height: 100%;
+  width: 100%;
   cursor: pointer;
   transition: 0.2s ease;
   &:hover {
@@ -146,21 +167,32 @@ h3 {
   }
 }
 
-.header {
+.img-section {
+  position: relative;
+  height: 100%;
+}
+
+.img-header {
   // flex-grow: 0;
   // display: flex;
   // align-items: center;
-  margin-bottom: 0.5rem;
-  margin-top: 0.5rem;
+  // margin-bottom: 0.5rem;
+  // margin-top: 0.5rem;
+  padding: 0.4rem 0;
+  // background: #66666699;
+  background: rgba(0, 0, 0, 0.64);
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  color: white;
+  color: hsla(0, 0%, 100%, 0.87);
 }
 
-.header-subtitle {
-  width: 90%;
-  // margin-left: auto;
+.img-header-subtitle {
   margin: 0.2rem auto;
-  font-style: italic;
   display: flex;
   justify-content: space-around;
+  color: hsla(0, 0%, 100%, 0.84);
 }
 
 .card-contents {
@@ -197,11 +229,31 @@ h3 {
   // align-items: baseline;
   // box-shadow: 3px 3px 5px 6px #cccccc80;
   height: 100%;
+  height: 400px;
   box-shadow: 0px 1px 5px #555;
   overflow: hidden;
 }
 
-// .row-full {
-//   width: 100%;
-// }
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-buttons {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  button > {
+    margin: 1rem;
+  }
+}
+
+.hidden {
+  display: none;
+}
 </style>
