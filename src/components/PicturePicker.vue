@@ -250,7 +250,7 @@ export default class PicturePicker extends AppProps {
 .picture-grid {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   padding: 5px;
   img > {
     // max-width: 300px;
