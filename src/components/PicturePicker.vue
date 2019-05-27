@@ -2,6 +2,7 @@
 import Vue from "vue"
 import Component from "vue-class-component"
 import Modal from "@/components/Modal.vue"
+import UrlStorage from "@/localStorage"
 
 function importAll(r: any) {
   return r.keys().map(r)
@@ -39,6 +40,7 @@ export default class PicturePicker extends AppProps {
   showModal: boolean = false
   showGallery: boolean = true
   showGetUrl: boolean = false
+  urlStore = new UrlStorage()
 
   pictures: string[] = IMAGES
   imgUrl: string = ""
@@ -61,7 +63,11 @@ export default class PicturePicker extends AppProps {
   }
   urlButtonClicked() {
     // this.selected_portrait = this.imgUrl
+    this.urlStore.add(this.imgUrl)
     this.externalImage = this.imgUrl
+  }
+  deleteUrl(index: number) {
+    this.urlStore.remove(index)
   }
   getPlaceHolder() {
     // TODO: Have it change depending on class/gender/kin
@@ -110,23 +116,29 @@ export default class PicturePicker extends AppProps {
               />
               <div class="button" @click="urlButtonClicked">Get</div>
             </form>
-            <div class="external-image-viewer tooltip" v-if="externalImage">
-              <div class="top">
-                Click picture to select
-                <i></i>
+            <div class="picture-grid">
+              <div
+                class="picture-container"
+                v-for="(url, index) in urlStore.storage"
+                v-bind:key="url + index"
+              >
+                <img
+                  :src="url"
+                  @click="selectImage(url)"
+                  :alt="'picture' + index"
+                  :class="[
+                    'portrait',
+                    url === selected_portrait ? 'portrait-selected' : '',
+                  ]"
+                />
+                <button
+                  type="button"
+                  class="button button-red delete-button"
+                  @click="deleteUrl(index)"
+                >
+                  Delete
+                </button>
               </div>
-              <img
-                :class="[
-                  'url-portrait',
-                  'portrait',
-                  externalImage === selected_portrait
-                    ? 'portrait-selected'
-                    : '',
-                ]"
-                :src="externalImage || getPlaceHolder()"
-                alt="Character Portrait"
-                @click="selectImage(externalImage)"
-              />
             </div>
           </div>
           <div v-if="showGallery">
@@ -164,6 +176,17 @@ export default class PicturePicker extends AppProps {
 
 <style lang="less" scoped>
 @import "~Style/colors.less";
+
+.delete-button {
+  position: absolute;
+  bottom: 0;
+}
+
+.picture-container {
+  position: relative;
+  min-width: 30ch;
+  // max-height: 400px;
+}
 
 .modal-body {
   overflow-y: auto;
