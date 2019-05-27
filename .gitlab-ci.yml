@@ -8,6 +8,7 @@ pages: # the job must be named pages
     - yarn build
     - mv public public-vue # GitLab Pages hooks on the public folder
     - mv dist public # rename the dist folder (result of npm run build)
+    - cp public/index.html public/404.html # rout all missing pages to index.html
   artifacts:
     paths:
       - public # artifact path must be /public for GitLab Pages to pick it up
