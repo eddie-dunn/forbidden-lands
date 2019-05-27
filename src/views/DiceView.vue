@@ -87,14 +87,10 @@ export default class DiceView extends Vue {
   ]
   rollResultLog: number[][][] = []
 
-  // TODO Remove?
-  // get currentRolls() {
-  //   return this.rollResultLog.slice(-1)[0]
-  // }
   accumulator = (sum: number, value: number) => sum + value
 
   get totals() {
-    const rolls = this.rollResultLog.slice(-1)[0]
+    const rolls = this.rollResultLog[0]
     if (!rolls) return []
     const t = rolls.map((rolls, diceType) => {
       const success = rolls
@@ -119,15 +115,6 @@ export default class DiceView extends Vue {
 
   get totalBlackSkulls() {
     return this.totals.length > 0 && this.totals[2] ? this.totals[2].fails : ""
-    // return this.totals[2].fails
-  }
-
-  // get totalFailure() {
-  //   return this.totals.map((item) => item.fails).reduce(this.accumulator, 0)
-  // }
-
-  get rollResultLogReverse() {
-    return [...this.rollResultLog.reverse()]
   }
 
   pushRoll() {
@@ -143,7 +130,7 @@ export default class DiceView extends Vue {
       })
     })
     this.rollResult = newRolls
-    this.rollResultLog.push(this.rollResult)
+    this.rollResultLog.unshift(this.rollResult)
   }
 
   rollDice() {
@@ -274,13 +261,24 @@ export default class DiceView extends Vue {
           </div>
         </div>
       </ExpandableSection>
+      <div v-if="totals.length > 0" class="result-box">
+        <div class="result-summary">
+          <pre>{{ totalWhiteSkulls }}</pre>
+          <SvgIcon name="skulls-1-inverted" class="dice-icon" />
+        </div>
+        <div class="result-summary">
+          <pre>{{ totalBlackSkulls }}</pre>
+          <SvgIcon name="skulls-1" class="dice-icon dice-black" />
+        </div>
+        <div class="result-summary">
+          <pre>{{ totalSuccess }}</pre>
+          <SvgIcon name="swords-1-inverted" class="dice-icon" />
+        </div>
+      </div>
       <div
         v-for="(rolls, index) in rollResultLog"
         v-bind:key="index"
-        :class="[
-          'roll-result',
-          index !== rollResultLog.length - 1 ? 'roll-result-old' : '',
-        ]"
+        :class="['roll-result', index !== 0 ? 'roll-result-old' : '']"
       >
         <span>
           <span
@@ -388,20 +386,6 @@ export default class DiceView extends Vue {
           </span>
         </span>
       </div>
-      <div v-if="totals.length > 0" class="result-box">
-        <div class="result-summary">
-          <pre>{{ totalWhiteSkulls }}</pre>
-          <SvgIcon name="skulls-1-inverted" class="dice-icon" />
-        </div>
-        <div class="result-summary">
-          <pre>{{ totalBlackSkulls }}</pre>
-          <SvgIcon name="skulls-1" class="dice-icon dice-black" />
-        </div>
-        <div class="result-summary">
-          <pre>{{ totalSuccess }}</pre>
-          <SvgIcon name="swords-1-inverted" class="dice-icon" />
-        </div>
-      </div>
     </div>
     <div class="navbar navbar-bottom">
       <button class="button button-white" @click="resetDice">
@@ -443,15 +427,10 @@ export default class DiceView extends Vue {
   }
 }
 
-// .dice-label {
-//   height: 3rem;
-// }
-
 .dice-view {
   display: flex;
   flex-direction: column;
-  // min-height: 80vh;
-  min-height: 100vh;
+  flex-grow: 1;
 }
 
 .roll-result {
@@ -510,5 +489,8 @@ export default class DiceView extends Vue {
   > button {
     margin: 0 0.24rem;
   }
+}
+.navbar-bottom::-webkit-scrollbar {
+  display: none;
 }
 </style>

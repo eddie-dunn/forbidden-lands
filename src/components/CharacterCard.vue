@@ -78,11 +78,11 @@ export default Vue.extend({
           :class="['card-buttons', actionsActive ? '' : 'hidden']"
           @click="cardClicked"
         >
-          <button class="button" @click="edit">
-            {{ $t("Edit") }}
-          </button>
           <button class="button button-red" @click="confirmRemove">
             {{ $t("Remove") }}
+          </button>
+          <button class="button" @click="edit">
+            {{ $t("Edit") }}
           </button>
         </div>
         <img
@@ -237,18 +237,18 @@ h3 {
 .card-buttons {
   position: absolute;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: space-around;
+  align-items: flex-start;
   width: 100%;
   height: 100%;
-  z-index: 10;
-  button > {
-    margin: 1rem;
+  background: hsla(0, 0%, 100%, 0.27);
+  &:hover {
+    opacity: 1;
   }
 }
 
 .hidden {
-  display: none;
+  // display: none;
+  opacity: 0;
 }
 </style>
