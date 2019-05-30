@@ -1,7 +1,10 @@
 <script lang="ts">
 import Vue from "vue"
-import { CharacterData } from "@/characterData"
+import { CharacterData, validateNewCharacter } from "@/characterData"
 import Modal from "@/components/Modal.vue"
+
+const VALID = "✓"
+const INVALID = "✖"
 
 export default Vue.extend({
   name: "CharacterCreatorCard",
@@ -33,6 +36,9 @@ export default Vue.extend({
       }
       return "#"
     },
+    newCharValid(): boolean {
+      return !!this.charData && validateNewCharacter(this.charData)
+    },
   },
   methods: {
     edit() {
@@ -52,6 +58,9 @@ export default Vue.extend({
     },
     closeModal() {
       this.modalActive = false
+    },
+    activate() {
+      // console.log("activate char")
     },
   },
 })
@@ -84,6 +93,14 @@ export default Vue.extend({
           <button class="button" @click="edit">
             {{ $t("Edit") }}
           </button>
+          <button
+            v-if="false"
+            :class="['button', !newCharValid ? 'hidden' : '']"
+            :disabled="!newCharValid"
+            @click="activate"
+          >
+            {{ $t("Activate") }}
+          </button>
         </div>
         <img
           class="top-image"
@@ -93,6 +110,14 @@ export default Vue.extend({
         <div class="img-header">
           <h3>
             <a class="undecorated-link" :href="cardLink">{{ charData.name }}</a>
+            <div
+              :class="[
+                'indicator',
+                'indicator-' + (newCharValid ? 'green' : 'red'),
+              ]"
+            >
+              <!-- {{ newCharValid ? "VALID" : "INVALID" }} -->
+            </div>
           </h3>
           <div class="img-header-subtitle capitalize">
             <span>{{ $t(this.charData.ageType) }}</span>
@@ -121,6 +146,27 @@ h3 {
   }
   // margin-bottom: 0.1rem;
   margin: 0;
+}
+
+.indicator {
+  font-size: 1.7rem;
+  position: absolute;
+  top: -2px;
+  right: 5px;
+
+  &-green {
+    color: @pastel-green;
+    &:before {
+      content: "✓";
+    }
+  }
+
+  &-red {
+    color: @pastel-red;
+    &:before {
+      content: "✖";
+    }
+  }
 }
 
 .undecorated-link {
@@ -158,7 +204,7 @@ h3 {
   cursor: pointer;
   transition: 0.2s ease;
   &:hover {
-    opacity: 0.3;
+    // opacity: 0.3;
   }
 }
 
@@ -198,7 +244,7 @@ h3 {
 
 .stat-card {
   &:active {
-    transform: translateY(2px);
+    // transform: translateY(2px);
   }
   // cursor: pointer;
   // width: 50vw;
@@ -237,18 +283,33 @@ h3 {
 .card-buttons {
   position: absolute;
   display: flex;
-  justify-content: space-around;
-  align-items: flex-start;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  flex-direction: column;
   width: 100%;
   height: 100%;
   background: hsla(0, 0%, 100%, 0.27);
-  &:hover {
-    opacity: 1;
+  // display: none;
+  // visibility: hidden;
+  // z-index: -10;
+  z-index: 10;
+
+  // transition: 0.3s ease;
+  // &:hover {
+  //   visibility: visible;
+  //   opacity: 1;
+  // }
+  button > {
+    margin: 1rem;
   }
 }
 
 .hidden {
+  // transition: 0.3s ease;
   // display: none;
   opacity: 0;
+  z-index: -10;
+  // visibility: hidden;
 }
 </style>

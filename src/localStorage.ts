@@ -15,7 +15,6 @@ function saveListToLocalStorage(urlList: UrlSaveData[]) {
 
 function loadAllUrlsFromLocalStorage(): UrlSaveData[] {
   const loadedData = JSON.parse(localStorage.getItem(URL_STORE_KEY) || "[]")
-  console.log("loaded list", loadedData)
   return loadedData
 }
 

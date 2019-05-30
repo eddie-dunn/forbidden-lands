@@ -1,6 +1,7 @@
 import {
   Age,
   Attribute,
+  DiceSides,
   KinName,
   Profession,
   Sex,
@@ -37,50 +38,64 @@ export interface CharacterMetaData {
   hasBeenActivated: boolean
 }
 
+type Item = { name: string; weight: number }
+interface Gear {
+  equipped?: Item[]
+  inventory: Item[]
+  consumables?: {
+    torches: DiceSides
+    food: DiceSides
+    water: DiceSides
+    arrows: DiceSides
+  }
+}
+
 export interface CharacterData {
   age: number | null
   ageType: Age
+  appearance: string
   attributes: AttributeData
-  profession: Profession | null
+  darkSecret: string
+  experience: number
+  gear: Gear
   kin: KinName | null
+  metadata: CharacterMetaData
   name: string
+  notes: string
+  portrait: string | null
+  pride: string
+  profession: Profession | null
+  relationshipts: string
   reputation: number
   sex: Sex | null
   skills: SkillMap
   talents: CharacterTalent[]
-  portrait: string | null
-  metadata: CharacterMetaData
-  experience: number
   willpower: number
-
-  appearance: string
-  pride: string
-  darkSecret: string
-  relationshipts: string
 }
 
 export function getNewCharacterData(): CharacterData {
   const newCharData: CharacterData = {
     name: "",
-    // age: null,
-    age: 33,
+    age: null,
+    // age: 33,
     ageType: "",
     sex: null,
-    // kin: null,
-    kin: "human",
+    kin: null,
+    // kin: "human",
     attributes: {
       strength: null,
       agility: null,
       wits: null,
       empathy: null,
     },
-    // class: null,
-    profession: "druid",
+    profession: null,
+    // profession: "druid",
     skills: getSkills(),
     talents: [],
 
     reputation: 0,
-    portrait: null, // require("./assets/500.png"),
+    portrait: null,
+    // portrait: require("./assets/500.png"),
     experience: 0,
     willpower: 0,
 
@@ -88,6 +103,11 @@ export function getNewCharacterData(): CharacterData {
     pride: "",
     darkSecret: "",
     relationshipts: "",
+
+    gear: {
+      inventory: [],
+    },
+    notes: "",
 
     // metadata
     metadata: {
@@ -201,7 +221,12 @@ export function validateTalents({ age, kin, talents }: CharacterData): boolean {
 export function validateNewCharacter(character: CharacterData): boolean {
   // check if all stats add up OR if character has been activated before
   return (
-    [validateBase, validateAttributes, validateSkills, validateTalents]
+    [
+      validateBase, //
+      validateAttributes, //
+      validateSkills, //
+      validateTalents, //
+    ]
       .map((validate) => validate(character))
       .filter((item) => item === false).length === 0 || false
   )

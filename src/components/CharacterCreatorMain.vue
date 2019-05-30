@@ -5,6 +5,7 @@ import TalentSelector from "@/components/TalentSelector.vue"
 import BaseSelector from "@/components/BaseSelector.vue"
 import PicturePicker from "@/components/PicturePicker.vue"
 import FlavorSelector from "@/components/FlavorSelector.vue"
+import GearPicker from "@/components/GearPicker.vue"
 import Card from "@/components/Card.vue"
 import { AGE, CLASS, KIN } from "@/keys.ts"
 import { getSkills } from "@/skills"
@@ -36,6 +37,7 @@ const CharacterCreatorMain = Vue.extend({
     Card,
     ExpandableSection,
     FlavorSelector,
+    GearPicker,
     PicturePicker,
     SkillSelector,
     TalentSelector,
@@ -97,9 +99,6 @@ const CharacterCreatorMain = Vue.extend({
       this.$set(this.characterData, "attributes", attributes)
     },
     updateTalents(talents: CharacterTalent[]) {
-      /* eslint-disable-next-line no-console */
-      console.log("new talents", talents)
-      // this.characterData.talents = talents
       this.$set(this.characterData, "talents", talents)
     },
     setImgSource(img: any) {
@@ -124,18 +123,39 @@ export default CharacterCreatorMain
       method="get"
       :key="id"
     >
-      <Card class="row-half" :title="$t('Base data')" :valid="baseDataValid">
+      <Card
+        class="row-half"
+        :title="$t('Base data')"
+        :valid="baseDataValid && attributesValid"
+      >
         <BaseSelector :data="characterData" @basedata-updated="updateBase" />
-      </Card>
-
-      <Card class="row-half" :noSign="true">
-        <PicturePicker
-          :portrait="characterData.portrait"
-          @pickedPicture="setImgSource"
+        <!-- TODO fix spacing -->
+        <AttributesSelector
+          :charData="characterData"
+          @attributes-updated="updateAttributes"
         />
       </Card>
 
-      <Card class="row-half" :title="$t('attributes')" :valid="attributesValid">
+      <!-- <Card class="row-full" :full-width="true" :noSign="true"> -->
+      <Card class="row-half" :noSign="true">
+        <div class="flex-row-wrap space-around appearance-section">
+          <PicturePicker
+            :portrait="characterData.portrait"
+            @pickedPicture="setImgSource"
+          />
+        </div>
+      </Card>
+
+      <Card class="row-half" :noSign="true">
+        <FlavorSelector class="flex-col-half" :data="characterData" />
+      </Card>
+
+      <Card
+        v-if="false"
+        class="row-half"
+        :title="$t('attributes')"
+        :valid="attributesValid"
+      >
         <AttributesSelector
           :charData="characterData"
           @attributes-updated="updateAttributes"
@@ -159,7 +179,17 @@ export default CharacterCreatorMain
         />
       </Card>
 
-      <FlavorSelector class="row-full" :data="characterData" />
+      <Card class="row-half" :title="$t('Gear')">
+        <GearPicker :characterData="characterData" />
+      </Card>
+
+      <Card class="row-half" :title="$t('Notes')" :noSign="true">
+        <textarea
+          v-model="characterData.notes"
+          rows="10"
+          style="width: 100%"
+        ></textarea>
+      </Card>
 
       <div class="action-bar-wrapper">
         <div class="action-bar">
@@ -184,6 +214,17 @@ export default CharacterCreatorMain
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
+.appearance-section {
+  flex: 1 1 45%;
+}
+
+.flex-col-half {
+  flex-basis: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
 .character_creator {
   margin-bottom: 20vh;
 }

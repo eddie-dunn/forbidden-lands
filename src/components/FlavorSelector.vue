@@ -5,15 +5,11 @@ import { GENERAL_TALENTS, getClassTalents } from "@/talents.ts"
 import { capitalize } from "@/util"
 import { getAgeType, getAgeRange, getReputation } from "@/age"
 import { CLASS as PROFESSION } from "@/classes"
-import Card from "@/components/Card.vue"
 import Vue from "vue"
 import { CharacterData } from "@/characterData"
 import VueI18n from "vue-i18n"
 
 export default Vue.extend({
-  components: {
-    Card,
-  },
   props: {
     data: {
       type: Object as () => CharacterData,
@@ -39,7 +35,7 @@ export default Vue.extend({
 </script>
 
 <template>
-  <Card :full-width="true" :title="$t('Miscellaneous')" :noSign="true">
+  <div>
     <div>
       <label for="appearance">{{ $t("Appearance") }}</label>
       <textarea
@@ -76,7 +72,7 @@ export default Vue.extend({
         placeholder="..."
       ></textarea>
     </div>
-  </Card>
+  </div>
 </template>
 
 <style scoped lang="less">

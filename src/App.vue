@@ -31,7 +31,7 @@ export default Vue.extend({
 body {
   // background: #2c3e50;
   // background: #282c34;
-  margin: 0;
+  margin: 5px;
 }
 
 #app {
@@ -101,7 +101,7 @@ select {
   // color: white;
   // height: 1.5rem;
   // border: 0;
-  padding: 0.3rem;
+  // padding: 0.3rem;
 }
 // &::-moz-focus-outer {
 //   border: 0;
@@ -146,5 +146,15 @@ select {
     background-color: @pastel-red;
     border: 1px solid @pastel-red;
   }
+}
+
+.flex-row-wrap {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.space-around {
+  justify-content: space-around;
 }
 </style>

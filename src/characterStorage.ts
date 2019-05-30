@@ -19,15 +19,15 @@ export function saveCharacterToLocalStorage(characterData: CharacterData) {
   // Check if id exists, if yes -- handle somehow; overwrite? prompt?
   if (storeData[id]) {
     /* eslint-disable-next-line no-console */
-    console.error("Overwriting current character ", id)
+    // console.error("Overwriting current character ", id)
   }
   /* eslint-disable-next-line no-console */
-  console.log(storeData)
+  // console.log(storeData)
   storeData[id] = characterData
   // write to storage
 
   /* eslint-disable-next-line no-console */
-  console.log("saving", JSON.stringify(storeData[id]))
+  // console.log("saving", JSON.stringify(storeData[id]))
   localStorage.setItem(CHAR_STORE_KEY, JSON.stringify(storeData))
 }
 
@@ -45,13 +45,13 @@ export function loadCharacterFromLocalStorage(id: string): CharacterData {
   if (!loadedData[id]) return getNewCharacterData()
   const loadedCharacterData = loadedData[id]
   /* eslint-disable-next-line no-console */
-  console.log("loaded", loadedCharacterData)
+  // console.log("loaded", loadedCharacterData)
   return parseCharacterData(loadedCharacterData)
 }
 
 export function loadAllCharactersFromLocalStorage(): SaveData {
   const loadedData = JSON.parse(localStorage.getItem(CHAR_STORE_KEY) || "{}")
-  console.log("loaded list", loadedData)
+  // console.log("loaded list", loadedData)
   // return Object.values(loadedData)
   return loadedData
 }
@@ -59,7 +59,7 @@ export function loadAllCharactersFromLocalStorage(): SaveData {
 /* Remove character by uuid from data, return new data version */
 export function removeCharacter(characterId: string): SaveData {
   let charData = loadAllCharactersFromLocalStorage()
-  console.log("Removing", characterId, "from", charData)
+  // console.log("Removing", characterId, "from", charData)
   // const toDelete = new Set([characterId, "abc", "efg"])
   // const newCharacterList = charData.filter(
   //   (obj: CharacterData) => obj.metadata && obj.metadata.id !== characterId //!toDelete.has(obj.metadata.id)
@@ -101,7 +101,7 @@ export class Store {
     return Object.keys(this.storage).length
   }
   commit(): void {
-    console.log("commit called")
+    // console.log("commit called")
     saveListToLocalStorage(this.storage)
   }
 }

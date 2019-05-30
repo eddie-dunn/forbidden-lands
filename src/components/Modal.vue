@@ -16,7 +16,6 @@ const Props = Vue.extend({
 export default class Modal extends Props {
   close(param: string): void {
     this.$emit("close", param)
-    console.log("emitted close", param)
   }
 }
 </script>

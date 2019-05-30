@@ -71,7 +71,7 @@ export default Vue.extend({
   methods: {
     nameSuggestion() {
       // TODO Get suggested names from docs, output them based on selected kin
-      return "Krom"
+      return ""
     },
     ageRange() {
       return getAgeRange(this.mdata.kin)
@@ -155,48 +155,6 @@ export default Vue.extend({
       <span v-if="this.mdata.age" class="capitalize">
         {{ $t("Reputation") }}: {{ this.reputation }}
       </span>
-    </div>
-
-    <div v-if="this.mdata.profession">
-      <h4>{{ $t("Starting gear") }}</h4>
-      <div>
-        {{ $t(PROFESSION[this.mdata.profession].gear_description) }}
-      </div>
-      <p>
-        Silver:
-        {{
-          $t("D") +
-            PROFESSION[this.mdata.profession].starting_resources.silver +
-            " (" +
-            $t("Roll dice before session starts") +
-            ")"
-        }}
-      </p>
-    </div>
-
-    <div class="consumables" v-if="this.mdata.class">
-      <div>
-        {{ $t("Food") }}:
-        {{ $t("D") + PROFESSION[this.mdata.class].starting_resources.food }}
-      </div>
-      <div>
-        {{ $t("Water") }}:
-        {{ $t("D") + PROFESSION[this.mdata.class].starting_resources.water }}
-      </div>
-      <div>
-        {{ $t("Arrows") }}:
-        {{
-          PROFESSION[this.mdata.class].starting_resources.arrows
-            ? $t("D") + PROFESSION[this.mdata.class].starting_resources.arrows
-            : 0
-        }}
-      </div>
-      <div v-if="false">
-        <!-- Add logic to set to true if active character -->
-        {{ $t("Torches") }}: D{{
-          PROFESSION[this.mdata.class].starting_resources.arrows
-        }}
-      </div>
     </div>
   </div>
 </template>

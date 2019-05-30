@@ -2,6 +2,7 @@
 import { Component, Vue, Watch } from "vue-property-decorator"
 import Card from "@/components/Card.vue"
 import CharacterCard from "@/components/CharacterCard.vue"
+import Expander from "@/components/ExpandableSection.vue"
 import {
   removeCharacter,
   loadAllCharactersFromLocalStorage,
@@ -12,6 +13,7 @@ import {
   components: {
     Card,
     CharacterCard,
+    Expander,
   },
 })
 export default class CharacterListView extends Vue {
@@ -27,26 +29,32 @@ export default class CharacterListView extends Vue {
 
 <template>
   <div class="character-list-container">
-    <h1>Character List</h1>
-    <div :key="idKey" v-if="store.length > -1" class="character-list">
-      <div
-        v-for="character in store.storage"
-        v-bind:key="'key_' + character.metadata.id"
-        class="character-card-container"
-      >
-        <CharacterCard :charData="character" @remove-card="removeCard" />
+    <h1>{{ $t("Characters") }}</h1>
+    <Expander
+      :label="$t('New')"
+      :expanded="true"
+      class="character-list-expander"
+    >
+      <div :key="idKey" v-if="store.length > -1" class="character-list">
+        <div
+          v-for="character in store.storage"
+          v-bind:key="'key_' + character.metadata.id"
+          class="character-card-container"
+        >
+          <CharacterCard :charData="character" @remove-card="removeCard" />
+        </div>
+        <div>
+          <CharacterCard :empty="true" />
+        </div>
       </div>
-      <div>
-        <CharacterCard :empty="true" />
-      </div>
-    </div>
-    <Card v-else :noSign="true">
-      <p>This section will include a card view of all saved characters</p>
-      <p>
-        No characters found; why not
-        <a href="character-creator/new/"> create a new one</a>?
-      </p>
-    </Card>
+    </Expander>
+    <Expander
+      class="character-list-expander"
+      :label="$t('Active')"
+      :expanded="true"
+      v-if="false"
+    >
+    </Expander>
   </div>
 </template>
 
@@ -59,4 +67,9 @@ export default class CharacterListView extends Vue {
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
   margin: 0.8rem;
 }
+
+// .character-list-expander {
+//   font-size: 3rem;
+
+// }
 </style>

@@ -27,10 +27,11 @@ export interface Class {
 }
 
 type ClassList = { [key in Profession]: Class }
-// interface KinList {
-//   [key: string]: Kin;
-// }
-export const CLASS: ClassList = {
+interface Professions {
+  [key: string]: Class
+}
+
+export const PROFESSION: Professions = {
   druid: {
     id: C.DRUID,
     key_attribute: ATTRIBUTE.WITS,
@@ -178,6 +179,8 @@ export const CLASS: ClassList = {
     // TYPICAL NICKNAMES: Rootheart, Greycape, The Wise
   },
 }
+
+export const CLASS = PROFESSION // TODO: Remove
 
 export function getSkillMax(
   skillId: Skill,

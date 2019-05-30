@@ -14,6 +14,7 @@ type KinList = { [key in KinName]: Kin }
 //   [key: string]: Kin;
 // }
 
+// TODO: Add all typical names
 export const KIN: KinList = {
   ["dwarf"]: {
     id: "dwarf",
