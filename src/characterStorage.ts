@@ -31,7 +31,7 @@ export function saveCharacterToLocalStorage(characterData: CharacterData) {
   localStorage.setItem(CHAR_STORE_KEY, JSON.stringify(storeData))
 }
 
-interface SaveData {
+export interface SaveData {
   [propName: string]: CharacterData
 }
 export function saveListToLocalStorage(characterList: SaveData) {
@@ -91,17 +91,37 @@ export class Store {
       this.commit()
     }
   }
+
   addCharacter(character: CharacterData, commit: boolean = false) {
     this.storage[character.metadata.id] = character
     if (commit) {
       this.commit()
     }
   }
+
+  getStorageDataBlob() {
+    const tmpStore = JSON.stringify(this.storage)
+    const blob = new Blob([tmpStore])
+    const objectUrl = window.URL.createObjectURL(blob)
+    setTimeout(() => {
+      // Cleanup if object url hasn't been used before timeout
+      window.URL.revokeObjectURL(objectUrl)
+    }, 60000)
+    return objectUrl
+  }
+
+  replaceData(newData: SaveData, commit: boolean = false) {
+    this.storage = newData
+    if (commit) {
+      this.commit()
+    }
+  }
+
   get length(): number {
     return Object.keys(this.storage).length
   }
+
   commit(): void {
-    // console.log("commit called")
     saveListToLocalStorage(this.storage)
   }
 }
