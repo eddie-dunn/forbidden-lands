@@ -40,7 +40,7 @@ export interface CharacterMetaData {
 
 type Item = { name: string; weight: number }
 interface Gear {
-  equipped?: Item[]
+  equipped: Item[]
   inventory: Item[]
   consumables?: {
     torches: DiceSides
@@ -105,6 +105,7 @@ export function getNewCharacterData(): CharacterData {
     relationshipts: "",
 
     gear: {
+      equipped: [],
       inventory: [],
     },
     notes: "",

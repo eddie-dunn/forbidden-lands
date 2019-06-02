@@ -14,7 +14,6 @@ function getDefaultGear() {
     weight: 1,
   }
 }
-type Gear = { name: string; weight: number }
 
 type VType = Vue & { focus: () => {} }
 
@@ -22,12 +21,8 @@ type VType = Vue & { focus: () => {} }
 export default class ExpandableSection extends Vue {
   @Prop({ required: true }) characterData!: CharacterData
 
-  // value: number | "" = Number(this.num) || ""
-  // characterData = this.characterData
   PROFESSION = PROFESSION
-
   adding = false
-  inventory: Gear[] = []
 
   tmpGear = getDefaultGear()
 
@@ -52,6 +47,16 @@ export default class ExpandableSection extends Vue {
   }
 
   // TODO: set consumables from charData or use starting gear if newly created
+  get inventory() {
+    if (!this.characterData.gear || !this.characterData.gear.inventory) {
+      this.characterData.gear = {
+        inventory: [],
+        equipped: [],
+      }
+    }
+    return this.characterData.gear.inventory
+  }
+
   get arrows() {
     if (this.characterData.profession) {
       return PROFESSION[this.characterData.profession].starting_resources.arrows
@@ -62,8 +67,16 @@ export default class ExpandableSection extends Vue {
     return 0
   }
 
-  get carryLoad() {
-    return this.characterData
+  get gearWeight() {
+    return this.inventory
+      .map((item) => item.weight)
+      .reduce((val, sum) => val + sum, 0)
+  }
+
+  get gearWeightMax() {
+    const multiplier = 1 // TODO get pack mule talent level
+    const charStrength = this.characterData.attributes.strength || 0
+    return charStrength * 2 * multiplier
   }
 }
 </script>
@@ -117,6 +130,7 @@ export default class ExpandableSection extends Vue {
     <!-- TODO: Complete gear selector -->
     <div v-if="false">
       <h4>{{ $t("Starting gear") }}</h4>
+      <div>Encumberance: {{ gearWeight }}/{{ gearWeightMax }}</div>
       <div v-if="inventory.length < 1">No gear added yet...</div>
       <div v-for="(item, index) in inventory" v-bind:key="index">
         <span>{{ item.name }}</span>

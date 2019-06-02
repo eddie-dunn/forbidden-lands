@@ -179,7 +179,7 @@ export default CharacterCreatorMain
         />
       </Card>
 
-      <Card class="row-half" :title="$t('Gear')">
+      <Card class="row-half" :title="$t('Gear')" :noSign="true">
         <GearPicker :characterData="characterData" />
       </Card>
 
