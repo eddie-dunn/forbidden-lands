@@ -130,6 +130,7 @@ export default CharacterCreatorMain
       >
         <BaseSelector :data="characterData" @basedata-updated="updateBase" />
         <!-- TODO fix spacing -->
+        <h4>{{ $t("Attributes") }}</h4>
         <AttributesSelector
           :charData="characterData"
           @attributes-updated="updateAttributes"
@@ -206,7 +207,8 @@ export default CharacterCreatorMain
         </div>
       </div>
     </form>
-    <ExpandableSection label="JSON Export">
+    <ExpandableSection v-if="false" label="JSON Export">
+      <!-- TODO Use same import/export functionality as for char list -->
       <pre>{{ JSON.stringify(characterData, null, 2) }}</pre>
     </ExpandableSection>
   </div>

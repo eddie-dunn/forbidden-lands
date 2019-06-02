@@ -115,7 +115,6 @@ export default Vue.extend({
     </ul>
   </div>
   <div v-else class="attribute-selector-content">
-    <span>{{ $t("Remaining") }}: {{ pointsAvailable() - pointsSpent() }}</span>
     <div
       v-for="attribute in Object.keys(charData.attributes)"
       class="attribute-item"
@@ -151,8 +150,9 @@ export default Vue.extend({
         :num="charData.attributes[attribute]"
         v-model.number="charData.attributes[attribute]"
       /> -->
-      <span class="attribute-damage">******</span>
+      <span v-if="false" class="attribute-damage">******</span>
     </div>
+    <span>{{ $t("Remaining") }}: {{ pointsAvailable() - pointsSpent() }}</span>
   </div>
 </template>
 

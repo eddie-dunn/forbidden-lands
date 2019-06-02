@@ -319,6 +319,7 @@ export default {
   ...GearDescriptions,
 
   "Active": "Aktiva",
+  "Attributes": "Grundegenskaper",
   "About": "Om",
   "Appearance": "Utseende",
   "Arrows": "Pilar",
