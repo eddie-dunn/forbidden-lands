@@ -10,11 +10,9 @@ export default class ExpandableSection extends Vue {
   @Prop({ default: "" }) placeholder!: string
   @Prop({ default: "" }) max!: string
   @Prop({ default: "" }) min!: string
-  @Prop({ default: "" }) num!: string
   @Prop({ default: () => () => {} }) enterCb!: Function
   @Prop({ default: () => () => {} }) ctrlEnterCb!: Function
-
-  // value: number | "" = Number(this.num) || ""
+  @Prop({ default: "" }) value!: string
 
   get cssProps() {
     const placeholderWidth = this.placeholder
@@ -32,27 +30,27 @@ export default class ExpandableSection extends Vue {
   }
 
   increment() {
-    if (this.max && Number(this.num) >= Number(this.max)) {
+    if (this.max && Number(this.value) >= Number(this.max)) {
       return
     }
-    this.$emit("input", Math.max(Number(this.num) + 1, Number(this.min)))
+    this.$emit("input", Math.max(Number(this.value) + 1, Number(this.min)))
   }
 
   decrement() {
-    if (this.min && Number(this.num) <= Number(this.min)) {
+    if (this.min && Number(this.value) <= Number(this.min)) {
       return
     }
-    this.$emit("input", Number(this.num) - 1)
+    this.$emit("input", Number(this.value) - 1)
   }
 
   get incrementDisabled() {
-    if (!this.max || !this.num) return false
-    return Number(this.num) >= Number(this.max)
+    if (!this.max || !this.value) return false
+    return Number(this.value) >= Number(this.max)
   }
 
   get decrementDisabled() {
-    if (this.min === "") return false
-    return Number(this.num) <= Number(this.min)
+    if (!this.min) return false
+    return Number(this.value) <= Number(this.min)
   }
 }
 </script>
@@ -70,7 +68,7 @@ export default class ExpandableSection extends Vue {
     </button>
     <input
       class="fl-number-input shared"
-      :value="this.num"
+      :value="this.value"
       :style="cssProps"
       type="number"
       :placeholder="placeholder"

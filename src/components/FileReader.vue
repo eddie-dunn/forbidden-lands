@@ -44,7 +44,7 @@ export default class CharacterListView extends Vue {
     <!-- Created a button that triggers the input in order to force clicks to register properly -->
     <div>
       <button class="button filereader-button" @click="click">
-        {{ label }}fo
+        {{ label }}
       </button>
       <span class="filename" v-if="filename">{{ filename }}</span>
     </div>

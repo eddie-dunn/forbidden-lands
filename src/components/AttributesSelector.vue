@@ -137,7 +137,6 @@ export default Vue.extend({
         :placeholder="'2-' + getMax(attribute)"
         min="2"
         :max="getMax(attribute)"
-        :num="charData.attributes[attribute]"
         v-model.number="charData.attributes[attribute]"
       />
       <span v-if="false" class="attribute-damage">******</span>

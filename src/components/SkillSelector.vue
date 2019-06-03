@@ -13,6 +13,7 @@ import { AGE, CLASS } from "@/keys.ts"
 import { getSkills, iconFor, SKILLS } from "@/skills.ts"
 import { getSkillMax, isClassSkill } from "@/classes.ts"
 import SvgIcon from "@/components/SvgIcon.vue"
+import FLNumberInput from "@/components/FLNumberInput.vue"
 import Vue from "vue"
 
 function calcSkillPoints(age) {
@@ -27,6 +28,7 @@ function calcSkillPoints(age) {
 
 export default Vue.extend({
   components: {
+    FLNumberInput,
     SvgIcon,
   },
   props: {
@@ -91,17 +93,6 @@ export default Vue.extend({
           :title="skill.attribute"
           class="attribute-icon"
         />
-        <input
-          class="skill-input"
-          :id="skill.id"
-          :name="skill.id"
-          type="number"
-          :placeholder="'0-' + getSkillMaxRank(skill.id)"
-          min="0"
-          :max="getSkillMaxRank(skill.id)"
-          v-model.number="skills[skill.id].rank"
-          :ref="skill.id"
-        />
         <label
           :for="skill.id"
           v-bind:class="[
@@ -111,16 +102,33 @@ export default Vue.extend({
         >
           {{ $t(skill.id) }}
         </label>
+        <FLNumberInput
+          class="skill-input"
+          fontSize="1.2rem"
+          :id="skill.id"
+          :name="skill.id"
+          type="number"
+          :placeholder="'0-' + getSkillMaxRank(skill.id)"
+          min="0"
+          :max="getSkillMaxRank(skill.id)"
+          :num="skills[skill.id].rank"
+          v-model.number="skills[skill.id].rank"
+          :ref="skill.id"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <style lang="less" scoped>
+.attribute-icon {
+  flex-shrink: 0;
+}
+
 .skillbox {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(19ch, 1fr));
-  row-gap: 10px;
+  row-gap: 1.2rem;
   column-gap: 3px;
 }
 
@@ -142,15 +150,12 @@ export default Vue.extend({
   margin-left: 0.2rem;
   overflow-x: scroll;
   scrollbar-width: none;
-  // text-overflow: ellipsis;
 }
 .skill-name::-webkit-scrollbar {
   display: none; // Safari and Chrome
 }
 
 .skill-input {
-  height: 1rem;
-  width: 2.5rem;
   margin-left: 0.2rem;
 }
 
