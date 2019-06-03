@@ -81,12 +81,6 @@ export default class CharacterListView extends Vue {
 
 <template>
   <div class="character-list-container">
-    <div v-if="false">
-      characterData
-      <div v-for="(character, index) in store.storage" v-bind:key="index">
-        {{ index }} >>>> {{ character.metadata }}
-      </div>
-    </div>
     <Expander
       v-if="true"
       :label="$t('New')"
@@ -168,6 +162,9 @@ export default class CharacterListView extends Vue {
   margin: 0.8rem;
 }
 
+.character-list-container {
+  margin-bottom: 20vh;
+}
 // .character-list-expander {
 //   font-size: 3rem;
 

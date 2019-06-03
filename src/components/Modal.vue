@@ -165,6 +165,7 @@ export default class Modal extends Props {
 
 .__modal-header {
   text-align: center;
+  padding: 1rem;
   color: #42b983;
   flex-grow: 0;
 }

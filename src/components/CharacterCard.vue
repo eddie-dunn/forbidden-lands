@@ -69,16 +69,16 @@ export default Vue.extend({
 <template>
   <div class="character-card">
     <Modal v-if="modalActive" @close="closeModal()" :maximized="false">
-      <div slot="header">Confirm delete</div>
+      <div slot="header">{{ $t("Confirm delete") }}</div>
       <div slot="body"></div>
       <div class="modal-button-row" slot="footer">
-        <button @click="closeModal()" class="button">Cancel</button>
+        <button @click="closeModal()" class="button">{{ $t("Cancel") }}</button>
         <button @click="remove()" class="button button-red">OK</button>
       </div>
     </Modal>
     <div v-if="!this.charData" class="stat-card row-full">
       <div class="placeholder" @click="edit()">
-        <h3>Create new character</h3>
+        <h3>{{ $t("Create new character") }}</h3>
       </div>
     </div>
     <div v-else class="stat-card row-full">
@@ -193,6 +193,8 @@ h3 {
 
 .modal-button-row {
   margin-top: 1rem;
+  width: 100%;
+  margin: 3px;
 }
 
 .top-image {
