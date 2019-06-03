@@ -30,7 +30,7 @@ interface AttributeInterface {
 
 export default Vue.extend({
   components: {
-    // NumberInput,
+    NumberInput,
     SvgIcon,
   },
   props: {
@@ -128,8 +128,8 @@ export default Vue.extend({
       <label :for="attribute" class="attribute-item-label">
         {{ $t(attribute) }}
       </label>
-      <input
-        class="attribute-input"
+      <NumberInput
+        fontSize="1.4rem"
         :id="attribute"
         :name="attribute"
         type="number"
@@ -137,19 +137,9 @@ export default Vue.extend({
         :placeholder="'2-' + getMax(attribute)"
         min="2"
         :max="getMax(attribute)"
-        v-model.number="charData.attributes[attribute]"
-      />
-      <!-- <NumberInput
-        :id="attribute"
-        :name="attribute"
-        type="number"
-        required
-        :placeholder="'1-' + getMax(attribute)"
-        min="1"
-        :max="getMax(attribute)"
         :num="charData.attributes[attribute]"
         v-model.number="charData.attributes[attribute]"
-      /> -->
+      />
       <span v-if="false" class="attribute-damage">******</span>
     </div>
     <span>{{ $t("Remaining") }}: {{ pointsAvailable() - pointsSpent() }}</span>

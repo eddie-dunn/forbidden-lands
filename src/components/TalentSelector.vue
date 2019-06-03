@@ -189,7 +189,7 @@ export default TalentSelector
 
     <div class="talent-item">
       <label for="class-talent">{{ $t("Profession") }}</label>
-      <select id="class-talent" v-model="selectedTalents[1]" required>
+      <select id="class-talent" v-model="selectedTalents[1]">
         <option
           v-for="talent in classTalents"
           :key="talent"
@@ -205,7 +205,6 @@ export default TalentSelector
           v-model.number="talentRanks[1]"
           value="1"
           checked="checked"
-          required
         />
         <label for="classTalentRank">1</label>
         <input
@@ -225,7 +224,7 @@ export default TalentSelector
       class="talent-item"
     >
       <label for="general-talent">{{ $t("General") }} {{ index }}</label>
-      <select id="general-talent" v-model="selectedTalents[index + 1]" required>
+      <select id="general-talent" v-model="selectedTalents[index + 1]">
         <optgroup :label="$t('General talents')">
           <option
             v-for="talent in generalTalents(index + 1)"
