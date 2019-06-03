@@ -6,6 +6,7 @@ import { Component, Prop } from "vue-property-decorator"
 export default class ExpandableSection extends Vue {
   @Prop({ default: "" }) width!: string
   // @Prop({ default: "" }) height!: string
+  @Prop({ default: "" }) fontSize!: string
   @Prop({ default: "" }) placeholder!: string
   @Prop({ default: "" }) max!: string
   @Prop({ default: "" }) min!: string
@@ -22,6 +23,7 @@ export default class ExpandableSection extends Vue {
     const maxWidth = this.max ? `${this.max.length}ch` : ""
     return {
       "--width": this.width || placeholderWidth || maxWidth || "2rem",
+      "--font-size": this.fontSize || "2rem",
     }
   }
 
@@ -30,22 +32,16 @@ export default class ExpandableSection extends Vue {
   }
 
   increment() {
-    // if (!this.value) this.value = this.min ? Number(this.min) - 1 : 0
-    // if (this.max && this.value >= Number(this.max)) {
-    //   return
-    // }
-    // this.value++
-    // this.inputEvent(Number(this.num) + 1)
-    this.$emit("input", Number(this.num) + 1)
+    if (this.max && Number(this.num) >= Number(this.max)) {
+      return
+    }
+    this.$emit("input", Math.max(Number(this.num) + 1, Number(this.min)))
   }
 
   decrement() {
-    // if (!this.value) this.value = Number(this.min) || 0
     if (this.min && Number(this.num) <= Number(this.min)) {
       return
     }
-    // this.value--
-    // this.inputEvent(Number(this.num) - 1)
     this.$emit("input", Number(this.num) - 1)
   }
 
@@ -68,6 +64,7 @@ export default class ExpandableSection extends Vue {
       :disabled="decrementDisabled"
       @click="decrement"
       tabindex="-1"
+      :style="cssProps"
     >
       -
     </button>
@@ -88,6 +85,7 @@ export default class ExpandableSection extends Vue {
       :disabled="incrementDisabled"
       @click="increment"
       tabindex="-1"
+      :style="cssProps"
     >
       +
     </button>
@@ -103,33 +101,33 @@ export default class ExpandableSection extends Vue {
 .fl-number-input {
   width: var(--width);
   border: solid 1px;
+  border: solid 1px @pastel-green;
   border-left: 0;
   border-right: 0;
 }
 
 .fl-number-button {
-  border: solid 1px black;
+  // border: solid 1px black;
+  border: solid 1px @pastel-green;
   background: @pastel-green;
   color: white;
   cursor: pointer;
+  &:disabled {
+    // background: @pastel-red;
+    cursor: not-allowed;
+    color: @pastel-green;
+  }
 }
 
 .shared {
   height: auto;
-  font-size: 2rem;
+  font-size: var(--font-size);
   padding: 1px 5px;
   // box-sizing: border-box;
   box-sizing: content-box;
   text-align: center;
   font-family: monospace;
-  // border: solid 1px;
 }
-
-// input[type="number"]::-webkit-inner-spin-button,
-// input[type="number"]::-webkit-outer-spin-button {
-//   -webkit-appearance: none;
-//   margin: 0;
-// }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

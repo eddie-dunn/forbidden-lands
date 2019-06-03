@@ -155,7 +155,7 @@ export default class ExpandableSection extends Vue {
   </div>
 </template>
 
-<style lang="less">
+<style lang="less" scoped>
 @import "~Style/colors.less";
 
 .consumables {
