@@ -82,27 +82,8 @@ export default class ExpandableSection extends Vue {
 </script>
 
 <template>
-  <div v-if="characterData.attributes.strength" class="gear-picker">
+  <div v-if="characterData.profession" class="gear-picker">
     <!-- start -->
-
-    <div v-if="this.characterData.profession">
-      <h4>{{ $t("Starting gear") }}</h4>
-      <div>
-        {{ $t(PROFESSION[this.characterData.profession].gear_description) }}
-      </div>
-      <p>
-        Silver:
-        {{
-          $t("D") +
-            PROFESSION[this.characterData.profession].starting_resources
-              .silver +
-            " (" +
-            $t("Roll dice before session starts") +
-            ")"
-        }}
-      </p>
-    </div>
-
     <div class="consumables" v-if="this.characterData.profession">
       <div>
         {{ $t("Food") }}:
@@ -127,6 +108,25 @@ export default class ExpandableSection extends Vue {
         {{ torches ? $t("D") + torches : "0" }}
       </div>
     </div>
+
+    <div>
+      <h4>{{ $t("Starting gear") }}</h4>
+      <div>
+        {{ $t(PROFESSION[this.characterData.profession].gear_description) }}
+      </div>
+      <p>
+        Silver:
+        {{
+          $t("D") +
+            PROFESSION[this.characterData.profession].starting_resources
+              .silver +
+            " (" +
+            $t("Roll dice before session starts") +
+            ")"
+        }}
+      </p>
+    </div>
+
     <!-- TODO: Complete gear selector -->
     <div v-if="false">
       <h4>{{ $t("Starting gear") }}</h4>
