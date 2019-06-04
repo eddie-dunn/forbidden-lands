@@ -10,6 +10,15 @@ const Props = Vue.extend({
       type: Boolean,
       default: true,
     },
+    width: {
+      type: String,
+      default: "70%",
+    },
+    height: {
+      type: String,
+      default: "70%",
+    },
+    // TODO: Add css parsing, see FLNumberInput
   },
 })
 

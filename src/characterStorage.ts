@@ -3,6 +3,7 @@ import {
   CharacterData,
   getNewCharacterData,
   parseCharacterData,
+  CharacterMetaDataStatus,
 } from "@/characterData"
 
 export const CHAR_STORE_KEY: string = "savedCharacters"
@@ -34,6 +35,7 @@ export function saveCharacterToLocalStorage(characterData: CharacterData) {
 export interface SaveData {
   [propName: string]: CharacterData
 }
+
 export function saveListToLocalStorage(characterList: SaveData) {
   localStorage.setItem(CHAR_STORE_KEY, JSON.stringify(characterList))
 }
@@ -83,24 +85,60 @@ export function removeCharacter(characterId: string): SaveData {
 
 // In-memory interface to localStorage
 export class Store {
-  storage: SaveData = loadAllCharactersFromLocalStorage()
+  _storage: SaveData = loadAllCharactersFromLocalStorage()
+
+  get storage() {
+    return this._storage
+  }
+
+  get length(): number {
+    return Object.keys(this._storage).length
+  }
+
+  get activeCharacters() {
+    return Object.values(this.storage).filter(
+      (character) => character.metadata.status === "active"
+    )
+  }
+
+  get newCharacters() {
+    return Object.values(this.storage).filter((character) =>
+      ["new", undefined].includes(character.metadata.status)
+    )
+  }
+
+  charactersByStatus(
+    status: (CharacterMetaDataStatus | undefined)[] | CharacterMetaDataStatus
+  ) {
+    if (!Array.isArray(status)) {
+      status = [status]
+    }
+    return Object.values(this.storage).filter((character) =>
+      status.includes(character.metadata.status)
+    )
+  }
 
   removeCharacter(characterId: string, commit: boolean = false): void {
-    delete this.storage[characterId]
+    delete this._storage[characterId]
     if (commit) {
       this.commit()
     }
   }
 
   addCharacter(character: CharacterData, commit: boolean = false) {
-    this.storage[character.metadata.id] = character
+    this._storage[character.metadata.id] = character
     if (commit) {
       this.commit()
     }
   }
 
+  activate(characterId: string, commit: boolean = false) {
+    this._storage[characterId].metadata.status = "active"
+    commit && this.commit()
+  }
+
   getStorageDataBlob() {
-    const tmpStore = JSON.stringify(this.storage)
+    const tmpStore = JSON.stringify(this._storage)
     const blob = new Blob([tmpStore])
     const objectUrl = window.URL.createObjectURL(blob)
     setTimeout(() => {
@@ -111,17 +149,13 @@ export class Store {
   }
 
   replaceData(newData: SaveData, commit: boolean = false) {
-    this.storage = newData
+    this._storage = newData
     if (commit) {
       this.commit()
     }
   }
 
-  get length(): number {
-    return Object.keys(this.storage).length
-  }
-
   commit(): void {
-    saveListToLocalStorage(this.storage)
+    saveListToLocalStorage(this._storage)
   }
 }

@@ -30,18 +30,26 @@ export default Vue.extend({
     },
     cardLink(): string {
       if (this.empty) return `new`
-      else if (this.charData) {
-        // check if new
+      else if (this.newChar) {
         return `new/edit/${this.characterId}`
       }
-      return "#"
+      return `active/edit/${this.characterId}`
     },
     newCharValid(): boolean {
       return !!this.charData && validateNewCharacter(this.charData)
     },
+    newChar(): boolean {
+      return (
+        !!this.charData &&
+        ["new", undefined].includes(this.charData.metadata.status)
+      )
+    },
   },
   methods: {
-    edit() {
+    edit(ev: Event) {
+      if (ev) {
+        ev.preventDefault()
+      }
       this.$router.push(this.cardLink)
       window.scrollTo(0, 0)
     },
@@ -52,6 +60,7 @@ export default Vue.extend({
       if (this.charData) {
         this.$emit("remove-card", this.charData.metadata.id)
       }
+      this.closeModal()
     },
     confirmRemove() {
       this.modalActive = true
@@ -60,7 +69,7 @@ export default Vue.extend({
       this.modalActive = false
     },
     activate() {
-      // console.log("activate char")
+      this.charData && this.$emit("activate", this.charData.metadata.id)
     },
   },
 })
@@ -94,8 +103,8 @@ export default Vue.extend({
             {{ $t("Edit") }}
           </button>
           <button
-            v-if="false"
-            :class="['button', !newCharValid ? 'hidden' : '']"
+            v-if="newChar && newCharValid && showWIP"
+            class="button"
             :disabled="!newCharValid"
             @click="activate"
           >
@@ -109,7 +118,9 @@ export default Vue.extend({
         />
         <div class="img-header">
           <h3>
-            <a class="undecorated-link" :href="cardLink">{{ charData.name }}</a>
+            <a class="undecorated-link" :href="cardLink" @click="edit">{{
+              charData.name
+            }}</a>
             <div
               :class="[
                 'indicator',
@@ -192,9 +203,10 @@ h3 {
 }
 
 .modal-button-row {
-  margin-top: 1rem;
-  width: 100%;
   margin: 3px;
+  margin: 0.5rem;
+  display: flex;
+  justify-content: space-between;
 }
 
 .top-image {

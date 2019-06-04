@@ -10,6 +10,7 @@ export default class ExpandableSection extends Vue {
   @Prop({ default: "" }) placeholder!: string
   @Prop({ default: "" }) max!: string
   @Prop({ default: "" }) min!: string
+  @Prop({ default: false }) disabled!: boolean
   @Prop({ default: () => () => {} }) enterCb!: Function
   @Prop({ default: () => () => {} }) ctrlEnterCb!: Function
   @Prop({ default: "" }) value!: string
@@ -59,7 +60,7 @@ export default class ExpandableSection extends Vue {
   <div class="fl-number-row">
     <button
       class="fl-number-button shared"
-      :disabled="decrementDisabled"
+      :disabled="decrementDisabled || disabled"
       @click="decrement"
       tabindex="-1"
       :style="cssProps"
@@ -68,6 +69,7 @@ export default class ExpandableSection extends Vue {
     </button>
     <input
       class="fl-number-input shared"
+      :disabled="disabled"
       :value="this.value"
       :style="cssProps"
       type="number"
@@ -80,7 +82,7 @@ export default class ExpandableSection extends Vue {
     />
     <button
       class="fl-number-button shared"
-      :disabled="incrementDisabled"
+      :disabled="incrementDisabled || disabled"
       @click="increment"
       tabindex="-1"
       :style="cssProps"

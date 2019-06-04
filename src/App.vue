@@ -31,7 +31,9 @@ export default Vue.extend({
 body {
   // background: #2c3e50;
   // background: #282c34;
-  margin: 5px;
+  margin: 4px;
+  color: #2c3e50;
+  // color: #fafafa;
 }
 
 #app {
@@ -39,8 +41,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  // color: white;
 
   display: flex;
   flex-direction: column;
@@ -55,10 +55,11 @@ body {
   justify-content: space-between;
 
   // Make it follow on scroll
-  position: sticky;
-  background: white;
-  // border: solid #42b98344 2px;
-  border: solid #42b98399 2px;
+  // position: sticky;
+  // background: white;
+  // background: @pastel-green;
+  // border: solid #42b98399 2px;
+  border: solid ~"@{pastel-green}99" 2px;
   // background: #2c3e50;
   // background: #282c34;
 
@@ -107,7 +108,7 @@ select {
 //   border: 0;
 // }
 
-.button {
+.DISABLEDbutton {
   &::-moz-focus-inner {
     border: 0;
   }

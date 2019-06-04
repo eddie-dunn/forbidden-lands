@@ -319,6 +319,7 @@ export default {
   ...GearDescriptions,
 
   "Active": "Aktiva",
+  "Activate": "Aktivera",
   "Attributes": "Grundegenskaper",
   "About": "Om",
   "Appearance": "Utseende",

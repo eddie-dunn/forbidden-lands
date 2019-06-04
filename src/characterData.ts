@@ -32,10 +32,19 @@ export interface AttributeData {
   empathy: number | null
 }
 
+export type CharacterMetaDataStatus =
+  | "new"
+  | "active"
+  | "levelup"
+  | "freeEdit"
+  | "trash"
+
 export interface CharacterMetaData {
   id: string
   active: boolean
   hasBeenActivated: boolean
+  status: CharacterMetaDataStatus
+  dataVersion: number
 }
 
 type Item = { name: string; weight: number }
@@ -114,7 +123,9 @@ export function getNewCharacterData(): CharacterData {
     metadata: {
       id: uuid1(),
       active: false,
+      status: "new",
       hasBeenActivated: false,
+      dataVersion: 1,
     },
   }
   return newCharData

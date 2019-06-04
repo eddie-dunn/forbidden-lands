@@ -47,6 +47,14 @@ export default Vue.extend({
       type: Object,
       required: true,
     },
+    skillMaximum: {
+      type: Number,
+      default: 5,
+    },
+    charData: {
+      type: Object,
+      required: true,
+    },
   },
   computed: {
     skillPoints() {
@@ -54,6 +62,12 @@ export default Vue.extend({
     },
     valid() {
       return this.skillPoints - this.pointsSpent() === 0
+    },
+    characterStatus() {
+      return this.charData.metadata.status
+    },
+    canEditSkills() {
+      return ["new", "freeEdit", "levelup"].includes(this.characterStatus)
     },
   },
   data() {
@@ -74,7 +88,10 @@ export default Vue.extend({
       return this.skillPoints - this.pointsSpent() <= 0
     },
     getSkillMaxRank(skillId) {
-      return getSkillMax(skillId, this.profession)
+      if (this.characterStatus === "new") {
+        return getSkillMax(skillId, this.profession)
+      }
+      return this.skillMaximum
     },
     isClassSkill(skillId, profession) {
       return isClassSkill(skillId, profession)
@@ -85,7 +102,9 @@ export default Vue.extend({
 
 <template>
   <div>
-    <div>{{ $t("Remaining") }}: {{ skillPoints - pointsSpent() }}</div>
+    <div v-if="characterStatus === 'new'">
+      {{ $t("Remaining") }}: {{ skillPoints - pointsSpent() }}
+    </div>
     <div class="skillbox">
       <div v-for="skill in skills" :key="skill.id" class="skillrow">
         <SvgIcon
@@ -103,6 +122,7 @@ export default Vue.extend({
           {{ $t(skill.id) }}
         </label>
         <FLNumberInput
+          v-if="canEditSkills"
           class="skill-input"
           fontSize="1.2rem"
           :id="skill.id"
@@ -115,6 +135,9 @@ export default Vue.extend({
           v-model.number="skills[skill.id].rank"
           :ref="skill.id"
         />
+        <div v-else class="skill-display">
+          {{ skills[skill.id].rank || 0 }}
+        </div>
       </div>
     </div>
   </div>
@@ -150,6 +173,7 @@ export default Vue.extend({
   margin-left: 0.2rem;
   overflow-x: scroll;
   scrollbar-width: none;
+  flex-grow: 1;
 }
 .skill-name::-webkit-scrollbar {
   display: none; // Safari and Chrome
@@ -157,6 +181,11 @@ export default Vue.extend({
 
 .skill-input {
   margin-left: 0.2rem;
+}
+
+.skill-display {
+  flex-basis: 10%;
+  font-size: 1.2rem;
 }
 
 // input:valid.with-checkbox + span::before {

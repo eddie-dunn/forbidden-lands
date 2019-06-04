@@ -46,10 +46,19 @@ export default new Router({
       path: "/new/edit/:id",
       // alias: "/character-creator/new/edit/:id",
       props: true,
-      name: "character_creator-edit",
+      name: "character_creator-edit-new",
       /* webpackChunkName: "character_creator" */
-      // component: () => import("./views/CharacterCreatorView.vue"),
-      component: CharacterCreatorView,
+      component: () => import("./views/CharacterCreatorView.vue"),
+      // component: CharacterCreatorView,
+    },
+    {
+      path: "/active/edit/:id",
+      // alias: "/character-creator/new/edit/:id",
+      props: true,
+      name: "character_creator-edit-active",
+      /* webpackChunkName: "character_creator" */
+      component: () => import("./views/CharacterCreatorView.vue"),
+      // component: CharacterCreatorView,
     },
   ],
 })

@@ -5,7 +5,11 @@ import { getAttributePoints, getAgeType } from "@/age"
 import { Attribute, KinName, Profession, Age } from "@/types"
 import { CLASS as PROFESSION_MAP } from "@/classes"
 import { KIN as KIN_MAP } from "@/kin"
-import { validateAttributes, CharacterData } from "@/characterData"
+import {
+  validateAttributes,
+  CharacterData,
+  CharacterMetaDataStatus,
+} from "@/characterData"
 import SvgIcon from "@/components/SvgIcon.vue"
 import NumberInput from "@/components/FLNumberInput.vue"
 
@@ -47,6 +51,12 @@ export default Vue.extend({
     pointsLeft(): number {
       return this.pointsAvailable() - this.pointsSpent()
     },
+    characterStatus(): CharacterMetaDataStatus {
+      return this.charData.metadata.status
+    },
+    baseAttributesEditable(): boolean {
+      return ["new", undefined, "freeEdit"].includes(this.characterStatus)
+    },
   },
   methods: {
     validateAttributes,
@@ -54,6 +64,7 @@ export default Vue.extend({
       return [1, 2, 3, 4, 5, 6].slice(0, this.getMax(attribute))
     },
     getMax(attribute: Attribute): number {
+      if (this.characterStatus === "freeEdit") return 10
       return getMaxAttribLevel(
         attribute,
         this.charData.kin,
@@ -71,10 +82,6 @@ export default Vue.extend({
           .map((attribute) => attribute[1])
           .reduce((sum, value) => Number(sum) + Number(value))
       )
-    },
-    validate() {
-      return this.charData && this.validateAttributes(this.charData)
-      // return this.pointsSpent() === this.pointsAvailable()
     },
     iconFor(attribute: Attribute): string {
       const map = {
@@ -129,6 +136,7 @@ export default Vue.extend({
         {{ $t(attribute) }}
       </label>
       <NumberInput
+        v-if="baseAttributesEditable"
         fontSize="1.4rem"
         :id="attribute"
         :name="attribute"
@@ -139,9 +147,12 @@ export default Vue.extend({
         :max="getMax(attribute)"
         v-model.number="charData.attributes[attribute]"
       />
+      <div v-else>{{ charData.attributes[attribute] }}</div>
       <span v-if="false" class="attribute-damage">******</span>
     </div>
-    <span>{{ $t("Remaining") }}: {{ pointsAvailable() - pointsSpent() }}</span>
+    <span v-if="characterStatus === 'new'">
+      {{ $t("Remaining") }}: {{ pointsAvailable() - pointsSpent() }}
+    </span>
   </div>
 </template>
 

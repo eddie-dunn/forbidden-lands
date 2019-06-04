@@ -6,6 +6,7 @@ import BaseSelector from "@/components/BaseSelector.vue"
 import PicturePicker from "@/components/PicturePicker.vue"
 import FlavorSelector from "@/components/FlavorSelector.vue"
 import GearPicker from "@/components/GearPicker.vue"
+import Modal from "@/components/Modal.vue"
 import Card from "@/components/Card.vue"
 import { AGE, CLASS, KIN } from "@/keys.ts"
 import { getSkills } from "@/skills"
@@ -20,6 +21,8 @@ import {
   validateAttributes,
   validateTalents,
   validateSkills,
+  CharacterMetaDataStatus,
+  CharacterMetaData,
 } from "@/characterData"
 import {
   loadCharacterFromLocalStorage,
@@ -38,6 +41,7 @@ const CharacterCreatorMain = Vue.extend({
     ExpandableSection,
     FlavorSelector,
     GearPicker,
+    Modal,
     PicturePicker,
     SkillSelector,
     TalentSelector,
@@ -63,6 +67,7 @@ const CharacterCreatorMain = Vue.extend({
       // characterData: getNewCharacterData(),
       characterData: loadCharacterFromLocalStorage(this.charName),
       showJSON: false,
+      showXPModal: false,
     }
   },
   computed: {
@@ -84,6 +89,12 @@ const CharacterCreatorMain = Vue.extend({
     skillsValid(): boolean {
       return validateSkills(this.characterData)
     },
+    status(): CharacterMetaDataStatus {
+      return this.characterData.metadata.status
+    },
+    canToggleXpMode(): boolean {
+      return ["active", "levelup"].includes(this.status)
+    },
   },
   methods: {
     saveClicked(event: any) {
@@ -101,6 +112,13 @@ const CharacterCreatorMain = Vue.extend({
     updateTalents(talents: CharacterTalent[]) {
       this.$set(this.characterData, "talents", talents)
     },
+    updateStatus(status: CharacterMetaDataStatus) {
+      this.$set(this.characterData.metadata, "status", status)
+    },
+    toggleSpendXpMode() {
+      const newStatus = this.status === "active" ? "levelup" : "active"
+      this.$set(this.characterData.metadata, "status", newStatus)
+    },
     setImgSource(img: any) {
       this.characterData.portrait = img
     },
@@ -116,6 +134,13 @@ export default CharacterCreatorMain
 
 <template>
   <div class="character_creator">
+    <div v-if="showWIP">
+      <span>Status: {{ this.status }}</span>
+      <button @click="updateStatus('new')">New</button>
+      <button @click="updateStatus('freeEdit')">Free</button>
+      <button @click="updateStatus('active')">Active</button>
+      <button @click="updateStatus('levelup')">Level-up</button>
+    </div>
     <form
       class="character_creator-form"
       @submit="checkForm"
@@ -127,9 +152,10 @@ export default CharacterCreatorMain
         class="row-half"
         :title="$t('Base data')"
         :valid="baseDataValid && attributesValid"
+        :noSign="baseDataValid && attributesValid && status != 'new'"
       >
         <BaseSelector :data="characterData" @basedata-updated="updateBase" />
-        <!-- TODO fix spacing -->
+
         <h4>{{ $t("Attributes") }}</h4>
         <AttributesSelector
           :charData="characterData"
@@ -137,7 +163,6 @@ export default CharacterCreatorMain
         />
       </Card>
 
-      <!-- <Card class="row-full" :full-width="true" :noSign="true"> -->
       <Card class="row-half" :noSign="true">
         <div class="flex-row-wrap space-around appearance-section">
           <PicturePicker
@@ -152,18 +177,11 @@ export default CharacterCreatorMain
       </Card>
 
       <Card
-        v-if="false"
         class="row-half"
-        :title="$t('attributes')"
-        :valid="attributesValid"
+        :title="$t('talents')"
+        :valid="talentsValid"
+        :noSign="characterData.metadata.status != 'new'"
       >
-        <AttributesSelector
-          :charData="characterData"
-          @attributes-updated="updateAttributes"
-        />
-      </Card>
-
-      <Card class="row-half" :title="$t('talents')" :valid="talentsValid">
         <TalentSelector
           class="content"
           :charData="characterData"
@@ -171,12 +189,17 @@ export default CharacterCreatorMain
         />
       </Card>
 
-      <Card class="row-half" :title="$t('skills')" :valid="skillsValid">
+      <Card
+        class="row-half"
+        :title="$t('skills')"
+        :valid="skillsValid"
+        :noSign="status != 'new'"
+      >
         <SkillSelector
           :profession="characterData.profession"
           :age="ageType"
           :skills="characterData.skills"
-          :lang="$i18n.locale"
+          :charData="characterData"
         />
       </Card>
 
@@ -194,20 +217,61 @@ export default CharacterCreatorMain
 
       <div class="action-bar-wrapper">
         <div class="action-bar">
+          <div
+            v-if="['active', 'levelup'].includes(status)"
+            class="item-action-bar experience-bar"
+          >
+            <span>XP: {{ this.characterData.experience }}</span>
+            <button
+              class="button item-action-bar"
+              v-if="canToggleXpMode"
+              @click="toggleSpendXpMode"
+            >
+              {{ status === "active" ? "Spend xp" : "Done" }}
+            </button>
+            <button
+              class="button item-action-bar"
+              v-if="status === 'active'"
+              @click="showXPModal = true"
+            >
+              Add XP
+            </button>
+          </div>
           <button
             v-if="false"
-            class="button-action-bar button-white"
+            class="item-action-bar button-white"
             v-on:click="() => {}"
           >
             Delete
           </button>
-          <button class="button button-action-bar" v-on:click="saveClicked">
+          <button class="button item-action-bar" v-on:click="saveClicked">
             Save
           </button>
         </div>
       </div>
     </form>
-    <ExpandableSection v-if="false" label="JSON Export">
+    <Modal v-if="showXPModal" @close="showXPModal = false">
+      <h2 slot="header">Calculate XP</h2>
+      <div slot="body">
+        Have you...
+        <div>
+          <input type="checkbox" />
+          <span>Done this</span>
+        </div>
+        <div>
+          <input type="checkbox" />
+          <span>Done something else</span>
+        </div>
+      </div>
+      <div class="modal-button-row" slot="footer">
+        <button @click="showXPModal = false" class="button">
+          {{ $t("Cancel") }}
+        </button>
+        <button @click="showXPModal = false" class="button">OK</button>
+        <!-- TODO: Commit XP if OK is clicked -->
+      </div>
+    </Modal>
+    <ExpandableSection v-if="showWIP" label="JSON Export">
       <!-- TODO Use same import/export functionality as for char list -->
       <pre>{{ JSON.stringify(characterData, null, 2) }}</pre>
     </ExpandableSection>
@@ -216,6 +280,8 @@ export default CharacterCreatorMain
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
+@import "~Style/colors.less";
+
 .appearance-section {
   flex: 1 1 45%;
 }
@@ -231,18 +297,8 @@ export default CharacterCreatorMain
   margin-bottom: 20vh;
 }
 
-.button-action-bar {
+.item-action-bar {
   margin: 0.5rem;
-}
-
-.button-white {
-  background-color: #fff;
-  color: #42b983;
-  // border-radius: 20%;
-  transition: all 0.15s ease;
-  box-sizing: border-box;
-  border: 1px solid #4fc08d;
-  padding: 0.5rem 1rem;
 }
 
 .character_creator-form {
@@ -273,11 +329,18 @@ export default CharacterCreatorMain
   display: flex;
   overflow: auto;
   justify-content: flex-end;
+  align-items: center;
   @media (max-width: 400px) {
     justify-content: space-around;
   }
   background: #fffe;
-  border: solid #42b98399 2px;
+  border: solid ~"@{pastel-green}99" 2px;
+}
+
+.experience-bar {
+  justify-self: flex-start;
+  text-align: left;
+  flex-grow: 1;
 }
 
 .row-full {

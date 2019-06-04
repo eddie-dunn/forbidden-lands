@@ -17,7 +17,11 @@ import {
   TalentProfession,
   TalentAll,
 } from "@/types"
-import { CharacterData, CharacterTalent } from "@/characterData"
+import {
+  CharacterData,
+  CharacterTalent,
+  CharacterMetaDataStatus,
+} from "@/characterData"
 import Vue from "vue"
 import { TranslateResult } from "vue-i18n"
 // import TalentSelect from "@/components/TalentSelect.vue"
@@ -76,6 +80,7 @@ const TalentSelector = Vue.extend({
       GENERAL_TALENTS2,
       selectedTalents: this.charData.talents.map((talent) => talent.id),
       talentRanks: this.charData.talents.map((talent) => talent.rank),
+      additionalTalents: 0,
     }
   },
   computed: {
@@ -93,7 +98,9 @@ const TalentSelector = Vue.extend({
       return getStartingTalents(this.ageType, this.charData.kin)
     },
     generalTalentsAllowed(): number {
-      return this.baseStartingTalents - this.talentRanksSum
+      return (
+        this.baseStartingTalents - this.talentRanksSum + this.additionalTalents
+      )
     },
     totalTalentsAllowed(): number {
       return 2 + this.generalTalentsAllowed
@@ -120,6 +127,16 @@ const TalentSelector = Vue.extend({
       }))
       return charTalents
     },
+    characterStatus(): CharacterMetaDataStatus {
+      return this.charData.metadata.status
+    },
+    canAddTalent(): boolean {
+      // TODO: we should check if XP is enough to add talent
+      return ["levelup", "freeEdit"].includes(this.characterStatus)
+    },
+    canRemoveTalent(): boolean {
+      return [/*"new",*/ "freeEdit"].includes(this.characterStatus)
+    },
   },
   methods: {
     generalTalents(index: number): any {
@@ -130,6 +147,10 @@ const TalentSelector = Vue.extend({
     },
     isTalentRankDisabled(index: number): boolean {
       return this.talentIncreased || index > this.generalTalentsAllowed
+    },
+    removeTalent(index: number) {
+      this.additionalTalents--
+      this.selectedTalents.splice(index + 1, 1)
     },
   },
   watch: {
@@ -212,7 +233,7 @@ export default TalentSelector
           name="classTalentRank"
           v-model.number="talentRanks[1]"
           value="2"
-          :disabled="isTalentRankDisabled(1)"
+          :disabled="characterStatus === 'new' && isTalentRankDisabled(1)"
         />
         <label for="classTalentRank">2</label>
       </span>
@@ -249,11 +270,19 @@ export default TalentSelector
           :name="'talent' + index"
           v-model.number="talentRanks[index + 1]"
           value="2"
-          :disabled="isTalentRankDisabled(index + 1)"
+          :disabled="
+            characterStatus === 'new' && isTalentRankDisabled(index + 1)
+          "
         />
         <label :for="'talent + index'">2</label>
         <!-- TODO: Add input for lvl 3 as well when supporting live Character Sheet -->
       </span>
+      <button v-if="canRemoveTalent" @click="removeTalent(index)">
+        ✖
+      </button>
+    </div>
+    <div v-if="canAddTalent">
+      <button @click="additionalTalents++">Add talent</button>
     </div>
   </div>
 </template>

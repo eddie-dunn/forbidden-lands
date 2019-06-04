@@ -78,6 +78,8 @@ h3 {
 }
 
 .card-sign {
+  position: absolute;
+  right: 0;
   margin-left: auto;
   // margin-bottom: -3rem;
   font-size: 2rem;
@@ -93,6 +95,7 @@ h3 {
   flex-grow: 0;
   display: flex;
   align-items: center;
+  position: relative;
 }
 
 .card-contents {
@@ -122,7 +125,8 @@ h3 {
   // border: solid gray 2px;
   // border: solid rgba(66, 185, 131, 0.3) 2px;
   // border: solid #42b98344 2px;
-  border: solid #42b98399 2px;
+  // border: solid #42b98399 2px;
+  border: solid ~"@{pastel-green}99" 2px;
   // &-invalid {
   //   border: solid ~"@{pastel-red}44" 2px;
   // }

@@ -12,12 +12,6 @@ import {
 import FileReader from "@/components/FileReader.vue"
 import { setTimeout } from "timers"
 
-// function getStorageDataBlob() {
-//   const tmpStore = JSON.stringify(window.localStorage)
-//   const blob = new Blob([tmpStore])
-//   return window.URL.createObjectURL(blob)
-// }
-
 function generateDateString(): string {
   return "backup-" + new Date().toISOString() + ".charlist.flcdata"
 }
@@ -31,38 +25,57 @@ function generateDateString(): string {
   },
 })
 export default class CharacterListView extends Vue {
-  idKey = 1
+  characterStore: Store = this.characterStore // necessary to avoid TS complaints
+
   importKey = 1
-  store: Store = new Store()
+
   importData: SaveData | null = null
   importName = ""
 
-  exportData = {
-    blob: "",
-    filename: "",
+  exportBlob: string = ""
+  exportFilename: string = ""
+
+  newCharacters = this.characterStore.charactersByStatus(["new", undefined])
+  activeCharacters = this.characterStore.charactersByStatus("active")
+
+  updateCharacters() {
+    // There is probably be a better way to handle this, but it will do for now
+    this.newCharacters = this.characterStore.charactersByStatus([
+      "new",
+      undefined,
+    ])
+    this.activeCharacters = this.characterStore.charactersByStatus("active")
   }
 
   removeCard(characterId: any) {
-    this.store.removeCharacter(characterId, true)
-    this.idKey = this.store.length
+    this.characterStore.removeCharacter(characterId, true)
+    this.updateCharacters()
+  }
+
+  activate(characterId: string) {
+    this.characterStore.activate(characterId, true)
+    this.updateCharacters()
   }
 
   generateBlob() {
-    this.exportData.blob = this.store.getStorageDataBlob()
-    this.exportData.filename = generateDateString()
+    this.exportBlob = this.characterStore.getStorageDataBlob()
+    this.exportFilename = generateDateString()
     // Release blob and reset backup data if backup has not been downloaded
     // within time limit:
     setTimeout(() => {
-      window.URL.revokeObjectURL(this.exportData.blob)
-      this.exportData = { blob: "", filename: "" }
+      window.URL.revokeObjectURL(this.exportBlob)
+      // this.exportData = { blob: "", filename: "" }
+      this.exportBlob = ""
+      this.exportFilename = ""
     }, 2500)
-    return this.exportData.blob
+    return this.exportBlob
   }
 
   releaseBlob() {
     // Need small timeout to be able to download before releasing blob object:
-    setTimeout(() => window.URL.revokeObjectURL(this.exportData.blob), 1500)
-    this.exportData = { blob: "", filename: "" }
+    setTimeout(() => window.URL.revokeObjectURL(this.exportBlob), 1500)
+    this.exportFilename = ""
+    this.exportBlob = ""
   }
 
   importDataLoaded(filedata: any) {
@@ -72,7 +85,8 @@ export default class CharacterListView extends Vue {
 
   importBackup() {
     if (!this.importData) return
-    this.store.replaceData(this.importData, true)
+    this.characterStore.replaceData(this.importData, true)
+    this.updateCharacters()
     this.importData = null
     this.importKey++
   }
@@ -81,22 +95,26 @@ export default class CharacterListView extends Vue {
 
 <template>
   <div class="character-list-container">
+    <h1>{{ $t("Characters") }}</h1>
     <Expander
-      v-if="true"
       :label="$t('New')"
       :expanded="true"
       class="character-list-expander"
     >
-      <div :key="idKey" v-if="store.length > -1" class="character-list">
+      <div class="character-list">
         <div
-          v-for="character in store.storage"
+          v-for="character in newCharacters"
           v-bind:key="'key_' + character.metadata.id"
           class="character-card-container"
         >
-          <CharacterCard :charData="character" @remove-card="removeCard" />
+          <CharacterCard
+            :charData="character"
+            @remove-card="removeCard"
+            @activate="activate"
+          />
         </div>
         <div>
-          <CharacterCard :empty="true" />
+          <CharacterCard />
         </div>
       </div>
     </Expander>
@@ -104,26 +122,38 @@ export default class CharacterListView extends Vue {
       class="character-list-expander"
       :label="$t('Active')"
       :expanded="true"
-      v-if="false"
+      v-if="characterStore.activeCharacters.length > 0 && showWIP"
     >
+      <div class="character-list">
+        <div
+          v-for="(character, index) in activeCharacters"
+          :key="'active' + index"
+          class="character-card-container"
+        >
+          <CharacterCard
+            :charData="character"
+            @remove-card="removeCard"
+            @activate="activate"
+          />
+        </div>
+      </div>
     </Expander>
     <Expander label="Import/Export">
-      <h1>{{ $t("Characters") }}</h1>
       <div>
         <h3>Export</h3>
         <button
-          v-if="!exportData.blob"
+          v-if="!exportBlob"
           class="button"
           @click="generateBlob"
-          :disabled="!!exportData.blob"
+          :disabled="!!exportBlob"
         >
           Generate backup
         </button>
         <a
           v-else
           class="button"
-          :href="exportData.blob"
-          :download="exportData.filename"
+          :href="exportBlob"
+          :download="exportFilename"
           @click="releaseBlob"
         >
           Export backup
