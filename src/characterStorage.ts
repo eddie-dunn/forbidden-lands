@@ -84,6 +84,8 @@ export function removeCharacter(characterId: string): SaveData {
 // loadDraftCharacter
 
 // In-memory interface to localStorage
+// Methods with an optional commit parameter can be invoked with commit = false
+// if many operations are to be done before saving to local storage
 export class Store {
   _storage: SaveData = loadAllCharactersFromLocalStorage()
 
@@ -118,21 +120,25 @@ export class Store {
     )
   }
 
-  removeCharacter(characterId: string, commit: boolean = false): void {
+  characterById(characterId: string): CharacterData | null {
+    return this.storage[characterId] || null
+  }
+
+  removeCharacter(characterId: string, commit: boolean = true): void {
     delete this._storage[characterId]
     if (commit) {
       this.commit()
     }
   }
 
-  addCharacter(character: CharacterData, commit: boolean = false) {
+  addCharacter(character: CharacterData, commit: boolean = true) {
     this._storage[character.metadata.id] = character
     if (commit) {
       this.commit()
     }
   }
 
-  activate(characterId: string, commit: boolean = false) {
+  activate(characterId: string, commit: boolean = true) {
     this._storage[characterId].metadata.status = "active"
     commit && this.commit()
   }
@@ -148,7 +154,7 @@ export class Store {
     return objectUrl
   }
 
-  replaceData(newData: SaveData, commit: boolean = false) {
+  replaceData(newData: SaveData, commit: boolean = true) {
     this._storage = newData
     if (commit) {
       this.commit()

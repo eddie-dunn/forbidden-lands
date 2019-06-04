@@ -47,12 +47,6 @@ const CharacterCreatorMain = Vue.extend({
     TalentSelector,
   },
   props: ["charName"],
-  // created() {
-  //   this.characterData = loadCharacterFromLocalStorage(this.charName)
-  //   if (!this.characterData.name && this.charName) {
-  //     this.characterData.name = this.charName
-  //   }
-  // },
   watch: {
     $route(to, from) {
       if (to.name === "character_creator-new") {
@@ -62,10 +56,9 @@ const CharacterCreatorMain = Vue.extend({
   },
   data() {
     return {
-      // TODO: Resolve double request to getNewCharacterData;
-      // loadCharacterFromLocalStorage also calls that method
-      // characterData: getNewCharacterData(),
-      characterData: loadCharacterFromLocalStorage(this.charName),
+      characterData:
+        this.$characterStore.characterById(this.charName) ||
+        getNewCharacterData(),
       showJSON: false,
       showXPModal: false,
     }
@@ -99,7 +92,7 @@ const CharacterCreatorMain = Vue.extend({
   methods: {
     saveClicked(event: any) {
       if (event && this.characterData.name) {
-        saveCharacterToLocalStorage(this.characterData)
+        this.$characterStore.addCharacter(this.characterData)
         this.$router.push("/character-list")
       }
     },

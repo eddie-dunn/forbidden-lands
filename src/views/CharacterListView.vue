@@ -25,8 +25,6 @@ function generateDateString(): string {
   },
 })
 export default class CharacterListView extends Vue {
-  characterStore: Store = this.characterStore // necessary to avoid TS complaints
-
   importKey = 1
 
   importData: SaveData | null = null
@@ -35,30 +33,30 @@ export default class CharacterListView extends Vue {
   exportBlob: string = ""
   exportFilename: string = ""
 
-  newCharacters = this.characterStore.charactersByStatus(["new", undefined])
-  activeCharacters = this.characterStore.charactersByStatus("active")
+  newCharacters = this.$characterStore.charactersByStatus(["new", undefined])
+  activeCharacters = this.$characterStore.charactersByStatus("active")
 
   updateCharacters() {
     // There is probably be a better way to handle this, but it will do for now
-    this.newCharacters = this.characterStore.charactersByStatus([
+    this.newCharacters = this.$characterStore.charactersByStatus([
       "new",
       undefined,
     ])
-    this.activeCharacters = this.characterStore.charactersByStatus("active")
+    this.activeCharacters = this.$characterStore.charactersByStatus("active")
   }
 
   removeCard(characterId: any) {
-    this.characterStore.removeCharacter(characterId, true)
+    this.$characterStore.removeCharacter(characterId, true)
     this.updateCharacters()
   }
 
   activate(characterId: string) {
-    this.characterStore.activate(characterId, true)
+    this.$characterStore.activate(characterId, true)
     this.updateCharacters()
   }
 
   generateBlob() {
-    this.exportBlob = this.characterStore.getStorageDataBlob()
+    this.exportBlob = this.$characterStore.getStorageDataBlob()
     this.exportFilename = generateDateString()
     // Release blob and reset backup data if backup has not been downloaded
     // within time limit:
@@ -85,7 +83,7 @@ export default class CharacterListView extends Vue {
 
   importBackup() {
     if (!this.importData) return
-    this.characterStore.replaceData(this.importData, true)
+    this.$characterStore.replaceData(this.importData, true)
     this.updateCharacters()
     this.importData = null
     this.importKey++
@@ -122,7 +120,7 @@ export default class CharacterListView extends Vue {
       class="character-list-expander"
       :label="$t('Active')"
       :expanded="true"
-      v-if="characterStore.activeCharacters.length > 0 && showWIP"
+      v-if="$characterStore.activeCharacters.length > 0 && showWIP"
     >
       <div class="character-list">
         <div
