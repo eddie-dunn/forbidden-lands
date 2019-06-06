@@ -64,9 +64,6 @@ const CharacterCreatorMain = Vue.extend({
       newXP: 0,
     }
   },
-  mounted() {
-    window.scrollTo(0, 0)
-  },
   computed: {
     id(): string {
       return this.characterData.metadata.id
