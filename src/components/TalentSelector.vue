@@ -24,17 +24,22 @@ import {
 } from "@/characterData"
 import Vue from "vue"
 import { TranslateResult } from "vue-i18n"
-// import TalentSelect from "@/components/TalentSelect.vue"
+import TalentSelect from "@/components/TalentSelect.vue"
+
+interface mTalent {
+  translation: string
+  id: string
+}
 
 function talentsSortedByTranslation(
   vm: any, // Vue instance with $t function
   talentIds: string[],
   idsToExclude: string[] = []
-) {
+): mTalent[] {
   const translationList = talentIds
     .filter((id) => !idsToExclude.includes(id))
     .map((id) => {
-      const translation: TranslateResult = vm.$t(id)
+      const translation: TranslateResult = String(vm.$t(id))
       return { translation, id }
     })
 
@@ -67,7 +72,7 @@ export function getTalentObjects(
 
 const TalentSelector = Vue.extend({
   components: {
-    // TalentSelect,
+    TalentSelect,
   },
   props: {
     charData: {
@@ -84,6 +89,9 @@ const TalentSelector = Vue.extend({
     }
   },
   computed: {
+    talents(): CharacterTalent[] {
+      return this.charData.talents
+    },
     ageType(): number | null {
       return this.charData.age
     },
@@ -137,13 +145,31 @@ const TalentSelector = Vue.extend({
     canRemoveTalent(): boolean {
       return [/*"new",*/ "freeEdit"].includes(this.characterStatus)
     },
+    canRender(): boolean {
+      return !!(
+        this.charData.age &&
+        this.charData.kin &&
+        this.charData.profession
+      )
+    },
   },
   methods: {
-    generalTalents(index: number): any {
+    maxTalentRank(index: number): number {
+      if (this.characterStatus !== "new") return 3
+      if (this.talentIncreased) return 1
+      return 2
+    },
+    generalTalents(index: number): mTalent[] {
       const talentFilter = this.selectedTalents.filter(
         (_, index2) => index !== index2
       )
       return talentsSortedByTranslation(this, GENERAL_TALENTS2, talentFilter)
+    },
+    classTalents2(): CharacterTalent[] {
+      const professionTalents = getTalentsForProfession(
+        this.charData.profession
+      )
+      return getTalentObjects(professionTalents, this.talentRanks)
     },
     isTalentRankDisabled(index: number): boolean {
       return this.talentIncreased || index > this.generalTalentsAllowed
@@ -151,6 +177,9 @@ const TalentSelector = Vue.extend({
     removeTalent(index: number) {
       this.additionalTalents--
       this.selectedTalents.splice(index + 1, 1)
+    },
+    rankChanged(index: number, value: number) {
+      this.$set(this.talentRanks, index, value)
     },
   },
   watch: {
@@ -180,110 +209,135 @@ export default TalentSelector
 </script>
 
 <template>
-  <div class="talent-contents">
-    <div class="talent-item">
-      <label for="kin-talent">{{ $t("Kin") }}</label>
-      <select id="kin-talent" disabled>
-        <option v-bind:value="selectedTalents[0]">
-          {{ $t(kinTalent) }}
-        </option>
-      </select>
-      <span class="toggle hidden">
-        <input type="radio" name="kinTalentRank" checked="checked" disabled />
-        <label for="kinTalentRank">1</label>
-        <input type="radio" name="kinTalentRank" disabled />
-        <label for="kinTalentRank">2</label>
-      </span>
-    </div>
-
-    <!-- <div
+  <div v-if="canRender" class="talent-contents">
+    <div>{{ $t("Kin") }}</div>
+    <TalentSelect
+      :talentOptions="[
+        { translation: $t(kinTalent), rank: null, id: kinTalent },
+      ]"
+      :disabled="true"
+      v-model="selectedTalents[0]"
+    />
+    <div>{{ $t("Profession") }}</div>
+    <TalentSelect
+      :talentOptions="classTalents2()"
+      :talentRank="talentRanks[1]"
+      :maxTalentRank="maxTalentRank(1)"
+      v-model="selectedTalents[1]"
+      @rank-changed="(value) => rankChanged(1, value)"
+    />
+    <div>{{ $t("General talents") }}</div>
+    <div
       v-for="index in generalTalentsAllowed"
       :key="'General' + index"
       class="talent-item"
     >
       <TalentSelect
-        :label="$t('Talent') + index"
-        :talentOptions="generalTalents"
-        :rankDisabled="isTalentDisabled(index)"
+        :talentOptions="generalTalents(index + 1)"
+        :rankDisabled="isTalentRankDisabled(index)"
+        :talentRank="talentRanks[index + 1]"
+        :maxTalentRank="maxTalentRank(index + 1)"
+        @rank-changed="(value) => rankChanged(index + 1, value)"
+        v-model="selectedTalents[index + 1]"
       />
-    </div> -->
-
-    <div class="talent-item">
-      <label for="class-talent">{{ $t("Profession") }}</label>
-      <select id="class-talent" v-model="selectedTalents[1]">
-        <option
-          v-for="talent in classTalents"
-          :key="talent"
-          v-bind:value="talent"
-        >
-          {{ $t(talent) }} {{ talentRanks[1] }}
-        </option>
-      </select>
-      <span class="toggle">
-        <input
-          type="radio"
-          name="classTalentRank"
-          v-model.number="talentRanks[1]"
-          value="1"
-          checked="checked"
-        />
-        <label for="classTalentRank">1</label>
-        <input
-          type="radio"
-          name="classTalentRank"
-          v-model.number="talentRanks[1]"
-          value="2"
-          :disabled="characterStatus === 'new' && isTalentRankDisabled(1)"
-        />
-        <label for="classTalentRank">2</label>
-      </span>
     </div>
 
-    <div
-      v-for="index in generalTalentsAllowed"
-      :key="index"
-      class="talent-item"
-    >
-      <label for="general-talent">{{ $t("General") }} {{ index }}</label>
-      <select id="general-talent" v-model="selectedTalents[index + 1]">
-        <optgroup :label="$t('General talents')">
-          <option
-            v-for="talent in generalTalents(index + 1)"
-            :key="talent.id"
-            v-bind:value="talent.id"
-          >
-            {{ talent.translation }} {{ talentRanks[index + 1] }}
+    <hr />
+
+    <div v-if="false">
+      <div class="talent-item">
+        <label for="kin-talent">{{ $t("Kin") }}</label>
+        <select id="kin-talent" disabled>
+          <option v-bind:value="selectedTalents[0]">
+            {{ $t(kinTalent) }}
           </option>
-        </optgroup>
-      </select>
-      <span class="toggle">
-        <input
-          type="radio"
-          :name="'talent' + index"
-          v-model.number="talentRanks[index + 1]"
-          value="1"
-          checked="checked"
-        />
-        <label :for="'talent' + index">1</label>
-        <input
-          type="radio"
-          :name="'talent' + index"
-          v-model.number="talentRanks[index + 1]"
-          value="2"
-          :disabled="
-            characterStatus === 'new' && isTalentRankDisabled(index + 1)
-          "
-        />
-        <label :for="'talent + index'">2</label>
-        <!-- TODO: Add input for lvl 3 as well when supporting live Character Sheet -->
-      </span>
-      <button v-if="canRemoveTalent" @click="removeTalent(index)">
-        ✖
-      </button>
+        </select>
+        <span class="toggle hidden">
+          <input type="radio" name="kinTalentRank" checked="checked" disabled />
+          <label for="kinTalentRank">1</label>
+          <input type="radio" name="kinTalentRank" disabled />
+          <label for="kinTalentRank">2</label>
+        </span>
+      </div>
+
+      <div class="talent-item">
+        <label for="class-talent">{{ $t("Profession") }}</label>
+        <select id="class-talent" v-model="selectedTalents[1]">
+          <option
+            v-for="talent in classTalents"
+            :key="talent"
+            v-bind:value="talent"
+          >
+            {{ $t(talent) }} {{ talentRanks[1] }}
+          </option>
+        </select>
+        <span class="toggle">
+          <input
+            type="radio"
+            name="classTalentRank"
+            v-model.number="talentRanks[1]"
+            value="1"
+            checked="checked"
+          />
+          <label for="classTalentRank">1</label>
+          <input
+            type="radio"
+            name="classTalentRank"
+            v-model.number="talentRanks[1]"
+            value="2"
+            :disabled="characterStatus === 'new' && isTalentRankDisabled(1)"
+          />
+          <label for="classTalentRank">2</label>
+        </span>
+      </div>
+
+      <div
+        v-for="index in generalTalentsAllowed"
+        :key="index"
+        class="talent-item"
+      >
+        <label for="general-talent">{{ $t("General") }} {{ index }}</label>
+        <select id="general-talent" v-model="selectedTalents[index + 1]">
+          <optgroup :label="$t('General talents')">
+            <option
+              v-for="talent in generalTalents(index + 1)"
+              :key="talent.id"
+              v-bind:value="talent.id"
+            >
+              {{ talent.translation }} {{ talentRanks[index + 1] }}
+            </option>
+          </optgroup>
+        </select>
+        <span class="toggle">
+          <input
+            type="radio"
+            :name="'talent' + index"
+            v-model.number="talentRanks[index + 1]"
+            value="1"
+            checked="checked"
+          />
+          <label :for="'talent' + index">1</label>
+          <input
+            type="radio"
+            :name="'talent' + index"
+            v-model.number="talentRanks[index + 1]"
+            value="2"
+            :disabled="
+              characterStatus === 'new' && isTalentRankDisabled(index + 1)
+            "
+          />
+          <label :for="'talent + index'">2</label>
+          <!-- TODO: Add input for lvl 3 as well when supporting live Character Sheet -->
+        </span>
+        <button v-if="canRemoveTalent" @click="removeTalent(index)">
+          ✖
+        </button>
+      </div>
+      <div v-if="canAddTalent">
+        <button @click="additionalTalents++">Add talent</button>
+      </div>
     </div>
-    <div v-if="canAddTalent">
-      <button @click="additionalTalents++">Add talent</button>
-    </div>
+    <!-- end -->
   </div>
 </template>
 
