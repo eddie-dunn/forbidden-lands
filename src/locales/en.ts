@@ -363,4 +363,31 @@ export default {
 
   // Longer
   "Roll dice before session starts": "Roll dice before session starts",
+  "XP_DESCR": `
+    You receive XP after the end of each game session. Talk it through and let
+    the whole group discuss what has happened. For each of the below questions
+    that you can reply “yes” to, you get one XP:
+
+    Did you participate in the game session? You get one XP just for being
+    there.
+
+    Did you travel through at least one hex on the game map that you had not
+    visited before?
+
+    Did you discover a new adventure site?
+
+    Did you defeat one or more monsters?
+
+    Did you find a treasure (1 gold or more)?
+
+    Did you build a function in your stronghold?
+
+    Did you activate your Pride?
+
+    Did you suffer from your Dark Secret?
+
+    Did you risk your life for another PC?
+
+    Did you perform an extraordinary action of some kind?
+  `,
 }

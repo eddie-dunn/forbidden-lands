@@ -51,7 +51,6 @@ export default Vue.extend({
         ev.preventDefault()
       }
       this.$router.push(this.cardLink)
-      window.scrollTo(0, 0)
     },
     cardClicked() {
       this.actionsActive = !this.actionsActive

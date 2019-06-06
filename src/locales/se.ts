@@ -374,4 +374,31 @@ export default {
 
   "Roll dice before session starts":
     "Kasta tärning efter att karaktären skapats",
+  "XP_DESCR": `
+    Du får dina ERF efter spelmötets slut. Ta ett eftersnack och låt hela
+    spelbordet diskutera. För varje fråga nedan du kan svara ja på vinner du en
+    ERF:
+
+    Har du deltagit i spelmötet?
+
+    Har du färdats genom minst en hexruta på kartan där ni inte har varit förut?
+
+    Har du upptäckt en ny äventyrsplats?
+
+    Har du besegrat ett eller flera monster?
+
+    Har du hittat en skatt (värd minst 1 guld)?
+
+    Har du givit en annan äventyrare en värdig begravning?
+
+    Har du byggt en funktion i ert fäste?
+
+    Har du aktiverat din stolthet?
+
+    Har du påverkats av din mörka hemlighet?
+
+    Har du riskerat livet för någon annan?
+
+    Har du utfört en extraordinär handling som inte täcks av ovanstående frågor?
+  `,
 }

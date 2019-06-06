@@ -30,7 +30,7 @@ import {
 } from "@/characterStorage"
 import Vue from "vue"
 import ExpandableSection from "@/components/ExpandableSection.vue"
-// import { workerData } from "worker_threads" // ???
+import XPModal from "@/components/XPModal.vue"
 
 const CharacterCreatorMain = Vue.extend({
   name: "CharacterCreatorForm",
@@ -41,10 +41,10 @@ const CharacterCreatorMain = Vue.extend({
     ExpandableSection,
     FlavorSelector,
     GearPicker,
-    Modal,
     PicturePicker,
     SkillSelector,
     TalentSelector,
+    XPModal,
   },
   props: ["charName"],
   watch: {
@@ -61,7 +61,11 @@ const CharacterCreatorMain = Vue.extend({
         getNewCharacterData(),
       showJSON: false,
       showXPModal: false,
+      newXP: 0,
     }
+  },
+  mounted() {
+    window.scrollTo(0, 0)
   },
   computed: {
     id(): string {
@@ -114,6 +118,10 @@ const CharacterCreatorMain = Vue.extend({
     },
     setImgSource(img: any) {
       this.characterData.portrait = img
+    },
+    handleNewXP(experience: number) {
+      this.characterData.experience = this.characterData.experience || 0
+      this.characterData.experience += experience
     },
     checkForm(event: any) {
       // console.log("form submit", event)
@@ -208,10 +216,33 @@ export default CharacterCreatorMain
         ></textarea>
       </Card>
 
+      <Card
+        v-if="status === 'active'"
+        class="row-half"
+        :title="$t('Pre/post session')"
+        :noSign="true"
+      >
+        <button
+          class="button item-action-bar"
+          v-if="canToggleXpMode"
+          @click="toggleSpendXpMode"
+        >
+          {{ status === "active" ? "Spend xp" : "Done" }}
+        </button>
+        <span>XP: {{ this.characterData.experience }}</span>
+        <button
+          class="button item-action-bar"
+          v-if="status === 'active'"
+          @click="showXPModal = true"
+        >
+          Add XP
+        </button>
+      </Card>
+
       <div class="action-bar-wrapper">
         <div class="action-bar">
           <div
-            v-if="['active', 'levelup'].includes(status)"
+            v-if="['levelup'].includes(status)"
             class="item-action-bar experience-bar"
           >
             <span>XP: {{ this.characterData.experience }}</span>
@@ -242,28 +273,13 @@ export default CharacterCreatorMain
           </button>
         </div>
       </div>
+
+      <XPModal
+        v-if="showXPModal"
+        @close="showXPModal = false"
+        @newXP="handleNewXP"
+      />
     </form>
-    <Modal v-if="showXPModal" @close="showXPModal = false">
-      <h2 slot="header">Calculate XP</h2>
-      <div slot="body">
-        Have you...
-        <div>
-          <input type="checkbox" />
-          <span>Done this</span>
-        </div>
-        <div>
-          <input type="checkbox" />
-          <span>Done something else</span>
-        </div>
-      </div>
-      <div class="modal-button-row" slot="footer">
-        <button @click="showXPModal = false" class="button">
-          {{ $t("Cancel") }}
-        </button>
-        <button @click="showXPModal = false" class="button">OK</button>
-        <!-- TODO: Commit XP if OK is clicked -->
-      </div>
-    </Modal>
     <ExpandableSection v-if="showWIP" label="JSON Export">
       <!-- TODO Use same import/export functionality as for char list -->
       <pre>{{ JSON.stringify(characterData, null, 2) }}</pre>

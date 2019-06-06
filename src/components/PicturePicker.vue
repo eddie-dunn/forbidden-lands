@@ -253,7 +253,7 @@ export default class PicturePicker extends AppProps {
   justify-content: flex-start;
   padding: 5px;
   img > {
-    // max-width: 300px;
+    max-width: calc(100% - 10px);
     max-height: 400px;
     margin: 5px;
     cursor: pointer;

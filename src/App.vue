@@ -108,7 +108,7 @@ select {
 //   border: 0;
 // }
 
-.DISABLEDbutton {
+.button {
   &::-moz-focus-inner {
     border: 0;
   }
