@@ -92,8 +92,9 @@ const CharacterCreatorMain = Vue.extend({
   },
   methods: {
     saveClicked(event: any) {
-      if (event && this.characterData.name) {
-        this.$characterStore.addCharacter(this.characterData)
+      if (!event || !this.characterData.name) return
+      this.$characterStore.addCharacter(this.characterData)
+      if (this.status === "new") {
         this.$router.push("/character-list")
       }
     },
@@ -245,13 +246,6 @@ export default CharacterCreatorMain
             <span>XP: {{ this.characterData.experience }}</span>
             <button
               class="button item-action-bar"
-              v-if="canToggleXpMode"
-              @click="toggleSpendXpMode"
-            >
-              {{ status === "active" ? "Spend xp" : "Done" }}
-            </button>
-            <button
-              class="button item-action-bar"
               v-if="status === 'active'"
               @click="showXPModal = true"
             >
@@ -265,7 +259,18 @@ export default CharacterCreatorMain
           >
             Delete
           </button>
-          <button class="button item-action-bar" v-on:click="saveClicked">
+          <button
+            class="button item-action-bar"
+            v-if="canToggleXpMode"
+            @click="toggleSpendXpMode"
+          >
+            {{ status === "active" ? "Spend xp" : "Done" }}
+          </button>
+          <button
+            v-if="status !== 'levelup'"
+            class="button item-action-bar"
+            v-on:click="saveClicked"
+          >
             Save
           </button>
         </div>
