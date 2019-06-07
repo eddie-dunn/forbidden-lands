@@ -153,6 +153,8 @@ export default Vue.extend({
     <span v-if="characterStatus === 'new'">
       {{ $t("Remaining") }}: {{ pointsAvailable() - pointsSpent() }}
     </span>
+
+    <!-- spacer -->
   </div>
 </template>
 

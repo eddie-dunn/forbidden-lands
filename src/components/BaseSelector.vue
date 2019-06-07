@@ -156,6 +156,8 @@ export default Vue.extend({
         {{ $t("Reputation") }}: {{ this.reputation }}
       </span>
     </div>
+
+    <!-- spacer -->
   </div>
 </template>
 
