@@ -84,19 +84,18 @@ export default class ExpandableSection extends Vue {
 <template>
   <div v-if="characterData.profession" class="gear-picker">
     <!-- start -->
-    <div class="consumables" v-if="this.characterData.profession">
+    <div class="consumables" v-if="characterData.profession">
       <div>
         {{ $t("Food") }}:
         {{
-          $t("D") +
-            PROFESSION[this.characterData.profession].starting_resources.food
+          $t("D") + PROFESSION[characterData.profession].starting_resources.food
         }}
       </div>
       <div>
         {{ $t("Water") }}:
         {{
           $t("D") +
-            PROFESSION[this.characterData.profession].starting_resources.water
+            PROFESSION[characterData.profession].starting_resources.water
         }}
       </div>
       <div>
@@ -109,17 +108,16 @@ export default class ExpandableSection extends Vue {
       </div>
     </div>
 
-    <div>
+    <div v-if="characterData.metadata.status === 'new'">
       <h4>{{ $t("Starting gear") }}</h4>
       <div>
-        {{ $t(PROFESSION[this.characterData.profession].gear_description) }}
+        {{ $t(PROFESSION[characterData.profession].gear_description) }}
       </div>
       <p>
         Silver:
         {{
           $t("D") +
-            PROFESSION[this.characterData.profession].starting_resources
-              .silver +
+            PROFESSION[characterData.profession].starting_resources.silver +
             " (" +
             $t("Roll dice before session starts") +
             ")"
