@@ -26,47 +26,19 @@ import Vue from "vue"
 import { TranslateResult } from "vue-i18n"
 import TalentSelect from "@/components/TalentSelect.vue"
 
-interface mTalent {
-  translation: string
-  id: string
-}
-
-function talentsSortedByTranslation(
-  vm: any, // Vue instance with $t function
-  talentIds: string[],
-  idsToExclude: string[] = []
-): mTalent[] {
-  const translationList = talentIds
-    .filter((id) => !idsToExclude.includes(id))
-    .map((id) => {
-      const translation: TranslateResult = String(vm.$t(id))
-      return { translation, id }
-    })
-
-  const sortedTalents = translationList.sort((item1, item2) => {
-    return item1.translation < item2.translation ? -1 : 1
-  })
-  return sortedTalents
-}
-
-// TODO: The method to map a talent to a translation key is overly complicated
-// and should be fixed; a general talent object should be created which contains
-// the translation keys for each talent, and that should be used instead from
-// which a sorted list can be extracted
-
-// Step one should be to break out the talent-selects to separate components,
-// which can individually deal with sorting by translation
-
 export function getTalentObjects(
   talentList: TalentAll[],
-  talentRanks: (number | undefined)[]
+  talentRanks: (number | undefined)[],
+  idsToExclude: string[] = []
 ): CharacterTalent[] {
-  const talentObj = talentList.map((talentName: TalentAll, index) => {
-    return {
-      id: talentName,
-      rank: talentRanks[index],
-    }
-  })
+  const talentObj = talentList
+    .filter((talentId) => !idsToExclude.includes(talentId))
+    .map((talentName: TalentAll, index) => {
+      return {
+        id: talentName,
+        rank: talentRanks[index],
+      }
+    })
   return talentObj
 }
 
@@ -83,9 +55,11 @@ const TalentSelector = Vue.extend({
   data() {
     return {
       GENERAL_TALENTS2,
+      // TODO: Combine selectedTalents and ranks in object[]
       selectedTalents: this.charData.talents.map((talent) => talent.id),
       talentRanks: this.charData.talents.map((talent) => talent.rank),
-      additionalTalents: 0,
+      // Rename to nbrOfTalents
+      additionalTalents: this.charData.talents.length || 3,
     }
   },
   computed: {
@@ -95,9 +69,6 @@ const TalentSelector = Vue.extend({
     ageType(): number | null {
       return this.charData.age
     },
-    classTalents(): TalentProfession[] {
-      return getTalentsForProfession(this.charData.profession)
-    },
     kinTalent(): TalentKin {
       if (!this.charData.kin) return "Adaptive"
       return KIN_TALENTS2[this.charData.kin]
@@ -105,30 +76,17 @@ const TalentSelector = Vue.extend({
     baseStartingTalents(): number {
       return getStartingTalents(this.ageType, this.charData.kin)
     },
-    generalTalentsAllowed(): number {
-      return (
-        this.baseStartingTalents - this.talentRanksSum + this.additionalTalents
-      )
-    },
-    totalTalentsAllowed(): number {
-      return 2 + this.generalTalentsAllowed
-    },
     talentIncreased(): boolean {
       return this.talentRanks.filter((rank) => (rank || 0) > 1).length > 0
     },
     talentRanksSum(): number {
       return this.talentIncreased ? 1 : 0 // this works for now
     },
-    exportedTalents(): TalentAll[] {
-      return this.selectedTalents.slice(0, 2 + this.generalTalentsAllowed)
-    },
     exported(): CharacterTalent[] {
-      // this.selectedTalents[0] = this.kinTalent
       const talentsSelected = [
         this.kinTalent,
-        ...this.selectedTalents.slice(1, this.totalTalentsAllowed),
+        ...this.selectedTalents.slice(1, this.additionalTalents),
       ]
-      const ranksSelected = this.talentRanks.slice(0, this.totalTalentsAllowed)
       const charTalents = talentsSelected.map((id, index) => ({
         id,
         rank: this.talentRanks[index],
@@ -139,11 +97,22 @@ const TalentSelector = Vue.extend({
       return this.charData.metadata.status
     },
     canAddTalent(): boolean {
-      // TODO: we should check if XP is enough to add talent
-      return ["levelup", "freeEdit"].includes(this.characterStatus)
+      if (this.characterStatus === "freeEdit") return true
+      if (this.characterStatus === "levelup" && this.charData.experience >= 3) {
+        return true
+      }
+      if (this.characterStatus === "new") {
+        return (
+          this.additionalTalents - 2 <
+          this.baseStartingTalents - this.talentRanksSum
+        )
+      }
+      return false
     },
-    canRemoveTalent(): boolean {
-      return [/*"new",*/ "freeEdit"].includes(this.characterStatus)
+    maxTalentRank(): number {
+      if (this.characterStatus !== "new") return 3
+      if (this.talentIncreased) return 1
+      return 2
     },
     canRender(): boolean {
       return !!(
@@ -154,36 +123,78 @@ const TalentSelector = Vue.extend({
     },
   },
   methods: {
-    maxTalentRank(index: number): number {
-      if (this.characterStatus !== "new") return 3
-      if (this.talentIncreased) return 1
-      return 2
+    canIncreaseTalent(index: number): boolean {
+      const status = this.characterStatus
+      if (status === "freeEdit") return true
+      if (status === "active") return false
+      if (status === "new") {
+        return !this.talentIncreased
+      }
+      if (status === "levelup") {
+        const rankCost = ((this.talentRanks[index] || 1) + 1) * 3
+        return this.charData.experience >= rankCost
+      }
+      return false
     },
-    generalTalents(index: number): mTalent[] {
-      const talentFilter = this.selectedTalents.filter(
+    getAdditionalTalents(index: number): CharacterTalent[] {
+      const idsToExclude = this.selectedTalents.filter(
         (_, index2) => index !== index2
       )
-      return talentsSortedByTranslation(this, GENERAL_TALENTS2, talentFilter)
+      const generalTalents = getTalentObjects(
+        GENERAL_TALENTS2,
+        this.talentRanks,
+        idsToExclude
+      )
+      return generalTalents
+      // if (this.characterStatus === "new") {
+      // }
+      // return [...generalTalents, ...this.classTalents()]
     },
-    classTalents2(): CharacterTalent[] {
+    classTalents(index: number): CharacterTalent[] {
+      // TODO: Enable adding class talents on levelup
+      const idsToExclude = this.selectedTalents.filter(
+        (_, index2) => index !== index2
+      )
       const professionTalents = getTalentsForProfession(
         this.charData.profession
       )
-      return getTalentObjects(professionTalents, this.talentRanks)
-    },
-    isTalentRankDisabled(index: number): boolean {
-      return this.talentIncreased || index > this.generalTalentsAllowed
+      return getTalentObjects(professionTalents, this.talentRanks, idsToExclude)
     },
     removeTalent(index: number) {
+      if (this.characterStatus === "levelup") {
+        const rank = this.talentRanks[index] || 1
+        const factor = (rank: number) => {
+          if (rank === 3) return 18
+          if (rank === 2) return 9
+          if (rank === 1) return 3
+          return 0
+        }
+        this.charData.experience += factor(rank)
+      }
       this.additionalTalents--
-      this.selectedTalents.splice(index + 1, 1)
+      this.selectedTalents.splice(index, 1)
+      this.talentRanks.splice(index, 1)
+    },
+    addTalent(index: number) {
+      if (this.characterStatus === "levelup") {
+        this.charData.experience -= 3
+      }
+      this.additionalTalents++
     },
     rankChanged(index: number, value: number) {
+      if (this.characterStatus === "levelup") {
+        const prevVal = this.talentRanks[index] || 0
+        if (prevVal < value) this.charData.experience -= value * 3
+        else this.charData.experience += prevVal * 3
+      }
       this.$set(this.talentRanks, index, value)
+    },
+    talentChanged(index: number, talentId: TalentAll) {
+      this.$set(this.selectedTalents, index, talentId)
     },
   },
   watch: {
-    selectedTalents: {
+    "selectedTalents": {
       immediate: true,
       handler() {
         // Set all undefined/falsy talent ranks to 1
@@ -192,11 +203,18 @@ const TalentSelector = Vue.extend({
         })
       },
     },
-    ageType() {
+    "ageType"() {
       // Reset all talent ranks to 1 if age is changed
       this.talentRanks = this.talentRanks.map(() => 1)
     },
-    exported: {
+    ["charData.profession"]() {
+      this.$set(this.selectedTalents, 1, null)
+      this.$set(this.talentRanks, 1, 1)
+    },
+    ["charData.kin"]() {
+      this.$set(this.selectedTalents, 0, this.kinTalent)
+    },
+    "exported": {
       immediate: true,
       handler() {
         this.$emit("talents-updated", this.exported)
@@ -210,133 +228,53 @@ export default TalentSelector
 
 <template>
   <div v-if="canRender" class="talent-contents">
-    <div>{{ $t("Kin") }}</div>
-    <TalentSelect
-      :talentOptions="[
-        { translation: $t(kinTalent), rank: null, id: kinTalent },
-      ]"
-      :disabled="true"
-      v-model="selectedTalents[0]"
-    />
-    <div>{{ $t("Profession") }}</div>
-    <TalentSelect
-      :talentOptions="classTalents2()"
-      :talentRank="talentRanks[1]"
-      :maxTalentRank="maxTalentRank(1)"
-      v-model="selectedTalents[1]"
-      @rank-changed="(value) => rankChanged(1, value)"
-    />
-    <div>{{ $t("General talents") }}</div>
     <div
-      v-for="index in generalTalentsAllowed"
-      :key="'General' + index"
+      v-for="(_, index) in additionalTalents"
+      :key="'talent' + index"
       class="talent-item"
     >
       <TalentSelect
-        :talentOptions="generalTalents(index + 1)"
-        :rankDisabled="isTalentRankDisabled(index)"
-        :talentRank="talentRanks[index + 1]"
-        :maxTalentRank="maxTalentRank(index + 1)"
-        @rank-changed="(value) => rankChanged(index + 1, value)"
-        v-model="selectedTalents[index + 1]"
+        v-if="index === 0"
+        :charStatus="characterStatus"
+        :charData="charData"
+        :disabled="true"
+        :talentOptions="[
+          { translation: $t(kinTalent), rank: 1, id: kinTalent },
+        ]"
+        v-model="selectedTalents[0]"
+      />
+      <TalentSelect
+        v-else-if="index === 1"
+        :charStatus="characterStatus"
+        :charData="charData"
+        :maxTalentRank="maxTalentRank"
+        :talentOptions="classTalents(1)"
+        :talentRank="talentRanks[1]"
+        @rank-changed="(value) => rankChanged(1, value)"
+        v-model="selectedTalents[1]"
+      />
+      <TalentSelect
+        v-else
+        :charStatus="characterStatus"
+        :charData="charData"
+        :maxTalentRank="maxTalentRank"
+        :talentOptions="getAdditionalTalents(index)"
+        :talentRank="talentRanks[index]"
+        :classTalentOptions="
+          characterStatus !== 'new' ? classTalents(index) : []
+        "
+        @rank-changed="(value) => rankChanged(index, value)"
+        @remove="removeTalent(index)"
+        v-model="selectedTalents[index]"
       />
     </div>
 
-    <hr />
-
-    <div v-if="false">
-      <div class="talent-item">
-        <label for="kin-talent">{{ $t("Kin") }}</label>
-        <select id="kin-talent" disabled>
-          <option v-bind:value="selectedTalents[0]">
-            {{ $t(kinTalent) }}
-          </option>
-        </select>
-        <span class="toggle hidden">
-          <input type="radio" name="kinTalentRank" checked="checked" disabled />
-          <label for="kinTalentRank">1</label>
-          <input type="radio" name="kinTalentRank" disabled />
-          <label for="kinTalentRank">2</label>
-        </span>
-      </div>
-
-      <div class="talent-item">
-        <label for="class-talent">{{ $t("Profession") }}</label>
-        <select id="class-talent" v-model="selectedTalents[1]">
-          <option
-            v-for="talent in classTalents"
-            :key="talent"
-            v-bind:value="talent"
-          >
-            {{ $t(talent) }} {{ talentRanks[1] }}
-          </option>
-        </select>
-        <span class="toggle">
-          <input
-            type="radio"
-            name="classTalentRank"
-            v-model.number="talentRanks[1]"
-            value="1"
-            checked="checked"
-          />
-          <label for="classTalentRank">1</label>
-          <input
-            type="radio"
-            name="classTalentRank"
-            v-model.number="talentRanks[1]"
-            value="2"
-            :disabled="characterStatus === 'new' && isTalentRankDisabled(1)"
-          />
-          <label for="classTalentRank">2</label>
-        </span>
-      </div>
-
-      <div
-        v-for="index in generalTalentsAllowed"
-        :key="index"
-        class="talent-item"
-      >
-        <label for="general-talent">{{ $t("General") }} {{ index }}</label>
-        <select id="general-talent" v-model="selectedTalents[index + 1]">
-          <optgroup :label="$t('General talents')">
-            <option
-              v-for="talent in generalTalents(index + 1)"
-              :key="talent.id"
-              v-bind:value="talent.id"
-            >
-              {{ talent.translation }} {{ talentRanks[index + 1] }}
-            </option>
-          </optgroup>
-        </select>
-        <span class="toggle">
-          <input
-            type="radio"
-            :name="'talent' + index"
-            v-model.number="talentRanks[index + 1]"
-            value="1"
-            checked="checked"
-          />
-          <label :for="'talent' + index">1</label>
-          <input
-            type="radio"
-            :name="'talent' + index"
-            v-model.number="talentRanks[index + 1]"
-            value="2"
-            :disabled="
-              characterStatus === 'new' && isTalentRankDisabled(index + 1)
-            "
-          />
-          <label :for="'talent + index'">2</label>
-          <!-- TODO: Add input for lvl 3 as well when supporting live Character Sheet -->
-        </span>
-        <button v-if="canRemoveTalent" @click="removeTalent(index)">
-          ✖
-        </button>
-      </div>
-      <div v-if="canAddTalent">
-        <button @click="additionalTalents++">Add talent</button>
-      </div>
+    <div v-if="canAddTalent">
+      <button class="button add-talent" @click="addTalent()">
+        {{ $t("Add talent") }}
+      </button>
     </div>
+
     <!-- end -->
   </div>
 </template>
@@ -345,30 +283,9 @@ export default TalentSelector
 .talent-contents {
   margin: 1rem auto;
 }
-.talent-item {
+
+.add-talent {
   display: flex;
-  align-items: center;
-  margin-top: 0.25rem;
-  select > {
-    flex-grow: 1;
-    flex-basis: 40%;
-    max-width: 20ch;
-  }
-}
-
-label {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  // flex-basis: 10ch;
-  flex-basis: 25%;
-}
-
-.talent-rank {
-  max-width: 3rem;
-}
-
-.hidden {
-  visibility: hidden;
+  margin: 1rem auto;
 }
 </style>

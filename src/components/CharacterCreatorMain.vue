@@ -238,33 +238,33 @@ export default CharacterCreatorMain
       </Card>
 
       <div class="action-bar-wrapper">
-        <div class="action-bar">
+        <div class="action-bar-left">
           <div
             v-if="['levelup'].includes(status)"
             class="item-action-bar experience-bar"
           >
-            <span>XP: {{ this.characterData.experience }}</span>
-            <button
-              class="button item-action-bar"
-              v-if="status === 'active'"
-              @click="showXPModal = true"
-            >
+            <button class="button item-action-bar" @click="showXPModal = true">
               Add XP
             </button>
+            <span>XP: {{ this.characterData.experience }}</span>
           </div>
+        </div>
+        <div class="action-bar-middle"></div>
+
+        <div class="action-bar-right">
           <button
             v-if="false"
-            class="item-action-bar button-white"
+            class="item-action-bar button button-white"
             v-on:click="() => {}"
           >
-            Delete
+            Cancel
           </button>
           <button
             class="button item-action-bar"
-            v-if="canToggleXpMode"
+            v-if="status === 'levelup'"
             @click="toggleSpendXpMode"
           >
-            {{ status === "active" ? "Spend xp" : "Done" }}
+            OK
           </button>
           <button
             v-if="status !== 'levelup'"
@@ -308,10 +308,6 @@ export default CharacterCreatorMain
   margin-bottom: 20vh;
 }
 
-.item-action-bar {
-  margin: 0.5rem;
-}
-
 .character_creator-form {
   margin: auto;
   row-gap: 0.5rem;
@@ -328,24 +324,30 @@ export default CharacterCreatorMain
 }
 
 .action-bar-wrapper {
-  display: block;
+  display: flex;
+  overflow: auto;
   width: 100%;
   position: sticky;
   bottom: 0;
   overflow: hidden;
   margin: 0 0.25rem;
+  background: #fffe;
+  border: solid ~"@{pastel-green}99" 2px;
+  padding: 0.5rem;
+  justify-content: space-around;
 }
 
 .action-bar {
-  display: flex;
-  overflow: auto;
-  justify-content: flex-end;
-  align-items: center;
-  @media (max-width: 400px) {
-    justify-content: space-around;
+  &-right {
+    justify-self: flex-end;
+    display: flex;
+    flex: 1 1 33%;
+    justify-content: flex-end;
   }
-  background: #fffe;
-  border: solid ~"@{pastel-green}99" 2px;
+  &-left {
+    justify-self: flex-start;
+  }
+  align-items: center;
 }
 
 .experience-bar {
