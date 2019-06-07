@@ -147,6 +147,16 @@ select {
     background-color: @pastel-red;
     border: 1px solid @pastel-red;
   }
+  &:disabled {
+    background: gray;
+    &:hover {
+      cursor: not-allowed;
+      color: gray;
+    }
+    &:active {
+      transform: unset;
+    }
+  }
 }
 
 .flex-row-wrap {
