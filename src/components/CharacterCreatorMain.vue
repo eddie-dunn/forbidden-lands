@@ -151,15 +151,26 @@ export default CharacterCreatorMain
         class="row-half"
         :title="$t('Base data')"
         :valid="baseDataValid && attributesValid"
-        :noSign="baseDataValid && attributesValid && status != 'new'"
+        :noSign="baseDataValid && attributesValid && status !== 'new'"
       >
         <BaseSelector :data="characterData" @basedata-updated="updateBase" />
 
-        <h4>{{ $t("Attributes") }}</h4>
-        <AttributesSelector
-          :charData="characterData"
-          @attributes-updated="updateAttributes"
-        />
+        <div class="base-data-sub">
+          <div>
+            <h4>{{ $t("Attributes") }}</h4>
+            <AttributesSelector
+              :charData="characterData"
+              @attributes-updated="updateAttributes"
+            />
+          </div>
+          <div v-if="status !== 'new'">
+            <h4>CONDITIONS</h4>
+            <div>Frozen</div>
+            <div>Starving</div>
+            <div>Thristy</div>
+            <div>Foo</div>
+          </div>
+        </div>
       </Card>
 
       <Card class="row-half" :noSign="true">
@@ -171,21 +182,8 @@ export default CharacterCreatorMain
         </div>
       </Card>
 
-      <Card class="row-half" :noSign="true">
+      <Card class="row-full" :noSign="true">
         <FlavorSelector class="flex-col-half" :data="characterData" />
-      </Card>
-
-      <Card
-        class="row-half"
-        :title="$t('talents')"
-        :valid="talentsValid"
-        :noSign="characterData.metadata.status != 'new'"
-      >
-        <TalentSelector
-          class="content"
-          :charData="characterData"
-          @talents-updated="updateTalents"
-        />
       </Card>
 
       <Card
@@ -202,11 +200,27 @@ export default CharacterCreatorMain
         />
       </Card>
 
+      <Card
+        class="row-half"
+        :title="$t('talents')"
+        :valid="talentsValid"
+        :noSign="characterData.metadata.status != 'new'"
+      >
+        <TalentSelector
+          class="content"
+          :charData="characterData"
+          @talents-updated="updateTalents"
+        />
+      </Card>
+
       <Card class="row-half" :title="$t('Gear')" :noSign="true">
         <GearPicker :characterData="characterData" />
       </Card>
 
-      <Card class="row-half" :title="$t('Notes')" :noSign="true">
+      <Card v-if="showWIP" class="row-half" :title="$t('Mount')" :noSign="true">
+      </Card>
+
+      <Card class="row-full" :title="$t('Notes')" :noSign="true">
         <textarea
           v-model="characterData.notes"
           rows="10"
@@ -216,7 +230,7 @@ export default CharacterCreatorMain
 
       <Card
         v-if="status === 'active'"
-        class="row-half"
+        class="row-full"
         :title="$t('Pre/post session')"
         :noSign="true"
       >
@@ -293,36 +307,6 @@ export default CharacterCreatorMain
 <style scoped lang="less">
 @import "~Style/colors.less";
 
-.appearance-section {
-  flex: 1 1 45%;
-}
-
-.flex-col-half {
-  flex-basis: 50%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-}
-
-.character_creator {
-  margin-bottom: 20vh;
-}
-
-.character_creator-form {
-  margin: auto;
-  row-gap: 0.5rem;
-  column-gap: 0.5rem; // only seems to work in firefox
-  margin: 0 -0.25rem;
-  margin-top: 1rem;
-
-  display: flex;
-  flex-wrap: wrap;
-  flex: 1 1 40%;
-  // align-items: stretch;
-  justify-content: space-evenly;
-  align-content: stretch;
-}
-
 .action-bar-wrapper {
   display: flex;
   overflow: auto;
@@ -350,10 +334,45 @@ export default CharacterCreatorMain
   align-items: center;
 }
 
+.appearance-section {
+  flex: 1 1 45%;
+}
+
+.base-data-sub {
+  display: flex;
+  justify-content: space-between;
+}
+
+.character_creator {
+  margin-bottom: 20vh;
+}
+
+.character_creator-form {
+  margin: auto;
+  row-gap: 0.5rem;
+  column-gap: 0.5rem; // only seems to work in firefox
+  margin: 0 -0.25rem;
+  margin-top: 1rem;
+
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1 1 40%;
+  // align-items: stretch;
+  justify-content: space-evenly;
+  align-content: stretch;
+}
+
 .experience-bar {
   justify-self: flex-start;
   text-align: left;
   flex-grow: 1;
+}
+
+.flex-col-half {
+  flex-basis: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 
 .row-full {
