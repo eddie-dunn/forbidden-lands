@@ -36,41 +36,43 @@ export default Vue.extend({
 
 <template>
   <div>
-    <div>
-      <label for="appearance">{{ $t("Appearance") }}</label>
-      <textarea
-        class="textarea-fullwidth"
-        id="appearance"
-        v-model="characterData.appearance"
-        :placeholder="appearancePlaceholder"
-      ></textarea>
-    </div>
-    <div>
-      <label for="pride">{{ $t("Pride") }}</label>
-      <textarea
-        id="pride"
-        class="textarea-fullwidth"
-        v-model="characterData.pride"
-        placeholder="..."
-      ></textarea>
-    </div>
-    <div>
-      <label for="dark-secret">{{ $t("Dark secret") }}</label>
-      <textarea
-        id="dark-secret"
-        class="textarea-fullwidth"
-        v-model="characterData.darkSecret"
-        placeholder="..."
-      ></textarea>
-    </div>
-    <div>
-      <label for="relationships">{{ $t("Relationships") }}</label>
-      <textarea
-        id="relationships"
-        class="textarea-fullwidth"
-        v-model="characterData.relationships"
-        placeholder="..."
-      ></textarea>
+    <div class="contentgroup">
+      <div>
+        <label for="appearance">{{ $t("Appearance") }}</label>
+        <textarea
+          class="textarea-fullwidth"
+          id="appearance"
+          v-model="characterData.appearance"
+          :placeholder="appearancePlaceholder"
+        ></textarea>
+      </div>
+      <div>
+        <label for="pride">{{ $t("Pride") }}</label>
+        <textarea
+          id="pride"
+          class="textarea-fullwidth"
+          v-model="characterData.pride"
+          placeholder="..."
+        ></textarea>
+      </div>
+      <div>
+        <label for="dark-secret">{{ $t("Dark secret") }}</label>
+        <textarea
+          id="dark-secret"
+          class="textarea-fullwidth"
+          v-model="characterData.darkSecret"
+          placeholder="..."
+        ></textarea>
+      </div>
+      <div>
+        <label for="relationships">{{ $t("Relationships") }}</label>
+        <textarea
+          id="relationships"
+          class="textarea-fullwidth"
+          v-model="characterData.relationships"
+          placeholder="..."
+        ></textarea>
+      </div>
     </div>
   </div>
 </template>
@@ -82,8 +84,21 @@ label,
   flex-wrap: wrap;
 }
 
+.contentgroup {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  div > {
+    flex: 1 1 100%;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    @media (min-width: 768px) {
+      flex-basis: 50%;
+    }
+  }
+}
 .textarea-fullwidth {
-  width: 100%;
+  width: 95%;
   height: 4rem;
 }
 </style>
