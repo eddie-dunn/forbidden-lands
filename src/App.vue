@@ -84,14 +84,29 @@ body {
 input[type="number"] {
   min-height: 1rem;
 }
+input {
+  background-color: @background-color;
+  color: @slate-black;
+  height: auto;
+  min-height: 1rem;
+  border: 2px solid @pastel-green-transparent;
+  padding: 0.3rem;
+  appearance: none;
+}
 
-// select {
-//   background-color: @pastel-green;
-//   color: white;
-//   height: auto;
-//   border: 0;
-//   padding: 0.3rem;
-// }
+select {
+  background-color: @background-color;
+  color: @slate-black;
+  height: auto;
+  border: 2px solid @pastel-green-transparent;
+  appearance: none;
+  background-image: url(~./assets/logo.png);
+  background-size: 0.7rem;
+  background-position: 96% center;
+  background-repeat: no-repeat;
+  padding: 0.3rem;
+  padding-right: 1rem;
+}
 // &::-moz-focus-outer {
 //   border: 0;
 // }
