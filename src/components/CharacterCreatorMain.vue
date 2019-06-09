@@ -24,10 +24,6 @@ import {
   CharacterMetaDataStatus,
   CharacterMetaData,
 } from "@/characterData"
-import {
-  loadCharacterFromLocalStorage,
-  saveCharacterToLocalStorage,
-} from "@/characterStorage"
 import Vue from "vue"
 import ExpandableSection from "@/components/ExpandableSection.vue"
 import XPModal from "@/components/XPModal.vue"
