@@ -61,6 +61,7 @@ body {
   a {
     font-weight: bold;
     color: #2c3e50;
+    text-decoration: none;
     &.router-link-exact-active {
       color: #42b983;
     }
@@ -107,6 +108,7 @@ select {
   padding: 0.3rem;
   padding-right: 1rem;
 }
+
 // &::-moz-focus-outer {
 //   border: 0;
 // }
