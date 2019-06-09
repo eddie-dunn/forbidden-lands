@@ -364,11 +364,15 @@ export default {
   "Reputation": "Rykte",
   "Reset": "Återställ",
   "Roll dice": "Rulla",
+  "Save": "Spara",
+  "Save & Close": "Spara & Stäng",
   "Select talent": "Välj talang",
   "Starting gear": "Utrustning vid start",
   "Talent": "Talang",
   "Torches": "Facklor",
   "Water": "Vatten",
+
+  // Lowercase
   "female": "kvinna",
   "male": "man",
   "sex": "kön",

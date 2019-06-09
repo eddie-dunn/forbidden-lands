@@ -159,7 +159,7 @@ export default CharacterCreatorMain
               @attributes-updated="updateAttributes"
             />
           </div>
-          <div v-if="status !== 'new'">
+          <div v-if="showWIP && status !== 'new'">
             <h4>CONDITIONS</h4>
             <div>Frozen</div>
             <div>Starving</div>
@@ -281,7 +281,7 @@ export default CharacterCreatorMain
             class="button item-action-bar"
             v-on:click="saveClicked"
           >
-            Save
+            {{ status === "new" ? $t("Save & Close") : $t("Save") }}
           </button>
         </div>
       </div>
