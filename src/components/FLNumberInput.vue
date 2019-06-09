@@ -109,6 +109,10 @@ export default class ExpandableSection extends Vue {
   border: solid 1px @pastel-green;
   border-left: 0;
   border-right: 0;
+  &:invalid {
+    color: @pastel-red;
+    border: solid 1px @pastel-red;
+  }
 }
 
 .fl-number-button {
