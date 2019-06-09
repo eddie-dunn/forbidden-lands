@@ -129,7 +129,7 @@ export default CharacterCreatorMain
 
 <template>
   <div class="character_creator">
-    <div v-if="showWIP">
+    <div v-if="showWIP" class="wip-bar">
       <span>Status: {{ this.status }}</span>
       <button @click="updateStatus('new')">New</button>
       <button @click="updateStatus('freeEdit')">Free</button>
@@ -379,5 +379,17 @@ export default CharacterCreatorMain
 .row-half {
   flex-basis: 40%;
   flex-grow: 1;
+}
+
+.wip-bar {
+  justify-content: space-around;
+  display: flex;
+  margin: 1rem 0;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 200;
+  border: solid;
+  padding: 1rem;
 }
 </style>
