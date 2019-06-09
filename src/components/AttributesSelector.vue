@@ -190,9 +190,8 @@ export default Vue.extend({
 }
 
 .attribute-icon {
-  flex-basis: 1;
-  margin-right: 0.5rem;
-  // flex-grow: 0;
+  flex: 1 0 auto;
+  margin-right: 0.25rem;
 }
 
 .attribute-damage {
