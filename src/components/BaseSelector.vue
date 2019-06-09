@@ -58,6 +58,9 @@ export default Vue.extend({
     reputation(): number {
       return getReputation(getAgeType(this.mdata.age, this.mdata.kin))
     },
+    disabled(): boolean {
+      return this.data.metadata.status === "active"
+    },
   },
   watch: {
     // mdata: {
@@ -119,28 +122,11 @@ export default Vue.extend({
       />
     </div>
 
-    <div class="cell">
-      <label for="character-kin">{{ $t("kin") }}</label>
-      <select id="character-kin" v-model="mdata.kin">
-        <option v-for="kin in kin_select" :key="kin.id" v-bind:value="kin.id">
-          {{ capitalize($t(kin.id)) }}
-        </option>
-      </select>
-    </div>
-
-    <div class="cell">
-      <label for="character-class">{{ $t("Profession") }}</label>
-      <select id="character-class" v-model="mdata.profession">
-        <option v-for="c in class_select" :key="c.id" v-bind:value="c.id">{{
-          capitalize($t(c.id)) || c.name
-        }}</option>
-      </select>
-    </div>
-
-    <div class="cell full-width">
-      <span>
-        <label for="age">{{ $t("age") }}</label>
+    <div class="base-flex2">
+      <div class="base-flex">
+        <label for="age" class="base-label">{{ $t("age") }}</label>
         <input
+          :disabled="disabled"
           id="age"
           type="number"
           v-model.number="mdata.age"
@@ -148,20 +134,69 @@ export default Vue.extend({
           class="smallnumber"
           min="1"
         />
-      </span>
+      </div>
+      <div class="base-flex">
+        <label for="character-kin" class="base-label">{{ $t("kin") }}</label>
+        <select id="character-kin" v-model="mdata.kin" :disabled="disabled">
+          <option v-for="kin in kin_select" :key="kin.id" v-bind:value="kin.id">
+            {{ capitalize($t(kin.id)) }}
+          </option>
+        </select>
+      </div>
+      <div class="base-flex">
+        <label for="character-class" class="base-label">
+          {{ $t("Profession") }}
+        </label>
+        <select
+          id="character-class"
+          v-model="mdata.profession"
+          :disabled="disabled"
+        >
+          <option v-for="c in class_select" :key="c.id" v-bind:value="c.id">
+            {{ capitalize($t(c.id)) || c.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="cell full-width">
       <span v-if="this.mdata.age" class="capitalize">
         {{ this.ageType }}
       </span>
       <span v-if="this.mdata.age" class="capitalize">
         {{ $t("Reputation") }}: {{ this.reputation }}
       </span>
+      <span v-if="this.mdata.experience" class="capitalize">
+        {{ $t("Experience") }}: {{ this.mdata.experience }}
+      </span>
     </div>
-
     <!-- spacer -->
   </div>
 </template>
 
 <style scoped lang="less">
+.base-flex2 {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+}
+.base-flex {
+  // TODO: Clean up this mess
+  display: flex;
+  align-items: center;
+  // flex: 1 0 25%;
+  flex-grow: 1;
+  margin: 0.2rem;
+  label,
+  select {
+    flex-grow: 1;
+  }
+  input {
+    max-width: 4rem;
+  }
+}
+
 label,
 .capitalize {
   text-transform: capitalize;
@@ -170,6 +205,7 @@ label,
 .full-width {
   width: 100%;
   justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .contentgroup {
