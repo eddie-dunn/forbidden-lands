@@ -89,7 +89,7 @@ const TalentSelector = Vue.extend({
       ]
       const charTalents = talentsSelected.map((id, index) => ({
         id,
-        rank: this.talentRanks[index],
+        rank: index === 0 ? 1 : this.talentRanks[index],
       }))
       return charTalents
     },
@@ -146,12 +146,8 @@ const TalentSelector = Vue.extend({
         idsToExclude
       )
       return generalTalents
-      // if (this.characterStatus === "new") {
-      // }
-      // return [...generalTalents, ...this.classTalents()]
     },
     classTalents(index: number): CharacterTalent[] {
-      // TODO: Enable adding class talents on levelup
       const idsToExclude = this.selectedTalents.filter(
         (_, index2) => index !== index2
       )
