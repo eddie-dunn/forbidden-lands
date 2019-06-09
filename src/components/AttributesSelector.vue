@@ -44,6 +44,10 @@ export default Vue.extend({
     },
   },
   created() {
+    if (!this.charData.attributeDmg) {
+      const attributeDmg = { agility: 0, empathy: 0, strength: 0, wits: 0 }
+      this.$set(this.charData, "attributeDmg", attributeDmg)
+    }
     // TODO: Check if this is necessary
     this.charData.ageType = getAgeType(this.charData.age, this.charData.kin)
   },
@@ -90,6 +94,12 @@ export default Vue.extend({
         [ATTRIBUTE.EMPATHY]: "shaking-hands",
       }
       return map[attribute] || "close-button"
+    },
+    remaining(attributeId: string) {
+      return (
+        Number(this.charData.attributes[attributeId]) -
+        Number(this.charData.attributeDmg[attributeId])
+      )
     },
   },
   data() {
@@ -146,8 +156,26 @@ export default Vue.extend({
         :max="getMax(attribute)"
         v-model.number="charData.attributes[attribute]"
       />
-      <div v-else>{{ charData.attributes[attribute] }}</div>
-      <span v-if="false" class="attribute-damage">******</span>
+      <div v-else class="active-attributes">
+        <span>
+          {{ charData.attributes[attribute] }}
+        </span>
+        <NumberInput
+          fontSize="1.4rem"
+          :id="attribute"
+          :name="attribute"
+          placeholder=""
+          type="number"
+          required
+          min="0"
+          width="1ch"
+          :max="getMax(attribute)"
+          v-model.number="charData.attributeDmg[attribute]"
+        />
+        <span :class="remaining(attribute) === 0 ? 'broken' : ''">
+          {{ remaining(attribute) }}
+        </span>
+      </div>
     </div>
     <span v-if="pointsLeft"> {{ $t("Remaining") }}: {{ pointsLeft }} </span>
 
@@ -178,6 +206,13 @@ export default Vue.extend({
   margin: 0.2rem;
 }
 
+.active-attributes {
+  display: flex;
+  align-items: center;
+  font-family: monospace;
+  font-size: 1.5rem;
+}
+
 .attribute-input {
   width: 2.5rem;
   height: 1rem;
@@ -187,15 +222,8 @@ export default Vue.extend({
 }
 
 .attribute-icon {
-  flex: 1 0 auto;
+  flex: 0 0 auto;
   margin-right: 0.25rem;
-}
-
-.attribute-damage {
-  visibility: hidden;
-  display: none;
-  flex-basis: 1;
-  flex-grow: 1;
 }
 
 .attribute-item-label {
@@ -204,6 +232,9 @@ export default Vue.extend({
   text-transform: capitalize;
 }
 
+.broken {
+  color: red;
+}
 // input[type="number"].with-checkbox {
 //   // max-width: 50%;
 //   width: 3em;
