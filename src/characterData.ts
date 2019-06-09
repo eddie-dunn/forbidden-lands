@@ -30,6 +30,7 @@ export interface AttributeData {
   wits: number | null
   agility: number | null
   empathy: number | null
+  [key: string]: number | null
 }
 
 export type CharacterMetaDataStatus =
@@ -64,6 +65,7 @@ export interface CharacterData {
   ageType: Age
   appearance: string
   attributes: AttributeData
+  attributeDmg: AttributeData
   darkSecret: string
   experience: number
   gear: Gear
@@ -96,6 +98,12 @@ export function getNewCharacterData(): CharacterData {
       agility: null,
       wits: null,
       empathy: null,
+    },
+    attributeDmg: {
+      strength: 0,
+      agility: 0,
+      wits: 0,
+      empathy: 0,
     },
     profession: null,
     // profession: "druid",
@@ -179,8 +187,9 @@ export function validateAttributes({
   const attribsOutsideRange = Object.entries(attributes)
     .map((item) => {
       return (
-        item[1] >= 2 &&
-        item[1] <= getMaxAttribLevel(item[0] as Attribute, kin, profession)
+        Number(item[1]) >= 2 &&
+        Number(item[1]) <=
+          getMaxAttribLevel(item[0] as Attribute, kin, profession)
       )
     })
     .filter((item) => !item).length
