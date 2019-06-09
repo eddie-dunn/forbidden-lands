@@ -107,6 +107,9 @@ select {
   background-repeat: no-repeat;
   padding: 0.3rem;
   padding-right: 1rem;
+  &:disabled {
+    background-image: none;
+  }
 }
 
 // &::-moz-focus-outer {
