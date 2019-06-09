@@ -64,7 +64,6 @@ export default Vue.extend({
       return [1, 2, 3, 4, 5, 6].slice(0, this.getMax(attribute))
     },
     getMax(attribute: Attribute): number {
-      if (this.characterStatus === "freeEdit") return 10
       return getMaxAttribLevel(
         attribute,
         this.charData.kin,
@@ -150,9 +149,7 @@ export default Vue.extend({
       <div v-else>{{ charData.attributes[attribute] }}</div>
       <span v-if="false" class="attribute-damage">******</span>
     </div>
-    <span v-if="characterStatus === 'new'">
-      {{ $t("Remaining") }}: {{ pointsAvailable() - pointsSpent() }}
-    </span>
+    <span v-if="pointsLeft"> {{ $t("Remaining") }}: {{ pointsLeft }} </span>
 
     <!-- spacer -->
   </div>
