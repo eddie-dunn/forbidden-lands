@@ -121,6 +121,7 @@ export default Vue.extend({
               charData.name
             }}</a>
             <div
+              v-if="newChar"
               :class="[
                 'indicator',
                 'indicator-' + (newCharValid ? 'green' : 'red'),
@@ -257,7 +258,7 @@ h3 {
 
 .stat-card {
   &:active {
-    // transform: translateY(2px);
+    transform: scale(0.99);
   }
   // cursor: pointer;
   // width: 50vw;
