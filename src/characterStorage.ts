@@ -53,35 +53,19 @@ export function loadCharacterFromLocalStorage(id: string): CharacterData {
 
 export function loadAllCharactersFromLocalStorage(): SaveData {
   const loadedData = JSON.parse(localStorage.getItem(CHAR_STORE_KEY) || "{}")
-  // console.log("loaded list", loadedData)
-  // return Object.values(loadedData)
+
+  // This is done to guarantee that character has a status:
+  Object.values(loadedData as CharacterData[]).map(
+    (character: CharacterData) => {
+      if (!character.metadata.status) {
+        loadedData[character.metadata.id].metadata.status = "new"
+      }
+    }
+  )
+
+  // console.log(loadedData)
   return loadedData
 }
-
-/* Remove character by uuid from data, return new data version */
-export function removeCharacter(characterId: string): SaveData {
-  let charData = loadAllCharactersFromLocalStorage()
-  // console.log("Removing", characterId, "from", charData)
-  // const toDelete = new Set([characterId, "abc", "efg"])
-  // const newCharacterList = charData.filter(
-  //   (obj: CharacterData) => obj.metadata && obj.metadata.id !== characterId //!toDelete.has(obj.metadata.id)
-  // )
-  // console.log("newlist", newCharacterList)
-  // const newCharacterObject: SaveData = {}
-  // for (let i = 0; i < newCharacterList.length; i++) {
-  //   if (newCharacterList[i].metadata.id) {
-  //     newCharacterObject[newCharacterList[i].metadata.id] = newCharacterList[i]
-  //   }
-  // }
-  // console.log("newobj", newCharacterObject)
-  // saveListToLocalStorage(newCharacterObject)
-  delete charData[characterId]
-  saveListToLocalStorage(charData)
-  return charData
-}
-
-// saveDraftCharacter
-// loadDraftCharacter
 
 // In-memory interface to localStorage
 // Methods with an optional commit parameter can be invoked with commit = false
@@ -98,8 +82,8 @@ export class Store {
   }
 
   get activeCharacters() {
-    return Object.values(this.storage).filter(
-      (character) => character.metadata.status === "active"
+    return Object.values(this.storage).filter((character) =>
+      ["active", "freeEdit", "levelup"].includes(character.metadata.status)
     )
   }
 
