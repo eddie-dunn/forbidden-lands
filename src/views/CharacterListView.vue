@@ -4,7 +4,6 @@ import Card from "@/components/Card.vue"
 import CharacterCard from "@/components/CharacterCard.vue"
 import Expander from "@/components/ExpandableSection.vue"
 import {
-  removeCharacter,
   loadAllCharactersFromLocalStorage,
   Store,
   SaveData,
@@ -34,7 +33,7 @@ export default class CharacterListView extends Vue {
   exportFilename: string = ""
 
   newCharacters = this.$characterStore.charactersByStatus(["new", undefined])
-  activeCharacters = this.$characterStore.charactersByStatus("active")
+  activeCharacters = this.$characterStore.activeCharacters
 
   updateCharacters() {
     // There is probably be a better way to handle this, but it will do for now
@@ -42,7 +41,7 @@ export default class CharacterListView extends Vue {
       "new",
       undefined,
     ])
-    this.activeCharacters = this.$characterStore.charactersByStatus("active")
+    this.activeCharacters = this.$characterStore.activeCharacters
   }
 
   removeCard(characterId: any) {
