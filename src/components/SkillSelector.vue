@@ -13,7 +13,7 @@ import { AGE, CLASS } from "@/keys.ts"
 import { getSkills, iconFor, SKILLS } from "@/skills.ts"
 import { getSkillMax, isClassSkill } from "@/classes.ts"
 import SvgIcon from "@/components/SvgIcon.vue"
-import FLNumberInput from "@/components/FLNumberInput.vue"
+import SkillInput from "@/components/SkillInput.vue"
 import Vue from "vue"
 
 function calcSkillPoints(age) {
@@ -28,7 +28,7 @@ function calcSkillPoints(age) {
 
 export default Vue.extend({
   components: {
-    FLNumberInput,
+    SkillInput,
     SvgIcon,
   },
   props: {
@@ -96,6 +96,11 @@ export default Vue.extend({
     isClassSkill(skillId, profession) {
       return isClassSkill(skillId, profession)
     },
+    skillChanged(skillId, value) {
+      if (this.characterStatus === "levelup") {
+        this.charData.experience += value
+      }
+    },
   },
 })
 </script>
@@ -121,25 +126,17 @@ export default Vue.extend({
         >
           {{ $t(skill.id) }}
         </label>
-        <FLNumberInput
-          v-if="canEditSkills"
-          class="skill-input"
-          fontSize="1.2rem"
-          :id="skill.id"
-          :name="skill.id"
-          type="number"
-          :placeholder="'0-' + getSkillMaxRank(skill.id)"
-          min="0"
+        <SkillInput
+          :status="characterStatus"
+          :experience="charData.experience"
           :max="getSkillMaxRank(skill.id)"
-          :num="skills[skill.id].rank"
           v-model.number="skills[skill.id].rank"
-          :ref="skill.id"
+          @xp-change="skillChanged(skill.id, $event)"
         />
-        <div v-else class="skill-display">
-          {{ skills[skill.id].rank || 0 }}
-        </div>
       </div>
     </div>
+
+    <!-- spacer -->
   </div>
 </template>
 
@@ -171,6 +168,7 @@ export default Vue.extend({
   text-transform: capitalize;
   margin-right: auto;
   margin-left: 0.2rem;
+  margin-right: 0.2rem;
   overflow-x: scroll;
   scrollbar-width: none;
   flex-grow: 1;
@@ -181,11 +179,6 @@ export default Vue.extend({
 
 .skill-input {
   margin-left: 0.2rem;
-}
-
-.skill-display {
-  flex-basis: 10%;
-  font-size: 1.2rem;
 }
 
 // input:valid.with-checkbox + span::before {

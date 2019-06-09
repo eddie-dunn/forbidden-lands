@@ -15,6 +15,10 @@ export default class ExpandableSection extends Vue {
   @Prop({ default: () => () => {} }) ctrlEnterCb!: Function
   @Prop({ default: "" }) value!: string
 
+  @Prop({ default: true }) canIncrement!: boolean
+  @Prop({ default: true }) canDecrement!: boolean
+  @Prop({ default: false }) fieldDisabled!: boolean
+
   get cssProps() {
     const placeholderWidth = this.placeholder
       ? `${this.placeholder.length}ch`
@@ -60,7 +64,7 @@ export default class ExpandableSection extends Vue {
   <div class="fl-number-row">
     <button
       class="fl-number-button shared"
-      :disabled="decrementDisabled || disabled"
+      :disabled="decrementDisabled || !canDecrement || disabled"
       @click="decrement"
       tabindex="-1"
       :style="cssProps"
@@ -68,9 +72,10 @@ export default class ExpandableSection extends Vue {
       -
     </button>
     <input
+      v-bind="$attrs"
       class="fl-number-input shared"
-      :disabled="disabled"
-      :value="this.value"
+      :disabled="disabled || fieldDisabled"
+      :value="value"
       :style="cssProps"
       type="number"
       :placeholder="placeholder"
@@ -82,7 +87,7 @@ export default class ExpandableSection extends Vue {
     />
     <button
       class="fl-number-button shared"
-      :disabled="incrementDisabled || disabled"
+      :disabled="incrementDisabled || !canIncrement || disabled"
       @click="increment"
       tabindex="-1"
       :style="cssProps"
@@ -92,7 +97,7 @@ export default class ExpandableSection extends Vue {
   </div>
 </template>
 
-<style lang="less">
+<style lang="less" scoped>
 @import "~Style/colors.less";
 .fl-number-row {
   display: flex;
