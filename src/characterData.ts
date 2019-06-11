@@ -223,6 +223,7 @@ export function validateSkills({
       .filter((invalid) => !!invalid).length > 0
   return (
     !skillRanksInvalid &&
+    skillRanksSpent !== 0 &&
     skillRanksSpent === calcNewCharSkillPoints(getAgeType(age, kin))
   )
 }
