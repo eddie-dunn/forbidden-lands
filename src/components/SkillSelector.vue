@@ -1,4 +1,5 @@
 <script>
+// TODO: Convert to ts file
 /*
 AGE SKILL POINTS
 Young 8
@@ -12,6 +13,7 @@ Skillmax: 5
 import { AGE, CLASS } from "@/keys.ts"
 import { getSkills, iconFor, SKILLS } from "@/skills.ts"
 import { getSkillMax, isClassSkill } from "@/classes.ts"
+import { getAgeType } from "@/age.ts"
 import SvgIcon from "@/components/SvgIcon.vue"
 import SkillInput from "@/components/SkillInput.vue"
 import Vue from "vue"
@@ -33,13 +35,6 @@ export default Vue.extend({
   },
   props: {
     // TODO: Send in characterData object instead
-    age: {
-      type: String,
-      required: true,
-      validator: function(value) {
-        return [...Object.values(AGE), null, ""].indexOf(value) !== -1
-      },
-    },
     profession: {
       required: true,
     },
@@ -58,7 +53,7 @@ export default Vue.extend({
   },
   computed: {
     skillPoints() {
-      return calcSkillPoints(this.age)
+      return calcSkillPoints(this.ageType)
     },
     valid() {
       return this.skillPoints - this.pointsSpent() === 0
@@ -68,6 +63,9 @@ export default Vue.extend({
     },
     canEditSkills() {
       return ["new", "freeEdit", "levelup"].includes(this.characterStatus)
+    },
+    ageType() {
+      return getAgeType(this.charData.age, this.charData.kin)
     },
   },
   data() {

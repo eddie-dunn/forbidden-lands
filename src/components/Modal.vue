@@ -139,10 +139,11 @@ export default class Modal extends Props {
 .__modal-body {
   overflow: auto;
   max-height: 100vh;
+  flex-grow: 1;
 }
 
 .__modal-footer {
-  overflow: auto;
+  border-top: 4px solid @pastel-green-transparent;
 }
 
 /*

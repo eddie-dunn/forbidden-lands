@@ -2,6 +2,7 @@
 /* eslint-disable no-console */
 import { AGE, CLASS, KIN } from "@/keys.ts"
 import { GENERAL_TALENTS, getClassTalents } from "@/talents.ts"
+import { Age } from "@/types"
 import { capitalize } from "@/util"
 import { getAgeType, getAgeRange, getReputation } from "@/age"
 import { CLASS as PROFESSION } from "@/classes"
@@ -52,26 +53,35 @@ export default Vue.extend({
   },
   computed: {
     ageType(): VueI18n.TranslateResult {
-      this.$emit("basedata-updated", this.mdata)
       return this.$t(getAgeType(this.mdata.age, this.mdata.kin))
     },
     reputation(): number {
-      return getReputation(getAgeType(this.mdata.age, this.mdata.kin))
+      return this.mdata.reputation || this.calcRep()
     },
     disabled(): boolean {
       return this.data.metadata.status === "active"
     },
   },
   watch: {
-    // mdata: {
-    //   immediate: true,
-    //   deep: true,
-    //   handler(newValue, oldValue) {
-    //     this.$emit("basedata-updated", this.mdata)
-    //   },
-    // },
+    mdata: {
+      // immediate: true,
+      deep: true,
+      handler(newValue, oldValue) {
+        console.log("age", this.mdata.age)
+        console.log("kin", this.mdata.kin)
+        this.mdata.reputation =
+          this.mdata.metadata.status !== "new"
+            ? this.mdata.reputation
+            : this.calcRep()
+        this.mdata.ageType = getAgeType(this.mdata.age, this.mdata.kin)
+        this.$emit("basedata-updated", this.mdata)
+      },
+    },
   },
   methods: {
+    calcRep() {
+      return getReputation(getAgeType(this.mdata.age, this.mdata.kin))
+    },
     nameSuggestion() {
       // TODO Get suggested names from docs, output them based on selected kin
       return ""
@@ -166,7 +176,7 @@ export default Vue.extend({
       <span v-if="this.mdata.age" class="capitalize">
         {{ $t("Reputation") }}: {{ this.reputation }}
       </span>
-      <span v-if="this.mdata.experience" class="capitalize">
+      <span class="capitalize">
         {{ $t("Experience") }}: {{ this.mdata.experience }}
       </span>
     </div>

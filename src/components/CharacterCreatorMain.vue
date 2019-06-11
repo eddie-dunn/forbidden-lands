@@ -9,7 +9,7 @@ import GearPicker from "@/components/GearPicker.vue"
 import Modal from "@/components/Modal.vue"
 import Card from "@/components/Card.vue"
 import { AGE, CLASS, KIN } from "@/keys.ts"
-import { getSkills } from "@/skills"
+import { getSkills, SkillMap } from "@/skills"
 import i18n from "@/i18n.ts"
 import { getAgeType } from "@/age.ts"
 import { Age, TalentAll } from "@/types.ts"
@@ -27,6 +27,7 @@ import {
 import Vue from "vue"
 import ExpandableSection from "@/components/ExpandableSection.vue"
 import XPModal from "@/components/XPModal.vue"
+import ModalSpendXP from "@/components/ModalSpendXP.vue"
 
 const CharacterCreatorMain = Vue.extend({
   name: "CharacterCreatorForm",
@@ -37,6 +38,7 @@ const CharacterCreatorMain = Vue.extend({
     ExpandableSection,
     FlavorSelector,
     GearPicker,
+    ModalSpendXP,
     PicturePicker,
     SkillSelector,
     TalentSelector,
@@ -57,6 +59,7 @@ const CharacterCreatorMain = Vue.extend({
         getNewCharacterData(),
       showJSON: false,
       showXPModal: false,
+      showSpendXPModal: false,
       newXP: 0,
     }
   },
@@ -85,6 +88,12 @@ const CharacterCreatorMain = Vue.extend({
     canToggleXpMode(): boolean {
       return ["active", "levelup"].includes(this.status)
     },
+    talentSum(): number {
+      const sum = (acc: number, number: number) => Number(acc) + Number(number)
+      return this.characterData.talents
+        .map((talent) => talent.rank || 0)
+        .reduce(sum, 0)
+    },
   },
   methods: {
     saveClicked(event: any) {
@@ -103,6 +112,9 @@ const CharacterCreatorMain = Vue.extend({
     updateTalents(talents: CharacterTalent[]) {
       this.$set(this.characterData, "talents", talents)
     },
+    updateSkills(skills: SkillMap) {
+      this.$set(this.characterData, "skills", skills)
+    },
     updateStatus(status: CharacterMetaDataStatus) {
       this.$set(this.characterData.metadata, "status", status)
     },
@@ -113,12 +125,13 @@ const CharacterCreatorMain = Vue.extend({
     setImgSource(img: any) {
       this.characterData.portrait = img
     },
-    handleNewXP(experience: number) {
-      this.characterData.experience = this.characterData.experience || 0
-      this.characterData.experience += experience
+    handleNewCharData(charData: CharacterData) {
+      this.updateTalents(charData.talents)
+      this.updateSkills(charData.skills)
+      this.characterData.experience = charData.experience
+      this.characterData.reputation = charData.reputation
     },
     checkForm(event: any) {
-      // console.log("form submit", event)
       // TODO: Run applicable validation
       event.preventDefault()
     },
@@ -161,10 +174,10 @@ export default CharacterCreatorMain
           </div>
           <div v-if="showWIP && status !== 'new'">
             <h4>CONDITIONS</h4>
-            <div>Frozen</div>
+            <div>Cold</div>
             <div>Starving</div>
-            <div>Thristy</div>
-            <div>Foo</div>
+            <div>Dehydrated</div>
+            <div>Tired</div>
           </div>
         </div>
       </Card>
@@ -203,17 +216,34 @@ export default CharacterCreatorMain
         :noSign="characterData.metadata.status != 'new'"
       >
         <TalentSelector
+          :key="talentSum"
           class="content"
           :charData="characterData"
           @talents-updated="updateTalents"
         />
       </Card>
 
-      <Card class="row-half" :title="$t('Gear')" :noSign="true">
+      <Card class="row-full" :title="$t('Gear')" :noSign="true">
         <GearPicker :characterData="characterData" />
       </Card>
 
       <Card v-if="showWIP" class="row-half" :title="$t('Mount')" :noSign="true">
+      </Card>
+
+      <Card
+        v-if="showWIP && status === 'active'"
+        class="row-half"
+        :title="$t('Pre/post session')"
+        :noSign="true"
+      >
+        <div v-if="showWIP" class="flex-row-wrap space-around">
+          <button class="button spacing" @click="showXPModal = true">
+            Update XP/Reputation
+          </button>
+          <button class="button spacing" @click="showSpendXPModal = true">
+            Spend XP
+          </button>
+        </div>
       </Card>
 
       <Card class="row-full" :title="$t('Notes')" :noSign="true">
@@ -224,58 +254,18 @@ export default CharacterCreatorMain
         ></textarea>
       </Card>
 
-      <Card
-        v-if="status === 'active'"
-        class="row-full"
-        :title="$t('Pre/post session')"
-        :noSign="true"
-      >
-        <button
-          class="button item-action-bar"
-          v-if="canToggleXpMode"
-          @click="toggleSpendXpMode"
-        >
-          {{ status === "active" ? "Spend xp" : "Done" }}
-        </button>
-        <span>XP: {{ this.characterData.experience }}</span>
-        <button
-          class="button item-action-bar"
-          v-if="status === 'active'"
-          @click="showXPModal = true"
-        >
-          Add XP
-        </button>
-      </Card>
-
       <div class="action-bar-wrapper">
         <div class="action-bar-left">
-          <div
-            v-if="['levelup'].includes(status)"
-            class="item-action-bar experience-bar"
-          >
-            <button class="button item-action-bar" @click="showXPModal = true">
-              Add XP
-            </button>
-            <span>XP: {{ this.characterData.experience }}</span>
-          </div>
-        </div>
-        <div class="action-bar-middle"></div>
-
-        <div class="action-bar-right">
           <button
-            v-if="false"
             class="item-action-bar button button-white"
             v-on:click="() => {}"
           >
             Cancel
           </button>
-          <button
-            class="button item-action-bar"
-            v-if="status === 'levelup'"
-            @click="toggleSpendXpMode"
-          >
-            OK
-          </button>
+        </div>
+        <div class="action-bar-middle"></div>
+
+        <div class="action-bar-right">
           <button
             v-if="status !== 'levelup'"
             class="button item-action-bar"
@@ -288,8 +278,16 @@ export default CharacterCreatorMain
 
       <XPModal
         v-if="showXPModal"
+        :charData="characterData"
         @close="showXPModal = false"
-        @newXP="handleNewXP"
+        @updated-chardata="handleNewCharData"
+      />
+
+      <ModalSpendXP
+        v-if="showSpendXPModal"
+        :charData="characterData"
+        @close="showSpendXPModal = false"
+        @updated-chardata="handleNewCharData"
       />
     </form>
     <ExpandableSection v-if="showWIP" label="JSON Export">
@@ -336,6 +334,7 @@ export default CharacterCreatorMain
 
 .base-data-sub {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
 }
 
@@ -381,9 +380,14 @@ export default CharacterCreatorMain
   flex-grow: 1;
 }
 
+.spacing {
+  margin: 1rem;
+}
+
 .wip-bar {
   justify-content: space-around;
   display: flex;
+  flex-wrap: wrap;
   margin: 1rem 0;
   position: sticky;
   top: 0;

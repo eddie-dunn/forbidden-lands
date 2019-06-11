@@ -82,6 +82,10 @@ body {
   text-transform: capitalize;
 }
 
+.hidden {
+  display: none;
+}
+
 input[type="number"] {
   min-height: 1rem;
 }

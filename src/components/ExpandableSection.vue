@@ -57,7 +57,7 @@ export default class ExpandableSection extends Vue {
   </div>
 </template>
 
-<style lang="less">
+<style lang="less" scoped>
 @import "~Style/colors.less";
 
 // .focus {
@@ -94,9 +94,5 @@ export default class ExpandableSection extends Vue {
   cursor: default;
   // font-size: initial;
   text-align: left;
-}
-
-.hidden {
-  display: none;
 }
 </style>

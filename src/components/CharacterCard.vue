@@ -217,9 +217,6 @@ h3 {
   width: 100%;
   cursor: pointer;
   transition: 0.2s ease;
-  &:hover {
-    // opacity: 0.3;
-  }
 }
 
 .img-section {

@@ -407,4 +407,24 @@ export default {
 
     Har du utfört en extraordinär handling som inte täcks av ovanstående frågor?
   `,
+  "REP_DESCR": `
+    Under spelets lopp kan ditt värde i Rykte öka. Efter ett spelpass där du
+    har utfört ett (eller flera) stordåd av något slag, en handling som blev
+    bevittnad och som kommer att omtalas i flera år framöver, ökar ditt Rykte
+    ett steg. Vad som räknas som ett stordåd är upp till SL, men här följer
+    några exempel:
+
+    En viktig SLP dödades eller räddades från en säker död.
+
+    Ett fruktat monster besegrades.
+
+    En legendarisk artefakt hittades eller stals.
+
+    Dådet förändrade permanent situationen i en äventyrsplats
+
+    Dådet kommer att få betydande kon sekvenser för någon av makterna i Det
+    glömda landet.
+
+    Ni har byggt en viktig funktion i ert fäste (sid 156).
+  `,
 }

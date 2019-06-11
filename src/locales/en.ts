@@ -390,4 +390,23 @@ export default {
 
     Did you perform an extraordinary action of some kind?
   `,
+  "REP_DESCR": `
+    During the game, your Reputation score will increase. After a game
+    session, if you have performed one or more great or terrible deeds of
+    some kind, your Reputation score increases one point. What counts as a
+    "great or terrible deed" is up to the GM, but here are some examples:
+
+    A prominent NPC was killed, or saved from certain death.
+
+    A feared monster was slain.
+
+    A legendary treasure or artifact was found or stolen.
+
+    The deed permanently altered the overall situation in an adventure site.
+
+    The deed will have significant consequences for one of the major powers
+    in the Forbidden Lands.
+
+    You have built a certain function in your stronghold (see page 160).
+  `,
 }
