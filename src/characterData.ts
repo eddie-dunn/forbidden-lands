@@ -76,7 +76,7 @@ export interface CharacterData {
   portrait: string | null
   pride: string
   profession: Profession | null
-  relationshipts: string
+  relationships: string
   reputation: number
   sex: Sex | null
   skills: SkillMap
@@ -119,7 +119,7 @@ export function getNewCharacterData(): CharacterData {
     appearance: "",
     pride: "",
     darkSecret: "",
-    relationshipts: "",
+    relationships: "",
 
     gear: {
       equipped: [],
