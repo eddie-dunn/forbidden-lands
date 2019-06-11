@@ -250,10 +250,10 @@ export default CharacterCreatorMain
       >
         <div v-if="showWIP" class="flex-row-wrap space-around">
           <button class="button spacing" @click="showXPModal = true">
-            Update XP/Reputation
+            {{ $t("Add XP/Reputation") }}
           </button>
           <button class="button spacing" @click="showSpendXPModal = true">
-            Spend XP
+            {{ $t("Spend XP") }}
           </button>
         </div>
       </Card>

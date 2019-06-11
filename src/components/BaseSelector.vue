@@ -67,8 +67,6 @@ export default Vue.extend({
       // immediate: true,
       deep: true,
       handler(newValue, oldValue) {
-        console.log("age", this.mdata.age)
-        console.log("kin", this.mdata.kin)
         this.mdata.reputation =
           this.mdata.metadata.status !== "new"
             ? this.mdata.reputation
