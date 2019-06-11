@@ -29,6 +29,10 @@ import ExpandableSection from "@/components/ExpandableSection.vue"
 import XPModal from "@/components/XPModal.vue"
 import ModalSpendXP from "@/components/ModalSpendXP.vue"
 
+function stringChar(characterData: CharacterData) {
+  return JSON.stringify(characterData)
+}
+
 const CharacterCreatorMain = Vue.extend({
   name: "CharacterCreatorForm",
   components: {
@@ -44,7 +48,7 @@ const CharacterCreatorMain = Vue.extend({
     TalentSelector,
     XPModal,
   },
-  props: ["charName"],
+  props: ["charId"],
   watch: {
     $route(to, from) {
       if (to.name === "character_creator-new") {
@@ -55,12 +59,12 @@ const CharacterCreatorMain = Vue.extend({
   data() {
     return {
       characterData:
-        this.$characterStore.characterById(this.charName) ||
+        this.$characterStore.characterById(this.charId) ||
         getNewCharacterData(),
       showJSON: false,
       showXPModal: false,
       showSpendXPModal: false,
-      newXP: 0,
+      characterDataCopy: "", // used to track if char data has changed or not
     }
   },
   computed: {
@@ -94,6 +98,9 @@ const CharacterCreatorMain = Vue.extend({
         .map((talent) => talent.rank || 0)
         .reduce(sum, 0)
     },
+    charDataUpdated(): boolean {
+      return stringChar(this.characterData) !== this.characterDataCopy
+    },
   },
   methods: {
     saveClicked(event: any) {
@@ -102,9 +109,10 @@ const CharacterCreatorMain = Vue.extend({
       if (this.status === "new") {
         this.$router.push("/character-list")
       }
+      this.characterDataCopy = stringChar(this.characterData)
     },
     updateBase(character: CharacterData) {
-      this.characterData.ageType = this.ageType
+      this.characterData.ageType = character.ageType
     },
     updateAttributes(attributes: any) {
       this.$set(this.characterData, "attributes", attributes)
@@ -136,6 +144,9 @@ const CharacterCreatorMain = Vue.extend({
       event.preventDefault()
     },
   },
+  mounted() {
+    this.characterDataCopy = stringChar(this.characterData)
+  },
 })
 export default CharacterCreatorMain
 </script>
@@ -143,6 +154,7 @@ export default CharacterCreatorMain
 <template>
   <div class="character_creator">
     <div v-if="showWIP" class="wip-bar">
+      <div>updated: {{ charDataUpdated }}</div>
       <span>Status: {{ this.status }}</span>
       <button @click="updateStatus('new')">New</button>
       <button @click="updateStatus('freeEdit')">Free</button>
@@ -268,7 +280,11 @@ export default CharacterCreatorMain
         <div class="action-bar-right">
           <button
             v-if="status !== 'levelup'"
-            class="button item-action-bar"
+            :class="[
+              'button',
+              charDataUpdated ? '' : 'button-white',
+              'item-action-bar',
+            ]"
             v-on:click="saveClicked"
           >
             {{ status === "new" ? $t("Save & Close") : $t("Save") }}

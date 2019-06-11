@@ -5,11 +5,7 @@ import { getAttributePoints, getAgeType } from "@/age"
 import { Attribute, KinName, Profession, Age } from "@/types"
 import { CLASS as PROFESSION_MAP } from "@/classes"
 import { KIN as KIN_MAP } from "@/kin"
-import {
-  validateAttributes,
-  CharacterData,
-  CharacterMetaDataStatus,
-} from "@/characterData"
+import { CharacterData, CharacterMetaDataStatus } from "@/characterData"
 import SvgIcon from "@/components/SvgIcon.vue"
 import NumberInput from "@/components/FLNumberInput.vue"
 
@@ -63,7 +59,6 @@ export default Vue.extend({
     },
   },
   methods: {
-    validateAttributes,
     getAttribArray(attribute: Attribute): number[] {
       return [1, 2, 3, 4, 5, 6].slice(0, this.getMax(attribute))
     },

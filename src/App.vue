@@ -146,7 +146,8 @@ select {
     border: 1px solid @pastel-red;
   }
 
-  &-white {
+  &-white,
+  &-cancel {
     background-color: white;
     color: #4fc08d;
   }

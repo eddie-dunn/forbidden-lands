@@ -120,7 +120,7 @@ export default class XPModal extends Vue {
     </div>
 
     <div class="modal-button-row" slot="footer">
-      <button @click="close" class="button">
+      <button @click="close" class="button button-cancel">
         {{ $t("Cancel") }}
       </button>
       <button @click="emitNewXP" class="button">OK</button>

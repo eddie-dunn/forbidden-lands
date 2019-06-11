@@ -1,6 +1,6 @@
 <template>
   <div class="character-creator">
-    <CharacterCreatorMain :charName="id" />
+    <CharacterCreatorMain :charId="id" />
   </div>
 </template>
 
