@@ -2,6 +2,7 @@
 import {
   CharacterData,
   getNewCharacterData,
+  getNewGear,
   parseCharacterData,
   CharacterMetaDataStatus,
 } from "@/characterData"
@@ -9,7 +10,39 @@ import {
 export const CHAR_STORE_KEY: string = "savedCharacters"
 export let STORE = [] // global in memory store object
 
-// TODO: Add commit memory store to localStorage
+const PATCHES = [
+  (data: CharacterData[]) =>
+    data.map((character: CharacterData) => {
+      const name = character.name
+      const id = character.metadata.id
+      if (!character.metadata.status) {
+        console.log("Adding status to", name, id)
+        character.metadata.status = "new"
+      }
+      if (!character.gear || !character.gear.money) {
+        console.log("Adding gear to", name, id)
+        character.gear = getNewGear()
+      }
+      character.metadata.dataVersion = 0
+    }),
+
+  (data: CharacterData[]) =>
+    data.map((character) => {
+      character.willpower = 0
+      character.metadata.dataVersion = 1
+    }),
+]
+
+function applyPatches(data: SaveData | {}) {
+  const dataList: CharacterData[] = Object.values(data)
+  PATCHES.map((patchFunc: CallableFunction, index: number) => {
+    if (Number(dataList[index].metadata.dataVersion || -1) < index) {
+      patchFunc(dataList)
+      console.log("applied patch for version", index, dataList)
+      // TODO Save
+    }
+  })
+}
 
 export function saveCharacterToLocalStorage(characterData: CharacterData) {
   const id = characterData.metadata.id
@@ -53,17 +86,8 @@ export function loadCharacterFromLocalStorage(id: string): CharacterData {
 
 export function loadAllCharactersFromLocalStorage(): SaveData {
   const loadedData = JSON.parse(localStorage.getItem(CHAR_STORE_KEY) || "{}")
-
-  // This is done to guarantee that character has a status:
-  Object.values(loadedData as CharacterData[]).map(
-    (character: CharacterData) => {
-      if (!character.metadata.status) {
-        loadedData[character.metadata.id].metadata.status = "new"
-      }
-    }
-  )
-
-  // console.log(loadedData)
+  // console.log("loaded data", loadedData)
+  applyPatches(loadedData)
   return loadedData
 }
 

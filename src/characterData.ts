@@ -25,6 +25,14 @@ export interface CharacterTalent {
   rank: number | undefined
 }
 
+export interface Conditions {
+  cold: boolean
+  starving: boolean
+  dehydrated: boolean
+  tired: boolean
+  [key: string]: boolean
+}
+
 export interface AttributeData {
   strength: number | null
   wits: number | null
@@ -49,14 +57,19 @@ export interface CharacterMetaData {
 }
 
 type Item = { name: string; weight: number }
-interface Gear {
+export interface Gear {
   equipped: Item[]
   inventory: Item[]
-  consumables?: {
+  consumables: {
     torches: DiceSides
     food: DiceSides
     water: DiceSides
     arrows: DiceSides
+  }
+  money: {
+    gold: number
+    silver: number
+    copper: number
   }
 }
 
@@ -66,6 +79,7 @@ export interface CharacterData {
   appearance: string
   attributes: AttributeData
   attributeDmg: AttributeData
+  conditions: Conditions
   darkSecret: string
   experience: number
   gear: Gear
@@ -82,6 +96,24 @@ export interface CharacterData {
   skills: SkillMap
   talents: CharacterTalent[]
   willpower: number
+}
+
+export function getNewGear(): Gear {
+  return {
+    equipped: [],
+    inventory: [],
+    money: {
+      copper: 0,
+      silver: 0,
+      gold: 0,
+    },
+    consumables: {
+      torches: 0,
+      food: 0,
+      water: 0,
+      arrows: 0,
+    },
+  }
 }
 
 export function getNewCharacterData(): CharacterData {
@@ -105,6 +137,12 @@ export function getNewCharacterData(): CharacterData {
       wits: 0,
       empathy: 0,
     },
+    conditions: {
+      cold: false,
+      starving: false,
+      dehydrated: false,
+      tired: false,
+    },
     profession: null,
     // profession: "druid",
     skills: getSkills(),
@@ -121,10 +159,8 @@ export function getNewCharacterData(): CharacterData {
     darkSecret: "",
     relationships: "",
 
-    gear: {
-      equipped: [],
-      inventory: [],
-    },
+    gear: getNewGear(),
+
     notes: "",
 
     // metadata

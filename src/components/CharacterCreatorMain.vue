@@ -28,6 +28,8 @@ import Vue from "vue"
 import ExpandableSection from "@/components/ExpandableSection.vue"
 import XPModal from "@/components/XPModal.vue"
 import ModalSpendXP from "@/components/ModalSpendXP.vue"
+import Conditions from "@/components/Conditions.vue"
+import FLNumberInput from "@/components/FLNumberInput.vue"
 
 function stringChar(characterData: CharacterData) {
   return JSON.stringify(characterData)
@@ -39,8 +41,10 @@ const CharacterCreatorMain = Vue.extend({
     AttributesSelector,
     BaseSelector,
     Card,
+    Conditions,
     ExpandableSection,
     FlavorSelector,
+    FLNumberInput,
     GearPicker,
     ModalSpendXP,
     PicturePicker,
@@ -160,6 +164,7 @@ export default CharacterCreatorMain
       <button @click="updateStatus('freeEdit')">Free</button>
       <button @click="updateStatus('active')">Active</button>
       <button @click="updateStatus('levelup')">Level-up</button>
+      <div>WP: {{ characterData.willpower }}</div>
     </div>
     <form
       class="character_creator-form"
@@ -185,11 +190,11 @@ export default CharacterCreatorMain
             />
           </div>
           <div v-if="showWIP && status !== 'new'">
-            <h4>CONDITIONS</h4>
-            <div>Cold</div>
-            <div>Starving</div>
-            <div>Dehydrated</div>
-            <div>Tired</div>
+            <h4>{{ $t("Conditions") }}</h4>
+            <Conditions
+              :conditions="this.characterData.conditions || {}"
+              v-model="characterData.conditions"
+            />
           </div>
         </div>
       </Card>
@@ -233,6 +238,22 @@ export default CharacterCreatorMain
           :charData="characterData"
           @talents-updated="updateTalents"
         />
+
+        <div
+          v-if="showWIP && status != 'new'"
+          class="willpower flex-row-wrap space-around"
+        >
+          <label for="willpower">
+            Willpower
+          </label>
+          <FLNumberInput
+            id="willpower"
+            fontSize="1.2rem"
+            min="0"
+            max="10"
+            v-model="characterData.willpower"
+          />
+        </div>
       </Card>
 
       <Card class="row-full" :title="$t('Gear')" :noSign="true">
@@ -266,32 +287,6 @@ export default CharacterCreatorMain
         ></textarea>
       </Card>
 
-      <div class="action-bar-wrapper">
-        <div class="action-bar-left">
-          <button
-            class="item-action-bar button button-white"
-            v-on:click="() => {}"
-          >
-            Cancel
-          </button>
-        </div>
-        <div class="action-bar-middle"></div>
-
-        <div class="action-bar-right">
-          <button
-            v-if="status !== 'levelup'"
-            :class="[
-              'button',
-              charDataUpdated ? '' : 'button-white',
-              'item-action-bar',
-            ]"
-            v-on:click="saveClicked"
-          >
-            {{ status === "new" ? $t("Save & Close") : $t("Save") }}
-          </button>
-        </div>
-      </div>
-
       <XPModal
         v-if="showXPModal"
         :charData="characterData"
@@ -306,6 +301,32 @@ export default CharacterCreatorMain
         @updated-chardata="handleNewCharData"
       />
     </form>
+
+    <div class="action-bar-wrapper">
+      <div class="action-bar-left">
+        <button
+          class="item-action-bar button button-white"
+          v-on:click="() => {}"
+        >
+          Cancel
+        </button>
+      </div>
+      <div class="action-bar-middle"></div>
+
+      <div class="action-bar-right">
+        <button
+          v-if="status !== 'levelup'"
+          :class="[
+            'button',
+            charDataUpdated ? '' : 'button-white',
+            'item-action-bar',
+          ]"
+          v-on:click="saveClicked"
+        >
+          {{ status === "new" ? $t("Save & Close") : $t("Save") }}
+        </button>
+      </div>
+    </div>
     <ExpandableSection v-if="showWIP" label="JSON Export">
       <!-- TODO Use same import/export functionality as for char list -->
       <pre>{{ JSON.stringify(characterData, null, 2) }}</pre>
@@ -320,7 +341,7 @@ export default CharacterCreatorMain
 .action-bar-wrapper {
   display: flex;
   overflow: auto;
-  width: 100%;
+  // width: 100%;
   position: sticky;
   bottom: 0;
   overflow: hidden;
@@ -356,13 +377,15 @@ export default CharacterCreatorMain
 
 .character_creator {
   margin-bottom: 20vh;
+  width: 100%;
 }
 
 .character_creator-form {
+  width: 100%;
   margin: auto;
   row-gap: 0.5rem;
-  column-gap: 0.5rem; // only seems to work in firefox
-  margin: 0 -0.25rem;
+  // column-gap: 0.5rem; // only seems to work in firefox
+  // margin: 0 -0.25rem;
   margin-top: 1rem;
 
   display: flex;
@@ -398,6 +421,12 @@ export default CharacterCreatorMain
 
 .spacing {
   margin: 1rem;
+}
+
+.willpower {
+  align-items: center;
+  max-width: 50%;
+  margin: 1rem auto;
 }
 
 .wip-bar {

@@ -57,6 +57,9 @@ export default Vue.extend({
     baseAttributesEditable(): boolean {
       return ["new", undefined, "freeEdit"].includes(this.characterStatus)
     },
+    active(): boolean {
+      return this.characterStatus === "active"
+    },
   },
   methods: {
     getAttribArray(attribute: Attribute): number[] {
@@ -125,85 +128,88 @@ export default Vue.extend({
       </li>
     </ul>
   </div>
-  <div v-else class="attribute-selector-content">
-    <div
-      v-for="attribute in Object.keys(charData.attributes)"
-      class="attribute-item"
-      :key="attribute"
-    >
-      <SvgIcon
-        :name="iconFor(attribute)"
-        :title="attribute"
-        class="attribute-icon"
-      />
-      <label :for="attribute" class="attribute-item-label">
-        {{ $t(attribute) }}
-      </label>
-      <NumberInput
-        v-if="baseAttributesEditable"
-        fontSize="1.4rem"
-        :id="attribute"
-        :name="attribute"
-        type="number"
-        required
-        :placeholder="'2-' + getMax(attribute)"
-        min="2"
-        :max="getMax(attribute)"
-        v-model.number="charData.attributes[attribute]"
-      />
-      <div v-else class="active-attributes">
-        <span>
-          {{ charData.attributes[attribute] }}
-        </span>
-        <NumberInput
-          fontSize="1.4rem"
-          :id="attribute"
-          :name="attribute"
-          placeholder=""
-          type="number"
-          required
-          min="0"
-          width="1ch"
-          :max="getMax(attribute)"
-          v-model.number="charData.attributeDmg[attribute]"
-        />
-        <span :class="remaining(attribute) === 0 ? 'broken' : ''">
-          {{ remaining(attribute) }}
-        </span>
-      </div>
-    </div>
-    <span v-if="pointsLeft"> {{ $t("Remaining") }}: {{ pointsLeft }} </span>
 
-    <!-- spacer -->
+  <div v-else>
+    <table style="width: 100%">
+      <thead>
+        <tr>
+          <th></th>
+          <th v-if="active">{{ $t("Damage") }}</th>
+          <th v-if="active">{{ $t("Remaining") }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="attribute in Object.keys(charData.attributes)"
+          :key="attribute"
+        >
+          <td class="attribute-item">
+            <SvgIcon
+              :name="iconFor(attribute)"
+              :title="attribute"
+              class="attribute-icon"
+            />
+            <label :for="attribute" class="attribute-item-label">
+              {{ $t(attribute) }}
+            </label>
+            <span v-if="active" class="active-attributes">
+              {{ charData.attributes[attribute] }}
+            </span>
+            <NumberInput
+              v-if="baseAttributesEditable"
+              fontSize="1.4rem"
+              :id="attribute"
+              :name="attribute"
+              type="number"
+              required
+              :placeholder="'2-' + getMax(attribute)"
+              min="2"
+              :max="getMax(attribute)"
+              v-model.number="charData.attributes[attribute]"
+            />
+          </td>
+          <td v-if="active">
+            <NumberInput
+              fontSize="1.4rem"
+              :id="attribute"
+              :name="attribute"
+              placeholder=""
+              type="number"
+              required
+              min="0"
+              width="1ch"
+              :max="getMax(attribute)"
+              v-model.number="charData.attributeDmg[attribute]"
+            />
+          </td>
+          <td
+            v-if="active"
+            :class="[
+              remaining(attribute) === 0 ? 'broken' : '',
+              'active-attributes',
+            ]"
+          >
+            {{ remaining(attribute) }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <span v-if="pointsLeft"> {{ $t("Remaining") }}: {{ pointsLeft }} </span>
   </div>
+
+  <!-- spacer -->
 </template>
 
 <style lang="less" scoped>
-.attribute-selector-content {
-  flex-grow: 2;
-  display: flex;
-  flex-direction: column;
-  // justify-content: space-around;
-  div > {
-    margin: 0.25rem;
-  }
-  // min-width: 300px;
-  // min-width: 32%;
-  // max-width: 50%;
-}
-
 .attribute-item {
   display: flex;
   flex-grow: 0;
-  // justify-content: space-around;
   justify-content: flex-start;
   align-items: center;
   margin: 0.2rem;
 }
 
 .active-attributes {
-  display: flex;
-  align-items: center;
   font-family: monospace;
   font-size: 1.5rem;
 }
@@ -211,7 +217,6 @@ export default Vue.extend({
 .attribute-input {
   width: 2.5rem;
   height: 1rem;
-  // margin-right: 2rem;
   flex-basis: 1;
   flex-grow: 0;
 }
@@ -222,14 +227,17 @@ export default Vue.extend({
 }
 
 .attribute-item-label {
-  // margin-right: 1rem;
   flex: 0 0 9ch;
   text-transform: capitalize;
 }
 
 .broken {
   color: red;
+  &:after {
+    content: "✖";
+  }
 }
+
 // input[type="number"].with-checkbox {
 //   // max-width: 50%;
 //   width: 3em;

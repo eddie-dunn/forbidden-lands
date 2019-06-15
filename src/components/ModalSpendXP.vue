@@ -6,13 +6,11 @@ import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 import { CharacterData, CharacterTalent } from "@/characterData"
 
-import FLNumberInput from "@/components/FLNumberInput.vue"
 import SkillSelector from "@/components/SkillSelector.vue"
 import TalentSelector from "@/components/TalentSelector.vue"
 
 @Component({
   components: {
-    FLNumberInput,
     Modal,
     SkillSelector,
     TalentSelector,
