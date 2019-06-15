@@ -86,10 +86,9 @@ body {
   display: none;
 }
 
-input[type="number"] {
+input[type="number"],
+input[type="text"] {
   min-height: 1rem;
-}
-input {
   background-color: @background-color;
   color: @slate-black;
   height: auto;
