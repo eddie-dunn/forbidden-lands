@@ -49,7 +49,7 @@ export default Vue.extend({
 <template>
   <div :class="['stat-card', valid ? '' : 'stat-card-invalid']">
     <div class="header">
-      <h3 v-if="title">{{ title }}</h3>
+      <h2 v-if="title">{{ title }}</h2>
       <span :class="['card-sign', valid ? '' : 'card-sign-invalid']">
         {{ sign }}
       </span>
@@ -72,6 +72,7 @@ h3 {
   // margin: 40px 0 0;
   width: 100%;
   text-align: center;
+  font-variant-caps: small-caps;
   &::first-letter {
     text-transform: uppercase;
   }

@@ -1,10 +1,11 @@
 <script lang="ts">
 import Vue from "vue"
-import { Component, Prop } from "vue-property-decorator"
-import { CLASS as PROFESSION } from "@/classes"
-import { CharacterData, Gear } from "@/characterData"
+import { Component, Prop, Watch } from "vue-property-decorator"
+import { PROFESSION } from "@/classes"
+import { CharacterData, Gear, Item, ItemArmor } from "@/characterData"
 import FLNumberInput from "@/components/FLNumberInput.vue"
 import SvgIcon from "@/components/SvgIcon.vue"
+import ModalAddItem from "@/components/ModalAddItem.vue"
 
 const DEFAULT_GEAR = {
   name: "",
@@ -22,39 +23,30 @@ type VType = Vue & { focus: () => {} }
 @Component({
   components: {
     FLNumberInput,
+    ModalAddItem,
     SvgIcon,
   },
 })
 export default class ExpandableSection extends Vue {
   @Prop({ required: true }) characterData!: CharacterData
+  showAddItem = false
 
   PROFESSION = PROFESSION
-  adding = false
 
-  tmpGear = defaultItem()
-  inventory: any = []
-  gold = 0
-  silver = 0
-  copper = 0
-
-  addGear() {
-    this.adding = false
-    this.inventory.push(this.tmpGear)
-    this.tmpGear = defaultItem()
-  }
-
-  cancelAddGear() {
-    this.tmpGear = defaultItem()
-    this.adding = false
+  get inventory() {
+    return this.characterData.gear.inventory
   }
 
   removeGear(index: number) {
-    this.inventory.splice(index, 1)
+    this.characterData.gear.inventory.splice(index, 1)
   }
 
-  setAdding() {
-    this.adding = true
-    this.$nextTick(() => (this.$refs.tmpGearNameInput as VType).focus())
+  addItem(item: Item) {
+    this.characterData.gear.inventory.push(item)
+  }
+
+  equippable(item: Item) {
+    return ["armor", "helmet", "shield", "weapon"].includes(item.type)
   }
 
   get arrows() {
@@ -63,20 +55,78 @@ export default class ExpandableSection extends Vue {
     }
     return 0
   }
+
   get torches() {
     return 0
   }
 
+  startingConsumable(consumable: string) {
+    if (!this.characterData.profession) return 0
+    return (
+      PROFESSION[this.characterData.profession].starting_resources[
+        consumable
+      ] || 0
+    )
+  }
+
+  get status() {
+    return this.characterData.metadata.status
+  }
+
+  get equippedWeapons() {
+    return this.inventory.filter(
+      (item: Item) => item.type === "weapon" && item.equipped
+    )
+  }
+
+  get equippedHelmet() {
+    return this.inventory
+      .filter((item) => item.type === "helmet" && item.equipped)
+      .pop()
+  }
+
+  get equippedShield() {
+    return this.inventory
+      .filter((item) => item.type === "shield" && item.equipped)
+      .pop()
+  }
+
+  get equippedArmor() {
+    return this.inventory
+      .filter((item) => item.type === "armor" && item.equipped)
+      .pop()
+  }
+
   get gearWeight() {
-    return this.characterData.gear.inventory
-      .map((item) => item.weight)
-      .reduce((val, sum) => val + sum, 0)
+    return (
+      this.characterData.gear.inventory
+        .map((item) => item.weight)
+        .reduce((val, sum) => val + sum, 0) +
+      Object.values(this.characterData.gear.money)
+        .map((moneyAmount) => Math.floor(moneyAmount / 100))
+        .reduce((val, sum) => {
+          return val + sum
+        }, 0)
+    )
   }
 
   get gearWeightMax() {
     const multiplier = 1 // TODO get pack mule talent level
     const charStrength = this.characterData.attributes.strength || 0
     return charStrength * 2 * multiplier
+  }
+
+  @Watch("characterData.profession")
+  setConsumables() {
+    if (!this.characterData.profession || this.status !== "new") return
+    this.characterData.gear.consumables.food = this.startingConsumable("food")
+    this.characterData.gear.consumables.water = this.startingConsumable("water")
+    this.characterData.gear.consumables.arrows = this.startingConsumable(
+      "arrows"
+    )
+    this.characterData.gear.consumables.torches = this.startingConsumable(
+      "torches"
+    )
   }
 }
 </script>
@@ -102,6 +152,180 @@ export default class ExpandableSection extends Vue {
       </p>
     </div>
 
+    <div class="button-row">
+      <button @click="showAddItem = true" class="button">
+        {{ $t("Add") }}
+      </button>
+      <!-- TODO: Implement move items modal -->
+      <button class="button">{{ $t("Move") }}</button>
+    </div>
+
+    <ModalAddItem
+      v-if="showAddItem"
+      @close="showAddItem = false"
+      @add-item="addItem"
+      :charData="characterData"
+    />
+
+    <!-- TODO: Look into using flex or grid instead of tables -->
+    <div class="inventory" v-if="showWIP">
+      <!-- spacer -->
+
+      <div class="other-gear">
+        <h4>{{ $t("Ägodelar") }}</h4>
+        <div v-if="inventory.length < 1">No gear...</div>
+        <table v-else>
+          <thead>
+            <tr>
+              <th class="equipped-cell">{{ $t("Aktiv") }}</th>
+              <th>{{ $t("Name") }}</th>
+              <th class="bonus-cell">Bonus</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in inventory" v-bind:key="item.name">
+              <td>
+                <input
+                  type="checkbox"
+                  :disabled="!equippable(item)"
+                  v-model="item.equipped"
+                />
+              </td>
+              <td>{{ item.name }}</td>
+              <td>{{ item.bonus || "" }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div>{{ $t("Encumbrance") }}: {{ gearWeight }}/{{ gearWeightMax }}</div>
+      </div>
+
+      <div class="protection">
+        <h4>{{ $t("Active") }} {{ $t("Protection") }}</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Namn</th>
+              <th class="bonus-cell">Bonus</th>
+            </tr>
+          </thead>
+          <tbody v-if="equippedArmor || equippedHelmet || equippedShield">
+            <tr v-if="equippedHelmet">
+              <td>{{ equippedHelmet.name }}</td>
+              <td>{{ equippedHelmet.bonus }}</td>
+            </tr>
+            <tr v-if="equippedShield">
+              <td>{{ equippedShield.name }}</td>
+              <td>{{ equippedShield.bonus }}</td>
+            </tr>
+            <tr v-if="equippedArmor">
+              <td>{{ equippedArmor.name }}</td>
+              <td>{{ equippedArmor.bonus }}</td>
+            </tr>
+          </tbody>
+          <div v-else>No protection equipped</div>
+        </table>
+      </div>
+
+      <div class="weapons">
+        <h4>{{ $t("Active") }} {{ $t("Weapons") }}</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>{{ $t("Name") }}</th>
+              <th class="bonus-cell">Bonus</th>
+              <th class="bonus-cell">{{ $t("Damage") }}</th>
+              <th>{{ $t("Range") }}</th>
+              <th>{{ $t("Comment") }}</th>
+            </tr>
+          </thead>
+          <tbody v-if="equippedWeapons.length > 0">
+            <tr v-for="weapon in equippedWeapons" v-bind:key="weapon.name">
+              <td>{{ weapon.name }}</td>
+              <td>{{ weapon.bonus }}</td>
+              <td>{{ weapon.damage }}</td>
+              <td class="capitalize">{{ $t(weapon.range) }}</td>
+              <td>{{ weapon.comment }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div v-if="equippedWeapons.length < 1">No weapons equipped</div>
+      </div>
+
+      <!-- spacer -->
+    </div>
+
+    <h4>{{ $t("Consumables") }}</h4>
+    <div class="consumables" v-if="characterData.profession">
+      <!-- spacer -->
+
+      <div class="consumable-item">
+        <label for="food">{{ $t("Food") }}</label>
+        <select
+          v-model="characterData.gear.consumables.food"
+          :disabled="status === 'new'"
+        >
+          <option
+            v-for="val in [0, 6, 8, 10, 12]"
+            v-bind:key="val"
+            :value="val"
+          >
+            {{ !!val ? $t("D") + val : 0 }}
+          </option>
+        </select>
+      </div>
+
+      <div class="consumable-item">
+        <label for="water">{{ $t("Water") }}</label>
+        <select
+          v-model.number="characterData.gear.consumables.water"
+          :disabled="status === 'new'"
+        >
+          <option
+            v-for="val in [0, 6, 8, 10, 12]"
+            v-bind:key="val"
+            :value="val"
+          >
+            {{ !!val ? $t("D") + val : 0 }}
+          </option>
+        </select>
+      </div>
+
+      <div class="consumable-item">
+        <label for="arrows">{{ $t("Arrows") }}</label>
+        <select
+          v-model.number="characterData.gear.consumables.arrows"
+          :disabled="status === 'new'"
+        >
+          <option
+            v-for="val in [0, 6, 8, 10, 12]"
+            v-bind:key="val"
+            :value="val"
+          >
+            {{ !!val ? $t("D") + val : 0 }}
+          </option>
+        </select>
+      </div>
+
+      <div class="consumable-item">
+        <label for="torches">{{ $t("Torches") }}</label>
+        <select
+          v-model.number="characterData.gear.consumables.torches"
+          :disabled="status === 'new'"
+        >
+          <option
+            v-for="val in [0, 6, 8, 10, 12]"
+            v-bind:key="val"
+            :value="val"
+          >
+            {{ !!val ? $t("D") + val : 0 }}
+          </option>
+        </select>
+      </div>
+
+      <!-- spacer -->
+    </div>
+
+    <h4>{{ $t("Coins") }}</h4>
     <div class="money">
       <div class="money-item">
         <label for="copper">
@@ -140,75 +364,56 @@ export default class ExpandableSection extends Vue {
       </div>
     </div>
 
-    <!-- TODO: Complete gear selector -->
-    <div class="inventory" v-if="showWIP">
-      <div>
-        <h4>{{ $t("Backpack") }}</h4>
-        <div>Encumberance: {{ gearWeight }}/{{ gearWeightMax }}</div>
-        <div v-if="inventory.length < 1">No gear added yet...</div>
-        <div v-for="(item, index) in inventory" v-bind:key="index">
-          <span>{{ item.name }}</span>
-          <span>{{ item.weight }}</span>
-          <button @click="removeGear(index)">X</button>
-        </div>
-        <button v-if="!adding" @click="setAdding">Add Item</button>
-        <form v-if="adding">
-          <input v-model="tmpGear.name" ref="tmpGearNameInput" />
-          <select v-model.number="tmpGear.weight">
-            <option :value="0">Tiny</option>
-            <option :value="0.5">Small</option>
-            <option :value="1">Normal</option>
-            <option :value="2">Large</option>
-          </select>
-          <button @click="addGear">OK</button>
-          <button @click="cancelAddGear">Cancel</button>
-        </form>
-      </div>
-
-      <div>
-        <div>
-          <h4>Vapen</h4>
-          Bonus Skada Räckvidd Övrigt
-        </div>
-        <div>
-          <h4>Skydd</h4>
-          <div>Hjälm</div>
-          <div>Sköld</div>
-          <div>Rustning</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="consumables" v-if="characterData.profession">
-      <div>
-        {{ $t("Food") }}:
-        {{
-          $t("D") + PROFESSION[characterData.profession].starting_resources.food
-        }}
-      </div>
-      <div>
-        {{ $t("Water") }}:
-        {{
-          $t("D") +
-            PROFESSION[characterData.profession].starting_resources.water
-        }}
-      </div>
-      <div>
-        {{ $t("Arrows") }}:
-        {{ arrows ? $t("D") + arrows : "0" }}
-      </div>
-      <div>
-        {{ $t("Torches") }}:
-        {{ torches ? $t("D") + torches : "0" }}
-      </div>
-    </div>
-
     <!-- end -->
   </div>
 </template>
 
 <style lang="less" scoped>
 @import "~Style/colors.less";
+h4 {
+  margin: 1rem auto 0.5rem auto;
+  text-align: center;
+}
+table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+  // border: 3px solid purple;
+  th {
+    font-variant-caps: small-caps;
+    font-weight: normal;
+    font-size: 0.8rem;
+  }
+  th,
+  td > {
+    word-wrap: break-word;
+    border: 1px solid @pastel-green-transparent;
+    height: 1.8em;
+    text-align: center;
+  }
+}
+
+label {
+  margin-right: 0.5rem;
+}
+
+.bonus-cell {
+  width: 6ch;
+}
+.equipped-cell {
+  width: 9ch;
+}
+
+.weapons {
+  flex: 1 1 100%;
+}
+.protection,
+.other-gear {
+  flex: 1 1 100%;
+  @media (min-width: 768px) {
+    flex: 0 1 48%;
+  }
+}
 
 .coin {
   height: 40px;
@@ -226,12 +431,21 @@ export default class ExpandableSection extends Vue {
 
 .consumables {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.consumable-item {
+  @media (max-width: 500px) {
+    label {
+      display: block;
+    }
+  }
 }
 
 .inventory {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .money {
@@ -247,12 +461,7 @@ export default class ExpandableSection extends Vue {
   flex: 1 0 30%;
   display: flex;
   align-items: center;
-  label {
-    margin-right: 0.5rem;
-    // flex-basis: 50%;
-    // flex-grow: 1;
-    // text-align: right;
-  }
+  justify-content: center;
 }
 
 input::-webkit-outer-spin-button,

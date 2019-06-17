@@ -43,7 +43,7 @@ export default class Talentelect extends Vue {
   @Prop({ default: () => [] }) classTalentOptions!: CharacterTalent[]
 
   @Watch("charStatus")
-  onChildChanged(val: string, oldVal: string) {
+  onStatusChanged(val: string, oldVal: string) {
     if (oldVal === "levelup" && val === "active") {
       this.copiedRank = this.talentRank
       this.copiedTalent = this.value
@@ -107,11 +107,19 @@ export default class Talentelect extends Vue {
   get canRemoveTalent(): boolean {
     if (this.charStatus === "freeEdit") return true
     if (this.charStatus === "new") return true
-    if (this.charStatus !== "levelup") return false
     if (this.charStatus === "levelup") {
       return this.copiedTalent !== this.value || !this.copiedTalent
     }
-    return true
+    return false
+  }
+
+  get canChangeTalent(): boolean {
+    if (this.charStatus === "freeEdit") return true
+    if (this.charStatus === "new") return true
+    if (this.charStatus === "levelup") {
+      return this.copiedTalent !== this.value || !this.copiedTalent
+    }
+    return false
   }
 }
 </script>
@@ -123,9 +131,9 @@ export default class Talentelect extends Vue {
       id="talent"
       v-bind:value="value"
       v-on:input="talentChanged"
-      :disabled="disabled || !editable"
+      :disabled="disabled || !editable || !canChangeTalent"
     >
-      <option key="select" :disabled="true">
+      <option key="select" :disabled="true" :value="null">
         {{ $t("Select talent") }}
       </option>
       <optgroup :label="$t('General talents')">
@@ -192,6 +200,7 @@ select {
 
 .toggle {
   margin: 0 0.25rem;
+  display: flex;
 }
 
 button {
@@ -199,5 +208,6 @@ button {
   padding: 0 0.2rem;
   font-size: 2rem;
   font-family: monospace;
+  // height: 2rem;
 }
 </style>

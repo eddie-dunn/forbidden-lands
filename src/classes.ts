@@ -13,8 +13,9 @@ export interface Resource {
 export interface StartResource {
   food: DiceSides
   water: DiceSides
-  arrows?: DiceSides
+  arrows: DiceSides
   silver: DiceSides
+  [key: string]: DiceSides
 }
 
 export interface Class {

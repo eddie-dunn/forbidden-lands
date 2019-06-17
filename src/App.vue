@@ -106,7 +106,7 @@ select {
   appearance: none;
   background-image: url(~./assets/logo.png);
   background-size: 0.7rem;
-  background-position: 96% center;
+  background-position: calc(100% - 3px) center;
   background-repeat: no-repeat;
   padding: 0.3rem;
   padding-right: 1rem;
@@ -172,5 +172,11 @@ select {
 
 .space-around {
   justify-content: space-around;
+}
+
+.button-row {
+  .flex-row-wrap();
+  .space-around();
+  margin: 0.5rem;
 }
 </style>

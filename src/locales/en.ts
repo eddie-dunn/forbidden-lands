@@ -361,6 +361,15 @@ export default {
   "name": "name",
   "sex": "sex",
 
+  // lowercase
+  "armslength": "arm's length",
+  "long": "long",
+  "short": "short",
+  "near": "near",
+
+  // Param
+  "PHB_ref": "Page {page} in the Player's Handbook",
+
   // Longer
   "Roll dice before session starts": "Roll dice before session starts",
   "XP_DESCR": `

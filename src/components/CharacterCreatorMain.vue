@@ -110,10 +110,10 @@ const CharacterCreatorMain = Vue.extend({
     saveClicked(event: any) {
       if (!event || !this.characterData.name) return
       this.$characterStore.addCharacter(this.characterData)
-      if (this.status === "new") {
-        this.$router.push("/character-list")
-      }
       this.characterDataCopy = stringChar(this.characterData)
+    },
+    closeClicked() {
+      this.$router.push("/character-list")
     },
     updateBase(character: CharacterData) {
       this.characterData.ageType = character.ageType
@@ -244,7 +244,7 @@ export default CharacterCreatorMain
           class="willpower flex-row-wrap space-around"
         >
           <label for="willpower">
-            Willpower
+            {{ $t("Willpower") }}
           </label>
           <FLNumberInput
             id="willpower"
@@ -261,6 +261,9 @@ export default CharacterCreatorMain
       </Card>
 
       <Card v-if="showWIP" class="row-half" :title="$t('Mount')" :noSign="true">
+        <button>Add mount</button>
+        <button>Add item</button>
+        <button>Move items</button>
       </Card>
 
       <Card
@@ -306,24 +309,23 @@ export default CharacterCreatorMain
       <div class="action-bar-left">
         <button
           class="item-action-bar button button-white"
-          v-on:click="() => {}"
+          v-on:click="closeClicked"
         >
-          Cancel
+          {{ $t("Close") }}
         </button>
       </div>
       <div class="action-bar-middle"></div>
 
       <div class="action-bar-right">
         <button
-          v-if="status !== 'levelup'"
           :class="[
             'button',
-            charDataUpdated ? '' : 'button-white',
+            !charDataUpdated ? 'button-white' : '',
             'item-action-bar',
           ]"
           v-on:click="saveClicked"
         >
-          {{ status === "new" ? $t("Save & Close") : $t("Save") }}
+          {{ $t("Save") }}
         </button>
       </div>
     </div>

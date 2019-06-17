@@ -47,16 +47,16 @@ export default class XPModal extends Vue {
 <template>
   <Modal class="xp-modal" @close="close" :maximized="true">
     <div slot="header" class="header">
-      <h2>Available XP: {{ charDataCopy.experience }}</h2>
+      <h2>{{ $t("XP") }}: {{ charDataCopy.experience }}</h2>
       <div class="tab-bar"></div>
     </div>
     <div slot="body" class="modal-body">
-      <h3>{{ $t("Talents") }}</h3>
+      <h3 class="capitalize">{{ $t("talents") }}</h3>
       <TalentSelector
         :charData="charDataCopy"
         @talents-updated="updateTalents"
       />
-      <h3>{{ $t("Skills") }}</h3>
+      <h3 class="capitalize">{{ $t("skills") }}</h3>
       <SkillSelector
         :profession="charDataCopy.profession"
         :skills="charDataCopy.skills"

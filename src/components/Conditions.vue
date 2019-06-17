@@ -29,23 +29,14 @@ export default class ConditionInput extends Vue {
     <div>
       <input
         type="checkbox"
-        name="condition-cold"
-        id="condition-cold"
-        v-model="conditionsCopy.cold"
+        name="condition-tired"
+        id="condition-tired"
+        v-model="conditionsCopy.tired"
         @input="emit"
       />
-      <label for="condition-cold">Cold</label>
+      <label for="condition-tired">{{ $t("Tired") }}</label>
     </div>
-    <div>
-      <input
-        type="checkbox"
-        name="condition-starving"
-        id="condition-starving"
-        v-model="conditionsCopy.starving"
-        @input="emit"
-      />
-      <label for="condition-starving">{{ $t("Starving") }}</label>
-    </div>
+
     <div>
       <input
         type="checkbox"
@@ -56,15 +47,27 @@ export default class ConditionInput extends Vue {
       />
       <label for="condition-dehydrated">{{ $t("Dehydrated") }}</label>
     </div>
+
     <div>
       <input
         type="checkbox"
-        name="condition-tired"
-        id="condition-tired"
-        v-model="conditionsCopy.tired"
+        name="condition-starving"
+        id="condition-starving"
+        v-model="conditionsCopy.starving"
         @input="emit"
       />
-      <label for="condition-tired">{{ $t("Tired") }}</label>
+      <label for="condition-starving">{{ $t("Starving") }}</label>
+    </div>
+
+    <div>
+      <input
+        type="checkbox"
+        name="condition-cold"
+        id="condition-cold"
+        v-model="conditionsCopy.cold"
+        @input="emit"
+      />
+      <label for="condition-cold">{{ $t("Cold") }}</label>
     </div>
   </div>
 

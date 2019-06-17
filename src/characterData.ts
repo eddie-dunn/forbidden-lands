@@ -56,7 +56,29 @@ export interface CharacterMetaData {
   dataVersion: number
 }
 
-type Item = { name: string; weight: number }
+type BaseItem = {
+  bonus: number
+  bonusType: string // Attribute[type], Skill[type], white/red/black dice
+  equipped: boolean
+  name: string
+  type: "" | "weapon" | "armor" | "shield" | "helmet"
+  weight: number
+  damage?: number
+}
+export type ItemWeapon = BaseItem & {
+  bonusType: "black"
+  comment: string
+  damage: number
+  range: string
+  type: "weapon"
+}
+export type ItemArmor = BaseItem & {
+  armorType: "torso" | "head" | "shield"
+  bonusType: "black"
+  type: "armor"
+}
+export type Item = BaseItem | ItemWeapon | ItemArmor
+
 export interface Gear {
   equipped: Item[]
   inventory: Item[]
