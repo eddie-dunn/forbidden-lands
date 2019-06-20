@@ -29,11 +29,8 @@ export default Vue.extend({
 <style lang="less">
 @import "~Style/colors.less";
 body {
-  // background: #2c3e50;
-  // background: #282c34;
   margin: 4px;
-  color: #2c3e50;
-  // color: #fafafa;
+  color: @color-text;
 }
 
 #app {
@@ -139,7 +136,8 @@ select {
     transform: scale(0.95);
   }
 
-  &-red {
+  &-red,
+  &-danger {
     color: #fff;
     background-color: @pastel-red;
     border: 1px solid @pastel-red;
@@ -177,6 +175,11 @@ select {
 .button-row {
   .flex-row-wrap();
   .space-around();
+  align-items: center;
   margin: 0.5rem;
+}
+
+.block {
+  display: block;
 }
 </style>

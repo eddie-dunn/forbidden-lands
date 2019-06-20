@@ -18,9 +18,9 @@ declare module "vue/types/vue" {
 }
 Vue.prototype.$characterStore = new CharacterStore()
 
-// showWIP is used to toggle stuff that is not ready for production yet
-Vue.prototype.showWIP = false
-// Vue.prototype.showWIP = true // DISABLE THIS LINE BEFORE PROD BUILD!
+// $debugMode is used to toggle stuff that is not ready for production yet
+Vue.prototype.$debugMode = false
+// Vue.prototype.$debugMode = true // DISABLE THIS LINE BEFORE PROD BUILD!
 
 new Vue({
   router,

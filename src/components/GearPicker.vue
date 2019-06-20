@@ -32,9 +32,14 @@ export default class ExpandableSection extends Vue {
   showAddItem = false
 
   PROFESSION = PROFESSION
+  selected: boolean[] = []
 
   get inventory() {
     return this.characterData.gear.inventory
+  }
+
+  get itemsSelected() {
+    return this.inventory.filter((item) => !!item.selected).length > 0
   }
 
   removeGear(index: number) {
@@ -128,6 +133,25 @@ export default class ExpandableSection extends Vue {
       "torches"
     )
   }
+
+  moveItems() {
+    const newInventory = this.inventory
+      .map((item) => {
+        if (item.selected) {
+          this.characterData.mount.inventory.push(item)
+          return null
+        } else {
+          return item
+        }
+      })
+      .filter((item) => !!item)
+    this.characterData.gear.inventory = newInventory as Item[]
+  }
+
+  dropItems() {
+    const newInventory = this.inventory.filter((item) => !item.selected)
+    this.characterData.gear.inventory = newInventory as Item[]
+  }
 }
 </script>
 
@@ -152,14 +176,6 @@ export default class ExpandableSection extends Vue {
       </p>
     </div>
 
-    <div class="button-row">
-      <button @click="showAddItem = true" class="button">
-        {{ $t("Add") }}
-      </button>
-      <!-- TODO: Implement move items modal -->
-      <button class="button">{{ $t("Move") }}</button>
-    </div>
-
     <ModalAddItem
       v-if="showAddItem"
       @close="showAddItem = false"
@@ -168,15 +184,15 @@ export default class ExpandableSection extends Vue {
     />
 
     <!-- TODO: Look into using flex or grid instead of tables -->
-    <div class="inventory" v-if="showWIP">
+    <div class="inventory">
       <!-- spacer -->
 
       <div class="other-gear">
         <h4>{{ $t("Ägodelar") }}</h4>
-        <div v-if="inventory.length < 1">No gear...</div>
-        <table v-else>
+        <table>
           <thead>
             <tr>
+              <th class="bonus-cell"></th>
               <th class="equipped-cell">{{ $t("Aktiv") }}</th>
               <th>{{ $t("Name") }}</th>
               <th class="bonus-cell">Bonus</th>
@@ -184,6 +200,9 @@ export default class ExpandableSection extends Vue {
           </thead>
           <tbody>
             <tr v-for="item in inventory" v-bind:key="item.name">
+              <td>
+                <input type="checkbox" v-model="item.selected" />
+              </td>
               <td>
                 <input
                   type="checkbox"
@@ -197,6 +216,22 @@ export default class ExpandableSection extends Vue {
           </tbody>
         </table>
         <div>{{ $t("Encumbrance") }}: {{ gearWeight }}/{{ gearWeightMax }}</div>
+
+        <div class="button-row">
+          <button
+            :disabled="!itemsSelected"
+            class="button button-danger"
+            @click="dropItems"
+          >
+            {{ $t("Drop") }}
+          </button>
+          <button :disabled="!itemsSelected" class="button" @click="moveItems">
+            {{ $t("Move") }}
+          </button>
+          <button @click="showAddItem = true" class="button">
+            {{ $t("Add") }}
+          </button>
+        </div>
       </div>
 
       <div class="protection">
@@ -204,7 +239,7 @@ export default class ExpandableSection extends Vue {
         <table>
           <thead>
             <tr>
-              <th>Namn</th>
+              <th>{{ $t("Namn") }}</th>
               <th class="bonus-cell">Bonus</th>
             </tr>
           </thead>

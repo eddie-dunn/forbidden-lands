@@ -64,6 +64,7 @@ type BaseItem = {
   type: "" | "weapon" | "armor" | "shield" | "helmet"
   weight: number
   damage?: number
+  selected?: boolean
 }
 export type ItemWeapon = BaseItem & {
   bonusType: "black"
@@ -107,6 +108,12 @@ export interface CharacterData {
   gear: Gear
   kin: KinName | null
   metadata: CharacterMetaData
+  mount: {
+    name: string
+    strength: number
+    agility: number
+    inventory: Item[]
+  }
   name: string
   notes: string
   portrait: string | null
@@ -182,6 +189,7 @@ export function getNewCharacterData(): CharacterData {
     relationships: "",
 
     gear: getNewGear(),
+    mount: {},
 
     notes: "",
 

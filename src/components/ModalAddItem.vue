@@ -13,18 +13,6 @@ import {
 
 import FLNumberInput from "@/components/FLNumberInput.vue"
 
-/*
-Arm’s Length Right next to you –
-Near A few steps away, in the same zone as
-you Small room, cave tunnel
-Short Up to 25 meters away, in a bordering
-zone Dense forest, swamp,
-large hall
-Long Up to one hundred meters (four seg-
-ments) away Forest, hills, city ruins,
-gigantic hall
-
-*/
 function defaultItem(): Item | ItemWeapon {
   return {
     bonus: 0,

@@ -89,20 +89,25 @@ export default Vue.extend({
         <h3>{{ $t("Create new character") }}</h3>
       </div>
     </div>
-    <div v-else class="stat-card row-full">
+    <div
+      v-else
+      :class="['stat-card', 'row-full', !actionsActive ? 'transform' : '']"
+    >
       <div class="img-section">
         <div
           :class="['card-buttons', actionsActive ? '' : 'hidden']"
-          @click="cardClicked"
+          @click.self="cardClicked"
         >
-          <button class="button button-red" @click="confirmRemove">
+          <button class="button button-red" @click.stop.prevent="confirmRemove">
             {{ $t("Remove") }}
           </button>
           <button class="button" @click="edit">
-            {{ $t("Edit") }}
+            {{
+              charData.metadata.status === "active" ? $t("View") : $t("Edit")
+            }}
           </button>
           <button
-            v-if="newChar && newCharValid && showWIP"
+            v-if="newChar && newCharValid"
             class="button"
             :disabled="!newCharValid"
             @click="activate"
@@ -253,9 +258,15 @@ h3 {
   flex-wrap: wrap;
 }
 
-.stat-card {
+.transform {
   &:active {
     transform: scale(0.99);
+  }
+}
+
+.stat-card {
+  &:active {
+    // transform: scale(0.99);
   }
   // cursor: pointer;
   // width: 50vw;

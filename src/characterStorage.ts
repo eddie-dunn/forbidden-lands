@@ -11,6 +11,7 @@ export const CHAR_STORE_KEY: string = "savedCharacters"
 export let STORE = [] // global in memory store object
 
 const PATCHES = [
+  // Array index maps to dataVersion
   (data: CharacterData[]) =>
     data.map((character: CharacterData) => {
       const name = character.name
@@ -31,17 +32,48 @@ const PATCHES = [
       character.willpower = 0
       character.metadata.dataVersion = 1
     }),
+  (data: CharacterData[]) =>
+    data.map((character) => {
+      const name = character.name
+      const id = character.metadata.id
+      if (!character.mount) {
+        console.log("Adding empty mount to", name, id)
+        character.mount = {
+          name: "",
+          strength: 0,
+          agility: 0,
+          inventory: [],
+        }
+      }
+      character.metadata.dataVersion = 2
+    }),
 ]
 
+// TODO: Probably more intuitive to go through each character, then go through
+// patch list and apply appropriate patches
 function applyPatches(data: SaveData | {}) {
   const dataList: CharacterData[] = Object.values(data)
   PATCHES.map((patchFunc: CallableFunction, index: number) => {
-    if (Number(dataList[index].metadata.dataVersion || -1) < index) {
+    const charDataVersion = dataList[index].metadata.dataVersion || -1
+    console.log("charDataVersion", charDataVersion)
+    const patchVersion = index
+    if (charDataVersion < patchVersion) {
       patchFunc(dataList)
-      console.log("applied patch for version", index, dataList)
+      console.log("applied patch for version", patchVersion, dataList)
       // TODO Save
     }
   })
+  // dataList.map((character) => {
+  //   // console.log("char", character)
+  //   PATCHES.map((patchFunc, index) => {
+  //     const charDataVersion = character.metadata.dataVersion || -1
+  //     console.log("a charDataVersion", charDataVersion)
+  //     const patchVersion = index
+  //     if (charDataVersion < patchVersion) {
+  //       patchFunc(character)
+  //     }
+  //   })
+  // })
 }
 
 export function saveCharacterToLocalStorage(characterData: CharacterData) {

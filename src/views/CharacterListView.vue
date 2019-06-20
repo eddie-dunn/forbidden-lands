@@ -119,7 +119,7 @@ export default class CharacterListView extends Vue {
       class="character-list-expander"
       :label="$t('Active')"
       :expanded="true"
-      v-if="$characterStore.activeCharacters.length > 0 && showWIP"
+      v-if="$characterStore.activeCharacters.length > 0"
     >
       <div class="character-list">
         <div

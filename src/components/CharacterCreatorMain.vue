@@ -25,11 +25,13 @@ import {
   CharacterMetaData,
 } from "@/characterData"
 import Vue from "vue"
-import ExpandableSection from "@/components/ExpandableSection.vue"
-import XPModal from "@/components/XPModal.vue"
-import ModalSpendXP from "@/components/ModalSpendXP.vue"
+
 import Conditions from "@/components/Conditions.vue"
+import ExpandableSection from "@/components/ExpandableSection.vue"
 import FLNumberInput from "@/components/FLNumberInput.vue"
+import ModalSpendXP from "@/components/ModalSpendXP.vue"
+import Mount from "@/components/Mount.vue"
+import XPModal from "@/components/XPModal.vue"
 
 function stringChar(characterData: CharacterData) {
   return JSON.stringify(characterData)
@@ -47,6 +49,7 @@ const CharacterCreatorMain = Vue.extend({
     FLNumberInput,
     GearPicker,
     ModalSpendXP,
+    Mount,
     PicturePicker,
     SkillSelector,
     TalentSelector,
@@ -157,7 +160,7 @@ export default CharacterCreatorMain
 
 <template>
   <div class="character_creator">
-    <div v-if="showWIP" class="wip-bar">
+    <div v-if="$debugMode" class="wip-bar">
       <div>updated: {{ charDataUpdated }}</div>
       <span>Status: {{ this.status }}</span>
       <button @click="updateStatus('new')">New</button>
@@ -189,7 +192,7 @@ export default CharacterCreatorMain
               @attributes-updated="updateAttributes"
             />
           </div>
-          <div v-if="showWIP && status !== 'new'">
+          <div v-if="status !== 'new'">
             <h4>{{ $t("Conditions") }}</h4>
             <Conditions
               :conditions="this.characterData.conditions || {}"
@@ -240,7 +243,7 @@ export default CharacterCreatorMain
         />
 
         <div
-          v-if="showWIP && status != 'new'"
+          v-if="status != 'new'"
           class="willpower flex-row-wrap space-around"
         >
           <label for="willpower">
@@ -260,19 +263,17 @@ export default CharacterCreatorMain
         <GearPicker :characterData="characterData" />
       </Card>
 
-      <Card v-if="showWIP" class="row-half" :title="$t('Mount')" :noSign="true">
-        <button>Add mount</button>
-        <button>Add item</button>
-        <button>Move items</button>
+      <Card class="row-half" :title="$t('Mount')" :noSign="true">
+        <Mount :charData="characterData" />
       </Card>
 
       <Card
-        v-if="showWIP && status === 'active'"
+        v-if="status === 'active'"
         class="row-half"
         :title="$t('Pre/post session')"
         :noSign="true"
       >
-        <div v-if="showWIP" class="flex-row-wrap space-around">
+        <div class="flex-row-wrap space-around">
           <button class="button spacing" @click="showXPModal = true">
             {{ $t("Add XP/Reputation") }}
           </button>
@@ -329,7 +330,7 @@ export default CharacterCreatorMain
         </button>
       </div>
     </div>
-    <ExpandableSection v-if="showWIP" label="JSON Export">
+    <ExpandableSection v-if="$debugMode" label="JSON Export">
       <!-- TODO Use same import/export functionality as for char list -->
       <pre>{{ JSON.stringify(characterData, null, 2) }}</pre>
     </ExpandableSection>
