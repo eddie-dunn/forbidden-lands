@@ -32,7 +32,7 @@ interface Professions {
   [key: string]: Class
 }
 
-export const PROFESSION: Professions = {
+export const PROFESSION: ClassList & Professions = {
   druid: {
     id: C.DRUID,
     key_attribute: ATTRIBUTE.WITS,
@@ -44,6 +44,7 @@ export const PROFESSION: Professions = {
       SKILL.ANIMAL_HANDLING,
     ],
     starting_resources: {
+      arrows: 0,
       food: 8,
       water: 8,
       silver: 6,
@@ -62,6 +63,7 @@ export const PROFESSION: Professions = {
       SKILL.MOVE,
     ],
     starting_resources: {
+      arrows: 0,
       food: 8,
       water: 6,
       silver: 6,
@@ -99,6 +101,7 @@ export const PROFESSION: Professions = {
       SKILL.HEALING,
     ],
     starting_resources: {
+      arrows: 0,
       food: 8,
       water: 6,
       silver: 8,
@@ -117,6 +120,7 @@ export const PROFESSION: Professions = {
       SKILL.MANIPULATION,
     ],
     starting_resources: {
+      arrows: 0,
       food: 8,
       water: 8,
       silver: 12,
@@ -154,6 +158,7 @@ export const PROFESSION: Professions = {
       SKILL.MANIPULATION,
     ],
     starting_resources: {
+      arrows: 0,
       food: 6,
       water: 6,
       silver: 10,
@@ -172,6 +177,7 @@ export const PROFESSION: Professions = {
       SKILL.MANIPULATION,
     ],
     starting_resources: {
+      arrows: 0,
       food: 6,
       water: 8,
       silver: 8,

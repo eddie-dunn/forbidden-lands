@@ -189,7 +189,12 @@ export function getNewCharacterData(): CharacterData {
     relationships: "",
 
     gear: getNewGear(),
-    mount: {},
+    mount: {
+      name: "",
+      strength: 0,
+      agility: 0,
+      inventory: [],
+    },
 
     notes: "",
 
