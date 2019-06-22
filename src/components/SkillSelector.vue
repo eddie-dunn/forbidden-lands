@@ -28,6 +28,17 @@ function calcSkillPoints(age) {
   )
 }
 
+function skillsSortedByTranslation(vm, skills) {
+  return Object.values(skills)
+    .map((skill) => {
+      skill.translation = vm.$t(skill.id)
+      return skill
+    })
+    .sort((skillA, skillB) => {
+      return skillA.translation > skillB.translation
+    })
+}
+
 export default Vue.extend({
   components: {
     SkillInput,
@@ -36,10 +47,6 @@ export default Vue.extend({
   props: {
     // TODO: Send in characterData object instead
     profession: {
-      required: true,
-    },
-    skills: {
-      type: Object,
       required: true,
     },
     skillMaximum: {
@@ -66,6 +73,9 @@ export default Vue.extend({
     },
     ageType() {
       return getAgeType(this.charData.age, this.charData.kin)
+    },
+    skills() {
+      return skillsSortedByTranslation(this, this.charData.skills)
     },
   },
   data() {
@@ -128,7 +138,7 @@ export default Vue.extend({
           :status="characterStatus"
           :experience="charData.experience"
           :max="getSkillMaxRank(skill.id)"
-          v-model.number="skills[skill.id].rank"
+          v-model.number="charData.skills[skill.id].rank"
           @xp-change="skillChanged(skill.id, $event)"
         />
       </div>
