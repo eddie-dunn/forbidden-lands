@@ -64,8 +64,9 @@ const PATCHES = [
 function applyPatches(data: SaveData | {}) {
   const dataList: CharacterData[] = Object.values(data)
   dataList.map((character) => {
+    character.metadata.dataVersion = -1
+    const charDataVersion = character.metadata.dataVersion
     PATCHES.map((patch, patchVersion) => {
-      const charDataVersion = character.metadata.dataVersion
       if (charDataVersion < patchVersion) {
         const patchedCharacter = patch(character)
         // saveCharacterToLocalStorage(patchedCharacter)
