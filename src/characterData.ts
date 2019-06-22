@@ -130,6 +130,7 @@ export interface CharacterData {
     name: string
     strength: number
     agility: number
+    mounted: boolean
     inventory: Item[]
   }
   name: string
@@ -209,6 +210,7 @@ export function getNewCharacterData(): CharacterData {
     gear: getNewGear(),
     mount: {
       name: "",
+      mounted: false,
       strength: 0,
       agility: 0,
       inventory: [],
@@ -222,7 +224,7 @@ export function getNewCharacterData(): CharacterData {
       active: false,
       status: "new",
       hasBeenActivated: false,
-      dataVersion: 1,
+      dataVersion: -1,
     },
   }
   return newCharData

@@ -19,7 +19,6 @@ import FLNumberInput from "@/components/FLNumberInput.vue"
 export default class XPModal extends Vue {
   @Prop({ required: true }) charData!: CharacterData
 
-  mounted = false
   addingMount = false
   showAddItem = false
 
@@ -150,7 +149,7 @@ export default class XPModal extends Vue {
         <div>{{ $t("Encumbrance") }}: {{ gearWeight }}/{{ gearWeightMax }}</div>
         <div class="">
           <label for="is-mounted">{{ $t("Mounted") }}</label>
-          <input type="checkbox" v-model="mounted" />
+          <input type="checkbox" v-model="charData.mount.mounted" />
         </div>
       </div>
       <div class="button-row">

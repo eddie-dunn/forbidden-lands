@@ -31,6 +31,7 @@ const PATCHES = [
       console.log("Adding empty mount to", name, id)
       character.mount = {
         name: "",
+        mounted: false,
         strength: 0,
         agility: 0,
         inventory: [],
