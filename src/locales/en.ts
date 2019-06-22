@@ -319,6 +319,7 @@ export default {
   ...GearDescriptions,
 
   "Appearance": "Appearance",
+  "Armslength": "Arm's length",
   "Arrows": "Arrows",
   "Base data": "Base data",
   "Body": "Body",
@@ -366,6 +367,7 @@ export default {
   "long": "long",
   "short": "short",
   "near": "near",
+  "slow_loading": "foo",
 
   // Param
   "PHB_ref": "Page {page} in the Player's Handbook",

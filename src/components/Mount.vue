@@ -41,7 +41,7 @@ export default class XPModal extends Vue {
   }
 
   get hasMount() {
-    return this.charData.mount.strength && this.charData.mount.name
+    return this.charData.mount.strength
   }
 
   get gearWeight() {
@@ -100,26 +100,27 @@ export default class XPModal extends Vue {
             <input id="mount-name" type="text" v-model="charData.mount.name" />
           </div>
 
-          <div>
-            <label for="mount-strength" class="capitalize">
-              {{ $t("strength") }}
-            </label>
-            <FLNumberInput
-              id="mount-strength"
-              fontSize="1.3rem"
-              v-model.number="charData.mount.strength"
-            />
-          </div>
-
-          <div>
-            <label for="mount-agility" class="capitalize">
-              {{ $t("agility") }}
-            </label>
-            <FLNumberInput
-              id="mount-agility"
-              fontSize="1.3rem"
-              v-model.number="charData.mount.agility"
-            />
+          <div class="mount-attrib-row">
+            <span>
+              <label for="mount-strength" class="capitalize block">
+                {{ $t("strength") }}
+              </label>
+              <FLNumberInput
+                id="mount-strength"
+                fontSize="1.3rem"
+                v-model.number="charData.mount.strength"
+              />
+            </span>
+            <span>
+              <label for="mount-agility" class="capitalize block">
+                {{ $t("agility") }}
+              </label>
+              <FLNumberInput
+                id="mount-agility"
+                fontSize="1.3rem"
+                v-model.number="charData.mount.agility"
+              />
+            </span>
           </div>
         </div>
       </div>
@@ -161,7 +162,7 @@ export default class XPModal extends Vue {
           {{ $t("Drop") }}
         </button>
         <button class="button" :disabled="!selected" @click="moveItems">
-          {{ $t("Move") }}
+          {{ $t("Move to backpack") }}
         </button>
         <button
           class="button"
@@ -211,6 +212,7 @@ table {
 
 .right-adjusted {
   justify-content: flex-start;
+  align-items: stretch;
   div > {
     margin-right: 1rem;
   }
@@ -218,5 +220,9 @@ table {
 
 .bonus-cell {
   width: 6ch;
+}
+
+.mount-attrib-row {
+  display: flex;
 }
 </style>

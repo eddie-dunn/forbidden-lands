@@ -61,24 +61,42 @@ type BaseItem = {
   bonusType: string // Attribute[type], Skill[type], white/red/black dice
   equipped: boolean
   name: string
-  type: "" | "weapon" | "armor" | "shield" | "helmet"
+  type: "" | "armor" | "helmet" | "shield" | "weapon"
   weight: number
-  damage?: number
   selected?: boolean
+  id: string
+  features?: {}
+}
+
+export enum Range {
+  "armslength",
+  "near",
+  "short",
+  "long",
 }
 export type ItemWeapon = BaseItem & {
   bonusType: "black"
-  comment: string
+  comment?: string
   damage: number
-  range: string
+  range: Range
   type: "weapon"
+  features: {
+    blunt?: boolean
+    pointed?: boolean
+    edged?: boolean
+    parrying?: boolean
+    hook?: boolean
+    slow_loading?: boolean // crossbows
+  }
 }
+
 export type ItemArmor = BaseItem & {
   armorType: "torso" | "head" | "shield"
   bonusType: "black"
   type: "armor"
 }
-export type Item = BaseItem | ItemWeapon | ItemArmor
+
+export type Item = BaseItem | ItemArmor | ItemWeapon
 
 export interface Gear {
   equipped: Item[]

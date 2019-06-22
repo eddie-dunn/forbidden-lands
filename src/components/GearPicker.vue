@@ -2,21 +2,17 @@
 import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 import { PROFESSION } from "@/classes"
-import { CharacterData, Gear, Item, ItemArmor } from "@/characterData"
+import {
+  CharacterData,
+  Gear,
+  Item,
+  ItemArmor,
+  ItemWeapon,
+  Range,
+} from "@/characterData"
 import FLNumberInput from "@/components/FLNumberInput.vue"
 import SvgIcon from "@/components/SvgIcon.vue"
 import ModalAddItem from "@/components/ModalAddItem.vue"
-
-const DEFAULT_GEAR = {
-  name: "",
-  weight: 1,
-}
-function defaultItem() {
-  return {
-    name: "",
-    weight: 1,
-  }
-}
 
 type VType = Vue & { focus: () => {} }
 
@@ -30,6 +26,8 @@ type VType = Vue & { focus: () => {} }
 export default class ExpandableSection extends Vue {
   @Prop({ required: true }) characterData!: CharacterData
   showAddItem = false
+  showEditItem = false
+  addItemEdit: Item | null = null
 
   PROFESSION = PROFESSION
   selected: boolean[] = []
@@ -44,10 +42,6 @@ export default class ExpandableSection extends Vue {
 
   removeGear(index: number) {
     this.characterData.gear.inventory.splice(index, 1)
-  }
-
-  addItem(item: Item) {
-    this.characterData.gear.inventory.push(item)
   }
 
   equippable(item: Item) {
@@ -115,6 +109,10 @@ export default class ExpandableSection extends Vue {
     )
   }
 
+  get hasMount(): boolean {
+    return !!this.characterData.mount.strength
+  }
+
   get gearWeightMax() {
     const multiplier = 1 // TODO get pack mule talent level
     const charStrength = this.characterData.attributes.strength || 0
@@ -152,6 +150,55 @@ export default class ExpandableSection extends Vue {
     const newInventory = this.inventory.filter((item) => !item.selected)
     this.characterData.gear.inventory = newInventory as Item[]
   }
+
+  iconFor(item: Item) {
+    switch (item.type) {
+      case "armor":
+        return "leather-armor"
+      case "helmet":
+        return "brutal-helm"
+      case "shield":
+        return "shield"
+      case "weapon":
+        if ((item as ItemWeapon).range >= 2) {
+          return "thrown-spear"
+        }
+        return "sword-brandish"
+      default:
+        return "swap-bag"
+    }
+  }
+
+  addItem(item: Item) {
+    this.characterData.gear.inventory.push(item)
+  }
+
+  updateItem(item: Item) {
+    this.characterData.gear.inventory = this.inventory.map((mitem) => {
+      if (mitem.id !== item.id) return mitem
+      return item
+    })
+    this.addItemEdit = null
+  }
+
+  editItem(item: Item) {
+    if (!item) return
+    this.addItemEdit = item
+    this.showEditItem = true
+  }
+
+  getFeatures(weapon: ItemWeapon) {
+    return Object.entries(weapon.features)
+      .filter((feature) => {
+        return feature[1]
+      })
+      .map((feature) => this.$t(feature[0]))
+      .join(", ")
+  }
+
+  getRange(weapon: ItemWeapon) {
+    return this.$t(Range[weapon.range])
+  }
 }
 </script>
 
@@ -177,10 +224,18 @@ export default class ExpandableSection extends Vue {
     </div>
 
     <ModalAddItem
+      v-if="showEditItem"
+      @close="showEditItem = false"
+      @add-item="updateItem"
+      :editItem="addItemEdit"
+      :title="$t('Edit item')"
+    />
+
+    <ModalAddItem
       v-if="showAddItem"
       @close="showAddItem = false"
       @add-item="addItem"
-      :charData="characterData"
+      :title="$t('Add item')"
     />
 
     <!-- TODO: Look into using flex or grid instead of tables -->
@@ -192,14 +247,18 @@ export default class ExpandableSection extends Vue {
         <table>
           <thead>
             <tr>
-              <th class="bonus-cell"></th>
-              <th class="equipped-cell">{{ $t("Aktiv") }}</th>
+              <th class="empty-cell"></th>
+              <th class="bonus-cell">{{ $t("Aktiv") }}</th>
+              <th class="icon-cell">{{ $t("Type") }}</th>
               <th>{{ $t("Name") }}</th>
               <th class="bonus-cell">Bonus</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in inventory" v-bind:key="item.name">
+            <tr
+              v-for="(item, index) in inventory"
+              v-bind:key="item.name + index"
+            >
               <td>
                 <input type="checkbox" v-model="item.selected" />
               </td>
@@ -210,7 +269,12 @@ export default class ExpandableSection extends Vue {
                   v-model="item.equipped"
                 />
               </td>
-              <td>{{ item.name }}</td>
+              <td>
+                <SvgIcon :name="iconFor(item)" :title="item.type" />
+              </td>
+              <td @click="editItem(item)" class="clickable-cell">
+                {{ item.name }}
+              </td>
               <td>{{ item.bonus || "" }}</td>
             </tr>
           </tbody>
@@ -225,8 +289,12 @@ export default class ExpandableSection extends Vue {
           >
             {{ $t("Drop") }}
           </button>
-          <button :disabled="!itemsSelected" class="button" @click="moveItems">
-            {{ $t("Move") }}
+          <button
+            :disabled="!itemsSelected || !hasMount"
+            class="button"
+            @click="moveItems"
+          >
+            {{ $t("Move to mount") }}
           </button>
           <button @click="showAddItem = true" class="button">
             {{ $t("Add") }}
@@ -239,25 +307,49 @@ export default class ExpandableSection extends Vue {
         <table>
           <thead>
             <tr>
+              <th class="empty-cell"></th>
               <th>{{ $t("Namn") }}</th>
               <th class="bonus-cell">Bonus</th>
             </tr>
           </thead>
-          <tbody v-if="equippedArmor || equippedHelmet || equippedShield">
-            <tr v-if="equippedHelmet">
-              <td>{{ equippedHelmet.name }}</td>
-              <td>{{ equippedHelmet.bonus }}</td>
+          <tbody>
+            <tr>
+              <td>
+                <SvgIcon name="brutal-helm" />
+              </td>
+              <td
+                @click="editItem(equippedHelmet)"
+                :class="equippedHelmet ? 'clickable-cell' : ''"
+              >
+                {{ equippedHelmet ? equippedHelmet.name : "" }}
+              </td>
+              <td>{{ equippedHelmet ? equippedHelmet.bonus : "" }}</td>
             </tr>
-            <tr v-if="equippedShield">
-              <td>{{ equippedShield.name }}</td>
-              <td>{{ equippedShield.bonus }}</td>
+            <tr>
+              <td>
+                <SvgIcon name="shield" />
+              </td>
+              <td
+                @click="editItem(equippedShield)"
+                :class="equippedShield ? 'clickable-cell' : ''"
+              >
+                {{ equippedShield ? equippedShield.name : "" }}
+              </td>
+              <td>{{ equippedShield ? equippedShield.bonus : "" }}</td>
             </tr>
-            <tr v-if="equippedArmor">
-              <td>{{ equippedArmor.name }}</td>
-              <td>{{ equippedArmor.bonus }}</td>
+            <tr>
+              <td>
+                <SvgIcon name="leather-armor" />
+              </td>
+              <td
+                @click="editItem(equippedArmor)"
+                :class="equippedArmor ? 'clickable-cell' : ''"
+              >
+                {{ equippedArmor ? equippedArmor.name : "" }}
+              </td>
+              <td>{{ equippedArmor ? equippedArmor.bonus : "" }}</td>
             </tr>
           </tbody>
-          <div v-else>No protection equipped</div>
         </table>
       </div>
 
@@ -270,16 +362,20 @@ export default class ExpandableSection extends Vue {
               <th class="bonus-cell">Bonus</th>
               <th class="bonus-cell">{{ $t("Damage") }}</th>
               <th>{{ $t("Range") }}</th>
-              <th>{{ $t("Comment") }}</th>
+              <th>{{ $t("Features") }}</th>
             </tr>
           </thead>
           <tbody v-if="equippedWeapons.length > 0">
             <tr v-for="weapon in equippedWeapons" v-bind:key="weapon.name">
-              <td>{{ weapon.name }}</td>
+              <td @click="editItem(weapon)" class="clickable-cell">
+                {{ weapon.name }}
+              </td>
               <td>{{ weapon.bonus }}</td>
               <td>{{ weapon.damage }}</td>
-              <td class="capitalize">{{ $t(weapon.range) }}</td>
-              <td>{{ weapon.comment }}</td>
+              <td class="capitalize">
+                {{ getRange(weapon) }}
+              </td>
+              <td>{{ getFeatures(weapon) }}</td>
             </tr>
           </tbody>
         </table>
@@ -433,10 +529,21 @@ label {
 }
 
 .bonus-cell {
-  width: 6ch;
+  width: max-content;
 }
-.equipped-cell {
-  width: 9ch;
+.empty-cell {
+  width: 5ch;
+}
+.icon-cell {
+  width: 5ch;
+}
+
+.clickable-cell {
+  cursor: pointer;
+  text-decoration: underline dotted @color-main;
+  &:hover {
+    background: @color-main;
+  }
 }
 
 .weapons {

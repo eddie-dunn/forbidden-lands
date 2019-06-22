@@ -1,10 +1,14 @@
 /* eslint-disable no-console */
+import uuid1 from "uuid/v1"
+
 import {
   CharacterData,
   getNewCharacterData,
   getNewGear,
   parseCharacterData,
   CharacterMetaDataStatus,
+  ItemWeapon,
+  Item,
 } from "@/characterData"
 
 export const CHAR_STORE_KEY: string = "savedCharacters"
@@ -12,7 +16,7 @@ export let STORE = [] // global in memory store object
 
 const PATCHES = [
   function patch0(character: CharacterData) {
-    console.log("patch0: adding necessary data structures")
+    console.log("patch0: performing migrations to Data Version 0")
     const name = character.name
     const id = character.metadata.id
     if (!character.metadata.status) {
@@ -39,8 +43,19 @@ const PATCHES = [
     return character
   },
   function patch1(character: CharacterData) {
-    // Just a sanity check that the patcher is being run
-    console.log("patch1: sanity check that patches are run")
+    console.log("patch1: performing migrations to Data Version 1")
+    const updateItem = (item: Item) => {
+      if (item.type === "weapon" && !item.features) {
+        console.log("Adding features to item", item.name, "for", character.name)
+        item.features = {}
+      }
+      if (!item.id) {
+        console.log("Adding id to item", item.name, "for", character.name)
+        item.id = uuid1()
+      }
+    }
+    character.gear.inventory.map(updateItem)
+    character.mount.inventory.map(updateItem)
     return character
   },
 ]

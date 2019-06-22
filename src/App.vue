@@ -177,6 +177,11 @@ select {
   .space-around();
   align-items: center;
   margin: 0.5rem;
+  & > button {
+    margin: 0.2rem;
+    flex: 1 0 auto;
+    white-space: nowrap;
+  }
 }
 
 .block {
