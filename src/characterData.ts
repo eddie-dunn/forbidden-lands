@@ -22,7 +22,7 @@ import uuid1 from "uuid/v1"
 export interface CharacterTalent {
   // name is gotten from translations via id
   id: TalentAll
-  rank: number | undefined
+  rank: 0 | 1 | 2 | 3 | undefined
 }
 
 export interface Conditions {

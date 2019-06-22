@@ -114,9 +114,20 @@ export default class ExpandableSection extends Vue {
   }
 
   get gearWeightMax() {
-    const multiplier = 1 // TODO get pack mule talent level
+    const packRatRank =
+      this.characterData.talents
+        .map((talent) => {
+          if (talent.id === "Pack Rat") return talent.rank
+        })
+        .pop() || 0
+    const bonus = {
+      0: 0,
+      1: 2,
+      2: 5,
+      3: 10,
+    }[packRatRank]
     const charStrength = this.characterData.attributes.strength || 0
-    return charStrength * 2 * multiplier
+    return charStrength * 2 + bonus
   }
 
   @Watch("characterData.profession")

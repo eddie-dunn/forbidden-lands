@@ -163,7 +163,7 @@ interface TalentMetaGeneral /* extends TalentMeta */ {
   id?: string
   name: TalentGeneral
   description_id?: string[]
-  rank?: number
+  rank?: 0 | 1 | 2 | 3
 }
 type GeneralTalentMap = { [key: string]: TalentMetaGeneral }
 export const GENERAL_TALENTS: GeneralTalentMap = {
