@@ -248,7 +248,7 @@ export default class ExpandableSection extends Vue {
           <thead>
             <tr>
               <th class="empty-cell"></th>
-              <th class="bonus-cell">{{ $t("Aktiv") }}</th>
+              <th class="bonus-cell">{{ $t("Active") }}</th>
               <th class="icon-cell">{{ $t("Type") }}</th>
               <th>{{ $t("Name") }}</th>
               <th class="bonus-cell">Bonus</th>
@@ -308,7 +308,7 @@ export default class ExpandableSection extends Vue {
           <thead>
             <tr>
               <th class="empty-cell"></th>
-              <th>{{ $t("Namn") }}</th>
+              <th>{{ $t("Name") }}</th>
               <th class="bonus-cell">Bonus</th>
             </tr>
           </thead>

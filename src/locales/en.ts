@@ -344,7 +344,7 @@ export default {
   "Name": "Name",
   "Pride": "Pride",
   "Profession": "Profession",
-  "Push": "Pressa",
+  "Push": "Push",
   "Relationships": "Relationships",
   "Remaining": "Remaining",
   "Remove": "Remove",
@@ -355,19 +355,20 @@ export default {
   "Talent": "Talent",
   "Torches": "Torches",
   "Water": "Water",
+
+  // lowercase
+
+  "armslength": "arm's length",
   "female": "female",
   "hello": "hello en",
+  "long": "long",
   "male": "male",
   "message": "hello i18n !!",
   "name": "name",
-  "sex": "sex",
-
-  // lowercase
-  "armslength": "arm's length",
-  "long": "long",
-  "short": "short",
   "near": "near",
-  "slow_loading": "foo",
+  "sex": "sex",
+  "short": "short",
+  "slow_loading": "slow loading",
 
   // Param
   "PHB_ref": "Page {page} in the Player's Handbook",

@@ -132,18 +132,6 @@ export default Vue.extend({
 
     <div class="base-flex2">
       <div class="base-flex">
-        <label for="age" class="base-label">{{ $t("age") }}</label>
-        <input
-          :disabled="disabled"
-          id="age"
-          type="number"
-          v-model.number="mdata.age"
-          :placeholder="ageRange()"
-          class="smallnumber"
-          min="1"
-        />
-      </div>
-      <div class="base-flex">
         <label for="character-kin" class="base-label">{{ $t("kin") }}</label>
         <select id="character-kin" v-model="mdata.kin" :disabled="disabled">
           <option v-for="kin in kin_select" :key="kin.id" v-bind:value="kin.id">
@@ -164,6 +152,18 @@ export default Vue.extend({
             {{ capitalize($t(c.id)) || c.name }}
           </option>
         </select>
+      </div>
+      <div class="base-flex">
+        <label for="age" class="base-label">{{ $t("age") }}</label>
+        <input
+          :disabled="disabled"
+          id="age"
+          type="number"
+          v-model.number="mdata.age"
+          :placeholder="ageRange()"
+          class="smallnumber"
+          min="1"
+        />
       </div>
     </div>
 
@@ -190,18 +190,16 @@ export default Vue.extend({
   width: 100%;
 }
 .base-flex {
-  // TODO: Clean up this mess
   display: flex;
   align-items: center;
-  // flex: 1 0 25%;
   flex-grow: 1;
   margin: 0.2rem;
-  label,
+  label {
+    min-width: 9ch;
+  }
+  input,
   select {
     flex-grow: 1;
-  }
-  input {
-    max-width: 4rem;
   }
 }
 
