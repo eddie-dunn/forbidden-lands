@@ -159,11 +159,12 @@ export function getTalentsForProfession(
 }
 
 // Metadata for General Talents
+export type TalentRank = 0 | 1 | 2 | 3
 interface TalentMetaGeneral /* extends TalentMeta */ {
   id?: string
   name: TalentGeneral
   description_id?: string[]
-  rank?: 0 | 1 | 2 | 3
+  rank?: TalentRank
 }
 type GeneralTalentMap = { [key: string]: TalentMetaGeneral }
 export const GENERAL_TALENTS: GeneralTalentMap = {

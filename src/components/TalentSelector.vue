@@ -17,6 +17,7 @@ import {
   TalentProfession,
   TalentAll,
 } from "@/types"
+import { TalentRank } from "@/talents"
 import {
   CharacterData,
   CharacterTalent,
@@ -28,7 +29,7 @@ import TalentSelect from "@/components/TalentSelect.vue"
 
 export function getTalentObjects(
   talentList: TalentAll[],
-  talentRanks: (number | undefined)[],
+  talentRanks: (TalentRank | undefined)[],
   idsToExclude: string[] = []
 ): CharacterTalent[] {
   const talentObj = talentList
@@ -201,7 +202,7 @@ const TalentSelector = Vue.extend({
     },
     "ageType"() {
       // Reset all talent ranks to 1 if age is changed
-      this.talentRanks = this.talentRanks.map(() => 1)
+      this.talentRanks = this.talentRanks.map(() => 1) as TalentRank[]
     },
     ["charData.profession"]() {
       this.$set(this.selectedTalents, 1, null)
