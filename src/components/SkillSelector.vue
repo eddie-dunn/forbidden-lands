@@ -29,14 +29,16 @@ function calcSkillPoints(age) {
 }
 
 function skillsSortedByTranslation(vm, skills) {
-  return Object.values(skills)
+  const sorted = Object.values(skills)
     .map((skill) => {
       skill.translation = vm.$t(skill.id)
       return skill
     })
     .sort((skillA, skillB) => {
-      return skillA.translation > skillB.translation
+      const greater = skillA.translation > skillB.translation
+      return greater ? 1 : -1
     })
+  return sorted
 }
 
 export default Vue.extend({
