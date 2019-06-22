@@ -102,6 +102,7 @@ export default Vue.extend({
       return this.skillMaximum
     },
     isClassSkill(skillId, profession) {
+      if (this.characterStatus !== "new") return false
       return isClassSkill(skillId, profession)
     },
     skillChanged(skillId, value) {
