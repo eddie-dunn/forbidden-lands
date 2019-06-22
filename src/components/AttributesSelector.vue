@@ -161,7 +161,6 @@ export default Vue.extend({
               :id="attribute"
               :name="attribute"
               type="number"
-              required
               :placeholder="'2-' + getMax(attribute)"
               min="2"
               :max="getMax(attribute)"
@@ -175,7 +174,6 @@ export default Vue.extend({
               :name="attribute"
               placeholder=""
               type="number"
-              required
               min="0"
               width="1ch"
               :max="getMax(attribute)"
