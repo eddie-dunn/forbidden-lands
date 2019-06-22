@@ -529,7 +529,7 @@ label {
 }
 
 .bonus-cell {
-  width: max-content;
+  width: 6ch;
 }
 .empty-cell {
   width: 5ch;
