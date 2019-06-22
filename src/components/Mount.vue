@@ -51,7 +51,7 @@ export default class XPModal extends Vue {
 
   get gearWeightMax() {
     if (!this.charData.mount.strength) return 0
-    const multiplier = this.mounted ? 2 : 4
+    const multiplier = this.charData.mount.mounted ? 2 : 4
     const charStrength = this.charData.mount.strength || 0
     return charStrength * multiplier
   }
