@@ -136,7 +136,7 @@ export default class CharacterListView extends Vue {
       </div>
     </Expander>
     <Expander label="Import/Export">
-      <div>
+      <div class="import-export">
         <h3>Export</h3>
         <button
           v-if="!exportBlob"
@@ -192,8 +192,8 @@ export default class CharacterListView extends Vue {
 .character-list-container {
   margin-bottom: 20vh;
 }
-// .character-list-expander {
-//   font-size: 3rem;
 
-// }
+.import-export {
+  padding: 0 1rem;
+}
 </style>
