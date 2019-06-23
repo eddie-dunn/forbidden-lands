@@ -52,7 +52,8 @@ body {
   justify-content: space-between;
 
   background: @background-color;
-  border: solid ~"@{pastel-green}99" 2px;
+  // border: solid ~"@{pastel-green}99" 2px;
+  box-shadow: 0px 1px 4px #5f5f5fff;
   padding: 10px;
 
   a {
@@ -60,13 +61,14 @@ body {
     color: #2c3e50;
     text-decoration: none;
     &.router-link-exact-active {
-      color: #42b983;
+      color: @color-background;
     }
   }
   z-index: 10;
 
   &-top {
     top: 0px;
+    background: @color-main;
   }
 
   &-bottom {
