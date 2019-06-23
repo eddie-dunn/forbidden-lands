@@ -95,7 +95,8 @@ export default class CharacterListView extends Vue {
     <h1>{{ $t("Characters") }}</h1>
     <Expander
       :label="$t('New')"
-      :expanded="true"
+      :defaultOpen="true"
+      saveStateId="new-characters"
       class="character-list-expander"
     >
       <div class="character-list">
@@ -118,7 +119,8 @@ export default class CharacterListView extends Vue {
     <Expander
       class="character-list-expander"
       :label="$t('Active')"
-      :expanded="true"
+      :defaultOpen="true"
+      saveStateId="active-characters"
       v-if="$characterStore.activeCharacters.length > 0"
     >
       <div class="character-list">

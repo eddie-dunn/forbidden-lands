@@ -8,19 +8,40 @@ const BASE_STORE_KEY = "__fl_expandable_section"
 @Component
 export default class ExpandableSection extends Vue {
   @Prop({ required: true }) label!: string
-  @Prop({ default: false }) expanded!: boolean
+  @Prop({ default: false }) defaultOpen!: boolean
+  @Prop({ default: "" }) saveStateId!: string
 
-  isExpanded = this.expanded
+  key = `${BASE_STORE_KEY}-${this.saveStateId}`
+  isExpanded = this.load(this.key)
   focused = false
 
   get icon() {
     return this.isExpanded ? "▼" : "▶"
   }
 
+  load(key: string) {
+    // don't load state if no unique id:
+    if (!this.saveStateId) return this.defaultOpen
+
+    const state = localStorage.getItem(key)
+    // console.log("loading state", this.key, "state", state)
+    if (state === null) return this.defaultOpen
+    return !!state
+  }
+
+  save() {
+    // console.log("saving state", this.key, this.isExpanded)
+    localStorage.setItem(this.key, this.isExpanded ? "open" : "")
+  }
+
   expandToggle(ev: any) {
     if (ev.type === "click") this.isExpanded = !this.isExpanded
     else if (this.focused && ev.code === "Enter") {
       this.isExpanded = !this.isExpanded
+    }
+
+    if (this.saveStateId) {
+      this.save() // save state if id is supplied
     }
   }
 

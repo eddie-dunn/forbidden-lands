@@ -155,7 +155,7 @@ export default class DiceView extends Vue {
 <template>
   <div class="dice-view">
     <div class="content">
-      <ExpandableSection label="Base Dice" :expanded="true">
+      <ExpandableSection label="Base Dice" :defaultOpen="true">
         <div class="dice-inputs">
           <div class="dice-input">
             <label for="white-input" class="dice-label white">
