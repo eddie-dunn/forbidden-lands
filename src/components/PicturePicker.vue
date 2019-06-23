@@ -62,9 +62,9 @@ export default class PicturePicker extends AppProps {
     // this.$emit("pickedPicture", this.selected_portrait)
   }
   urlButtonClicked() {
-    // this.selected_portrait = this.imgUrl
     this.urlStore.add(this.imgUrl)
     this.externalImage = this.imgUrl
+    this.imgUrl = ""
   }
   deleteUrl(index: number) {
     this.urlStore.remove(index)
