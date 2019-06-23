@@ -81,10 +81,8 @@ h2 {
 }
 
 .conditions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12ch, 1fr));
 }
 
 .modal-body {
