@@ -135,7 +135,7 @@ export default Vue.extend({
         <tr>
           <th></th>
           <th v-if="active">{{ $t("Damage") }}</th>
-          <th v-if="active">{{ $t("Remaining") }}</th>
+          <th v-if="active" class="empty-cell"></th>
         </tr>
       </thead>
       <tbody>
@@ -176,7 +176,7 @@ export default Vue.extend({
               type="number"
               min="0"
               width="1ch"
-              :max="getMax(attribute)"
+              :max="charData.attributes[attribute]"
               v-model.number="charData.attributeDmg[attribute]"
             />
           </td>
@@ -236,6 +236,9 @@ export default Vue.extend({
   }
 }
 
+.empty-cell {
+  width: 5ch;
+}
 // input[type="number"].with-checkbox {
 //   // max-width: 50%;
 //   width: 3em;
