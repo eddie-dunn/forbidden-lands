@@ -95,6 +95,10 @@ input[type="text"] {
   border: 2px solid @pastel-green-transparent;
   padding: 0.3rem;
   appearance: none;
+  &:disabled {
+    background-image: none;
+    border: 2px solid ~"@{pastel-green}55";
+  }
 }
 
 select {
@@ -111,6 +115,7 @@ select {
   padding-right: 1rem;
   &:disabled {
     background-image: none;
+    border: 2px solid ~"@{pastel-green}55";
   }
 }
 
