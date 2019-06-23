@@ -40,6 +40,7 @@ export default class Talentelect extends Vue {
   @Prop({ default: null }) value!: string
   @Prop({ default: null }) talentRank!: number
   @Prop({ default: false }) disabled!: number
+  @Prop({ default: true }) removeOk!: number
   @Prop({ default: () => [] }) classTalentOptions!: CharacterTalent[]
 
   @Watch("charStatus")
@@ -105,6 +106,7 @@ export default class Talentelect extends Vue {
   }
 
   get canRemoveTalent(): boolean {
+    if (!this.removeOk) return false
     if (this.charStatus === "freeEdit") return true
     if (this.charStatus === "new") return true
     if (this.charStatus === "levelup") {
@@ -158,7 +160,7 @@ export default class Talentelect extends Vue {
         </option>
       </optgroup>
     </select>
-    <span class="toggle">
+    <span v-if="canChangeTalent" class="toggle">
       <button class="button" :disabled="!canDecreaseTalent" @click="decTalent">
         -
       </button>

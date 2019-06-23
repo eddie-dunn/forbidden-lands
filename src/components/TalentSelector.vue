@@ -247,6 +247,7 @@ export default TalentSelector
         :maxTalentRank="maxTalentRank"
         :talentOptions="classTalents(1)"
         :talentRank="talentRanks[1]"
+        :removeOk="false"
         @rank-changed="(value) => rankChanged(1, value)"
         v-model="selectedTalents[1]"
       />
