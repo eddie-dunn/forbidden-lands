@@ -29,7 +29,7 @@ export default Vue.extend({
 <style lang="less">
 @import "~Style/colors.less";
 body {
-  margin: 4px;
+  margin: 0;
   color: @color-text;
 }
 
@@ -42,7 +42,7 @@ body {
   display: flex;
   flex-direction: column;
   max-width: 1024px;
-  margin: 0.5rem auto;
+  margin: 0 auto;
   min-height: 98vh;
 }
 
