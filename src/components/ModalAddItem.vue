@@ -83,7 +83,7 @@ export default class AddItem extends Vue {
       <div class="new-item-form">
         <label for="gear-type">{{ $t("Type") }}</label>
         <select v-model="tmpGear.type">
-          <option disabled value="">{{ $t("Select one") }}</option>
+          <option disabled value="">{{ $t("Choose") }}</option>
           <option value="armor">{{ $t("Armor") }}</option>
           <option value="helmet">{{ $t("Helmet") }}</option>
           <option value="shield">{{ $t("Shield") }}</option>
@@ -96,7 +96,7 @@ export default class AddItem extends Vue {
 
         <label for="gear-weight">{{ $t("Weight") }}</label>
         <select v-model.number="tmpGear.weight">
-          <option disabled value="">{{ $t("Select one") }}</option>
+          <option disabled value="">{{ $t("Choose") }}</option>
           <option :value="0">{{ $t("Tiny") }}</option>
           <option :value="0.5">{{ $t("Light") }}</option>
           <option :value="1">Normal</option>
@@ -120,7 +120,7 @@ export default class AddItem extends Vue {
           v-if="isWeapon"
           class="capitalize"
         >
-          <option disabled value="">{{ $t("Select one") }}</option>
+          <option disabled value="">{{ $t("Choose") }}</option>
           <option class="capitalize" value="0">
             {{ $t("Armslength") }}
           </option>
@@ -133,7 +133,7 @@ export default class AddItem extends Vue {
         <input type="text" v-model="tmpGear.comment" />
 
         <label v-if="isWeapon" for="weapon-features">
-          Features
+          {{ $t("Features") }}
         </label>
         <div v-if="isWeapon" id="weapon-features" class="grid-features">
           <div class="flex">

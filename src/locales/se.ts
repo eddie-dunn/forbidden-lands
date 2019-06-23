@@ -334,6 +334,7 @@ export default {
   "Body": "Kropp",
   "Cancel": "Avbryt",
   "Characters": "Rollpersoner",
+  "Choose": "Välj",
   "Class talent": "Yrkestalang",
   "Class talents": "Yrkestalanger",
   "Close": "Stäng",
