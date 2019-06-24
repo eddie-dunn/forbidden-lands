@@ -25,7 +25,7 @@ export default new Router({
     },
     {
       path: "/",
-      alias: "/character-list",
+      alias: ["/character-list", "/index.html"],
       name: "character_list",
       component: () => import("./views/CharacterListView.vue"),
     },
