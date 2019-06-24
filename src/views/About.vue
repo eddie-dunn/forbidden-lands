@@ -13,25 +13,70 @@ export default {
     <div class="long-text">
       <p>
         Welcome to the Forbidden Lands Companion. The purpose of this app is to
-        serve as a helper for people playing the role playing game Forbidden
-        Lands by Fria Ligan.
+        serve as a helper for people playing the role playing game
+        <a href="https://frialigan.se/en/games/forbidden-lands/">
+          Forbidden Lands
+        </a>
+        by Fria Ligan.
       </p>
       <h2>Features</h2>
       <p>
-        Currently, the app provides a character creator, which keeps track of
-        the rules for creating a new character for you, and a dice roller.
+        Currently, the app's main features are
       </p>
+      <ul>
+        <li>
+          a character creator, which keeps track of the rules for creating a new
+          character
+        </li>
+        <li>
+          giving a character 'active' status, which means that you can modify
+          your Willpower, increase XP and/or Reputation and that you will need
+          to add XP in order to add/increase skills & talents
+        </li>
+        <li>
+          giving a character 'inactive' status, which means you can freely edit
+          it as you like, without any pesky rules to limit your creativity
+        </li>
+        <li>
+          an inventory manager that keeps track of encumbrance for you
+        </li>
+        <li>language support for both Swedish and English</li>
+        <li>
+          and a dice roller, of course :)
+        </li>
+      </ul>
       <p>
-        The next planned additions are an active character editor (which will
-        keep track of the rules for leveling your character, encumberance etc)
-        and a free form character editor with no rules so that you can create
-        exactly the character you'd like.
+        Planned features include
       </p>
-      <h2>Contribute</h2>
+      <ol>
+        <li>
+          Releasing source code
+        </li>
+        <li>
+          Several small UI/UX improvements
+        </li>
+        <li>
+          Item templates so that people won't have to enter all item data
+          manually when adding stuff to their player character's inventory
+        </li>
+        <li>
+          Tapping/clicking attributes and skills will display a modal suggesting
+          dice to be rolled based on attributes, skill level, talents & equipped
+          items
+        </li>
+        <li>
+          Multiplayer mode: enable a GM to host a session which players can
+          connect to
+        </li>
+      </ol>
+
+      <h2>How to use</h2>
       <p>
-        Comments, improvement suggestions, feature requests, bug reports? Go to
-        <a href="#">the repo hosting the project</a> or
-        <a href="mailto:foo@bar.com">email me</a>.
+        Usage should be fairly self-explanatory. If you come across something
+        confusing, or have other questions, comments, improvement suggestions,
+        feature requests, bug reports etc, please go to
+        <a href="#">the repo hosting the project</a> (TBA) or
+        <a href="mailto:eddie.dunn+flc@gmail.com">email me</a>.
       </p>
       <p>
         The app uses fairly modern technology so if you are using an old browser
@@ -46,7 +91,8 @@ export default {
           Progressive Web App
         </a>
         which means that it can be used offline if your OS and browser supports
-        it.
+        it. In Android Chrome, for example, you open the settings menu and tap
+        "Add to Home screen".
       </p>
       <p>
         It uses the browser's local storage to store your data, which means that
@@ -60,11 +106,19 @@ export default {
         however with clearing browser data as that might mean you will lose all
         the characters you created.
       </p>
+      <h2>Acknowledgements</h2>
+      <p>
+        Icons that I haven't made myself have been downloaded from
+        <a href="https://game-icons.net/">Game-icons.net</a>.
+      </p>
     </div>
   </div>
 </template>
 
 <style lang="less" scoped>
+.about {
+  margin: 1rem;
+}
 .long-text {
   text-align: left;
   max-width: 75ch;
