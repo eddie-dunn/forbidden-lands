@@ -32,6 +32,7 @@ import FLNumberInput from "@/components/FLNumberInput.vue"
 import ModalSpendXP from "@/components/ModalSpendXP.vue"
 import Mount from "@/components/Mount.vue"
 import XPModal from "@/components/XPModal.vue"
+import ModalDice from "@/components/ModalDice.vue"
 
 function stringChar(characterData: CharacterData) {
   return JSON.stringify(characterData)
@@ -45,9 +46,10 @@ const CharacterCreatorMain = Vue.extend({
     Card,
     Conditions,
     ExpandableSection,
-    FlavorSelector,
     FLNumberInput,
+    FlavorSelector,
     GearPicker,
+    ModalDice,
     ModalSpendXP,
     Mount,
     PicturePicker,
@@ -71,6 +73,7 @@ const CharacterCreatorMain = Vue.extend({
       showJSON: false,
       showXPModal: false,
       showSpendXPModal: false,
+      showDiceModal: false,
       characterDataCopy: "", // used to track if char data has changed or not
     }
   },
@@ -303,6 +306,12 @@ export default CharacterCreatorMain
         :charData="characterData"
         @close="showSpendXPModal = false"
         @updated-chardata="handleNewCharData"
+      />
+
+      <ModalDice
+        v-if="showDiceModal"
+        :charData="characterData"
+        @close="showDiceModal = false"
       />
     </form>
 
