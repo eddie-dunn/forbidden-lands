@@ -138,7 +138,7 @@ export class Store {
 
   get activeCharacters() {
     return Object.values(this.storage).filter((character) =>
-      ["active", "freeEdit", "levelup"].includes(character.metadata.status)
+      ["active", "levelup"].includes(character.metadata.status)
     )
   }
 
@@ -175,6 +175,12 @@ export class Store {
     if (commit) {
       this.commit()
     }
+  }
+
+  deactivate(characterId: string, commit: boolean = true) {
+    console.log("deactivate")
+    this._storage[characterId].metadata.status = "freeEdit"
+    commit && this.commit()
   }
 
   activate(characterId: string, commit: boolean = true) {

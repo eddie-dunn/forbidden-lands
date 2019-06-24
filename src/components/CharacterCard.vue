@@ -69,6 +69,11 @@ export default Vue.extend({
     },
     activate() {
       this.charData && this.$emit("activate", this.charData.metadata.id)
+      this.actionsActive = false
+    },
+    deactivate() {
+      this.charData && this.$emit("free-edit", this.charData.metadata.id)
+      this.actionsActive = false
     },
   },
 })
@@ -107,12 +112,22 @@ export default Vue.extend({
             }}
           </button>
           <button
-            v-if="newChar && newCharValid"
+            v-if="
+              (newChar && newCharValid) ||
+                charData.metadata.status === 'freeEdit'
+            "
             class="button"
-            :disabled="!newCharValid"
+            :disabled="!newCharValid && newChar"
             @click="activate"
           >
             {{ $t("Activate") }}
+          </button>
+          <button
+            v-if="charData.metadata.status === 'active'"
+            class="button"
+            @click="deactivate"
+          >
+            {{ $t("Deactivate") }}
           </button>
         </div>
         <img
@@ -324,6 +339,7 @@ h3 {
   // }
   button > {
     margin: 1rem;
+    min-width: 60%;
   }
 }
 

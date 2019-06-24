@@ -34,6 +34,7 @@ export default class CharacterListView extends Vue {
 
   newCharacters = this.$characterStore.charactersByStatus(["new", undefined])
   activeCharacters = this.$characterStore.activeCharacters
+  inactiveCharacters = this.$characterStore.charactersByStatus("freeEdit")
 
   updateCharacters() {
     // There is probably be a better way to handle this, but it will do for now
@@ -42,6 +43,9 @@ export default class CharacterListView extends Vue {
       undefined,
     ])
     this.activeCharacters = this.$characterStore.activeCharacters
+    this.inactiveCharacters = this.$characterStore.charactersByStatus(
+      "freeEdit"
+    )
   }
 
   removeCard(characterId: any) {
@@ -51,6 +55,11 @@ export default class CharacterListView extends Vue {
 
   activate(characterId: string) {
     this.$characterStore.activate(characterId, true)
+    this.updateCharacters()
+  }
+
+  deactivate(characterId: string) {
+    this.$characterStore.deactivate(characterId, true)
     this.updateCharacters()
   }
 
@@ -116,6 +125,29 @@ export default class CharacterListView extends Vue {
         </div>
       </div>
     </Expander>
+
+    <Expander
+      class="character-list-expander"
+      :label="$t('Inactive')"
+      :defaultOpen="true"
+      saveStateId="inactive-characters"
+      v-if="inactiveCharacters.length > 0"
+    >
+      <div class="character-list">
+        <div
+          v-for="(character, index) in inactiveCharacters"
+          :key="'inactive' + index"
+          class="character-card-container"
+        >
+          <CharacterCard
+            :charData="character"
+            @activate="activate"
+            @remove-card="removeCard"
+          />
+        </div>
+      </div>
+    </Expander>
+
     <Expander
       class="character-list-expander"
       :label="$t('Active')"
@@ -132,11 +164,12 @@ export default class CharacterListView extends Vue {
           <CharacterCard
             :charData="character"
             @remove-card="removeCard"
-            @activate="activate"
+            @free-edit="deactivate"
           />
         </div>
       </div>
     </Expander>
+
     <Expander label="Import/Export">
       <div class="import-export">
         <h3>Export</h3>
