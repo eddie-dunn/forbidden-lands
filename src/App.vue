@@ -43,7 +43,7 @@ body {
   flex-direction: column;
   max-width: 1024px;
   margin: 0 auto;
-  min-height: 98vh;
+  min-height: 100vh;
 }
 
 .navbar {
