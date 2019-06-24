@@ -343,7 +343,7 @@ h3 {
   // }
   button > {
     margin: 1rem;
-    min-width: 60%;
+    min-width: 75%;
   }
 }
 
