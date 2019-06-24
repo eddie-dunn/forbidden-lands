@@ -61,7 +61,7 @@ export default class XPModal extends Vue {
 <template>
   <Modal class="xp-modal" @close="close" :maximized="true">
     <div slot="header" class="header">
-      <h2>Post session</h2>
+      <h2>{{ $t("Pre/post session") }}</h2>
       <div class="tab-bar">
         <div
           v-for="(tab, index) in tabs"
@@ -88,7 +88,7 @@ export default class XPModal extends Vue {
           </li>
         </ul>
         <div class="experience-input">
-          <label for="xp-input">Experience gained</label>
+          <label for="xp-input">{{ $t("Experience gained") }}</label>
           <FLNumberInput
             id="xp-input"
             min="0"
@@ -108,7 +108,7 @@ export default class XPModal extends Vue {
           </li>
         </ul>
         <div class="experience-input">
-          <label for="rep-input">Reputation gained</label>
+          <label for="rep-input">{{ $t("Reputation gained") }}</label>
           <FLNumberInput
             id="rep-input"
             min="0"

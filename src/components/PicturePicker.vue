@@ -89,19 +89,19 @@ export default class PicturePicker extends AppProps {
     <!-- <a href="#" id="show-modal" @click="showPicker()">Show Modal</a> -->
     <Modal v-if="showModal" @close="closePicker()">
       <div slot="header">
-        <h3>Select picture</h3>
+        <h3>{{ $t("Select picture") }}</h3>
         <div class="tab-bar">
           <div
             @click.self="galleryClicked"
             :class="['tab', showGallery ? 'tab--active' : '']"
           >
-            Gallery
+            {{ $t("Gallery") }}
           </div>
           <div
             @click.self="getUrlClicked"
             :class="['tab', showGetUrl ? 'tab--active' : '']"
           >
-            Get from URL
+            {{ $t("Get from URL") }}
           </div>
         </div>
       </div>
@@ -110,11 +110,13 @@ export default class PicturePicker extends AppProps {
           <div class="url-view" v-if="showGetUrl">
             <form class="url-view-form" v-on:submit.prevent="urlButtonClicked">
               <input
-                placeholder="Enter external URL..."
+                :placeholder="$t('Enter external URL...')"
                 id="external url"
                 v-model="imgUrl"
               />
-              <div class="button" @click="urlButtonClicked">Get</div>
+              <div class="button" @click="urlButtonClicked">
+                {{ $t("Get") }}
+              </div>
             </form>
             <div class="picture-grid">
               <div
@@ -136,7 +138,7 @@ export default class PicturePicker extends AppProps {
                   class="button button-red delete-button"
                   @click="deleteUrl(index)"
                 >
-                  Delete
+                  {{ $t("Delete") }}
                 </button>
               </div>
             </div>
