@@ -151,7 +151,7 @@ export default Vue.extend({
             </div>
           </h3>
           <div class="img-header-subtitle capitalize">
-            <span>{{ $t(this.charData.ageType) }}</span>
+            <!-- <span>{{ $t(this.charData.ageType) }}</span> -->
             <span>{{ $t(charData.kin) }}</span>
             <span>{{ $t(charData.profession) }}</span>
           </div>
@@ -263,8 +263,12 @@ h3 {
 .img-header-subtitle {
   margin: 0.2rem auto;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-around;
   color: hsla(0, 0%, 100%, 0.84);
+  span > {
+    margin: 0 0.3rem;
+  }
 }
 
 .card-contents {

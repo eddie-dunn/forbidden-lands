@@ -220,7 +220,7 @@ export default class CharacterListView extends Vue {
 .character-list {
   display: grid;
   grid-gap: 0.8rem;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   margin: 0.8rem;
 }
 
