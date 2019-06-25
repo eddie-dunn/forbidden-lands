@@ -59,7 +59,7 @@ export interface CharacterMetaData {
 type BaseItem = {
   bonus: number
   bonusType: string // Attribute[type], Skill[type], white/red/black dice
-  equipped: boolean
+  equipped?: boolean
   name: string
   type: "" | "armor" | "helmet" | "shield" | "weapon"
   weight: number
