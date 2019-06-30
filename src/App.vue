@@ -142,6 +142,9 @@ select {
   &:active {
     transform: scale(0.95);
   }
+  &:focus {
+    outline: @color-danger auto 1px;
+  }
 
   &-red,
   &-danger {

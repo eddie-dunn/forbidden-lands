@@ -394,6 +394,7 @@ export default {
   "Other": "Annat",
   "Please select the following in": "Vänligen välj följande i",
   "Portrait": "Porträtt",
+  "Post session": "Efter session",
   "Pre/post session": "Inför/efter session",
   "Pride": "Stolthet",
   "Profession": "Yrke",

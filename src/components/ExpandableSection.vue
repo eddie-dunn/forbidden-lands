@@ -10,12 +10,15 @@ export default class ExpandableSection extends Vue {
   @Prop({ required: true }) label!: string
   @Prop({ default: false }) defaultOpen!: boolean
   @Prop({ default: "" }) saveStateId!: string
+  @Prop({ required: false, default: null }) iconRight!: string
+  @Prop({ default: false }) iconRightOK!: boolean
 
   key = `${BASE_STORE_KEY}-${this.saveStateId}`
   isExpanded = this.load(this.key)
   focused = false
 
   get icon() {
+    // TODO: Use svg
     return this.isExpanded ? "▼" : "▶"
   }
 
@@ -58,9 +61,9 @@ export default class ExpandableSection extends Vue {
 </script>
 
 <template>
-  <div>
+  <div :class="['expander-wrapper', isExpanded ? '' : 'max-content']">
     <div
-      :class="['expander', focused || isExpanded ? 'focus' : '']"
+      :class="['expander']"
       ref="expander"
       tabindex="0"
       @click="expandToggle"
@@ -68,11 +71,22 @@ export default class ExpandableSection extends Vue {
       @blur="blur"
       v-on:keyup="expandToggle"
     >
-      <span class="expander-icon">{{ icon + " " }}</span>
-      <span :class="focused ? 'underline' : ''">{{ label }}</span>
+      <span class="icon-left">{{ icon }}</span>
+      <span :class="['expander-label']">
+        {{ label }}
+      </span>
+      <span
+        :class="[
+          'icon-right',
+          iconRightOK ? 'icon-right-ok' : 'icon-right-nok',
+        ]"
+        >{{ iconRight }}</span
+      >
     </div>
-    <!-- <div class="expanded-content" v-if="isExpanded"> -->
-    <div :class="['expanded-content', !isExpanded ? 'hidden' : '']">
+    <div class="expander-content" v-if="isExpanded">
+      <!-- <div
+      :class="['expander-content', isExpanded ? 'is-expanded' : 'not-expanded']"
+    > -->
       <slot></slot>
     </div>
   </div>
@@ -81,39 +95,62 @@ export default class ExpandableSection extends Vue {
 <style lang="less" scoped>
 @import "~Style/colors.less";
 
-// .focus {
-//   // border-bottom: 5px solid @pastel-green;
-//   border-bottom: 3px solid @pastel-green;
-//   padding-bottom: 0px;
-// }
+.max-content {
+  height: max-content;
+  min-height: 1rem;
+}
 
-.underline {
-  // text-decoration: underline;
+// TODO: Check if we can animate with this: https://stackoverflow.com/a/43965099
+.is-expanded {
+  // height: auto;
+  // min-height: auto;
+  max-height: 9999px;
+  transition-timing-function: cubic-bezier(0.5, 0, 1, 0);
+  transition-delay: 0s;
+}
+
+.not-expanded {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.8s cubic-bezier(0, 1, 0, 1) -0.1s;
 }
 
 .expander {
   cursor: pointer;
-  // margin-top: 1rem;
   margin: 0.5rem 0.2rem;
   text-align: left;
   font-size: 2rem;
   outline-color: ~"@{pastel-green}55";
-  // outline-style: none;
-  // border-bottom: 5px solid #ffffff00;
-  // padding-bottom: 3px;
-  // &:focus {
-  //   // border-bottom: 3px solid @pastel-green;
-  //   // padding-bottom: 0px;
-  // }
+  display: flex;
+  align-items: center;
 }
 
-.expander-icon {
-  font-family: monospace;
-}
-
-.expanded-content {
+.expander-content {
   cursor: default;
-  // font-size: initial;
   text-align: left;
+  height: auto;
+}
+
+.icon-left {
+  font-family: monospace;
+  margin: 0 1rem;
+}
+
+.expander-label {
+  white-space: nowrap;
+  &::first-letter {
+    text-transform: uppercase;
+  }
+}
+
+.icon-right {
+  margin-left: auto;
+  margin-right: 1rem;
+  &-ok {
+    color: @color-main;
+  }
+  &-nok {
+    color: @color-danger;
+  }
 }
 </style>

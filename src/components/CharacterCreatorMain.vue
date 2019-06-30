@@ -202,7 +202,7 @@ export default CharacterCreatorMain
         </div>
       </Card>
 
-      <Card class="row-half" :noSign="true">
+      <Card class="row-half" :title="$t('Portrait')" :noSign="true">
         <div class="flex-row-wrap space-around appearance-section">
           <PicturePicker
             :portrait="characterData.portrait"
@@ -211,7 +211,7 @@ export default CharacterCreatorMain
         </div>
       </Card>
 
-      <Card class="row-full" :noSign="true">
+      <Card class="row-full" :noSign="true" :title="$t('Personality')">
         <FlavorSelector class="flex-col-half" :data="characterData" />
       </Card>
 
@@ -270,7 +270,7 @@ export default CharacterCreatorMain
       <Card
         v-if="status === 'active'"
         class="row-half"
-        :title="$t('Pre/post session')"
+        :title="$t('Post session')"
         :noSign="true"
       >
         <div class="flex-row-wrap space-around">
