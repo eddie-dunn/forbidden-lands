@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "core-js": "^2.6.5",
+    "peerjs": "^1.0.0",
     "register-service-worker": "^1.6.2",
     "ts-interface-checker": "^0.1.7",
     "uuid": "^3.3.2",

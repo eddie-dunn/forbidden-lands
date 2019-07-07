@@ -54,6 +54,8 @@ export default Vue.extend({
           |
           <router-link to="/dice">{{ $t("Dice") }}</router-link>
           |
+          <router-link to="/multiplayer">{{ $t("Multiplay") }}</router-link>
+          |
           <router-link to="/about">{{ $t("About") }}</router-link>
         </div>
       </div>

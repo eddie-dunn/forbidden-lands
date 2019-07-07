@@ -55,6 +55,11 @@ export default new Router({
       component: Home,
     },
     {
+      path: "/multiplayer",
+      name: "multiplayer",
+      component: () => import("./views/MultiplayerView.vue"),
+    },
+    {
       path: "/",
       alias: ["/character-list", "/index.html"],
       name: "character_list",
