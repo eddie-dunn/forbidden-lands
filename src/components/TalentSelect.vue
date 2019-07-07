@@ -2,6 +2,7 @@
 import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 import { TranslateResult } from "vue-i18n"
+import SvgIcon from "@/components/SvgIcon.vue"
 
 import {
   CharacterData,
@@ -30,7 +31,11 @@ function talentsSortedByTranslation(
   return sortedTalents
 }
 
-@Component
+@Component({
+  components: {
+    SvgIcon,
+  },
+})
 export default class Talentelect extends Vue {
   @Prop() label!: string
   @Prop({ required: true }) talentOptions!: CharacterTalent[]
@@ -162,7 +167,7 @@ export default class Talentelect extends Vue {
     </select>
     <span v-if="charStatus !== 'active'" class="toggle">
       <button class="button" :disabled="!canDecreaseTalent" @click="decTalent">
-        -
+        <SvgIcon name="remove" title="decrement" class="talent-icon" />
       </button>
       <button
         class="button"
@@ -171,14 +176,14 @@ export default class Talentelect extends Vue {
           disabled || !canIncreaseTalent || talentRank >= this.maxTalentRank
         "
       >
-        +
+        <SvgIcon name="add" title="increment" class="talent-icon" />
       </button>
       <button
         :disabled="disabled || !editable || !canRemoveTalent"
         class="button button-red"
         @click="$emit('remove')"
       >
-        ✖
+        <SvgIcon name="close" title="remove" class="talent-icon" />
       </button>
     </span>
   </div>
@@ -211,5 +216,9 @@ button {
   font-size: 2rem;
   font-family: monospace;
   // height: 2rem;
+}
+
+.talent-icon {
+  vertical-align: middle;
 }
 </style>
