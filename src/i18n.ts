@@ -1,39 +1,19 @@
 import Vue from "vue"
-// import VueI18n, { LocaleMessages } from "vue-i18n"
 import VueI18n from "vue-i18n"
 import en from "@/locales/en"
 import se from "@/locales/se"
 
 Vue.use(VueI18n)
 
-/*
-function loadLocaleMessages(): LocaleMessages {
-  const locales = require.context(
-    "./locales",
-    true,
-    /[A-Za-z0-9-_,\s]+\.json$/i
-  )
-
-  const messages: LocaleMessages = {}
-  locales.keys().forEach(key => {
-    const matched = key.match(/([A-Za-z0-9-_]+)\./i)
-    console.log("match", matched)
-
-    if (matched && matched.length > 1) {
-      const locale = matched[1]
-      messages[locale] = locales(key)
-      console.log("loc", locale, key)
-    }
-  })
-  // console.log("messages", messages, se)
-  return messages
-}
-*/
+export const LOCALE_KEY = "__localeSetting"
+const DEFAULT_LOCALE = "en"
+const CURRENT_LOCALE = localStorage.getItem(LOCALE_KEY) || DEFAULT_LOCALE
 
 // export default new VueI18n({
 const i18n = new VueI18n({
-  locale: process.env.VUE_APP_I18N_LOCALE || "se",
-  fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE || "en",
+  // TODO: VUE_APP_I18N_LOCALE is never used; reconfigure?
+  locale: CURRENT_LOCALE || process.env.VUE_APP_I18N_LOCALE,
+  fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE,
   silentTranslationWarn: true,
   messages: {
     /*...loadLocaleMessages(), */
@@ -42,6 +22,7 @@ const i18n = new VueI18n({
   },
 })
 
+// TODO: Remove?
 export function $t(key: string) {
   return i18n.t(key)
 }
