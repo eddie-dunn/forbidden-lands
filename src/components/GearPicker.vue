@@ -254,7 +254,7 @@ export default class ExpandableSection extends Vue {
       <!-- spacer -->
 
       <div class="other-gear">
-        <h4>{{ $t("Ägodelar") }}</h4>
+        <h4>{{ $t("Inventory") }}</h4>
         <table>
           <thead>
             <tr>

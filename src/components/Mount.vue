@@ -126,7 +126,7 @@ export default class XPModal extends Vue {
     </div>
 
     <div v-if="hasMount">
-      <h4>{{ $t("Ägodelar") }}</h4>
+      <h4>{{ $t("Carried by mount") }}</h4>
       <table>
         <thead>
           <tr>

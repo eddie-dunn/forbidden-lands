@@ -151,14 +151,14 @@ const talents = {
 
 const talents2: TalentTranslations = {
   // Kin
-  "True Grit": "Bita ihop", // dwarf
-  "Inner Peace": "Inre frid", // elf
-  "Sneaky": "Lömsk", // goblin
-  "Psychic Power": "Psykisk kraft", // half-elf
-  "Hard to Catch": "Kvickfotad", // halfling
-  "Adaptive": "Adaptiv", // human
-  "Unbreakable": "Stryktålig", // orc
-  "Hunting Instincts": "Jaktsinne", // wolfkin
+  "True Grit": "True grit", // dwarf
+  "Inner Peace": "Inner peace", // elf
+  "Sneaky": "Sneaky", // goblin
+  "Psychic Power": "Psychic power", // half-elf
+  "Hard to Catch": "Hard to catch", // halfling
+  "Adaptive": "Adaptive", // human
+  "Unbreakable": "Unbreakable", // orc
+  "Hunting Instincts": "Hunting insticts", // wolfkin
 
   // General
   "Ambidextrous": "Ambidextrous",
