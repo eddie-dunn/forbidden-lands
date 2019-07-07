@@ -54,6 +54,7 @@ export interface CharacterMetaData {
   hasBeenActivated: boolean
   status: CharacterMetaDataStatus
   dataVersion: number
+  xpAtCreation: number
 }
 
 type BaseItem = {
@@ -225,6 +226,7 @@ export function getNewCharacterData(): CharacterData {
       status: "new",
       hasBeenActivated: false,
       dataVersion: -1,
+      xpAtCreation: 0,
     },
   }
   return newCharData
@@ -370,4 +372,35 @@ export function validateCharacter(data: Object): Result {
     errCode: 0,
     msg: "no err",
   }
+}
+
+const sum = (acc: number, val: number) => acc + val
+
+export function calcCharacterXP(data: CharacterData): number {
+  return (
+    calcCharacterSkillXP(data.skills) + calcCharacterTalentXP(data.talents) - 3
+    // -3 to compensate for kin talent being lvl 1; maybe fix some other day
+  )
+}
+
+function calcCharacterTalentXP(talents: CharacterTalent[]): number {
+  function calcTalent(lvl: number) {
+    const arr = Array.from({ length: lvl }, (v, k) => k + 1)
+    return arr.reduce((acc, val) => acc + val * 3, 0)
+  }
+  const talentSum = talents
+    .map((talent) => calcTalent(talent.rank || 0))
+    .reduce(sum, 0)
+  return talentSum
+}
+
+function calcCharacterSkillXP(skills: SkillMap): number {
+  function calcSkill(lvl: number) {
+    const arr = Array.from({ length: lvl }, (v, k) => k + 1)
+    return arr.reduce((acc, val) => acc + val * 5, 0)
+  }
+  const skillSum = Object.values(skills)
+    .map((skill) => calcSkill(skill.rank || 0))
+    .reduce(sum, 0)
+  return skillSum
 }

@@ -23,6 +23,7 @@ import {
   validateSkills,
   CharacterMetaDataStatus,
   CharacterMetaData,
+  calcCharacterXP,
 } from "@/characterData"
 import Vue from "vue"
 
@@ -108,10 +109,21 @@ const CharacterCreatorMain = Vue.extend({
     charDataUpdated(): boolean {
       return stringChar(this.characterData) !== this.characterDataCopy
     },
+    totalXp(): number {
+      return (
+        calcCharacterXP(this.characterData) -
+        (this.characterData.metadata.xpAtCreation || 0)
+      )
+    },
   },
   methods: {
     saveClicked(event: any) {
       if (!event || !this.characterData.name) return
+      if (this.status === "new") {
+        // Save xp at creation, so that we later can calculate how many XP
+        // points have been spent on leveling up character
+        this.characterData.metadata.xpAtCreation = this.totalXp
+      }
       this.$characterStore.addCharacter(this.characterData)
       this.characterDataCopy = stringChar(this.characterData)
     },
@@ -161,6 +173,7 @@ export default CharacterCreatorMain
 <template>
   <div class="character_creator">
     <div v-if="$debugMode" class="wip-bar">
+      <div>Total xp: {{ totalXp }}</div>
       <div>updated: {{ charDataUpdated }}</div>
       <span>Status: {{ this.status }}</span>
       <button @click="updateStatus('new')">New</button>
