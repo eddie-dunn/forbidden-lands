@@ -1,11 +1,16 @@
 <script lang="ts">
 import Vue from "vue"
 import { Component, Prop } from "vue-property-decorator"
+import SvgIcon from "@/components/SvgIcon.vue"
 
 // TODO: Implement saving last state to local storage
 const BASE_STORE_KEY = "__fl_expandable_section"
 
-@Component
+@Component({
+  components: {
+    SvgIcon,
+  },
+})
 export default class ExpandableSection extends Vue {
   @Prop({ required: true }) label!: string
   @Prop({ default: false }) defaultOpen!: boolean
@@ -18,8 +23,7 @@ export default class ExpandableSection extends Vue {
   focused = false
 
   get icon() {
-    // TODO: Use svg
-    return this.isExpanded ? "▼" : "▶"
+    return this.isExpanded ? "chevron_down" : "chevron_right"
   }
 
   load(key: string) {
@@ -71,17 +75,20 @@ export default class ExpandableSection extends Vue {
       @blur="blur"
       v-on:keyup="expandToggle"
     >
-      <span class="icon-left">{{ icon }}</span>
-      <span :class="['expander-label']">
+      <div class="icon-left">
+        <SvgIcon :name="icon" :title="icon" />
+      </div>
+      <div :class="['expander-label']">
         {{ label }}
-      </span>
-      <span
+      </div>
+      <div
         :class="[
           'icon-right',
           iconRightOK ? 'icon-right-ok' : 'icon-right-nok',
         ]"
-        >{{ iconRight }}</span
       >
+        {{ iconRight }}
+      </div>
     </div>
     <div class="expander-content" v-if="isExpanded">
       <!-- <div
@@ -132,11 +139,17 @@ export default class ExpandableSection extends Vue {
 }
 
 .icon-left {
-  font-family: monospace;
+  display: inline-block;
   margin: 0 1rem;
+  & > svg {
+    width: 2rem;
+    height: 2rem;
+    vertical-align: middle;
+  }
 }
 
 .expander-label {
+  display: inline-block;
   white-space: nowrap;
   &::first-letter {
     text-transform: uppercase;
@@ -144,6 +157,7 @@ export default class ExpandableSection extends Vue {
 }
 
 .icon-right {
+  display: inline-block;
   margin-left: auto;
   margin-right: 1rem;
   &-ok {
