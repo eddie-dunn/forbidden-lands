@@ -38,9 +38,14 @@ export default {
           it as you like, without any pesky rules to limit your creativity
         </li>
         <li>
-          an inventory manager that keeps track of encumbrance for you
+          an inventory manager that keeps track of items and encumbrance for you
         </li>
-        <li>language support for both Swedish and English</li>
+        <li>
+          language support for both Swedish and English
+        </li>
+        <li>
+          Import/export of your data if you wish to move it between devices
+        </li>
         <li>
           and a dice roller, of course :)
         </li>

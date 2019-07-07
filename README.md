@@ -1,27 +1,5 @@
 # forbidden_lands_companion
 
-## Features
-
-- Character Creator
-  - Will help you create a new character in accordance with the rules in the
-    Player's Handbook
-  - .
-- .
-
-Planned features
-
-- Character list view
-  - Will display draft, inactive and active characters
-  - Draft characters are newly created characters with required fields missing
-  - Active characters are characters that will apply experience point
-    validation rules for modifying stats
-  - Inactive characters are characters that have been validated but will
-    allow free-form editing
-- 'Active' character editor
-  - Characters active during campaign have different validation rules
-  - Will help you modify an active character
-- Go from active to inactive to draft and vice versa
-
 ## Development setup
 
 You need to have `yarn` installed. Follow the instructions
