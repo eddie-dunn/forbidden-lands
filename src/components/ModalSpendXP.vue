@@ -4,7 +4,11 @@
 import Modal from "@/components/Modal.vue"
 import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
-import { CharacterData, CharacterTalent } from "@/characterData"
+import {
+  CharacterData,
+  CharacterTalent,
+  calcCharacterXP,
+} from "@/characterData"
 
 import SkillSelector from "@/components/SkillSelector.vue"
 import TalentSelector from "@/components/TalentSelector.vue"
@@ -25,6 +29,12 @@ export default class XPModal extends Vue {
 
   charDataCopy: CharacterData = JSON.parse(JSON.stringify(this.charData))
 
+  get xpSpent() {
+    return (
+      calcCharacterXP(this.charDataCopy) -
+      this.charDataCopy.metadata.xpAtCreation
+    )
+  }
   emitCharData() {
     this.$emit("updated-chardata", this.charDataCopy)
     this.close()
@@ -48,6 +58,7 @@ export default class XPModal extends Vue {
   <Modal class="xp-modal" @close="close" :maximized="true">
     <div slot="header" class="header">
       <h2>{{ $t("XP") }}: {{ charDataCopy.experience }}</h2>
+      <div>{{ $t("Total spent") }}: {{ xpSpent }}</div>
       <div class="tab-bar"></div>
     </div>
     <div slot="body" class="modal-body">

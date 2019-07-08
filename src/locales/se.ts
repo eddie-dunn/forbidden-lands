@@ -424,6 +424,7 @@ export default {
   "Tiny": "Småsak",
   "Tired": "Sömnlös",
   "Torches": "Facklor",
+  "Total spent": "Spenderat totalt",
   "Type": "Typ",
   "View": "Visa",
   "Water": "Vatten",
