@@ -143,7 +143,7 @@ select {
     transform: scale(0.95);
   }
   &:focus {
-    outline: @color-danger auto 1px;
+    outline: @color-danger dotted 1px;
   }
 
   &-red,
