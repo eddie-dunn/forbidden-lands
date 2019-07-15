@@ -117,6 +117,10 @@ export default class DiceView extends Vue {
     return this.totals.length > 0 && this.totals[2] ? this.totals[2].fails : ""
   }
 
+  get pushed() {
+    return this.rollResultLog.length >= 2
+  }
+
   pushRoll() {
     const newRolls = this.rollResult.map((results, index) => {
       return results.map((result) => {
@@ -262,11 +266,11 @@ export default class DiceView extends Vue {
         </div>
       </ExpandableSection>
       <div v-if="totals.length > 0" class="result-box">
-        <div class="result-summary">
+        <div :class="['result-summary', pushed ? '' : 'transparent']">
           <pre>{{ totalWhiteSkulls }}</pre>
           <SvgIcon name="skulls-1-inverted" class="dice-icon" />
         </div>
-        <div class="result-summary">
+        <div :class="['result-summary', pushed ? '' : 'transparent']">
           <pre>{{ totalBlackSkulls }}</pre>
           <SvgIcon name="skulls-1" class="dice-icon dice-black" />
         </div>
@@ -438,6 +442,12 @@ export default class DiceView extends Vue {
   justify-content: center;
   align-items: center;
   margin-top: 2rem;
+}
+
+.transparent {
+  * > {
+    opacity: 0.3;
+  }
 }
 
 .roll-result-old {
