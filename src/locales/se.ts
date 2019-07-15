@@ -395,6 +395,7 @@ export default {
   "Notes": "Anteckningar",
   "Open": "Öppna",
   "Other": "Annat",
+  "Personality": "Personlighet",
   "Please select the following in": "Vänligen välj följande i",
   "Portrait": "Porträtt",
   "Post session": "Efter session",
