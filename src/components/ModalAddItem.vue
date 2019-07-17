@@ -62,7 +62,13 @@ export default class AddItem extends Vue {
     }
     return "?"
   }
-  emitNewInventory() {
+
+  save() {
+    if (!this.tmpGear.name) {
+      // Trigger built in form validation:
+      ;(this.$refs.invisibleButton as any).click()
+      return
+    }
     this.$emit("add-item", this.tmpGear)
     this.close()
   }
@@ -80,7 +86,7 @@ export default class AddItem extends Vue {
     </div>
 
     <div slot="body" class="modal-body">
-      <div class="new-item-form">
+      <form class="new-item-form">
         <label for="gear-type">{{ $t("Type") }}</label>
         <select v-model="tmpGear.type">
           <option disabled value="">{{ $t("Choose") }}</option>
@@ -92,7 +98,7 @@ export default class AddItem extends Vue {
         </select>
 
         <label for="gear-name">{{ $t("Name") }}</label>
-        <input type="text" v-model="tmpGear.name" ref="tmpGearNameInput" />
+        <input type="text" v-model="tmpGear.name" required />
 
         <label for="gear-weight">{{ $t("Weight") }}</label>
         <select v-model.number="tmpGear.weight">
@@ -195,7 +201,8 @@ export default class AddItem extends Vue {
             </label>
           </div>
         </div>
-      </div>
+        <button class="hidden" ref="invisibleButton">Invisible</button>
+      </form>
 
       <div v-if="tmpGear.type">
         <h4>Info</h4>
@@ -209,7 +216,7 @@ export default class AddItem extends Vue {
       <button @click="close" class="button button-cancel">
         {{ $t("Cancel") }}
       </button>
-      <button @click="emitNewInventory" class="button">OK</button>
+      <button @click="save" class="button">OK</button>
     </div>
 
     <!-- spacer -->
