@@ -1,8 +1,11 @@
 <script>
-// @ is an alias to /src
-import HelloI18n from "@/components/HelloI18n.vue"
 export default {
-  name: "character_creator",
+  name: "about_page",
+  data() {
+    return {
+      buildVersion: __APP_VERSION__,
+    }
+  },
 }
 </script>
 
@@ -117,6 +120,9 @@ export default {
         <a href="https://game-icons.net/">Game-icons.net</a>.
       </p>
     </div>
+    <div class="version-footer">
+      {{ buildVersion }}
+    </div>
   </div>
 </template>
 
@@ -128,5 +134,10 @@ export default {
   text-align: left;
   max-width: 75ch;
   margin: 1rem auto;
+}
+
+.version-footer {
+  margin-top: 5vh;
+  font-size: 0.8rem;
 }
 </style>

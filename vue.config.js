@@ -1,3 +1,4 @@
+const webpack = require("webpack")
 const path = require("path")
 
 module.exports = {
@@ -17,6 +18,16 @@ module.exports = {
         Style: path.resolve(__dirname, "src/assets/style/"),
       },
     },
+    plugins: [
+      new webpack.DefinePlugin({
+        __APP_VERSION__: JSON.stringify(
+          "v" +
+            require("./package.json").version +
+            "_b" +
+            new Date().toISOString()
+        ),
+      }),
+    ],
   },
 
   pluginOptions: {
