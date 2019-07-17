@@ -69,19 +69,20 @@ export default class CharacterListView extends Vue {
     // Release blob and reset backup data if backup has not been downloaded
     // within time limit:
     setTimeout(() => {
-      window.URL.revokeObjectURL(this.exportBlob)
-      // this.exportData = { blob: "", filename: "" }
-      this.exportBlob = ""
-      this.exportFilename = ""
-    }, 2500)
+      this.releaseBlob()
+    }, 25000)
     return this.exportBlob
   }
 
   releaseBlob() {
-    // Need small timeout to be able to download before releasing blob object:
-    setTimeout(() => window.URL.revokeObjectURL(this.exportBlob), 1500)
+    window.URL.revokeObjectURL(this.exportBlob)
     this.exportFilename = ""
     this.exportBlob = ""
+  }
+
+  downloadClicked() {
+    // Need small timeout to be able to download before releasing blob object:
+    setTimeout(() => this.releaseBlob(), 500)
   }
 
   importDataLoaded(filedata: any) {
@@ -181,15 +182,19 @@ export default class CharacterListView extends Vue {
         >
           Generate backup
         </button>
-        <a
-          v-else
-          class="button"
-          :href="exportBlob"
-          :download="exportFilename"
-          @click="releaseBlob"
-        >
-          Export backup
-        </a>
+        <div class="download-link" v-if="exportBlob">
+          <a
+            :href="exportBlob"
+            :download="exportFilename"
+            @click="downloadClicked"
+          >
+            Download data
+          </a>
+          <span>
+            (to choose destination folder, right click/long press and select
+            "Save link as...")
+          </span>
+        </div>
         <h3>Import</h3>
         <FileReader
           label="Select file"
@@ -230,5 +235,9 @@ export default class CharacterListView extends Vue {
 
 .import-export {
   padding: 0 1rem;
+}
+
+.download-link {
+  margin: 2rem;
 }
 </style>
