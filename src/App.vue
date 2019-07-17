@@ -81,6 +81,10 @@ body {
   text-transform: capitalize;
 }
 
+.capitalize-first::first-letter {
+  text-transform: capitalize;
+}
+
 .hidden {
   display: none;
 }
