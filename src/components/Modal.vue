@@ -45,7 +45,7 @@ export default class Modal extends Props {
         <div class="close-button-container" @click="close()">
           <SvgIcon name="close-button" title="Close" class="close-button" />
         </div>
-        <div class="__modal-header">
+        <div class="__modal-header capitalize-first">
           <slot name="header">
             <!-- <h2>default header with a lot of text and stuff</h2> -->
           </slot>
@@ -133,13 +133,13 @@ export default class Modal extends Props {
 .__modal-header {
   text-align: center;
   color: #42b983;
-  text-transform: capitalize;
 }
 
 .__modal-body {
   overflow: auto;
   max-height: 100vh;
   flex-grow: 1;
+  margin: 0 0.5rem 0.5rem 0.5rem;
 }
 
 .__modal-footer {

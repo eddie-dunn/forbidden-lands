@@ -13,6 +13,7 @@ import {
 import FLNumberInput from "@/components/FLNumberInput.vue"
 import SvgIcon from "@/components/SvgIcon.vue"
 import ModalAddItem from "@/components/ModalAddItem.vue"
+import ModalConfirm from "@/components/ModalConfirm.vue"
 
 type VType = Vue & { focus: () => {} }
 
@@ -20,6 +21,7 @@ type VType = Vue & { focus: () => {} }
   components: {
     FLNumberInput,
     ModalAddItem,
+    ModalConfirm,
     SvgIcon,
   },
 })
@@ -27,6 +29,7 @@ export default class ExpandableSection extends Vue {
   @Prop({ required: true }) characterData!: CharacterData
   showAddItem = false
   showEditItem = false
+  showConfirmDeleteItem = false
   addItemEdit: Item | null = null
 
   PROFESSION = PROFESSION
@@ -38,10 +41,6 @@ export default class ExpandableSection extends Vue {
 
   get itemsSelected() {
     return this.inventory.filter((item) => !!item.selected).length > 0
-  }
-
-  removeGear(index: number) {
-    this.characterData.gear.inventory.splice(index, 1)
   }
 
   equippable(item: Item) {
@@ -160,6 +159,15 @@ export default class ExpandableSection extends Vue {
   dropItems() {
     const newInventory = this.inventory.filter((item) => !item.selected)
     this.characterData.gear.inventory = newInventory as Item[]
+    this.showConfirmDeleteItem = false
+  }
+
+  get deleteItemsBody() {
+    const items = this.inventory
+      .filter((item) => item.selected)
+      .map((item) => item.name)
+      .join(", ")
+    return items
   }
 
   iconFor(item: Item) {
@@ -239,7 +247,7 @@ export default class ExpandableSection extends Vue {
       @close="showEditItem = false"
       @add-item="updateItem"
       :editItem="addItemEdit"
-      :title="$t('Edit item')"
+      :title="$t('Edit') + ': ' + addItemEdit.name"
     />
 
     <ModalAddItem
@@ -247,6 +255,14 @@ export default class ExpandableSection extends Vue {
       @close="showAddItem = false"
       @add-item="addItem"
       :title="$t('Add item')"
+    />
+
+    <ModalConfirm
+      v-if="showConfirmDeleteItem"
+      :title="$t('Drop') + '?'"
+      :body="deleteItemsBody"
+      :confirmAction="dropItems"
+      @close="showConfirmDeleteItem = false"
     />
 
     <!-- TODO: Look into using flex or grid instead of tables -->
@@ -296,7 +312,7 @@ export default class ExpandableSection extends Vue {
           <button
             :disabled="!itemsSelected"
             class="button button-danger"
-            @click="dropItems"
+            @click="showConfirmDeleteItem = true"
           >
             {{ $t("Drop") }}
           </button>
