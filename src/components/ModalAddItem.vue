@@ -65,9 +65,7 @@ export default class AddItem extends Vue {
 
   save() {
     if (!this.tmpGear.name) {
-      // Trigger built in form validation:
-      ;(this.$refs.invisibleButton as any).click()
-      return
+      this.tmpGear.name = "???"
     }
     this.$emit("add-item", this.tmpGear)
     this.close()
@@ -86,7 +84,10 @@ export default class AddItem extends Vue {
     </div>
 
     <div slot="body" class="modal-body">
-      <form class="new-item-form">
+      <div class="new-item-form" @submit.prevent="submit">
+        <label for="gear-name">{{ $t("Name") }}</label>
+        <input type="text" v-model="tmpGear.name" placeholder="???" />
+
         <label for="gear-type">{{ $t("Type") }}</label>
         <select v-model="tmpGear.type">
           <option disabled value="">{{ $t("Choose") }}</option>
@@ -96,9 +97,6 @@ export default class AddItem extends Vue {
           <option value="weapon">{{ $t("Weapon") }}</option>
           <option value="other">{{ $t("Other") }}</option>
         </select>
-
-        <label for="gear-name">{{ $t("Name") }}</label>
-        <input type="text" v-model="tmpGear.name" required />
 
         <label for="gear-weight">{{ $t("Weight") }}</label>
         <select v-model.number="tmpGear.weight">
@@ -110,7 +108,7 @@ export default class AddItem extends Vue {
         </select>
 
         <label for="gear-bonus">Bonus</label>
-        <FLNumberInput v-model="tmpGear.bonus" max="9" fontSize="1.2rem" />
+        <FLNumberInput v-model="tmpGear.bonus" max="9" fontSize="1.4rem" />
 
         <label v-if="isWeapon" for="gear-damage">{{ $t("Damage") }}</label>
         <FLNumberInput
@@ -202,7 +200,7 @@ export default class AddItem extends Vue {
           </div>
         </div>
         <button class="hidden" ref="invisibleButton">Invisible</button>
-      </form>
+      </div>
 
       <div v-if="tmpGear.type">
         <h4>Info</h4>
