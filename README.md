@@ -1,4 +1,6 @@
-# forbidden_lands_companion
+# Forbidden Lands Companion App
+
+> A character creator & manager + dice roller
 
 ## Development setup
 

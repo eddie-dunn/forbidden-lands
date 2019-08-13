@@ -83,8 +83,10 @@ export default {
         Usage should be fairly self-explanatory. If you come across something
         confusing, or have other questions, comments, improvement suggestions,
         feature requests, bug reports etc, please go to
-        <a href="#">the repo hosting the project</a> (TBA) or
-        <a href="mailto:eddie.dunn+flc@gmail.com">email me</a>.
+        <a href="https://gitlab.com/eddie-dunn/forbidden-lands/">
+          the repo hosting the project
+        </a>
+        or <a href="mailto:eddie.dunn+flc@gmail.com">email me</a>.
       </p>
       <p>
         The app uses fairly modern technology so if you are using an old browser
