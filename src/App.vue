@@ -93,6 +93,10 @@ body {
   text-transform: capitalize;
 }
 
+.small-caps {
+  font-variant-caps: small-caps;
+}
+
 .hidden {
   display: none;
 }
@@ -208,5 +212,17 @@ select {
 
 .block {
   display: block;
+}
+
+.text {
+  &-center {
+    text-align: center;
+  }
+  &-left {
+    text-align: left;
+  }
+  &-right {
+    text-align: right;
+  }
 }
 </style>
