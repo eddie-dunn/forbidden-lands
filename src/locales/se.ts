@@ -25,7 +25,7 @@ const attributes: AttributeTranslations = {
 }
 
 const professions: ProfessionTranslations = {
-  druid: "Druid",
+  druid: "druid",
   fighter: "krigare",
   hunter: "jägare",
   minstrel: "skald",
