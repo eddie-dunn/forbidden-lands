@@ -13,6 +13,7 @@ export default Vue.extend({
   },
   props: {
     charData: Object as () => CharacterData | null,
+    titleOverride: String,
   },
   data() {
     return {
@@ -89,11 +90,13 @@ export default Vue.extend({
         <button @click="remove()" class="button button-red">OK</button>
       </div>
     </Modal>
+
     <div v-if="!this.charData" class="stat-card row-full">
       <div class="placeholder" @click="edit()">
-        <h3>{{ $t("Create new character") }}</h3>
+        <h3>{{ titleOverride }}</h3>
       </div>
     </div>
+
     <div
       v-else
       :class="['stat-card', 'row-full', !actionsActive ? 'transform' : '']"

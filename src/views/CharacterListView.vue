@@ -122,8 +122,12 @@ export default class CharacterListView extends Vue {
           />
         </div>
         <div>
-          <CharacterCard />
+          <CharacterCard :titleOverride="$t('Create new character')" />
         </div>
+        <CharacterCard
+          titleOverride="Create from template"
+          @click="() => console.log('hello')"
+        />
       </div>
     </Expander>
 
