@@ -61,6 +61,12 @@ export default new Router({
       // component: CharacterCreatorView,
     },
     {
+      path: "/new/template",
+      props: true,
+      name: "character_creator-template",
+      component: () => import("./views/CharacterTemplateView.vue"),
+    },
+    {
       path: "/active/edit/:id",
       // alias: "/character-creator/new/edit/:id",
       props: true,

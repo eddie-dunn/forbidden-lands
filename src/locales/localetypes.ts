@@ -4,7 +4,9 @@ export type AttributeTranslations = {
   [key in Attribute | "attributes"]: string
 }
 
-export type KinTranslations = { [key in KinName | "kin"]: string }
+export type KinTranslations = {
+  [key in KinName | "kin" | "alderlander" | "aslene" | "ailander"]: string
+}
 
 export type ProfessionTranslations = { [key in Profession]: string }
 

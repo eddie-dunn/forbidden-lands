@@ -45,6 +45,10 @@ const kin: KinTranslations = {
   human: "människa",
   orc: "orch",
   wolfkin: "vargfolk",
+
+  alderlander: "alderlänning",
+  aslene: "aslen",
+  ailander: "eländer",
 }
 
 const skills: SkillTranslations = {
