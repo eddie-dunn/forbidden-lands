@@ -55,6 +55,10 @@ body {
   grid-column-gap: 5px;
 }
 
+.bold {
+  font-weight: bold;
+}
+
 .navbar {
   display: flex;
   align-items: center;
