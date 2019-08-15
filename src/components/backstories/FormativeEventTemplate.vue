@@ -1,53 +1,36 @@
 <template>
-  <!-- Childhood  -->
   <TemplateSelect
-    :title="'Childhood, ' + $t(selectedKinId)"
+    :title="'Formative event, ' + $t(selectedProfessionId)"
     :diceValue="value"
     @randomClicked="emitRandom"
   >
     <div
-      v-for="(childhoodData, index) in characterTemplate.CHILDHOOD[
-        selectedKinId
+      v-for="(formativeData, index) in characterTemplate.FORMATIVE_EVENTS[
+        selectedProfessionId
       ]"
-      v-bind:key="selectedKinId + index"
+      v-bind:key="selectedProfessionId + index"
       class="template-grid"
     >
       <input
         type="radio"
         class="template-grid-radio"
-        :id="'childhood-' + selectedKinId + '-' + index"
+        :id="'event-' + selectedProfessionId + '-' + index"
         :value="index + 1"
         :checked="index + 1 === value"
         @change="emit(index + 1)"
       />
+
       <label
         class="small-caps bold template-grid-title"
-        :for="'childhood-' + selectedKinId + '-' + index"
+        :for="'profession-' + selectedProfessionId + '-' + index"
       >
         <span class="bold text-center">{{ index + 1 }}</span>
-        {{ childhoodData.name }}
+        {{ formativeData.name }}
       </label>
 
       <div class="template-grid-story">
-        {{ childhoodData.story }}
-      </div>
-
-      <div class="template-grid-attributes-title small-caps">
-        {{ $t("attributes") }}
-      </div>
-      <div class="template-grid-attributes">
-        <div class="capitalize">
-          {{ $t("strength") }}: {{ childhoodData.attributes.strength }}
-        </div>
-        <div class="capitalize">
-          {{ $t("agility") }}: {{ childhoodData.attributes.agility }}
-        </div>
-        <div class="capitalize">
-          {{ $t("wits") }}: {{ childhoodData.attributes.wits }}
-        </div>
-        <div class="capitalize">
-          {{ $t("empathy") }}: {{ childhoodData.attributes.empathy }}
-        </div>
+        <div>{{ formativeData.story }}</div>
+        <div class="with-margin">✣ {{ formativeData.items }}</div>
       </div>
 
       <div class="template-grid-skills-title small-caps">
@@ -55,11 +38,18 @@
       </div>
       <div class="template-grid-skills">
         <div
-          v-for="(value, skill) in childhoodData.skills"
+          v-for="(value, skill) in formativeData.skills"
           v-bind:key="value + skill"
         >
           <span class="capitalize"> {{ $t(skill) }}: {{ value }} </span>
         </div>
+      </div>
+
+      <div class="template-grid-talent-title small-caps">
+        {{ $t("Talent") }}
+      </div>
+      <div class="template-grid-talent capitalize">
+        {{ $t(formativeData.talent) }}
       </div>
 
       <!-- spacer -->
@@ -72,7 +62,11 @@ import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 
 import TemplateSelect from "@/components/backstories/TemplateSelect.vue"
-import characterTemplate from "@/data/character_template/character_template"
+import characterTemplate, {
+  KIN_66,
+  PROFESSION_66,
+  TemplateItem,
+} from "@/data/character_template/character_template"
 import { rollDice } from "@/dice"
 
 @Component({
@@ -82,8 +76,9 @@ import { rollDice } from "@/dice"
 })
 export default class CharacterTemplateChildhood extends Vue {
   characterTemplate = characterTemplate
+  rollDice = rollDice
 
-  @Prop({ required: true }) selectedKinId!: string
+  @Prop({ required: true }) selectedProfessionId!: string
   @Prop({ required: true }) value!: number
 
   emitRandom() {
@@ -102,23 +97,26 @@ export default class CharacterTemplateChildhood extends Vue {
   @media (min-width: 500px) {
     grid-template-columns: min-content minmax(20ch, 2fr) 1fr 1fr;
     grid-template-areas:
-      "radio title attributes-title skills-title"
-      ". story attributes skills";
+      "radio title skills-title talent-title"
+      ". story skills talent";
   }
   grid-template-rows: auto;
   grid-template-areas:
     "radio title title"
     ". story story"
-    ". skills-title attributes-title"
-    ". skills attributes";
+    ". skills-title talent-title"
+    ". skills talent";
   grid-gap: 0.5rem;
   margin-top: 1rem;
 
   &-title {
     grid-area: title;
+    // grid-column-start: 2;
+    // grid-column-end: -1;
   }
   &-story {
     grid-area: story;
+    // grid-column: 2;
   }
   &-radio {
     grid-area: radio;
@@ -129,11 +127,23 @@ export default class CharacterTemplateChildhood extends Vue {
       grid-area: skills-title;
     }
   }
-  &-attributes {
-    grid-area: attributes;
+  &-talent {
+    grid-area: talent;
     &-title {
-      grid-area: attributes-title;
+      grid-area: talent-title;
     }
   }
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.template-profession {
+  text-align: left;
+}
+
+.with-margin {
+  margin: 0.7rem 0 0 0;
 }
 </style>

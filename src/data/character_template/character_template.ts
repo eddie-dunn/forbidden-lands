@@ -1,6 +1,7 @@
 import CHILDHOOD from "./childhood"
 import FORMATIVE_EVENTS from "./formative_events"
 import { PROFESSION_TALENTS } from "@/talents"
+import { Profession } from "@/types.ts"
 
 export interface TemplateItem {
   readonly d_min: number

@@ -2,21 +2,22 @@
   <!-- Kin  -->
   <TemplateSelect
     :title="$t('Kin')"
-    :diceValue="selectedKin.diceRoll"
-    @randomClicked="selectedKin = rollKin()"
+    :diceValue="value.diceRoll"
+    @randomClicked="randomClicked"
   >
     <div
-      v-for="(kin, index) in characterTemplate.KIN_66"
+      v-for="(kin, index) in KIN_66"
       @click="setKinWithValue(kin.d_min)"
+      v-bind:key="kin + index"
     >
       <input
         :id="'template-' + kin.id"
         type="radio"
-        :checked="kin.id === selectedKin.id"
-        @change="setKinWithValue(kin.d_min)"
         :value="kin.id"
+        :checked="kin.id === value.id"
+        @change="setKinWithValue(kin.d_min)"
       />
-      <span>
+      <span :class="kin.id === value.id ? 'bold' : ''">
         {{ kin.d_min }}-{{ kin.d_max }}
         <label :for="'template-' + kin.id">{{ $t(kin.id) }}</label>
       </span>
@@ -29,12 +30,12 @@ import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 
 import TemplateSelect from "@/components/backstories/TemplateSelect.vue"
-import characterTemplate, {
+import {
   KIN_66,
-  PROFESSION_66,
   TemplateItem,
 } from "@/data/character_template/character_template"
-import { rollDice } from "@/dice"
+
+import { rollKin } from "@/components/backstories/characterTemplate.ts"
 
 @Component({
   components: {
@@ -42,42 +43,28 @@ import { rollDice } from "@/dice"
   },
 })
 export default class CharacterTemplateChildhood extends Vue {
-  characterTemplate = characterTemplate
+  KIN_66 = KIN_66
 
-  @Prop({ required: true }) selectedKinId!: string
-  @Prop({ required: true }) value!: number
-
-  childhoodValue = this.value
-
-  @Watch("value")
-  onPropValueChanged() {
-    this.childhoodValue = this.value
+  @Prop({ required: true }) value!: {
+    id: string
+    diceRoll: number
+    result: TemplateItem
   }
 
-  @Watch("childhoodValue")
-  onChildhoodValueChanged() {
-    this.$emit("input", this.childhoodValue)
+  setKinWithValue(diceVal: number) {
+    // Kin is set by 'rolling' with a fixed value
+    this.$emit("input", rollKin(diceVal))
+  }
+
+  randomClicked() {
+    this.$emit("input", rollKin())
   }
 }
 </script>
 
 <style scoped lang="less">
-.template-grid {
+.kin-template-grid {
+  // TODO
   display: grid;
-  grid-template-columns: min-content 2fr 1fr 1fr;
-  grid-gap: 1rem;
-  margin: 1rem;
-  &-title {
-    grid-column-start: 2;
-    grid-column-end: -1;
-  }
-}
-
-.bold {
-  font-weight: bold;
-}
-
-.template-childhood {
-  text-align: left;
 }
 </style>
