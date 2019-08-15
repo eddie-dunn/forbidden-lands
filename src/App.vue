@@ -225,4 +225,25 @@ select {
     text-align: right;
   }
 }
+
+.dice {
+  &-white {
+    color: white;
+  }
+  &-black {
+    color: black;
+  }
+  &-red {
+    color: red;
+  }
+  &-green {
+    color: green;
+  }
+  &-blue {
+    color: blue;
+  }
+  &-orange {
+    color: orange;
+  }
+}
 </style>
