@@ -150,7 +150,6 @@ select {
   outline: 0;
   text-decoration: none;
   padding: 0.5rem 2rem;
-  // border-radius: 2em;
   display: inline-block;
   color: #fff;
   background-color: @pastel-green;
@@ -158,9 +157,11 @@ select {
   box-sizing: border-box;
   border: 1px solid #4fc08d;
   cursor: pointer;
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
 
   &:active {
-    transform: scale(0.95);
+    transform: scale(0.97);
   }
   &:focus {
     outline: @color-danger dotted 1px;
@@ -177,6 +178,13 @@ select {
   &-cancel {
     background-color: white;
     color: #4fc08d;
+  }
+
+  &-shadow,
+  &-ghost {
+    border: 0;
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+      0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
   }
 
   &:disabled {
