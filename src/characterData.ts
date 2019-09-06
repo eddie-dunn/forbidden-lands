@@ -54,6 +54,7 @@ export interface CharacterMetaData {
   hasBeenActivated: boolean
   status: CharacterMetaDataStatus
   dataVersion: number
+  startingItems?: string
   xpAtCreation: number
 }
 
