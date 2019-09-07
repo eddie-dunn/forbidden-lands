@@ -190,7 +190,6 @@ export class Store {
   }
 
   deactivate(characterId: string, commit: boolean = true) {
-    console.log("deactivate")
     this._storage[characterId].metadata.status = "freeEdit"
     commit && this.commit()
   }

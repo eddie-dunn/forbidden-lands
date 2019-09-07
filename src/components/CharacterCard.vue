@@ -20,6 +20,7 @@ export default Vue.extend({
     return {
       modalActive: false,
       actionsActive: false,
+      modalConfirmActivate: false,
     }
   },
   computed: {
@@ -68,6 +69,13 @@ export default Vue.extend({
     closeModal() {
       this.modalActive = false
     },
+    activateClicked() {
+      if (this.newChar && !this.newCharValid) {
+        this.modalConfirmActivate = true
+      } else {
+        this.activate()
+      }
+    },
     activate() {
       this.charData && this.$emit("activate", this.charData.metadata.id)
       this.actionsActive = false
@@ -88,6 +96,20 @@ export default Vue.extend({
       <div class="modal-button-row" slot="footer">
         <button @click="closeModal()" class="button">{{ $t("Cancel") }}</button>
         <button @click="remove()" class="button button-red">OK</button>
+      </div>
+    </Modal>
+    <Modal
+      v-if="modalConfirmActivate"
+      @close="modalConfirmActivate = false"
+      :maximized="false"
+    >
+      <div slot="header">{{ $t("Confirm activate") }}</div>
+      <div slot="body">{{ $t("CONFIRM_ACTIVATE_INVALID_CHAR") }}</div>
+      <div class="modal-button-row" slot="footer">
+        <button @click="modalConfirmActivate = false" class="button">
+          {{ $t("Cancel") }}
+        </button>
+        <button @click="activate()" class="button button-red">OK</button>
       </div>
     </Modal>
 
@@ -115,13 +137,9 @@ export default Vue.extend({
             }}
           </button>
           <button
-            v-if="
-              (newChar && newCharValid) ||
-                charData.metadata.status === 'freeEdit'
-            "
-            class="button"
-            :disabled="!newCharValid && newChar"
-            @click="activate"
+            v-if="charData.metadata.status !== 'active'"
+            :class="['button', newChar && !newCharValid ? 'button-danger' : '']"
+            @click="activateClicked"
           >
             {{ $t("Activate") }}
           </button>

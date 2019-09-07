@@ -511,4 +511,9 @@ export default {
 
     Ni har byggt en viktig funktion i ert fäste (sid 156).
   `,
+  "CONFIRM_ACTIVATE_INVALID_CHAR": `
+    Din rollperson uppfyller inte reglerna för skapande av en ny rollperson.
+    Är du säker på att du vill aktivera den?
+  `,
+  "Confirm activate": "Bekräfta aktivering",
 }

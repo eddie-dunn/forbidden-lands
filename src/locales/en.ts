@@ -424,4 +424,7 @@ export default {
 
     You have built a certain function in your stronghold (see page 160).
   `,
+  "CONFIRM_ACTIVATE_INVALID_CHAR": `
+    Your character does not validate; are you sure you wish to activate it?
+  `,
 }
