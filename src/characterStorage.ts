@@ -7,8 +7,8 @@ import {
   getNewGear,
   parseCharacterData,
   CharacterMetaDataStatus,
-  ItemWeapon,
   Item,
+  calcCharacterXP,
 } from "@/characterData"
 import { TalentAll, TalentGeneral } from "@/types"
 import { GENERAL_TALENTS } from "@/talents"
@@ -75,11 +75,28 @@ const PATCHES = [
     })
     return character
   },
+  function patch4(character: CharacterData): CharacterData {
+    const xpOrig = character.metadata.xpAtCreation
+    if (!xpOrig) {
+      const avgXPForAgeType = {
+        "young": 65,
+        "adult": 83,
+        "old": 103,
+        "": 80,
+      }
+      const calcedXP = calcCharacterXP(character)
+      const newXP = Math.min(calcedXP, avgXPForAgeType[character.ageType])
+      console.log("calced xp", calcedXP, "setting xp to", newXP)
+      character.metadata.xpAtCreation = newXP
+    }
+    return character
+  },
 ]
 
 function applyPatches(data: SaveData | {}) {
   const dataList: CharacterData[] = Object.values(data)
   dataList.map((character) => {
+    // character.metadata.dataVersion = 1 // use for testing
     const charDataVersion = character.metadata.dataVersion || -1
     console.log("charDataversion", charDataVersion, character.name)
     PATCHES.map((patch, patchVersion) => {
