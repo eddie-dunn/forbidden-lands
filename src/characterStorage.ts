@@ -235,10 +235,11 @@ export class Store {
   }
 
   replaceData(newData: SaveData, commit: boolean = true) {
+    applyPatches(newData) // TODO: apply patches in a functional way
     this._storage = newData
-    if (commit) {
-      this.commit()
-    }
+    // if (commit) {
+    //   this.commit()
+    // }
   }
 
   commit(): void {
