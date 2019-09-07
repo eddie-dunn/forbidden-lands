@@ -14,11 +14,16 @@ import { TalentAll, TalentGeneral } from "@/types"
 import { GENERAL_TALENTS } from "@/talents"
 
 export const CHAR_STORE_KEY: string = "savedCharacters"
-export let STORE = [] // global in memory store object
 
 const PATCHES = [
-  function patch0(character: CharacterData) {
-    console.log("patch0: performing migrations to Data Version 0")
+  function patch0(character: CharacterData): CharacterData {
+    if (!character.metadata.dataVersion) {
+      console.log("adding dataVersion to character")
+      character.metadata.dataVersion = 0
+    }
+    return character
+  },
+  function patch1(character: CharacterData): CharacterData {
     const name = character.name
     const id = character.metadata.id
     if (!character.metadata.status) {
@@ -42,11 +47,9 @@ const PATCHES = [
     if (!character.willpower) {
       character.willpower = 0
     }
-    character.metadata.dataVersion = 0
     return character
   },
-  function patch1(character: CharacterData) {
-    console.log("patch1: performing migrations to Data Version 1")
+  function patch2(character: CharacterData): CharacterData {
     const updateItem = (item: Item) => {
       if (item.type === "weapon" && !item.features) {
         console.log("Adding features to item", item.name, "for", character.name)
@@ -61,29 +64,33 @@ const PATCHES = [
     character.mount.inventory.map(updateItem)
     return character
   },
-  function patch2(character: CharacterData) {
-    console.log("patch2: performing migrations to Data Version 2")
+  function patch3(character: CharacterData): CharacterData {
     character.talents = character.talents.map(({ id, rank }) => {
       const lowerCaseTalent = (id || "").toLowerCase() as TalentAll
       if (!GENERAL_TALENTS.includes(lowerCaseTalent as TalentGeneral)) {
         return { id, rank }
       }
+      console.log("lowercasing talent", id, "->", lowerCaseTalent)
       return { id: lowerCaseTalent, rank }
     })
+    return character
   },
 ]
 
 function applyPatches(data: SaveData | {}) {
   const dataList: CharacterData[] = Object.values(data)
   dataList.map((character) => {
-    character.metadata.dataVersion = -1
-    const charDataVersion = character.metadata.dataVersion
+    const charDataVersion = character.metadata.dataVersion || -1
+    console.log("charDataversion", charDataVersion, character.name)
     PATCHES.map((patch, patchVersion) => {
       if (charDataVersion < patchVersion) {
+        console.log(`Running patch ${patchVersion} on ${character.name}`)
         const patchedCharacter = patch(character)
-        // saveCharacterToLocalStorage(patchedCharacter)
+        patchedCharacter.metadata.dataVersion = patchVersion
       }
     })
+    // Apply all patches to in memory data, only write to storage at end
+    saveCharacterToLocalStorage(character)
   })
 }
 
