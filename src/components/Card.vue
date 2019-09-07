@@ -24,6 +24,10 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+    defaultOpen: {
+      type: Boolean,
+      default: true,
+    },
   },
   computed: {
     sign(): string {
@@ -36,20 +40,30 @@ export default Vue.extend({
 
 <template>
   <Expander
-    :label="title"
     :class="['card']"
-    :defaultOpen="true"
+    :defaultOpen="defaultOpen"
     :iconRight="sign"
     :iconRightOK="valid"
   >
-    <div :class="['stat-card']">
-      <div class="header"></div>
-      <p v-if="subtitle" class="subtitle">{{ subtitle }}</p>
-      <div class="card-contents">
-        <slot></slot>
+    <template v-slot:header>
+      <slot name="header">
+        {{ title }}
+      </slot>
+    </template>
+    <template v-slot:icon-right>
+      <slot name="icon-right"></slot>
+    </template>
+
+    <template v-slot:default>
+      <div :class="['stat-card']">
+        <div class="header"></div>
+        <p v-if="subtitle" class="subtitle">{{ subtitle }}</p>
+        <div class="card-contents">
+          <slot></slot>
+        </div>
+        <div class="card-footer">{{ footer }}</div>
       </div>
-      <div class="card-footer">{{ footer }}</div>
-    </div>
+    </template>
   </Expander>
 </template>
 
