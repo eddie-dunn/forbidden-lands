@@ -1,9 +1,10 @@
 <template>
   <TemplateSelect
-    :title="$t('Talent')"
+    :title="$t(value.id)"
     :diceValue="value.diceRoll"
     @randomClicked="randomClicked"
   >
+    <div>{{ $t("Class talent") }}, {{ $t(professionId) }}</div>
     <div
       v-for="(talent, index) in characterTemplate.PROFESSION_TALENTS[
         professionId
@@ -58,6 +59,11 @@ export default class CharacterTemplateChildhood extends Vue {
 
   randomClicked() {
     this.$emit("input", rollTalent(this.professionId))
+  }
+
+  @Watch("professionId")
+  onProfessionChange() {
+    this.randomClicked()
   }
 }
 </script>

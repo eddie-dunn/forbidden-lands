@@ -12,7 +12,7 @@ const BASE_STORE_KEY = "__fl_expandable_section"
   },
 })
 export default class ExpandableSection extends Vue {
-  @Prop({ required: true }) label!: string
+  @Prop({ default: "" }) label!: string
   @Prop({ default: false }) defaultOpen!: boolean
   @Prop({ default: "" }) saveStateId!: string
   @Prop({ required: false, default: null }) iconRight!: string
@@ -80,6 +80,7 @@ export default class ExpandableSection extends Vue {
       </div>
       <div :class="['expander-label']">
         {{ label }}
+        <slot name="header"></slot>
       </div>
       <div
         :class="[
@@ -88,6 +89,7 @@ export default class ExpandableSection extends Vue {
         ]"
       >
         {{ iconRight }}
+        <slot name="icon-right"></slot>
       </div>
     </div>
     <div class="expander-content" v-if="isExpanded">
@@ -140,7 +142,7 @@ export default class ExpandableSection extends Vue {
 
 .icon-left {
   display: inline-block;
-  margin: 0 1rem;
+  margin: 0 0.5rem;
   & > svg {
     width: 2rem;
     height: 2rem;
@@ -150,7 +152,7 @@ export default class ExpandableSection extends Vue {
 
 .expander-label {
   display: inline-block;
-  white-space: nowrap;
+  // white-space: nowrap;
   &::first-letter {
     text-transform: uppercase;
   }

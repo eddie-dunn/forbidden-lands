@@ -27,8 +27,6 @@ const arrayToObject = (array) =>
 
 const IMG_MAP = arrayToObject(IMAGES.map((item) => item.default))
 
-// console.log("lololo", IMG_MAP)
-
 export default {
   name: "svg-icon",
 
@@ -46,7 +44,15 @@ export default {
 
   computed: {
     iconPath() {
-      return IMG_MAP[this.name].url
+      const img = IMG_MAP[this.name]
+      if (img) return img.url
+      else {
+        /* eslint-disable no-console */
+        console.error("+++ image not found:", name)
+        console.error("+++ IMG_MAP:", IMG_MAP)
+        /* eslint-enable no-console */
+      }
+      return img.url
 
       // let icon = require(`@/assets/icons/${this.name}.svg`)
       // if (Object.prototype.hasOwnProperty.call(icon, "default")) {

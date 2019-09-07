@@ -14,6 +14,7 @@ export default Vue.extend({
   props: {
     charData: Object as () => CharacterData | null,
     titleOverride: String,
+    linkOverride: String,
   },
   data() {
     return {
@@ -30,10 +31,9 @@ export default Vue.extend({
       return !this.charData
     },
     cardLink(): string {
+      if (this.linkOverride) return this.linkOverride
       if (this.empty) return `new`
-      else if (this.newChar) {
-        return `new/edit/${this.characterId}`
-      }
+      if (this.newChar) return `new/edit/${this.characterId}`
       return `active/edit/${this.characterId}`
     },
     newCharValid(): boolean {
@@ -91,9 +91,9 @@ export default Vue.extend({
       </div>
     </Modal>
 
-    <div v-if="!this.charData" class="stat-card row-full">
+    <div v-if="!this.charData" class="stat-card row-full transform">
       <div class="placeholder" @click="edit()">
-        <h3>{{ titleOverride }}</h3>
+        <h3 class="capitalize-first">{{ titleOverride }}</h3>
       </div>
     </div>
 
@@ -106,7 +106,7 @@ export default Vue.extend({
           :class="['card-buttons', actionsActive ? '' : 'hidden']"
           @click.self="cardClicked"
         >
-          <button class="button button-red" @click.stop.prevent="confirmRemove">
+          <button class="button button-red" @click.self="confirmRemove">
             {{ $t("Remove") }}
           </button>
           <button class="button" @click="edit">
@@ -216,7 +216,7 @@ h3 {
   display: flex;
   align-items: center;
   justify-content: center;
-  // height: 400px;
+  padding: 0.5rem;
   height: 3rem;
   transition: 0.2s ease;
   &:hover {
@@ -287,32 +287,13 @@ h3 {
 }
 
 .stat-card {
-  &:active {
-    // transform: scale(0.99);
-  }
-  // cursor: pointer;
-  // width: 50vw;
-  // background: #fafafa;
-  // margin: 0.5rem;
   text-align: left;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   flex-basis: 40%;
-  // min-width: 18rem;
   justify-content: space-around;
   align-content: space-between;
-
-  // border: solid gray 2px;
-  // border: solid rgba(66, 185, 131, 0.3) 2px;
-  // border: solid #42b98344 3px;
-  // border-radius: 1rem;
-  // border-radius: 0 0 1rem 1rem;
-  // padding: 1rem;
-  // align-content: center;
-  // justify-items: baseline;
-  // align-items: baseline;
-  // box-shadow: 3px 3px 5px 6px #cccccc80;
   height: 100%;
   height: 400px;
   box-shadow: 0px 1px 5px #555;

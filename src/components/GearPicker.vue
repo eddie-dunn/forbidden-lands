@@ -116,7 +116,7 @@ export default class ExpandableSection extends Vue {
     const packRatRank =
       this.characterData.talents
         .map((talent) => {
-          if (talent.id === "Pack Rat") return talent.rank
+          if (talent.id === "pack rat") return talent.rank
         })
         .pop() || 0
     const bonus = {
@@ -129,7 +129,7 @@ export default class ExpandableSection extends Vue {
     return charStrength * 2 + bonus
   }
 
-  @Watch("characterData.profession")
+  @Watch("characterData.profession", { immediate: true })
   setConsumables() {
     if (!this.characterData.profession || this.status !== "new") return
     this.characterData.gear.consumables.food = this.startingConsumable("food")
@@ -227,7 +227,10 @@ export default class ExpandableSection extends Vue {
 
     <div v-if="characterData.metadata.status === 'new'">
       <h4>{{ $t("Starting gear") }}</h4>
-      <div>
+      <div v-if="characterData.metadata.startingItems">
+        ✣ {{ characterData.metadata.startingItems }}
+      </div>
+      <div v-else>
         {{ $t(PROFESSION[characterData.profession].gear_description) }}
       </div>
       <p>

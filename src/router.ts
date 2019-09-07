@@ -67,8 +67,13 @@ export default new Router({
       component: () => import("./views/CharacterTemplateView.vue"),
     },
     {
+      path: "/new/template/edit",
+      props: { templateData: true },
+      name: "character_creator-template-edit",
+      component: () => import("./views/CharacterCreatorView.vue"),
+    },
+    {
       path: "/active/edit/:id",
-      // alias: "/character-creator/new/edit/:id",
       props: true,
       name: "character_creator-edit-active",
       /* webpackChunkName: "character_creator" */

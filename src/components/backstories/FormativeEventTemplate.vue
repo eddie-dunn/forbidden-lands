@@ -1,9 +1,12 @@
 <template>
   <TemplateSelect
-    :title="'Formative event, ' + $t(selectedProfessionId)"
+    :title="eventName"
     :diceValue="value"
     @randomClicked="emitRandom"
   >
+    <div class="capitalize-first">
+      {{ $t("formative event") + ", " + $t(selectedProfessionId) }}
+    </div>
     <div
       v-for="(formativeData, index) in characterTemplate.FORMATIVE_EVENTS[
         selectedProfessionId
@@ -80,6 +83,12 @@ export default class CharacterTemplateChildhood extends Vue {
 
   @Prop({ required: true }) selectedProfessionId!: string
   @Prop({ required: true }) value!: number
+
+  get eventName() {
+    return characterTemplate.FORMATIVE_EVENTS[this.selectedProfessionId][
+      this.value - 1
+    ].name
+  }
 
   emitRandom() {
     this.$emit("input", rollDice(6))

@@ -8,8 +8,7 @@ interface FormativeEvent {
   readonly name: string
   readonly story: string
   readonly items: string
-  // readonly talent: TalentGeneral
-  talent: string
+  readonly talent: TalentGeneral
   readonly skills: Skills
 }
 // TODO: Refactor TalentGeneral to use lower case for everything
@@ -87,6 +86,8 @@ export const druid: FormativeEvent[] = [
       "You sought the beauty of nature, away from the violent conflicts of the Forbidden Lands. When you finally returned to the land, you did so with newfound strength.",
     items: "Receive a tent and a field kitchen.",
     skills: {
+      endurance: 1,
+      survival: 1,
       // add skills as above
     },
     talent: "pathfinder",
@@ -536,7 +537,7 @@ export const minstrel: FormativeEvent[] = [
     name: "sang for a lord",
     story:
       "Your talent drew the attention of a local lord and he offered you a place as an entertainer at his court. Your time in the castle was filled with wine, delicious food, and clinking silver. But also insidious intrigue, assassinations, and jealousy.",
-    items: "Receive fine farments and a dagger",
+    items: "Receive fine garments and a dagger",
     skills: {
       insight: 1,
       performance: 1,

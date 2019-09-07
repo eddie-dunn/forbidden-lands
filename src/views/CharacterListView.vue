@@ -124,9 +124,11 @@ export default class CharacterListView extends Vue {
         <div>
           <CharacterCard :titleOverride="$t('Create new character')" />
         </div>
+        <!-- TODO: Enable when fully working -->
         <CharacterCard
-          titleOverride="Create from template"
-          @click="() => console.log('hello')"
+          v-if="$debugMode"
+          :titleOverride="$t('create from template')"
+          linkOverride="new/template"
         />
       </div>
     </Expander>

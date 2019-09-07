@@ -1,10 +1,11 @@
 <template>
   <!-- Kin  -->
   <TemplateSelect
-    :title="$t('Kin')"
+    :title="$t(value.id)"
     :diceValue="value.diceRoll"
     @randomClicked="randomClicked"
   >
+    <div>{{ $t("Kin") }}</div>
     <div
       v-for="(kin, index) in KIN_66"
       @click="setKinWithValue(kin.d_min)"
@@ -19,7 +20,9 @@
       />
       <span :class="kin.id === value.id ? 'bold' : ''">
         {{ kin.d_min }}-{{ kin.d_max }}
-        <label :for="'template-' + kin.id">{{ $t(kin.id) }}</label>
+        <label class="capitalize" :for="'template-' + kin.id">
+          {{ $t(kin.id) }}
+        </label>
       </span>
     </div>
   </TemplateSelect>

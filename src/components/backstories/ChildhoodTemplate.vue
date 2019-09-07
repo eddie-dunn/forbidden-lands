@@ -1,10 +1,9 @@
 <template>
   <!-- Childhood  -->
-  <TemplateSelect
-    :title="'Childhood, ' + $t(selectedKinId)"
-    :diceValue="value"
-    @randomClicked="emitRandom"
-  >
+  <TemplateSelect :title="title" :diceValue="value" @randomClicked="emitRandom">
+    <div class="capitalize-first">
+      {{ $t("childhood") }}, {{ $t(selectedKinId) }}
+    </div>
     <div
       v-for="(childhoodData, index) in characterTemplate.CHILDHOOD[
         selectedKinId
@@ -86,6 +85,10 @@ export default class CharacterTemplateChildhood extends Vue {
   @Prop({ required: true }) selectedKinId!: string
   @Prop({ required: true }) value!: number
 
+  get title() {
+    return characterTemplate.CHILDHOOD[this.selectedKinId][this.value - 1].name
+  }
+
   emitRandom() {
     this.$emit("input", rollDice(6))
   }
@@ -99,8 +102,8 @@ export default class CharacterTemplateChildhood extends Vue {
 <style scoped lang="less">
 .template-grid {
   display: grid;
-  @media (min-width: 500px) {
-    grid-template-columns: min-content minmax(20ch, 2fr) 1fr 1fr;
+  @media (min-width: 600px) {
+    grid-template-columns: min-content 2fr 1fr 1fr;
     grid-template-areas:
       "radio title attributes-title skills-title"
       ". story attributes skills";

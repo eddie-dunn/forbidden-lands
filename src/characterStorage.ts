@@ -10,6 +10,8 @@ import {
   ItemWeapon,
   Item,
 } from "@/characterData"
+import { TalentAll, TalentGeneral } from "@/types"
+import { GENERAL_TALENTS } from "@/talents"
 
 export const CHAR_STORE_KEY: string = "savedCharacters"
 export let STORE = [] // global in memory store object
@@ -58,6 +60,16 @@ const PATCHES = [
     character.gear.inventory.map(updateItem)
     character.mount.inventory.map(updateItem)
     return character
+  },
+  function patch2(character: CharacterData) {
+    console.log("patch2: performing migrations to Data Version 2")
+    character.talents = character.talents.map(({ id, rank }) => {
+      const lowerCaseTalent = (id || "").toLowerCase() as TalentAll
+      if (!GENERAL_TALENTS.includes(lowerCaseTalent as TalentGeneral)) {
+        return { id, rank }
+      }
+      return { id: lowerCaseTalent, rank }
+    })
   },
 ]
 

@@ -1,4 +1,6 @@
 <script lang="ts">
+import Vue from "vue"
+
 import AttributesSelector from "@/components/AttributesSelector.vue"
 import SkillSelector from "@/components/SkillSelector.vue"
 import TalentSelector from "@/components/TalentSelector.vue"
@@ -25,7 +27,7 @@ import {
   CharacterMetaData,
   calcCharacterXP,
 } from "@/characterData"
-import Vue from "vue"
+import { getCharDataFromQuery } from "@/util/characterUtil"
 
 import Conditions from "@/components/Conditions.vue"
 import ExpandableSection from "@/components/ExpandableSection.vue"
@@ -36,6 +38,17 @@ import XPModal from "@/components/XPModal.vue"
 
 function stringChar(characterData: CharacterData) {
   return JSON.stringify(characterData)
+}
+
+function initCharData(
+  $characterStore: any,
+  charId: string,
+  query: any
+): CharacterData {
+  if (query.kinId) {
+    return getCharDataFromQuery(query)
+  }
+  return $characterStore.characterById(charId) || getNewCharacterData()
 }
 
 const CharacterCreatorMain = Vue.extend({
@@ -56,9 +69,10 @@ const CharacterCreatorMain = Vue.extend({
     TalentSelector,
     XPModal,
   },
-  props: ["charId"],
+  props: ["charId", "useTemplateData"],
   watch: {
     $route(to, from) {
+      // TODO: this block never seems to execute?
       if (to.name === "character_creator-new") {
         Vue.set(this, "characterData", getNewCharacterData())
       }
@@ -66,9 +80,11 @@ const CharacterCreatorMain = Vue.extend({
   },
   data() {
     return {
-      characterData:
-        this.$characterStore.characterById(this.charId) ||
-        getNewCharacterData(),
+      characterData: initCharData(
+        this.$characterStore,
+        this.charId,
+        this.$route.query
+      ),
       showJSON: false,
       showXPModal: false,
       showSpendXPModal: false,
@@ -126,9 +142,16 @@ const CharacterCreatorMain = Vue.extend({
       }
       this.$characterStore.addCharacter(this.characterData)
       this.characterDataCopy = stringChar(this.characterData)
+      if (this.useTemplateData) {
+        this.$router.push(`/new/edit/${this.id}`)
+      }
     },
     closeClicked() {
-      this.$router.push("/character-list")
+      if (this.useTemplateData) {
+        this.$router.go(-1)
+      } else {
+        this.$router.push("/")
+      }
     },
     updateBase(character: CharacterData) {
       this.characterData.ageType = character.ageType
@@ -322,10 +345,10 @@ export default CharacterCreatorMain
     <div class="action-bar-wrapper">
       <div class="action-bar-left">
         <button
-          class="item-action-bar button button-white"
+          :class="['item-action-bar', 'button', 'button-white']"
           v-on:click="closeClicked"
         >
-          {{ $t("Close") }}
+          {{ useTemplateData ? $t("Back") : $t("Close") }}
         </button>
       </div>
       <div class="action-bar-middle"></div>
@@ -343,6 +366,7 @@ export default CharacterCreatorMain
         </button>
       </div>
     </div>
+
     <ExpandableSection v-if="$debugMode" label="JSON Export">
       <!-- TODO Use same import/export functionality as for char list -->
       <pre>{{ JSON.stringify(characterData, null, 2) }}</pre>

@@ -16,13 +16,21 @@ interface TranslatedTalent {
   rank: number | null | undefined
 }
 
+function capitalizeFirst(s: string): string {
+  return s[0].toUpperCase() + s.slice(1).toLowerCase()
+}
+
 function talentsSortedByTranslation(
   vm: any, // Vue instance with $t function
   talents: CharacterTalent[]
 ): TranslatedTalent[] {
   const translationList = talents.map((talent) => {
     const translation: TranslateResult = String(vm.$t(talent.id))
-    return { translation, id: talent.id, rank: talent.rank }
+    return {
+      translation: capitalizeFirst(translation),
+      id: talent.id,
+      rank: talent.rank,
+    }
   })
 
   const sortedTalents = translationList.sort((item1, item2) => {
@@ -132,7 +140,7 @@ export default class Talentelect extends Vue {
 </script>
 
 <template>
-  <div v-if="true" class="talent-row">
+  <div class="talent-row">
     <label for="talent">{{ label }}</label>
     <select
       id="talent"
@@ -186,10 +194,10 @@ export default class Talentelect extends Vue {
         <SvgIcon name="close" title="remove" class="talent-icon" />
       </button>
     </span>
-  </div>
-  <div v-else>
-    <span>{{ $t(value) }}</span>
-    <span>{{ !!talentRank ? " " + talentRank : "" }}</span>
+    <div v-if="false">
+      <span>{{ $t(value) }}</span>
+      <span>{{ !!talentRank ? " " + talentRank : "" }}</span>
+    </div>
   </div>
 </template>
 

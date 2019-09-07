@@ -1,7 +1,6 @@
 <script lang="ts">
 /* eslint-disable no-console */
 import { AGE, CLASS, KIN } from "@/keys.ts"
-import { GENERAL_TALENTS, getClassTalents } from "@/talents.ts"
 import { capitalize } from "@/util"
 import { getAgeType, getAgeRange, getReputation } from "@/age"
 import { CLASS as PROFESSION } from "@/classes"

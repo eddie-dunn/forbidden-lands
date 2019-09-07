@@ -1,6 +1,6 @@
 <template>
   <div class="character-creator">
-    <CharacterCreatorMain :charId="id" />
+    <CharacterCreatorMain :charId="id" :useTemplateData="templateData" />
   </div>
 </template>
 
@@ -15,6 +15,7 @@ export default {
   },
   props: {
     id: String,
+    templateData: Boolean,
   },
 }
 </script>

@@ -1,9 +1,10 @@
 <template>
   <TemplateSelect
-    :title="$t('Profession')"
+    :title="$t(value.id)"
     :diceValue="value.diceRoll"
     @randomClicked="randomClicked"
   >
+    <div>{{ $t("Profession") }}</div>
     <div
       v-for="(professsion, index) in PROFESSION_66"
       @click="setKinWithValue(professsion.d_min)"
@@ -18,9 +19,9 @@
       />
       <span :class="professsion.id === value.id ? 'bold' : ''">
         {{ professsion.d_min }}-{{ professsion.d_max }}
-        <label :for="'template-' + professsion.id">{{
-          $t(professsion.id)
-        }}</label>
+        <label class="capitalize" :for="'template-' + professsion.id">
+          {{ $t(professsion.id) }}
+        </label>
       </span>
     </div>
   </TemplateSelect>
@@ -28,7 +29,7 @@
 
 <script lang="ts">
 import Vue from "vue"
-import { Component, Prop, Watch } from "vue-property-decorator"
+import { Component, Prop } from "vue-property-decorator"
 
 import TemplateSelect from "@/components/backstories/TemplateSelect.vue"
 import {
