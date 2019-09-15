@@ -1,17 +1,17 @@
-/* eslint-disable no-console */
-import uuid1 from "uuid/v1"
-
 import {
   CharacterData,
-  getNewCharacterData,
-  getNewGear,
-  parseCharacterData,
   CharacterMetaDataStatus,
   Item,
   calcCharacterXP,
+  getNewCharacterData,
+  getNewGear,
+  parseCharacterData,
 } from "@/characterData"
 import { TalentAll, TalentGeneral } from "@/types"
+
 import { GENERAL_TALENTS } from "@/talents"
+/* eslint-disable no-console */
+import uuid1 from "uuid/v1"
 
 export const CHAR_STORE_KEY: string = "savedCharacters"
 
@@ -91,6 +91,18 @@ const PATCHES = [
     }
     return character
   },
+  function patch5(character: CharacterData): CharacterData | null {
+    console.log("patcher 5", character.name, character.portrait)
+    const matcher = /^\/img\/player_handbook_png-\d{3}/
+    const foundName = (character.portrait || "").match(matcher)
+    if (foundName) {
+      const newName = foundName + ".png"
+      console.log("NEWNAME", newName)
+      // character.portrait = newName
+    }
+    // return character
+    return null
+  },
 ]
 
 function applyPatches(data: SaveData | {}) {
@@ -103,7 +115,9 @@ function applyPatches(data: SaveData | {}) {
       if (charDataVersion < patchVersion) {
         console.log(`Running patch ${patchVersion} on ${character.name}`)
         const patchedCharacter = patch(character)
-        patchedCharacter.metadata.dataVersion = patchVersion
+        if (patchedCharacter) {
+          patchedCharacter.metadata.dataVersion = patchVersion
+        }
       }
     })
     // Apply all patches to in memory data, only write to storage at end
