@@ -427,4 +427,11 @@ export default {
   "CONFIRM_ACTIVATE_INVALID_CHAR": `
     Your character does not validate; are you sure you wish to activate it?
   `,
+  "TEMPLATE_VALID_WARNING": `
+    N.B: Creating a character from a template may result in a character that
+    does not validate according to the character creation rules.
+
+    However, even if the stats are invalid it is still possible to save and
+    activate your character, should you wish to do so.
+  `,
 }

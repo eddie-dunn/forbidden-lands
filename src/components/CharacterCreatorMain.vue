@@ -35,6 +35,7 @@ import FLNumberInput from "@/components/FLNumberInput.vue"
 import ModalSpendXP from "@/components/ModalSpendXP.vue"
 import Mount from "@/components/Mount.vue"
 import XPModal from "@/components/XPModal.vue"
+import InfoBox from "@/components/base/InfoBox.vue"
 
 function stringChar(characterData: CharacterData) {
   return JSON.stringify(characterData)
@@ -62,6 +63,7 @@ const CharacterCreatorMain = Vue.extend({
     FlavorSelector,
     FLNumberInput,
     GearPicker,
+    InfoBox,
     ModalSpendXP,
     Mount,
     PicturePicker,
@@ -187,6 +189,9 @@ const CharacterCreatorMain = Vue.extend({
     },
   },
   mounted() {
+    if (this.useTemplateData) {
+      this.characterData.name = "Template Char"
+    }
     this.characterDataCopy = stringChar(this.characterData)
   },
 })
@@ -205,6 +210,12 @@ export default CharacterCreatorMain
       <button @click="updateStatus('levelup')">Level-up</button>
       <div>WP: {{ characterData.willpower }}</div>
     </div>
+    <InfoBox
+      v-show="useTemplateData && (!skillsValid || !attributesValid)"
+      boxType="warning"
+    >
+      {{ $t("TEMPLATE_VALID_WARNING") }}
+    </InfoBox>
     <form
       class="character_creator-form"
       @submit="checkForm"
