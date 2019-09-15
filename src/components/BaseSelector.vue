@@ -117,20 +117,31 @@ export default Vue.extend({
 
 <template>
   <div class="contentgroup">
-    <div class="cell full-width">
-      <label for="character-name">{{ $t("Name") }}</label>
-      <input
-        id="character-name"
-        class="input-max-width"
-        type="text"
-        v-model="mdata.name"
-        :placeholder="nameSuggestion()"
-        required
-      />
-    </div>
+    <div class="grid-3-col">
+      <div class="input-layout grid-full-width">
+        <label for="character-name">{{ $t("Name") }}</label>
+        <input
+          id="character-name"
+          type="text"
+          v-model="mdata.name"
+          :placeholder="nameSuggestion()"
+          required
+        />
+      </div>
 
-    <div class="base-flex2">
-      <div class="base-flex">
+      <div class="input-layout">
+        <label for="age" class="base-label">{{ $t("age") }}</label>
+        <input
+          :disabled="disabled"
+          id="age"
+          type="number"
+          v-model.number="mdata.age"
+          :placeholder="ageRange()"
+          min="10"
+          max="999"
+        />
+      </div>
+      <div class="input-layout">
         <label for="character-kin" class="base-label">{{ $t("kin") }}</label>
         <select id="character-kin" v-model="mdata.kin" :disabled="disabled">
           <option v-for="kin in kin_select" :key="kin.id" v-bind:value="kin.id">
@@ -138,7 +149,7 @@ export default Vue.extend({
           </option>
         </select>
       </div>
-      <div class="base-flex">
+      <div class="input-layout">
         <label for="character-class" class="base-label">
           {{ $t("Profession") }}
         </label>
@@ -152,21 +163,6 @@ export default Vue.extend({
           </option>
         </select>
       </div>
-      <div class="base-flex">
-        <label for="age" class="base-label">{{ $t("age") }}</label>
-        <input
-          :disabled="disabled"
-          id="age"
-          type="number"
-          v-model.number="mdata.age"
-          :placeholder="ageRange()"
-          class="smallnumber"
-          min="1"
-        />
-      </div>
-    </div>
-
-    <div class="cell full-width">
       <span v-if="this.mdata.age" class="capitalize">
         {{ this.ageType }}
       </span>
@@ -174,37 +170,35 @@ export default Vue.extend({
         {{ $t("Reputation") }}: {{ this.reputation }}
       </span>
       <span class="capitalize">
-        {{ $t("Experience") }}: {{ this.mdata.experience }}
+        {{ $t("XP") }}: {{ this.mdata.experience }}
       </span>
     </div>
+
     <!-- spacer -->
   </div>
 </template>
 
 <style scoped lang="less">
-.base-flex2 {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+.grid-3-col {
   width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 1rem 5px;
 }
-.base-flex {
+
+.input-layout {
   display: flex;
-  align-items: center;
-  flex-grow: 1;
-  margin: 0.2rem;
-  label {
-    min-width: 9ch;
-  }
-  input,
-  select {
-    flex-grow: 1;
-  }
+  flex-direction: column;
 }
 
 label,
 .capitalize {
   text-transform: capitalize;
+}
+
+.grid-full-width {
+  grid-column-start: 1;
+  grid-column-end: -1;
 }
 
 .full-width {
@@ -218,38 +212,10 @@ label,
   flex-wrap: wrap;
 }
 
-.consumables {
-  // display: flex;
-  // flex: 1 1 100%;
-  // justify-items: stretch;
-  // flex-grow: 1;
-  // justify-content: space-between;
-  // margin: 1rem;
-  div > {
-    display: inline-block;
-    margin-right: 1rem;
-  }
-}
-
 .cell {
   display: flex;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
-  // justify-content: center;
   align-items: center;
-  label,
-  select,
-  input > {
-    margin-left: 0.5rem;
-    // margin-right: 0.5rem;
-  }
-}
-
-.input-max-width {
-  width: 100%;
-}
-
-.smallnumber {
-  width: 4rem;
 }
 </style>

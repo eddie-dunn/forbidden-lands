@@ -115,6 +115,7 @@ input[type="text"] {
   border: 2px solid @pastel-green-transparent;
   padding: 0.3rem;
   appearance: none;
+  inline-size: auto;
   &:disabled {
     background-image: none;
     border: 2px solid ~"@{pastel-green}55";
