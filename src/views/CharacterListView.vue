@@ -126,7 +126,6 @@ export default class CharacterListView extends Vue {
         </div>
         <!-- TODO: Enable when fully working -->
         <CharacterCard
-          v-if="$debugMode"
           :titleOverride="$t('create from template')"
           linkOverride="new/template"
         />
