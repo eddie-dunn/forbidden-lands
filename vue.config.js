@@ -4,6 +4,13 @@ const path = require("path")
 module.exports = {
   // publicPath: process.env.NODE_ENV === "production" ? "/fl/cc" : "/",
   publicPath: process.env.NODE_ENV === "production" ? "/forbidden-lands/" : "/",
+  pwa: {
+    workboxPluginMode: "InjectManifest",
+    workboxOptions: {
+      swSrc: "./src/sw.js",
+      swDest: "service-worker.js",
+    },
+  },
   configureWebpack: {
     module: {
       rules: [

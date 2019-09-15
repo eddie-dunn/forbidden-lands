@@ -7,6 +7,36 @@ export default Vue.extend({
     LocaleChanger,
     RefreshButton,
   },
+  data() {
+    return {
+      refreshing: false,
+      registration: null as any,
+      updateExists: false,
+    }
+  },
+  methods: {
+    showRefreshUI(e: any) {
+      this.registration = e.detail
+      this.updateExists = true
+    },
+    refreshApp() {
+      this.updateExists = false
+      if (!this.registration || !this.registration.waiting) {
+        return
+      }
+      this.registration.waiting.postMessage("skipWaiting")
+    },
+  },
+  created() {
+    // Service worker update from:
+    // https://medium.com/@dougallrich/give-users-control-over-app-updates-in-vue-cli-3-pwas-20453aedc1f2
+    document.addEventListener("swUpdated", this.showRefreshUI, { once: true })
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (this.refreshing) return
+      this.refreshing = true
+      window.location.reload()
+    })
+  },
 })
 </script>
 
@@ -25,6 +55,14 @@ export default Vue.extend({
         <RefreshButton />
       </div>
     </div>
+    <button
+      v-if="updateExists"
+      style="margin: 1rem"
+      class="button button-danger"
+      @click="refreshApp"
+    >
+      New version available! Click to update
+    </button>
     <router-view />
   </div>
 </template>
