@@ -21,7 +21,8 @@ if (process.env.NODE_ENV === "production") {
     },
     updated() {
       console.log("New content is available; please refresh.")
-      // location.reload(true) // TODO: Add notification?
+      window.location.reload(true) // TODO: Add notification?
+      console.log("Refreshed page")
     },
     offline() {
       console.log(
