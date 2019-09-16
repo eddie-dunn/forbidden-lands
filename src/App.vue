@@ -1,9 +1,11 @@
 <script lang="ts">
 import Vue from "vue"
 import LocaleChanger from "@/components/LocaleChanger.vue"
+import RefreshButton from "@/components/RefreshButton.vue"
 export default Vue.extend({
   components: {
     LocaleChanger,
+    RefreshButton,
   },
 })
 </script>
@@ -18,8 +20,9 @@ export default Vue.extend({
         |
         <router-link to="/about">{{ $t("About") }}</router-link>
       </div>
-      <div class="route-links">
+      <div class="navbar-right">
         <LocaleChanger />
+        <RefreshButton />
       </div>
     </div>
     <router-view />
@@ -46,13 +49,18 @@ body {
   min-height: 100vh;
 }
 
+.navbar-right {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 5px;
+}
+
 .navbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
 
   background: @background-color;
-  // border: solid ~"@{pastel-green}99" 2px;
   box-shadow: 0px 1px 4px #5f5f5fff;
   padding: 10px;
 

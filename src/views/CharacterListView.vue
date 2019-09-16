@@ -171,7 +171,7 @@ export default class CharacterListView extends Vue {
       </div>
     </Expander>
 
-    <Expander label="Import/Export">
+    <Expander :label="$t('Import/Export')">
       <div class="import-export">
         <h3>Export</h3>
         <button
@@ -180,6 +180,7 @@ export default class CharacterListView extends Vue {
           @click="generateBlob"
           :disabled="!!exportBlob"
         >
+          <!-- TODO: Translate -->
           Generate backup
         </button>
         <div class="download-link" v-if="exportBlob">
@@ -188,9 +189,11 @@ export default class CharacterListView extends Vue {
             :download="exportFilename"
             @click="downloadClicked"
           >
+            <!-- TODO: Translate -->
             Download data
           </a>
           <span>
+            <!-- TODO: Translate -->
             (to choose destination folder, right click/long press and select
             "Save link as...")
           </span>
@@ -207,9 +210,11 @@ export default class CharacterListView extends Vue {
             class="button button-red"
             @click="importBackup"
           >
+            <!-- TODO: Translate -->
             Import backup
           </button>
           <p v-if="importData">
+            <!-- TODO: Translate -->
             N.B: Importing character list data will overwrite all your current
             characters!
           </p>
