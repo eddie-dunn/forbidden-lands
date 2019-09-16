@@ -2,7 +2,6 @@ const webpack = require("webpack")
 const path = require("path")
 
 module.exports = {
-  // publicPath: process.env.NODE_ENV === "production" ? "/fl/cc" : "/",
   publicPath: process.env.NODE_ENV === "production" ? "/forbidden-lands/" : "/",
   pwa: {
     workboxPluginMode: "InjectManifest",
@@ -17,23 +16,6 @@ module.exports = {
         {
           test: /\.less$/,
           loader: "less-loader",
-        },
-        {
-          test: /player_handbook_png-\d*\.png/,
-          use: [
-            {
-              loader: "url-loader",
-              options: {
-                limit: 4096,
-                fallback: {
-                  loader: "file-loader",
-                  options: {
-                    name: "img/[name].[ext]",
-                  },
-                },
-              },
-            },
-          ],
         },
       ],
     },
@@ -100,5 +82,14 @@ module.exports = {
       .rule("svg-sprite")
       .use("svgo-loader")
       .loader("svgo-loader")
+
+    config.module
+      .rule("images")
+      .use("url-loader")
+      .loader("url-loader")
+      .tap((options) => {
+        options.fallback.options.name = "img/[name].[ext]"
+        return options
+      })
   },
 }

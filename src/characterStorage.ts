@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import {
   CharacterData,
   CharacterMetaDataStatus,
@@ -10,7 +12,6 @@ import {
 import { TalentAll, TalentGeneral } from "@/types"
 
 import { GENERAL_TALENTS } from "@/talents"
-/* eslint-disable no-console */
 import uuid1 from "uuid/v1"
 
 export const CHAR_STORE_KEY: string = "savedCharacters"
@@ -92,11 +93,11 @@ const PATCHES = [
     return character
   },
   function patch5(character: CharacterData): CharacterData | null {
-    console.log("patcher 5", character.name, character.portrait)
-    const matcher = /(\/img\/player_handbook_png-\d*\.)([\da-zA-Z]*)(\.png)/
+    console.log("Validating portrait for", character.name, character.portrait)
+    const matcher = /\/(img\/player_handbook_png-\d*\.)[\da-zA-Z]*\.png/
     const found = (character.portrait || "").match(matcher)
     if (found && found[1]) {
-      const newName = found[1] + "png"
+      const newName = __webpack_public_path__ + found[1] + "png"
       console.log("OLDNAME", character.portrait, "NEWNAME", newName)
       character.portrait = newName
     }
