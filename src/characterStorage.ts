@@ -93,12 +93,12 @@ const PATCHES = [
   },
   function patch5(character: CharacterData): CharacterData | null {
     console.log("patcher 5", character.name, character.portrait)
-    const matcher = /^\/img\/player_handbook_png-\d{3}/
-    const foundName = (character.portrait || "").match(matcher)
-    if (foundName) {
-      const newName = foundName + ".png"
-      console.log("NEWNAME", newName)
-      // character.portrait = newName
+    const matcher = /(\/img\/player_handbook_png-\d*\.)([\da-zA-Z]*)(\.png)/
+    const found = (character.portrait || "").match(matcher)
+    if (found && found[1]) {
+      const newName = found[1] + "png"
+      console.log("OLDNAME", character.portrait, "NEWNAME", newName)
+      character.portrait = newName
     }
     // return character
     return null

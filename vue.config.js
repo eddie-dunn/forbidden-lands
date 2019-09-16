@@ -18,6 +18,23 @@ module.exports = {
           test: /\.less$/,
           loader: "less-loader",
         },
+        {
+          test: /player_handbook_png-\d*\.png/,
+          use: [
+            {
+              loader: "url-loader",
+              options: {
+                limit: 4096,
+                fallback: {
+                  loader: "file-loader",
+                  options: {
+                    name: "img/[name].[ext]",
+                  },
+                },
+              },
+            },
+          ],
+        },
       ],
     },
     resolve: {
@@ -59,8 +76,8 @@ module.exports = {
        */
       loaderOptions: {
         extract: true,
-        // spriteFilename: "img/icons.[hash:8].svg", // or 'img/icons.svg' if filenameHashing == false
-        spriteFilename: "img/icons.svg", // or 'img/icons.svg' if filenameHashing == false
+        spriteFilename: "img/icons.[hash:8].svg", // or 'img/icons.svg' if filenameHashing == false
+        // spriteFilename: "img/icons.svg", // or 'img/icons.svg' if filenameHashing == false
       },
       /*
        * @see https://github.com/kisenka/svg-sprite-loader#configuration
