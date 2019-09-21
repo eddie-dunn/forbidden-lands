@@ -1,11 +1,11 @@
 <script lang="ts">
 import Vue from "vue"
 import LocaleChanger from "@/components/LocaleChanger.vue"
-import RefreshButton from "@/components/RefreshButton.vue"
+import NavButton from "@/components/NavButton.vue"
 export default Vue.extend({
   components: {
     LocaleChanger,
-    RefreshButton,
+    NavButton,
   },
   data() {
     return {
@@ -43,16 +43,22 @@ export default Vue.extend({
 <template>
   <div id="app">
     <div class="navbar navbar-top">
-      <div class="route-links">
-        <router-link to="/">{{ $t("List") }}</router-link>
-        |
-        <router-link to="/dice">{{ $t("Dice") }}</router-link>
-        |
-        <router-link to="/about">{{ $t("About") }}</router-link>
+      <div class="navbar-left">
+        <div v-if="false">
+          <NavButton type="back" />
+          <NavButton type="forward" />
+          <NavButton type="refresh" />
+        </div>
+        <div class="route-links">
+          <router-link to="/">{{ $t("List") }}</router-link>
+          |
+          <router-link to="/dice">{{ $t("Dice") }}</router-link>
+          |
+          <router-link to="/about">{{ $t("About") }}</router-link>
+        </div>
       </div>
       <div class="navbar-right">
         <LocaleChanger />
-        <RefreshButton />
       </div>
     </div>
     <button
@@ -87,10 +93,12 @@ body {
   min-height: 100vh;
 }
 
-.navbar-right {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-column-gap: 5px;
+.navbar-left {
+  > div {
+    display: inline-block;
+    margin-right: 1rem;
+    vertical-align: middle;
+  }
 }
 
 .bold {
