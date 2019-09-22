@@ -14,6 +14,7 @@ Vue.config.productionTip = false
 declare module "vue/types/vue" {
   interface Vue {
     $characterStore: CharacterStore
+    $debugMode: boolean
   }
 }
 Vue.prototype.$characterStore = new CharacterStore()
