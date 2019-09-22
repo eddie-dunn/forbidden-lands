@@ -2,7 +2,7 @@ import characterTemplate, {
   TemplateItem,
 } from "@/data/character_template/character_template"
 
-import { Profession } from "@/types.ts"
+import { Profession, ExtendedKinName } from "@/types.ts"
 import { rollDice } from "@/dice"
 
 function diceRollToValue(
@@ -16,22 +16,36 @@ function diceRollToValue(
   )
 }
 
+interface ProfessionRoll {
+  id: Profession
+  diceRoll: number
+  result: TemplateItem
+  [key: string]: number | TemplateItem | Profession
+}
+
+interface KinRoll {
+  id: ExtendedKinName
+  diceRoll: number
+  result: TemplateItem
+  [key: string]: number | TemplateItem | ExtendedKinName
+}
+
 function roll66(diceRoll: number | undefined, valueList: TemplateItem[]) {
   diceRoll = diceRoll || rollDice(66)
   const result = diceRollToValue(diceRoll, valueList)
   return {
     diceRoll,
     result,
-    id: result ? result.id : "elf",
+    id: result ? result.id : "elf", // TODO: What is this? Refactor!
   }
 }
 
-export function rollProfession(diceRoll?: number) {
-  return roll66(diceRoll, characterTemplate.PROFESSION_66)
+export function rollProfession(diceRoll?: number): ProfessionRoll {
+  return roll66(diceRoll, characterTemplate.PROFESSION_66) as ProfessionRoll
 }
 
-export function rollKin(diceRoll?: number) {
-  return roll66(diceRoll, characterTemplate.KIN_66)
+export function rollKin(diceRoll?: number): KinRoll {
+  return roll66(diceRoll, characterTemplate.KIN_66) as KinRoll
 }
 
 export function rollTalent(professionId: string /*Profession*/) {
@@ -45,4 +59,9 @@ export function rollTalent(professionId: string /*Profession*/) {
     diceRoll,
     id: talentId,
   }
+}
+
+export function rollAge(kin: any): number {
+  // interval [kin.young - 2, kin.old + 10]
+  return 18 // TODO: Implement
 }

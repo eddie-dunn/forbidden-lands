@@ -10,7 +10,10 @@ import {
   rollProfession,
   rollKin,
   rollTalent,
+  rollAge,
 } from "@/components/backstories/characterTemplate.ts"
+import { getAgeType } from "@/age.ts"
+import { CharDataQueryObj, kinTransform } from "@/util/characterUtil.ts"
 
 import ChildhoodTemplate from "@/components/backstories/ChildhoodTemplate.vue"
 import FormativeEventTemplate from "@/components/backstories/FormativeEventTemplate.vue"
@@ -52,22 +55,30 @@ export default class CharacterTemplateView extends Vue {
   selectedProfession = rollProfession()
   selectedTalent = rollTalent(this.selectedProfession.id)
   formativeNum = rollDice(6)
+  age = 18
 
   rollAll() {
     this.selectedKin = rollKin()
+    this.age = rollAge(this.selectedKin)
     this.childhoodNum = rollDice(6)
     this.selectedProfession = rollProfession()
     this.selectedTalent = rollTalent(this.selectedProfession.id)
     this.formativeNum = rollDice(6)
   }
 
-  characterTemplateData() {
+  get ageType() {
+    const kinId = kinTransform(this.selectedKin.id)
+    return getAgeType(this.age, kinId)
+  }
+
+  characterTemplateData(): CharDataQueryObj {
     return {
       kinId: this.selectedKin.id,
       professionId: this.selectedProfession.id,
       talentId: this.selectedTalent.id,
       childhoodIndex: String(this.childhoodNum - 1),
       formativeEventIndex: String(this.formativeNum - 1),
+      age: String(this.age),
     }
   }
 
@@ -76,6 +87,8 @@ export default class CharacterTemplateView extends Vue {
   }
 
   nextClicked() {
+    // console.log("char template data", this.characterTemplateData())
+    // return
     this.$router.push({
       name: "character_creator-template-edit",
       query: this.characterTemplateData(),

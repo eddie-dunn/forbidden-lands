@@ -15,6 +15,8 @@ export type KinName =
   | "orc"
   | "wolfkin"
 
+export type ExtendedKinName = KinName | "alderlander" | "ailander" | "aslene"
+
 export type Profession =
   | "druid"
   | "fighter"

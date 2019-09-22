@@ -1,5 +1,6 @@
 import { CharacterData, getNewCharacterData } from "@/characterData"
 import {
+  ExtendedKinName,
   KinName,
   Profession,
   Skill,
@@ -30,16 +31,17 @@ function mergeSkills(skills1: SkillObj, skills2: SkillObj) {
   return mergedSkills
 }
 
-type ExtendedKin = KinName | "alderlander" | "ailander" | "aslene"
-interface QueryObj {
-  kinId: ExtendedKin
+export interface CharDataQueryObj {
+  kinId: ExtendedKinName
   professionId: Profession
   talentId: TalentProfession
+  age: string
   childhoodIndex: string
   formativeEventIndex: string
+  [key: string]: string
 }
 
-function kinTransform(kinId: ExtendedKin): KinName {
+export function kinTransform(kinId: ExtendedKinName): KinName {
   if (["alderlander", "ailander", "aslene"].includes(kinId)) {
     return "human"
   }
@@ -56,7 +58,8 @@ export function getCharDataFromQuery(query: {
     talentId,
     childhoodIndex,
     formativeEventIndex,
-  } = (query as unknown) as QueryObj // TODO: Hack, might want to add extra checking
+    age,
+  } = query as CharDataQueryObj // TODO: Hack, might want to add extra checking
   const childhood = characterTemplate.CHILDHOOD[kinId][Number(childhoodIndex)]
   const formativeEvent =
     characterTemplate.FORMATIVE_EVENTS[professionId][
@@ -76,7 +79,7 @@ export function getCharDataFromQuery(query: {
   )}, formative event: ${capitalize(formativeEvent.name)}\n${
     formativeEvent.story
   }`
-  charData.age = 18
+  charData.age = Number(age)
   charData.attributes = childhood.attributes
 
   // Adjust skills according to template

@@ -27,7 +27,7 @@ import {
   CharacterMetaData,
   calcCharacterXP,
 } from "@/characterData"
-import { getCharDataFromQuery } from "@/util/characterUtil"
+import { getCharDataFromQuery, CharDataQueryObj } from "@/util/characterUtil"
 
 import Conditions from "@/components/Conditions.vue"
 import ExpandableSection from "@/components/ExpandableSection.vue"
@@ -44,7 +44,7 @@ function stringChar(characterData: CharacterData) {
 function initCharData(
   $characterStore: any,
   charId: string,
-  query: any
+  query: CharDataQueryObj
 ): CharacterData {
   if (query.kinId) {
     return getCharDataFromQuery(query)
@@ -82,11 +82,8 @@ const CharacterCreatorMain = Vue.extend({
   },
   data() {
     return {
-      characterData: initCharData(
-        this.$characterStore,
-        this.charId,
-        this.$route.query
-      ),
+      characterData: initCharData(this.$characterStore, this.charId, this.$route
+        .query as CharDataQueryObj),
       showJSON: false,
       showXPModal: false,
       showSpendXPModal: false,
