@@ -228,7 +228,12 @@ export default class ExpandableSection extends Vue {
     <div v-if="characterData.metadata.status === 'new'">
       <h4>{{ $t("Starting gear") }}</h4>
       <div v-if="characterData.metadata.startingItems">
-        ✣ {{ characterData.metadata.startingItems }}
+        <p
+          v-for="item in characterData.metadata.startingItems.split('\n')"
+          v-bind:key="item"
+        >
+          ✣ {{ item }}
+        </p>
       </div>
       <div v-else>
         {{ $t(PROFESSION[characterData.profession].gear_description) }}

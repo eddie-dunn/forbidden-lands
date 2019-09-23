@@ -37,7 +37,7 @@ export interface CharDataQueryObj {
   talentId: TalentProfession
   age: string
   childhoodIndex: string
-  formativeEventIndex: string
+  formativeEvents: string
   [key: string]: string
 }
 
@@ -49,47 +49,60 @@ export function kinTransform(kinId: ExtendedKinName): KinName {
 }
 
 // FIXME: Add tests
-export function getCharDataFromQuery(query: {
-  [key: string]: string
-}): CharacterData {
+export function getCharDataFromQuery(query: CharDataQueryObj): CharacterData {
   const {
     kinId,
     professionId,
     talentId,
     childhoodIndex,
-    formativeEventIndex,
+    formativeEvents,
     age,
-  } = query as CharDataQueryObj // TODO: Hack, might want to add extra checking
+  } = query
   const childhood = characterTemplate.CHILDHOOD[kinId][Number(childhoodIndex)]
-  const formativeEvent =
-    characterTemplate.FORMATIVE_EVENTS[professionId][
-      Number(formativeEventIndex)
+  const fevents = formativeEvents.split(",").map((eventIndex) => {
+    return characterTemplate.FORMATIVE_EVENTS[professionId][
+      Number(eventIndex) - 1
     ]
+  })
+
   const charData = getNewCharacterData()
   charData.kin = kinTransform(kinId)
   charData.profession = professionId
-  charData.talents[1] = { id: talentId, rank: 1 }
-  charData.talents[2] = { id: formativeEvent.talent as TalentAll, rank: 1 }
+  charData.talents[1] = { id: talentId, rank: 1 } // set profession talent
+  fevents.map((event, index) => {
+    charData.talents[index + 2] = {
+      id: event.talent,
+      rank: 1,
+    }
+  }) // set general talents
 
   // TODO: Add dedent? https://github.com/dmnd/dedent
-  charData.notes = `# ${capitalize(kinId)}, childhood: ${capitalize(
-    childhood.name
-  )}\n${childhood.story}\n\n# ${capitalize(
-    professionId
-  )}, formative event: ${capitalize(formativeEvent.name)}\n${
-    formativeEvent.story
-  }`
+  let notes = fevents.map(({ name, story }) => {
+    return `## ${capitalize(name)}\n\n${story}`.trim()
+  })
+  charData.notes = `
+# ${capitalize(kinId)} ${capitalize(professionId)}
+
+## ${capitalize(childhood.name)}
+
+${childhood.story}
+
+${notes.join("\n\n")}
+`.trim()
+
   charData.age = Number(age)
   charData.attributes = childhood.attributes
 
   // Adjust skills according to template
-  const mergedSkills = mergeSkills(childhood.skills, formativeEvent.skills)
+  const mergedSkills = fevents
+    .map((event) => event.skills)
+    .reduce(mergeSkills, childhood.skills)
   Object.entries(mergedSkills).map((skill) => {
     const skillId = skill[0]
     const skillVal = skill[1]
     charData.skills[skillId as Skill].rank = skillVal || 0
   })
 
-  charData.metadata.startingItems = formativeEvent.items
+  charData.metadata.startingItems = fevents.map((f) => f.items).join("\n")
   return charData
 }

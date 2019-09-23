@@ -1,8 +1,3 @@
-/*
-    [AGE.YOUNG]: 15,
-    [AGE.ADULT]: 14,
-    [AGE.OLD]: 13,
-*/
 import { AGE, KIN } from "@/keys.ts"
 import { Age, KinName } from "@/types"
 
@@ -24,6 +19,7 @@ const table = {
   [KIN.WOLFKIN]: [13, 21, 41],
   [KIN.ORC]: [13, 21, 46],
   [KIN.GOBLIN]: [16, 26, 61],
+  [KIN.ELF]: [25, 100, 500],
 }
 
 export function getAgeRangeArray(kin: KinName): Array<number> {
@@ -52,12 +48,7 @@ export function getAgeType(age: number | null, kin: KinName | null): Age {
   return AGE.ADULT
 }
 
-export function getStartingTalents(
-  age: number | null,
-  kin: KinName | null
-): number {
-  const ageType = getAgeType(age, kin)
-  // const talentMap: 1 | 2 | 3 = { [AGE.YOUNG]: 1, [AGE.ADULT]: 2, [AGE.OLD]: 3}
+export function getStartingTalentsFromType(ageType: Age): number {
   const talentMap = {
     "young": 1,
     "adult": 2,
@@ -65,4 +56,12 @@ export function getStartingTalents(
     "": 0,
   }
   return talentMap[ageType] || 0
+}
+
+export function getStartingTalents(
+  age: number | null,
+  kin: KinName | null
+): number {
+  const ageType = getAgeType(age, kin)
+  return getStartingTalentsFromType(ageType)
 }

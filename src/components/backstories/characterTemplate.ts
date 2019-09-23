@@ -2,8 +2,9 @@ import characterTemplate, {
   TemplateItem,
 } from "@/data/character_template/character_template"
 
-import { Profession, ExtendedKinName } from "@/types.ts"
-import { rollDice } from "@/dice"
+import { Profession, ExtendedKinName, KinName } from "@/types.ts"
+import { getAgeType, getAgeRangeArray } from "@/age.ts"
+import { rollDice, getRandomIntInclusive } from "@/dice"
 
 function diceRollToValue(
   diceRoll: number,
@@ -61,7 +62,10 @@ export function rollTalent(professionId: string /*Profession*/) {
   }
 }
 
-export function rollAge(kin: any): number {
-  // interval [kin.young - 2, kin.old + 10]
-  return 18 // TODO: Implement
+export function rollAge(kin: KinName): number {
+  const ageRanges = getAgeRangeArray(kin)
+  const min = ageRanges[0] - 2
+  const max = ageRanges[2] + 10
+  const randomVal = getRandomIntInclusive(min, max)
+  return randomVal
 }

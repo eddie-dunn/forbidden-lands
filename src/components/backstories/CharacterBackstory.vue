@@ -1,7 +1,7 @@
 <script lang="ts">
 import Vue from "vue"
 import { Component, Watch } from "vue-property-decorator"
-import { Skill } from "@/types.ts"
+import { Skill, Age } from "@/types.ts"
 
 import characterTemplate from "@/data/character_template/character_template"
 import { rollDice } from "@/dice"
@@ -12,12 +12,13 @@ import {
   rollTalent,
   rollAge,
 } from "@/components/backstories/characterTemplate.ts"
-import { getAgeType } from "@/age.ts"
+import { getAgeType, getStartingTalentsFromType } from "@/age.ts"
 import { CharDataQueryObj, kinTransform } from "@/util/characterUtil.ts"
 
 import ChildhoodTemplate from "@/components/backstories/ChildhoodTemplate.vue"
 import FormativeEventTemplate from "@/components/backstories/FormativeEventTemplate.vue"
 import KinTemplate from "@/components/backstories/KinTemplate.vue"
+import AgeTemplate from "@/components/backstories/AgeTemplate.vue"
 import ProfessionTemplate from "@/components/backstories/ProfessionTemplate.vue"
 import TalentTemplate from "@/components/backstories/TalentTemplate.vue"
 import TemplateSelect from "@/components/backstories/TemplateSelect.vue"
@@ -40,6 +41,7 @@ function mergeSkills(skills1: SkillObj, skills2: SkillObj) {
 
 @Component({
   components: {
+    AgeTemplate,
     ChildhoodTemplate,
     FormativeEventTemplate,
     KinTemplate,
@@ -54,21 +56,51 @@ export default class CharacterTemplateView extends Vue {
   childhoodNum = rollDice(6)
   selectedProfession = rollProfession()
   selectedTalent = rollTalent(this.selectedProfession.id)
-  formativeNum = rollDice(6)
   age = 18
+  formativeEvents = this.getFormativeEvents()
 
   rollAll() {
     this.selectedKin = rollKin()
-    this.age = rollAge(this.selectedKin)
+    this.age = rollAge(kinTransform(this.selectedKin.id))
     this.childhoodNum = rollDice(6)
     this.selectedProfession = rollProfession()
     this.selectedTalent = rollTalent(this.selectedProfession.id)
-    this.formativeNum = rollDice(6)
+    this.formativeEvents = this.getFormativeEvents()
   }
 
-  get ageType() {
+  getFormativeEvents() {
+    // TODO: Rewrite, avoid multiple loops
+    let formativeEvents = Array.from(Array(this.formativeEventNumber)).map(
+      (element) => {
+        return rollDice(6)
+      }
+    )
+    for (let i = 0; i < this.formativeEventNumber; i++) {
+      let diceVal = formativeEvents[i]
+      while (formativeEvents.includes(diceVal)) {
+        diceVal = rollDice(6)
+      }
+      formativeEvents[i] = diceVal
+    }
+    return formativeEvents
+  }
+
+  get ageType(): Age {
     const kinId = kinTransform(this.selectedKin.id)
     return getAgeType(this.age, kinId)
+  }
+
+  get kin() {
+    return kinTransform(this.selectedKin.id)
+  }
+
+  get formativeEventNumber() {
+    return getStartingTalentsFromType(this.ageType)
+  }
+
+  @Watch("ageType")
+  updateFormativeEvent() {
+    this.formativeEvents = this.getFormativeEvents()
   }
 
   characterTemplateData(): CharDataQueryObj {
@@ -77,7 +109,7 @@ export default class CharacterTemplateView extends Vue {
       professionId: this.selectedProfession.id,
       talentId: this.selectedTalent.id,
       childhoodIndex: String(this.childhoodNum - 1),
-      formativeEventIndex: String(this.formativeNum - 1),
+      formativeEvents: String(this.formativeEvents),
       age: String(this.age),
     }
   }
@@ -87,12 +119,8 @@ export default class CharacterTemplateView extends Vue {
   }
 
   nextClicked() {
-    // console.log("char template data", this.characterTemplateData())
-    // return
-    this.$router.push({
-      name: "character_creator-template-edit",
-      query: this.characterTemplateData(),
-    })
+    const query = this.characterTemplateData()
+    this.$router.push({ name: "character_creator-template-edit", query })
   }
 }
 </script>
@@ -106,6 +134,8 @@ export default class CharacterTemplateView extends Vue {
         </button>
       </div>
       <KinTemplate v-model="selectedKin" />
+
+      <AgeTemplate v-model.number="age" :kin="selectedKin.id" />
 
       <!-- Childhood  -->
       <ChildhoodTemplate
@@ -129,10 +159,14 @@ export default class CharacterTemplateView extends Vue {
       </div>
 
       <!-- formative event -->
+      <!-- <div v-for="index in formativeEventNumber" v-bind:key="index"> -->
       <FormativeEventTemplate
-        v-model="formativeNum"
+        v-for="index in formativeEventNumber"
+        v-bind:key="index"
+        v-model="formativeEvents[index - 1]"
         :selectedProfessionId="selectedProfession.id"
       />
+      <!-- </div> -->
     </div>
 
     <div v-if="false">
@@ -157,6 +191,7 @@ export default class CharacterTemplateView extends Vue {
         <button
           :class="['button', 'button-shadow', 'item-action-bar']"
           @click="nextClicked"
+          :disabled="age < 1"
         >
           {{ $t("Next") }}
         </button>

@@ -14,7 +14,8 @@ import Card from "@/components/Card.vue"
 })
 export default class TemplateSelect extends Vue {
   @Prop({ default: "" }) title!: string
-  @Prop({ required: true }) diceValue!: number
+  @Prop({}) diceValue!: number
+  @Prop({}) numeralValue!: number
 
   rollClicked() {
     this.$emit("randomClicked")
@@ -36,6 +37,7 @@ export default class TemplateSelect extends Vue {
     </template>
     <template v-slot:icon-right>
       <button
+        v-if="diceValue"
         class="button button-white button-ghost button-icon"
         @click.stop="rollClicked"
       >
@@ -54,6 +56,13 @@ export default class TemplateSelect extends Vue {
           :name="`d6-${diceResults[1]}`"
           class="dice-icon dice-red"
         />
+      </button>
+      <button
+        v-else-if="numeralValue || numeralValue === 0"
+        @click.stop="rollClicked"
+        class="button button-white button-ghost button-numeral"
+      >
+        {{ numeralValue }}
       </button>
     </template>
     <button v-if="false" class="button-icon" @click="rollClicked">
@@ -76,13 +85,18 @@ export default class TemplateSelect extends Vue {
   // border-color: black;
 }
 
+.button-numeral {
+  font-size: 20px;
+  padding: 0.5rem 1rem;
+}
+
 .dice-icon {
   height: 30px;
   width: 30px;
 }
 
 .heading {
-  font-size: 32px;
-  // font-weight: bold;
+  font-size: 24px;
+  display: inline-block;
 }
 </style>

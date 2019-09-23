@@ -15,9 +15,7 @@ export const alderlander: Childhood[] = [
   {
     // #1
     name: "orphaned",
-    story: `You have never met your mother or father, never had a family. Since
-      you were little, you've had to care for yourself. It has hardened you
-      and made you strong, but a feeling of rootlessness gnaws within you.`,
+    story: `You have never met your mother or father, never had a family. Since you were little, you've had to care for yourself. It has hardened you and made you strong, but a feeling of rootlessness gnaws within you.`,
     attributes: {
       strength: 3,
       agility: 5,
