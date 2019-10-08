@@ -56,6 +56,7 @@ export default new Router({
     },
     {
       path: "/multiplayer",
+      alias: "/m",
       name: "multiplayer",
       component: () => import("./views/MultiplayerView.vue"),
     },
