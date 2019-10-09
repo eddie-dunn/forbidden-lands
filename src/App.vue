@@ -162,6 +162,7 @@ input[type="text"] {
   padding: 0.3rem;
   appearance: none;
   inline-size: auto;
+  box-sizing: border-box;
   &:disabled {
     background-image: none;
     border: 2px solid ~"@{pastel-green}55";
