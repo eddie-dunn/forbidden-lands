@@ -1,44 +1,53 @@
 import {
   ChatMessage,
   ClientMessage,
-  ConnectMessage,
+  UserListMsg,
   FLMetadata,
   HostMessage,
   ServerMessage,
-  timeout,
 } from "@/components/multiplay/multi.ts"
+import { timeout } from "@/util.ts"
 
 import Peer from "peerjs"
 
 export default class Client {
-  client: Peer | null = null
-  host: Peer.DataConnection | null = null
+  clientPeer: Peer | null = null
+  hostConn: Peer.DataConnection | null = null
   destination: string = ""
+  _userList: { peerId: string; username: string }[] = []
+  chatMessages: ChatMessage[] = []
 
   receiveMsgCb: (data: ChatMessage) => void
-  connectionCb: (data: ConnectMessage) => void
+  connectionCb: (data: UserListMsg) => void
   handleServerMessage: (data: ServerMessage) => void
 
   constructor({
     receiveMsgCb = (data: ChatMessage) => {},
     handleServerMessage = (data: ServerMessage) => {},
-    connectionCb = (data: ConnectMessage) => {},
+    connectionCb = (data: UserListMsg) => {},
   } = {}) {
     this.receiveMsgCb = receiveMsgCb
     this.connectionCb = connectionCb
     this.handleServerMessage = handleServerMessage
   }
 
+  get userList() {
+    return this._userList
+  }
+  set userList(list: { peerId: string; username: string }[]) {
+    this._userList = list
+  }
+
   get clientId() {
-    return this.client ? this.client.id : null
+    return this.clientPeer ? this.clientPeer.id : null
   }
 
   get hostId() {
-    return this.host ? this.host.peer : null
+    return this.hostConn ? this.hostConn.peer : null
   }
 
   get connected() {
-    return this.host && this.host.open
+    return this.hostConn && this.hostConn.open
   }
 
   log(message: any, ...optionalParams: any[]) {
@@ -48,20 +57,20 @@ export default class Client {
 
   /* Setup and initialize a client peer connection */
   init(): Client {
-    this.client = new Peer(undefined, {
+    this.clientPeer = new Peer(undefined, {
       debug: 2,
     })
 
-    this.client.on("open", (id: string) => {
+    this.clientPeer.on("open", (id: string) => {
       this.log(`my client id is: ${id}`)
     })
-    this.client.on("close", () => {
+    this.clientPeer.on("close", () => {
       this.log("Client connection closed:", this.clientId)
     })
-    this.client.on("disconnected", () => {
+    this.clientPeer.on("disconnected", () => {
       this.log("Client disconnected:", this.clientId)
     })
-    this.client.on("error", (error) => {
+    this.clientPeer.on("error", (error) => {
       /* eslint-disable-next-line no-console */
       console.error(">>> ERROR:", error.type, error)
     })
@@ -72,7 +81,7 @@ export default class Client {
     const client = new Peer(undefined, {
       debug: 2,
     })
-    this.client = client
+    this.clientPeer = client
 
     client.on("close", () => {
       this.log("Client connection closed:", this.clientId)
@@ -93,27 +102,31 @@ export default class Client {
   }
 
   /* Connect to server */
-  // TODO: Convert to Promise to remove callback dependency?
-  join(hostId: string, username: string): Client {
-    if (!this.client) {
+  async join(hostId: string, username: string) {
+    if (!this.clientPeer) {
       /* eslint-disable-next-line no-console */
       console.error("Init client first")
       return this
     }
 
-    this.log("connecting to", hostId)
-    this.host = this.client.connect(hostId, {
+    this.log("connecting to", hostId, "as", username)
+    const hostConn = this.clientPeer.connect(hostId, {
       metadata: { username } as FLMetadata,
     })
+    this.hostConn = hostConn
 
-    this.host.on("data", (data: HostMessage) => this.onHostData(data))
-    this.host.on("open", () => this.host && this.onHostConnected(this.host))
-    return this
-  }
-
-  onHostConnected(host: Peer.DataConnection) {
-    this.log("connection open, getting data")
-    this._hostSend(host, { type: "list-users" })
+    hostConn.on("data", (data: HostMessage) => this.onHostData(data))
+    return new Promise<Client>((resolve, reject) => {
+      hostConn.on("open", () => {
+        this._hostSend(hostConn, { type: "list-users" })
+        resolve(this)
+      })
+      hostConn.on("error", (error) => {
+        /* eslint-disable-next-line no-console */
+        console.error(">>> ERROR:", error.type, error)
+        reject(error.type)
+      })
+    })
   }
 
   onHostData(data: HostMessage) {
@@ -121,28 +134,35 @@ export default class Client {
     switch (data.type) {
       case "chat-message":
         this.receiveMsgCb(data)
+        this.receiveChat(data)
         break
       case "server-message":
         this.handleServerMessage(data)
         break
       case "connect-message":
         this.connectionCb(data)
+        this.userList = data.peers
         break
       default:
         break
     }
   }
 
+  receiveChat(data: ChatMessage) {
+    this.chatMessages.push(data)
+  }
   // Wrapper for ensuring type compatibility
   _hostSend(host: Peer.DataConnection, data: ClientMessage) {
     host.send(data)
   }
 
   sendChat(message: string) {
-    if (!this.host) return
-    const username = this.host.metadata ? this.host.metadata.username : ""
+    if (!this.hostConn) return
+    const username = this.hostConn.metadata
+      ? this.hostConn.metadata.username
+      : ""
     this.log("sending chat message", message)
-    this._hostSend(this.host, {
+    this._hostSend(this.hostConn, {
       type: "chat-message",
       message,
       username,
@@ -152,24 +172,22 @@ export default class Client {
   disconnect() {
     // TODO: Implement disconnect handling & timeout fallback
     this.log("disconnecting client...")
-    if (this.host) {
-      this._hostSend(this.host, {
+    if (this.hostConn) {
+      this._hostSend(this.hostConn, {
         type: "client-disconnect",
         peerId: this.clientId || "",
       })
     }
-    timeout(1000)
-      .then(() => {
-        if (this.host) {
-          this.host.close()
-        }
-      })
-      .then(() => {
-        if (this.client) {
-          this.client.disconnect()
-          // this.client.destroy()
-        }
-      })
+    return new Promise<Client>((resolve, reject) => {
+      if (!this.clientPeer) {
+        reject("No client to disconnect")
+      } else {
+        this.clientPeer.on("disconnected", () => {
+          resolve(this)
+        })
+        this.clientPeer.disconnect()
+      }
+    })
   }
 }
 /**

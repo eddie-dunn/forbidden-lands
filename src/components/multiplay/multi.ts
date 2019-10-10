@@ -5,11 +5,34 @@
  */
 import Peer from "peerjs"
 
-// TODO: Move to util
-export function timeout(delay: number) {
-  return new Promise(function(resolve, reject) {
-    setTimeout(resolve, delay)
-  })
+export const NAMES = [
+  "aclie",
+  "alice",
+  "bob",
+  "charles",
+  "engelbrekt",
+  "hogan",
+  "johnny",
+
+  // radio
+  "alpha",
+  "bravo",
+  "charlie",
+  "delta",
+  "echo",
+  "foxtrot",
+  "golf",
+  "hotel",
+  "india",
+  "juliet",
+  "kilo",
+  "lima",
+  "mike",
+]
+
+export function randomName(names: string[] = NAMES) {
+  const name = names[Math.floor(Math.random() * names.length)]
+  return name
 }
 
 // Types/Interfaces
@@ -29,7 +52,7 @@ export interface ChatMessage {
   username: string
 }
 
-export interface ConnectMessage {
+export interface UserListMsg {
   type: "connect-message"
   peers: {
     peerId: string
@@ -42,7 +65,7 @@ export interface ServerMessage {
   message: string
 }
 
-export type HostMessage = ConnectMessage | ChatMessage | ServerMessage
+export type HostMessage = UserListMsg | ChatMessage | ServerMessage
 
 export interface ListUsers {
   type: "list-users"

@@ -15,6 +15,7 @@ export default class FLInput extends Vue {
   @Prop({ default: "" }) id!: string
   @Prop({ default: "text" }) type!: string
   @Prop({ default: "" }) iconName!: string
+  @Prop({ default: false }) required!: boolean
   @Prop({ default: () => {} }) enterCb!: Function
 
   inputEvent($event: any) {
@@ -28,9 +29,11 @@ export default class FLInput extends Vue {
     <label :for="id">
       <SvgIcon v-if="iconName" class="" :name="iconName" />
       <span>{{ label }}</span>
+      <span v-if="required" class="required-sign">*</span>
     </label>
     <input
       v-bind="$attrs"
+      :required="required"
       :id="id"
       class="input"
       :type="type"
@@ -53,5 +56,9 @@ export default class FLInput extends Vue {
 .input {
   width: 100%;
   box-sizing: border-box;
+}
+
+.required-sign {
+  color: @pastel-red;
 }
 </style>

@@ -6,11 +6,15 @@ import Modal from "@/components/Modal.vue"
 const VALID = "✓"
 const INVALID = "✖"
 
+/*
+ * A component that displays a picture and character data.
+ *
+ * TODO: Cleanup, make extensible, use as base for other character card
+ * implementations.
+ */
 export default Vue.extend({
-  name: "CharacterCreatorCard",
-  components: {
-    Modal,
-  },
+  name: "CharacterCard",
+  components: {},
   props: {
     charData: Object as () => CharacterData | null,
     titleOverride: String,
@@ -91,29 +95,6 @@ export default Vue.extend({
 
 <template>
   <div class="character-card">
-    <Modal v-if="modalActive" @close="closeModal()" :maximized="false">
-      <div slot="header">{{ $t("Confirm delete") }}</div>
-      <div slot="body"></div>
-      <div class="modal-button-row" slot="footer">
-        <button @click="closeModal()" class="button">{{ $t("Cancel") }}</button>
-        <button @click="remove()" class="button button-red">OK</button>
-      </div>
-    </Modal>
-    <Modal
-      v-if="modalConfirmActivate"
-      @close="modalConfirmActivate = false"
-      :maximized="false"
-    >
-      <div slot="header">{{ $t("Confirm activate") }}</div>
-      <div slot="body">{{ $t("CONFIRM_ACTIVATE_INVALID_CHAR") }}</div>
-      <div class="modal-button-row" slot="footer">
-        <button @click="modalConfirmActivate = false" class="button">
-          {{ $t("Cancel") }}
-        </button>
-        <button @click="activate()" class="button button-red">OK</button>
-      </div>
-    </Modal>
-
     <div v-if="!this.charData" class="stat-card row-full transform">
       <div class="placeholder" @click="edit()">
         <h3 class="capitalize-first">{{ titleOverride }}</h3>
@@ -125,52 +106,12 @@ export default Vue.extend({
       :class="['stat-card', 'row-full', !actionsActive ? 'transform' : '']"
     >
       <div class="img-section">
-        <div
-          :class="['card-buttons', actionsActive ? '' : 'hidden']"
-          @click.self="cardClicked"
-        >
-          <button class="button button-red" @click.self="confirmRemove">
-            {{ $t("Remove") }}
-          </button>
-          <button class="button" @click="edit">
-            {{
-              charData.metadata.status === "active" ? $t("View") : $t("Edit")
-            }}
-          </button>
-          <button
-            v-if="charData.metadata.status !== 'active'"
-            :class="['button', newChar && !newCharValid ? 'button-danger' : '']"
-            @click="activateClicked"
-          >
-            {{ $t("Activate") }}
-          </button>
-          <button
-            v-if="charData.metadata.status === 'active'"
-            class="button"
-            @click="deactivate"
-          >
-            {{ $t("Deactivate") }}
-          </button>
-        </div>
-        <img
-          class="top-image"
-          :src="charData.portrait"
-          @click.self="cardClicked()"
-        />
+        <img class="top-image" :src="charData.portrait" />
         <div class="img-header">
           <h3>
-            <a class="undecorated-link" :href="cardLink" @click="edit">{{
-              charData.name
-            }}</a>
-            <div
-              v-if="newChar"
-              :class="[
-                'indicator',
-                'indicator-' + (newCharValid ? 'green' : 'red'),
-              ]"
-            >
-              <!-- {{ newCharValid ? "VALID" : "INVALID" }} -->
-            </div>
+            <a class="undecorated-link" :href="cardLink" @click="edit">
+              {{ charData.name }}
+            </a>
           </h3>
           <div class="img-header-subtitle capitalize">
             <!-- <span>{{ $t(this.charData.ageType) }}</span> -->

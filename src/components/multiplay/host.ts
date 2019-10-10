@@ -1,13 +1,12 @@
 import {
   ChatMessage,
   ClientMessage,
-  ConnectMessage,
+  UserListMsg,
   Connection,
   FLMetadata,
   HostMessage,
   PeerJSError,
   ServerMessage,
-  timeout,
 } from "@/components/multiplay/multi.ts"
 
 import Peer from "peerjs"
@@ -25,10 +24,6 @@ function handlePeerJsError(errorType: PeerJSError) {
       console.error(errorType, "TODO not handled")
       break
   }
-}
-// Wrapper for typing
-function sendToClient(client: Peer.DataConnection, data: HostMessage) {
-  client.send(data)
 }
 
 export default class Host {
@@ -89,16 +84,22 @@ export default class Host {
     /* eslint-disable-next-line no-console */
     console.error(`[HOST:${this.hostId}]`, message, ...optionalParams)
   }
+  // Wrapper for typing
+  sendToClient(client: Peer.DataConnection, data: HostMessage) {
+    this.info("sending to", client.peer, data)
+    client.send(data)
+  }
 
   _handleListUserRequest(client: Connection) {
-    const message: ConnectMessage = {
+    const message: UserListMsg = {
       type: "connect-message",
       peers: this.connectedPeers.map((connection) => ({
         peerId: connection.peerId,
         username: connection.username,
+        metadata: connection.conn.metadata,
       })),
     }
-    sendToClient(client.conn, message)
+    this.sendToClient(client.conn, message)
   }
 
   _onClientData(data: ClientMessage, client: Connection) {
@@ -109,7 +110,6 @@ export default class Host {
         this.receiveCallback(data)
         break
       case "list-users":
-        this.log("sending users")
         this._handleListUserRequest(client)
         break
       case "client-disconnect":
@@ -126,9 +126,25 @@ export default class Host {
     const peerId = conn.peer
     const client = { conn: conn, peerId, username }
     conn.on("data", (data: ClientMessage) => this._onClientData(data, client))
-    conn.on("close", () => this.log("client closed", username))
-    conn.on("disconnected", () => this.log("client disconnected", username))
+    conn.on("close", () => {
+      this.log("client closed", username, peerId)
+      this.connectedPeers = this.connectedPeers.filter(
+        (peer) => peer.peerId !== peerId
+      )
+      this.broadCastConnected(this.connectedPeers)
+    })
+    conn.on("disconnected", () => {
+      this.log("client disconnected", username)
+      this._onPeerDisconnect(peerId)
+    })
     return client
+  }
+
+  _onPeerDisconnect(peerId: string) {
+    this.connectedPeers = this.connectedPeers.filter(
+      (peer) => peer.peerId !== peerId
+    )
+    this.broadCastConnected(this.connectedPeers)
   }
 
   _onClientDataConnection(conn: Peer.DataConnection) {
@@ -145,7 +161,7 @@ export default class Host {
     this.onHosting(id)
   }
 
-  _onPeerDisconnected() {
+  _onHostPeerDisconnected() {
     this.log("Host is disconnected.")
   }
 
@@ -156,19 +172,46 @@ export default class Host {
 
   // Public methods
   connect(sessionName: string | undefined) {
-    this.host = new Peer(sessionName, {
+    const host = new Peer(sessionName, {
       debug: 2,
     })
+    this.host = host
     this.host.on("open", (id) => this._onHostPeerOpen(id))
-    this.host.on("disconnected", () => this._onPeerDisconnected())
+    this.host.on("disconnected", () => this._onHostPeerDisconnected())
     this.host.on("connection", (conn) => this._onClientDataConnection(conn))
     this.host.on("error", (err) => this._handleError(err.type as PeerJSError))
-    return this
+    return new Promise<Host>((resolve, reject) => {
+      host.on("open", (id: string) => {
+        this.log("my host id is:", id)
+        resolve(this)
+      })
+      host.on("error", (err) => reject(err))
+    })
   }
 
   disconnect() {
+    if (!this.host) return
     this.log("disconnecting host...")
-    this.host && this.host.disconnect()
+    return new Promise<Host>((resolve, reject) => {
+      if (!this.host) {
+        reject("No host to disconnect")
+      } else {
+        this.host.on("disconnected", () => {
+          resolve(this)
+        })
+        this.host.disconnect()
+      }
+    })
+    // return new Promise<Client>((resolve, reject) => {
+    //   client.on("open", (id: string) => {
+    //     resolve(this)
+    //   })
+    //   client.on("error", (error) => {
+    //     /* eslint-disable-next-line no-console */
+    //     console.error(">>> ERROR:", error.type, error)
+    //     reject(error.type)
+    //   })
+    // })
   }
 
   // Broadcasting
@@ -185,7 +228,7 @@ export default class Host {
       peerId: connection.peerId,
       username: connection.username,
     }))
-    const message: ConnectMessage = { type: "connect-message", peers }
+    const message: UserListMsg = { type: "connect-message", peers }
     this._broadCast(message)
   }
 
