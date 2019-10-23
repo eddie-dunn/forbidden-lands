@@ -3,11 +3,11 @@
 import Peer from "peerjs"
 import { Component, Vue, Watch } from "vue-property-decorator"
 
+import { store, SET_CLIENT, SET_MP_CHAR } from "@/store/store.ts"
 import {
   UserListMsg,
   ChatMessage,
   ServerMessage,
-  randomName,
 } from "@/components/multiplay/multi"
 import Host from "@/components/multiplay/host.ts"
 import Client from "@/components/multiplay/client.ts"
@@ -35,10 +35,16 @@ export default class JoinGame extends Vue {
   roomName = ""
   playerType = "player"
   clientState: HostState = "disconnected"
-  character: CharacterData | null = null
-  client = new Client()
+  // character: CharacterData | null = null
 
   userList: any[] = []
+
+  get character(): CharacterData | null {
+    return this.$store.state.multiPlayerCharacter
+  }
+  set character(charData: CharacterData | null) {
+    this.$store.commit(SET_MP_CHAR, charData)
+  }
 
   get activeCharacters() {
     return this.$characterStore.activeCharacters
@@ -51,13 +57,8 @@ export default class JoinGame extends Vue {
   }
 
   get connected() {
-    return this.clientState === "connected"
+    return this.client.connected
   }
-
-  // get userList() {
-  //   console.log("get userlist")
-  //   return this.client.userList
-  // }
 
   @Watch("client.userList", { deep: true })
   updateUserList() {
@@ -65,21 +66,45 @@ export default class JoinGame extends Vue {
     this.userList = this.client.userList
   }
 
+  get client() {
+    return this.$store.state.client
+  }
+
   get joinGameButtonText() {
-    return {
-      connecting: "Connecting",
-      disconnecting: "Disconnecting",
-      disconnected: "Join game",
-      connected: "Disconnect",
-    }[this.clientState]
+    if (this.busy) {
+      return {
+        connecting: "Connecting",
+        disconnecting: "Disconnecting",
+        disconnected: "Join game",
+        connected: "Disconnect",
+      }[this.clientState]
+    }
+    if (this.connected) {
+      return "Disconnect"
+    }
+    return "Join game"
+  }
+
+  get canJoin() {
+    return !this.busy && this.userName && this.roomName
   }
 
   async joinGame() {
     this.clientState = "connecting"
     const client = await new Client().initPromise()
-    await client.join(this.roomName, this.userName)
-    this.client = client
-    this.clientState = "connected"
+
+    console.log("joining with", this.userName, this.character)
+    await client
+      .join(this.roomName, this.userName, this.character as CharacterData)
+      .then((client: Client) => {
+        // this.client = client
+        this.$store.commit(SET_CLIENT, client)
+        this.clientState = "connected"
+      })
+      .catch((e: any) => {
+        console.error("FIXME", e)
+        this.clientState = "disconnected"
+      })
   }
 
   async disconnectSession() {
@@ -89,16 +114,9 @@ export default class JoinGame extends Vue {
   }
 
   async onClickJoinGame() {
-    // const from =
-    //   this.clientState === "disconnected" ? "connecting" : "disconnecting"
-    // const to =
-    //   this.clientState === "disconnected" ? "connected" : "disconnected"
-    // this.clientState = from
-    // await timeout(500)
-    // this.clientState = to
-    if (this.clientState === "disconnected") {
+    if (!this.connected && this.canJoin) {
       await this.joinGame()
-    } else if (this.clientState === "connected") {
+    } else if (this.connected) {
       await this.disconnectSession()
     }
   }
@@ -131,8 +149,8 @@ export default class JoinGame extends Vue {
 
 <template>
   <div class="hostgame">
-    <div>
-      <h3>Character<span class="red-star">*</span></h3>
+    <div v-if="!connected">
+      <h4>Character<span class="red-star">*</span></h4>
       <div class="character-list">
         <div
           v-for="(charData, index) in activeCharacters"
@@ -148,44 +166,50 @@ export default class JoinGame extends Vue {
           <CharacterCard :clickDisabled="true" :charData="charData" />
         </div>
       </div>
-    </div>
-    <div class="flexy">
-      <FLInput
-        class="flexy-item"
-        label="Nickname"
-        :required="true"
-        :disabled="connected"
-        v-model="userName"
-      />
-      <FLInput
-        class="flexy-item"
-        label="Room"
-        :required="true"
-        :disabled="connected"
-        v-model="roomName"
-      />
-      <!-- TODO: Add password at some point? -->
-      <!-- TODO: Enable players to join as GMs -->
+
+      <div class="flexy">
+        <FLInput
+          class="flexy-item"
+          label="Nickname"
+          :required="true"
+          :disabled="connected"
+          :enterCb="onClickJoinGame"
+          v-model="userName"
+        />
+        <FLInput
+          class="flexy-item"
+          label="Room"
+          :required="true"
+          :disabled="connected"
+          :enterCb="onClickJoinGame"
+          v-model="roomName"
+        />
+        <!-- TODO: Add password at some point? -->
+        <!-- TODO: Enable others to join as GMs -->
+      </div>
     </div>
     <div>
       <button
-        :class="[
-          'button',
-          'flexy-button',
-          clientState === 'connected' ? 'button-danger' : '',
-        ]"
-        :disabled="busy || !userName || !roomName"
+        v-if="!connected"
+        :class="['button', 'flexy-button', connected ? 'button-danger' : '']"
+        :disabled="!canJoin || connected"
         @click="onClickJoinGame"
       >
         {{ joinGameButtonText }}
       </button>
+      <button
+        v-if="connected"
+        :class="['button', 'flexy-button', connected ? 'button-danger' : '']"
+        :disabled="!connected"
+        @click="disconnectSession"
+      >
+        {{ "Disconnect" }}
+      </button>
     </div>
 
     <ChatWindow
-      v-if="connected"
-      :sendMsg="sendMsg"
-      :users="userList"
-      :messages="[]"
+      v-if="connected && client"
+      :roomName="roomName"
       :userName="userName"
       :client="client"
     />

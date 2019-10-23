@@ -1,5 +1,6 @@
 <script lang="ts">
-/* eslint-disable no-console */
+// TODO: Add better error handling
+
 import Peer from "peerjs"
 import { Component, Vue } from "vue-property-decorator"
 
@@ -11,12 +12,15 @@ import { timeout } from "@/util.ts"
 import ChatWindow from "@/components/multiplay/ChatWindow.vue"
 import FLInput from "@/components/base/FLInput.vue"
 
-async function createNewSession(gameName: string, userName: string) {
-  const client = await new Client().initPromise()
+async function createNewSession(
+  client: Client,
+  gameName: string,
+  userName: string
+) {
+  await client.initPromise()
   const host = await new Host({
     onHosting: (gameName) => {
-      console.log(">>>>> Hosting", gameName)
-      client.join(gameName, userName)
+      client.join(gameName, userName, null)
     },
   }).connect(gameName)
   // TODO: Use async instead of 'onHosting' callback
@@ -42,10 +46,10 @@ type HostState = "connecting" | "disconnected" | "connected" | "disconnecting"
 })
 export default class HostGame extends Vue {
   host: Host | null = null
-  client: Client | null = null
+  client = this.$store.state.client
 
-  gameName = ""
-  userName = randomName()
+  gameName = randomName(3)
+  userName = randomName(1)
 
   hostState: HostState = "disconnected"
 
@@ -54,6 +58,9 @@ export default class HostGame extends Vue {
   }
   get connected() {
     return this.hostState === "connected"
+  }
+  get canHost() {
+    return !this.busy && this.userName && this.hostState === "disconnected"
   }
 
   get hostGameButtonText() {
@@ -68,11 +75,11 @@ export default class HostGame extends Vue {
   async createNewSession() {
     this.hostState = "connecting"
     const { host, client } = await createNewSession(
+      this.$store.state.client,
       this.gameName,
       this.userName
     )
     this.host = host
-    console.log("setting host id", host.hostId)
     this.gameName = host.hostId || ""
     this.client = client
     this.hostState = "connected"
@@ -86,10 +93,10 @@ export default class HostGame extends Vue {
   }
 
   async onClickHostGame() {
-    if (this.hostState === "disconnected") {
+    if (this.canHost) {
       await this.createNewSession()
     } else if (this.hostState === "connected") {
-      this.disconnectSession()
+      await this.disconnectSession()
     }
   }
 }
@@ -97,12 +104,15 @@ export default class HostGame extends Vue {
 
 <template>
   <div class="hostgame">
-    <div class="flexy">
+    <!-- spacer -->
+
+    <div v-if="!connected" class="flexy">
       <FLInput
         class="flexy-item"
         label="Nickname"
         :required="true"
         :disabled="connected"
+        :enterCb="onClickHostGame"
         v-model="userName"
       />
       <FLInput
@@ -110,35 +120,23 @@ export default class HostGame extends Vue {
         label="Room"
         placeholder="Empty => auto-select"
         :disabled="connected"
+        :enterCb="onClickHostGame"
         v-model="gameName"
       />
       <!-- TODO: Add password at some point? -->
     </div>
+
     <button
       :class="[
         'button',
         'flexy-button',
         hostState === 'connected' ? 'button-danger' : '',
       ]"
-      :disabled="busy || !userName"
+      :disabled="!canHost && !connected"
       @click="onClickHostGame"
     >
       {{ hostGameButtonText }}
     </button>
-    <div v-if="connected">
-      <div>
-        <input type="checkbox" name="allow-other-gms" id="allow-other-gms" />
-        <label for="allow-other-gms">Allow other GMs</label>
-      </div>
-      <div>
-        <input
-          type="checkbox"
-          name="allow-more-players"
-          id="allow-more-players"
-        />
-        <label for="allow-more-players">Players can join</label>
-      </div>
-    </div>
 
     <ChatWindow v-if="connected" :userName="userName" :client="client" />
 

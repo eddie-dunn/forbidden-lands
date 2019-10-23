@@ -3,47 +3,70 @@
  * https://github.com/jmcker/Peer-to-Peer-Cue-System/blob/master/receive.html
  *
  */
+
+import { CharacterData } from "@/characterData.ts"
 import Peer from "peerjs"
 
 export const NAMES = [
-  "aclie",
-  "alice",
-  "bob",
-  "charles",
-  "engelbrekt",
-  "hogan",
-  "johnny",
-
+  "Alice",
+  "Bob",
+  "Charles",
   // radio
-  "alpha",
-  "bravo",
-  "charlie",
-  "delta",
-  "echo",
-  "foxtrot",
-  "golf",
-  "hotel",
-  "india",
-  "juliet",
-  "kilo",
-  "lima",
-  "mike",
+  "Alpha",
+  "Bravo",
+  "Charlie",
+  "Delta",
+  "Echo",
+  "Foxtrot",
+  "Golf",
+  "Hotel",
+  "India",
+  "Juliet",
+  "Kilo",
+  "Lima",
+  "Mike",
+  "November",
+  "Oscar",
+  "Papa",
+  "Quebec",
+  "Romeo",
+  "Sierra",
+  "Tango",
+  "Uniform",
+  "Victor",
+  "Whiskey",
+  "X-ray",
+  "Yankee",
+  "Zulu",
 ]
 
-export function randomName(names: string[] = NAMES) {
-  const name = names[Math.floor(Math.random() * names.length)]
-  return name
+export function randomName(words = 1, nameList: string[] = NAMES): string {
+  const getName = () => nameList[Math.floor(Math.random() * nameList.length)]
+  let names = []
+  for (let i = 0; i < words; i++) {
+    names.push(getName())
+  }
+  return names.join(" ")
 }
 
 // Types/Interfaces
+export interface User {
+  peerId: string
+  username: string
+  charData: CharacterData | null
+  admin?: boolean
+}
+
 export interface FLMetadata {
   username: string
+  charData?: CharacterData
 }
 
 export interface Connection {
   conn: Peer.DataConnection
   peerId: string
   username: string
+  charData: CharacterData | null
 }
 
 export interface ChatMessage {
@@ -53,11 +76,13 @@ export interface ChatMessage {
 }
 
 export interface UserListMsg {
-  type: "connect-message"
-  peers: {
-    peerId: string
-    username: string
-  }[]
+  type: "userlist"
+  users: User[]
+  // peers: {
+  //   peerId: string
+  //   username: string
+  //   charData?: CharacterData
+  // }[]
 }
 
 export interface ServerMessage {
@@ -76,7 +101,16 @@ export interface DisconnectMessage {
   peerId: string
 }
 
-export type ClientMessage = ChatMessage | ListUsers | DisconnectMessage
+export interface SendCharData {
+  type: "send-chardata"
+  user: User
+}
+
+export type ClientMessage =
+  | ChatMessage
+  | ListUsers
+  | DisconnectMessage
+  | SendCharData
 
 // PeerJS doesn't currently support error types, so let's declare them here:
 export type PeerJSError =

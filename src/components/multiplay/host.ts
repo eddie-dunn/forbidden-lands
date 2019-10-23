@@ -1,12 +1,14 @@
 import {
   ChatMessage,
   ClientMessage,
-  UserListMsg,
   Connection,
   FLMetadata,
   HostMessage,
   PeerJSError,
+  SendCharData,
   ServerMessage,
+  User,
+  UserListMsg,
 } from "@/components/multiplay/multi.ts"
 
 import Peer from "peerjs"
@@ -30,23 +32,14 @@ export default class Host {
   host: Peer | null = null
 
   connectedPeers: Connection[] = []
-  receiveCallback: (data: any) => void
   onHosting: (name: string) => void
-  onClientConnected: (data: any) => void
 
   logging: boolean = true
   verbosity: number
 
-  constructor({
-    verbosity = 3,
-    receiveCallback = (data: any) => {},
-    onHosting = (name: string) => {},
-    onClientConnected = (data: any) => {},
-  } = {}) {
+  constructor({ verbosity = 3, onHosting = (name: string) => {} } = {}) {
     this.verbosity = verbosity
-    this.receiveCallback = receiveCallback
     this.onHosting = onHosting
-    this.onClientConnected = onClientConnected
   }
 
   _handleDisconnect(peerId: string) {
@@ -91,15 +84,40 @@ export default class Host {
   }
 
   _handleListUserRequest(client: Connection) {
+    const users = this.connectedPeers.map((connection) => ({
+      peerId: connection.peerId,
+      username: connection.username,
+      // metadata: connection.conn.metadata,
+      charData: connection.charData,
+    }))
     const message: UserListMsg = {
-      type: "connect-message",
-      peers: this.connectedPeers.map((connection) => ({
-        peerId: connection.peerId,
-        username: connection.username,
-        metadata: connection.conn.metadata,
-      })),
+      type: "userlist",
+      users,
     }
     this.sendToClient(client.conn, message)
+  }
+
+  _onCharData(data: SendCharData, client: Connection) {
+    this.info("got chardata from", client.username, data)
+    const users: User[] = this.connectedPeers.map((connection: Connection) => {
+      if (connection.peerId === data.user.peerId) {
+        return {
+          peerId: data.user.peerId,
+          username: data.user.username,
+          charData: data.user.charData,
+        }
+      }
+      return {
+        peerId: connection.peerId,
+        username: connection.username,
+        charData: connection.charData,
+      }
+    })
+    const broadCastData: UserListMsg = {
+      type: "userlist",
+      users,
+    }
+    this._broadCast(broadCastData)
   }
 
   _onClientData(data: ClientMessage, client: Connection) {
@@ -107,13 +125,15 @@ export default class Host {
     switch (data.type) {
       case "chat-message":
         this.broadcastMsg(data.message, client.username)
-        this.receiveCallback(data)
         break
       case "list-users":
         this._handleListUserRequest(client)
         break
       case "client-disconnect":
         this._handleDisconnect(client.peerId)
+        break
+      case "send-chardata":
+        this._onCharData(data, client)
         break
       default:
         this.error("Unknown data", data)
@@ -122,9 +142,9 @@ export default class Host {
   }
   // Callback handling
   _createClient(conn: Peer.DataConnection): Connection {
-    const username = (conn.metadata as FLMetadata).username
+    const { username, charData = null } = conn.metadata as FLMetadata
     const peerId = conn.peer
-    const client = { conn: conn, peerId, username }
+    const client = { conn: conn, peerId, username, charData }
     conn.on("data", (data: ClientMessage) => this._onClientData(data, client))
     conn.on("close", () => {
       this.log("client closed", username, peerId)
@@ -224,11 +244,12 @@ export default class Host {
   }
 
   broadCastConnected(connections: Connection[]) {
-    const peers = connections.map((connection) => ({
+    const users: User[] = connections.map((connection) => ({
       peerId: connection.peerId,
       username: connection.username,
+      charData: null, // FIXME
     }))
-    const message: UserListMsg = { type: "connect-message", peers }
+    const message: UserListMsg = { type: "userlist", users }
     this._broadCast(message)
   }
 

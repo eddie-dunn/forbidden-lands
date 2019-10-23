@@ -1,22 +1,26 @@
+// TODO: Add better error handling
+
 import {
   ChatMessage,
   ClientMessage,
-  UserListMsg,
   FLMetadata,
   HostMessage,
   ServerMessage,
+  User,
+  UserListMsg,
 } from "@/components/multiplay/multi.ts"
-import { timeout } from "@/util.ts"
 
+import { CharacterData } from "@/characterData.ts"
 import Peer from "peerjs"
 
 export default class Client {
   clientPeer: Peer | null = null
   hostConn: Peer.DataConnection | null = null
-  destination: string = ""
-  _userList: { peerId: string; username: string }[] = []
-  chatMessages: ChatMessage[] = []
+  roomName: string = ""
+  _userList: User[] = []
+  chatMessages: (ChatMessage | ServerMessage)[] = []
 
+  // TODO: Remove callbacks
   receiveMsgCb: (data: ChatMessage) => void
   connectionCb: (data: UserListMsg) => void
   handleServerMessage: (data: ServerMessage) => void
@@ -34,7 +38,7 @@ export default class Client {
   get userList() {
     return this._userList
   }
-  set userList(list: { peerId: string; username: string }[]) {
+  set userList(list: User[]) {
     this._userList = list
   }
 
@@ -72,11 +76,13 @@ export default class Client {
     })
     this.clientPeer.on("error", (error) => {
       /* eslint-disable-next-line no-console */
-      console.error(">>> ERROR:", error.type, error)
+      console.error(">>> Client ERROR:", error.type, error)
     })
     return this
   }
   // TODO: Fixup/merge init & initPromise
+
+  onClientClose() {}
   initPromise() {
     const client = new Peer(undefined, {
       debug: 2,
@@ -91,18 +97,19 @@ export default class Client {
     })
     return new Promise<Client>((resolve, reject) => {
       client.on("open", (id: string) => {
+        this.log("client connected as", id)
         resolve(this)
       })
       client.on("error", (error) => {
         /* eslint-disable-next-line no-console */
-        console.error(">>> ERROR:", error.type, error)
-        reject(error.type)
+        console.error(">>> client ERROR:", error.type, error)
+        reject(new Error(error))
       })
     })
   }
 
   /* Connect to server */
-  async join(hostId: string, username: string) {
+  async join(hostId: string, username: string, charData: CharacterData | null) {
     if (!this.clientPeer) {
       /* eslint-disable-next-line no-console */
       console.error("Init client first")
@@ -111,20 +118,22 @@ export default class Client {
 
     this.log("connecting to", hostId, "as", username)
     const hostConn = this.clientPeer.connect(hostId, {
-      metadata: { username } as FLMetadata,
+      metadata: { username, charData } as FLMetadata,
     })
     this.hostConn = hostConn
 
     hostConn.on("data", (data: HostMessage) => this.onHostData(data))
     return new Promise<Client>((resolve, reject) => {
-      hostConn.on("open", () => {
-        this._hostSend(hostConn, { type: "list-users" })
-        resolve(this)
-      })
       hostConn.on("error", (error) => {
+        // TODO: Handle rejection better for e.g., non existing server name
         /* eslint-disable-next-line no-console */
-        console.error(">>> ERROR:", error.type, error)
-        reject(error.type)
+        console.error(">>> hostConn ERROR:", error.type, error)
+        reject(error)
+      })
+      hostConn.on("open", () => {
+        this.roomName = hostId
+        this.sendCharacter(username, charData)
+        resolve(this) // TODO: Only resolve if host returns userlist?
       })
     })
   }
@@ -138,14 +147,22 @@ export default class Client {
         break
       case "server-message":
         this.handleServerMessage(data)
+        this.receiveServerMessage(data)
         break
-      case "connect-message":
-        this.connectionCb(data)
-        this.userList = data.peers
+      case "userlist":
+        this.receiveUserList(data)
         break
       default:
         break
     }
+  }
+
+  receiveUserList(data: UserListMsg) {
+    this.userList = data.users
+  }
+
+  receiveServerMessage(data: ServerMessage) {
+    this.chatMessages.push(data)
   }
 
   receiveChat(data: ChatMessage) {
@@ -169,6 +186,20 @@ export default class Client {
     })
   }
 
+  sendCharacter(username: string, charData: CharacterData | null) {
+    if (!this.hostConn) return
+    const user: User = {
+      peerId: this.clientId || "UNKNOWN ID",
+      username,
+      charData,
+    }
+    this.log(">>>>> sending character", user)
+    this._hostSend(this.hostConn, {
+      type: "send-chardata",
+      user,
+    })
+  }
+
   disconnect() {
     // TODO: Implement disconnect handling & timeout fallback
     this.log("disconnecting client...")
@@ -183,6 +214,7 @@ export default class Client {
         reject("No client to disconnect")
       } else {
         this.clientPeer.on("disconnected", () => {
+          this.hostConn = null
           resolve(this)
         })
         this.clientPeer.disconnect()
