@@ -20,6 +20,11 @@ export default Vue.extend({
       type: Object as () => CharacterData,
       required: true,
     },
+    viewOnly: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
     // Functions
     capitalize: {
       default: () => capitalize,
@@ -63,7 +68,7 @@ export default Vue.extend({
       return this.mdata.reputation || this.calcRep()
     },
     disabled(): boolean {
-      return this.data.metadata.status === "active"
+      return this.data.metadata.status === "active" || this.viewOnly
     },
   },
   watch: {
@@ -127,6 +132,7 @@ export default Vue.extend({
         v-model="mdata.name"
         :placeholder="nameSuggestion()"
         :label="$t('Name')"
+        :disabled="viewOnly"
         id="character-name"
         class="grid-full-width"
         required

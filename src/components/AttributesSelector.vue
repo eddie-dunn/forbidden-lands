@@ -38,6 +38,11 @@ export default Vue.extend({
       type: Object as () => CharacterData,
       required: true,
     },
+    viewOnly: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
   },
   created() {
     if (!this.charData.attributeDmg) {
@@ -165,6 +170,7 @@ export default Vue.extend({
               min="2"
               :max="getMax(attribute)"
               v-model.number="charData.attributes[attribute]"
+              :disabled="viewOnly"
             />
           </td>
           <td v-if="active">
@@ -172,6 +178,7 @@ export default Vue.extend({
               fontSize="1.4rem"
               :id="attribute"
               :name="attribute"
+              :disabled="viewOnly"
               placeholder=""
               type="number"
               min="0"

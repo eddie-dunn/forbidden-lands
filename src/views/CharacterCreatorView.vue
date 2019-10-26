@@ -5,8 +5,7 @@ import { Component, Prop, Watch } from "vue-property-decorator"
 import { getNewCharacterData, CharacterData } from "@/characterData"
 import { getCharDataFromQuery, CharDataQueryObj } from "@/util/characterUtil"
 
-import CharacterCreatorMain from "@/components/CharacterCreatorMain.vue"
-// import CharacterCreatorMain from "@/components/characterEditor/CharacterEditorMain.vue"
+import CharacterEditorMain from "@/components/characterEditor/CharacterEditorMain.vue"
 
 function initCharData(
   $characterStore: any,
@@ -21,7 +20,7 @@ function initCharData(
 
 @Component({
   components: {
-    CharacterCreatorMain,
+    CharacterEditorMain,
   },
 })
 export default class CharacterEditorView extends Vue {
@@ -33,11 +32,7 @@ export default class CharacterEditorView extends Vue {
 </script>
 
 <template>
-  <CharacterCreatorMain
-    :charId="id"
-    :useTemplateData="templateData"
-    :charData="charData"
-  />
+  <CharacterEditorMain :useTemplateData="templateData" :charData="charData" />
 </template>
 
 <style lang="less"></style>

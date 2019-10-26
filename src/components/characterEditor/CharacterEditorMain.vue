@@ -1,0 +1,167 @@
+<script lang="ts">
+import Vue from "vue"
+import { Component, Prop, Watch } from "vue-property-decorator"
+
+import { CharacterData, calcCharacterXP } from "@/characterData"
+
+import FLButton from "@/components/base/FLButton.vue"
+import BaseCard from "@/components/characterEditor/BaseCard.vue"
+import SessionCard from "@/components/characterEditor/SessionCard.vue"
+import TalentCard from "@/components/characterEditor/TalentCard.vue"
+import PortraitCard from "@/components/characterEditor/PortraitCard.vue"
+import FlavorCard from "@/components/characterEditor/FlavorCard.vue"
+import SkillCard from "@/components/characterEditor/SkillCard.vue"
+import GearCard from "@/components/characterEditor/GearCard.vue"
+import MountCard from "@/components/characterEditor/MountCard.vue"
+import NoteCard from "@/components/characterEditor/NoteCard.vue"
+
+function stringChar(characterData: CharacterData) {
+  return JSON.stringify(characterData)
+}
+
+@Component({
+  components: {
+    FLButton,
+    BaseCard,
+    FlavorCard,
+    GearCard,
+    MountCard,
+    NoteCard,
+    PortraitCard,
+    SessionCard,
+    SkillCard,
+    TalentCard,
+  },
+})
+export default class CharacterEditor extends Vue {
+  @Prop({ required: true }) charData!: CharacterData
+  @Prop({ default: false }) viewOnly!: boolean
+
+  // TODO: Get from localStorage instead
+  charDataCopyStr: string = stringChar(this.charData)
+
+  get status() {
+    return this.charData.metadata.status
+  }
+  get totalXp(): number {
+    return (
+      calcCharacterXP(this.charData) -
+      (this.charData.metadata.xpAtCreation || 0)
+    )
+  }
+  get charDataUpdated(): boolean {
+    return stringChar(this.charData) !== this.charDataCopyStr
+  }
+
+  closeClicked() {
+    this.$router.push("/")
+  }
+  saveClicked(event: any) {
+    if (!event || !this.charData.name) return
+    if (this.status === "new") {
+      // Save xp at creation, so that we later can calculate how many XP
+      // points have been spent on leveling up character
+      this.charData.metadata.xpAtCreation = this.totalXp
+    }
+    this.$characterStore.addCharacter(this.charData)
+    this.charDataCopyStr = stringChar(this.charData)
+  }
+}
+</script>
+
+<template>
+  <div class="character_creator">
+    <div class="detail-form">
+      <BaseCard class="row-half" :charData="charData" :viewOnly="true" />
+      <PortraitCard class="row-half" :charData="charData" />
+      <FlavorCard class="row-full" :charData="charData" />
+      <SkillCard class="row-half" :charData="charData" />
+      <TalentCard class="row-half" :charData="charData" />
+      <GearCard class="row-full" :charData="charData" />
+      <MountCard class="row-half" :charData="charData" />
+      <SessionCard
+        v-if="status === 'active'"
+        class="row-half"
+        :charData="charData"
+      />
+      <NoteCard class="row-full" :charData="charData" />
+    </div>
+
+    <div class="action-bar-wrapper">
+      <div class="action-bar-left">
+        <FLButton
+          :type="!charDataUpdated ? 'cancel' : 'danger'"
+          @click="closeClicked"
+        >
+          {{ $t("Close") }}
+        </FLButton>
+      </div>
+      <div class="action-bar-middle"></div>
+
+      <div class="action-bar-right">
+        <FLButton :type="!charDataUpdated ? 'cancel' : ''" @click="saveClicked">
+          {{ $t("Save") }}
+        </FLButton>
+      </div>
+    </div>
+
+    <!-- end -->
+  </div>
+</template>
+
+<style lang="less" scoped>
+@import "~Style/colors.less";
+
+.action-bar-wrapper {
+  display: flex;
+  overflow: auto;
+  position: sticky;
+  bottom: 0;
+  overflow: hidden;
+  margin: 0 0.25rem;
+  background: #fffe;
+  border: solid ~"@{pastel-green}99" 2px;
+  padding: 0.5rem;
+  justify-content: space-around;
+}
+
+.action-bar {
+  &-right {
+    justify-self: flex-end;
+    display: flex;
+    flex: 1 1 33%;
+    justify-content: flex-end;
+  }
+  &-left {
+    justify-self: flex-start;
+  }
+  align-items: center;
+}
+
+.character_creator {
+  margin-bottom: 20vh;
+}
+
+.detail-form {
+  width: 100%;
+  margin: auto;
+  margin-top: 1rem;
+
+  row-gap: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1 1 40%;
+  justify-content: space-evenly;
+  align-content: stretch;
+}
+
+.row-full {
+  flex-basis: 100%;
+  flex-grow: 2;
+}
+
+.row-half {
+  flex-basis: 40%;
+  flex-grow: 1;
+}
+</style>

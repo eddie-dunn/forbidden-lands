@@ -64,6 +64,7 @@ export default class ExpandableSection extends Vue {
   <div class="fl-number-row">
     <button
       class="fl-number-button shared"
+      type="button"
       :disabled="decrementDisabled || !canDecrement || disabled"
       @click="decrement"
       tabindex="-1"
@@ -87,6 +88,7 @@ export default class ExpandableSection extends Vue {
     />
     <button
       class="fl-number-button shared"
+      type="button"
       :disabled="incrementDisabled || !canIncrement || disabled"
       @click="increment"
       tabindex="-1"
@@ -112,6 +114,9 @@ export default class ExpandableSection extends Vue {
   &:invalid {
     color: @pastel-red;
     border: solid 1px @pastel-red;
+  }
+  &:disabled {
+    border: 1px solid @color-main-transparent;
   }
 }
 
