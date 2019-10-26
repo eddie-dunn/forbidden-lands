@@ -1,9 +1,40 @@
-import CharacterCreatorView from "./views/CharacterCreatorView.vue"
 import Home from "./views/Home.vue"
+import CharacterEditor from "@/views/CharacterCreatorView.vue"
 import Router from "vue-router"
 import Vue from "vue"
 
 Vue.use(Router)
+
+function characterEditorRoutes() {
+  return [
+    {
+      path: "/new",
+      // alias: "/character-creator/new",
+      name: "character_creator-new",
+      component: () => import("./views/CharacterCreatorView.vue"),
+    },
+    {
+      path: "/new/edit/:id",
+      // alias: "/character-creator/new/edit/:id",
+      props: true,
+      name: "character_creator-edit-new",
+      component: () => import("./views/CharacterCreatorView.vue"),
+    },
+    {
+      path: "/active/edit/:id",
+      props: true,
+      name: "character_creator-edit-active",
+      component: () => import("./views/CharacterCreatorView.vue"),
+    },
+    {
+      path: "/new/template/edit",
+      props: (route: any) => ({ templateData: route.query }),
+      name: "character_creator-template-edit",
+      component: () => import("./views/CharacterCreatorView.vue"),
+      // component: CharacterEditor,
+    },
+  ]
+}
 
 export default new Router({
   mode: "history",
@@ -44,41 +75,11 @@ export default new Router({
         import(/* webpackChunkName: "about" */ "./views/About.vue"),
     },
     {
-      path: "/new",
-      // alias: "/character-creator/new",
-      name: "character_creator-new",
-      /* webpackChunkName: "character_creator" */
-      component: () => import("./views/CharacterCreatorView.vue"),
-      // component: CharacterCreatorView,
-    },
-    {
-      path: "/new/edit/:id",
-      // alias: "/character-creator/new/edit/:id",
-      props: true,
-      name: "character_creator-edit-new",
-      /* webpackChunkName: "character_creator" */
-      component: () => import("./views/CharacterCreatorView.vue"),
-      // component: CharacterCreatorView,
-    },
-    {
       path: "/new/template",
       props: true,
       name: "character_creator-template",
       component: () => import("./views/CharacterTemplateView.vue"),
     },
-    {
-      path: "/new/template/edit",
-      props: { templateData: true },
-      name: "character_creator-template-edit",
-      component: () => import("./views/CharacterCreatorView.vue"),
-    },
-    {
-      path: "/active/edit/:id",
-      props: true,
-      name: "character_creator-edit-active",
-      /* webpackChunkName: "character_creator" */
-      component: () => import("./views/CharacterCreatorView.vue"),
-      // component: CharacterCreatorView,
-    },
+    ...characterEditorRoutes(),
   ],
 })
