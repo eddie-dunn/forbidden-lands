@@ -1,4 +1,5 @@
 <script lang="ts">
+// TODO: Split this up into smaller components
 import Vue from "vue"
 import { Component, Prop } from "vue-property-decorator"
 import SvgIcon from "@/components/SvgIcon.vue"
