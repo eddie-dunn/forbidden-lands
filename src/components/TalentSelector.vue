@@ -191,7 +191,7 @@ const TalentSelector = Vue.extend({
     },
   },
   watch: {
-    "selectedTalents": {
+    ["selectedTalents"]: {
       immediate: true,
       handler() {
         // Set all undefined/falsy talent ranks to 1
@@ -200,7 +200,7 @@ const TalentSelector = Vue.extend({
         })
       },
     },
-    "ageType"() {
+    ["ageType"]() {
       // Reset all talent ranks to 1 if age is changed
       this.talentRanks = this.talentRanks.map(() => 1) as TalentRank[]
     },
@@ -211,7 +211,7 @@ const TalentSelector = Vue.extend({
     ["charData.kin"]() {
       this.$set(this.selectedTalents, 0, this.kinTalent)
     },
-    "exported": {
+    ["exported"]: {
       immediate: true,
       handler() {
         this.$emit("talents-updated", this.exported)
