@@ -1,44 +1,113 @@
+/* eslint-disable no-console */
 import Vue from "vue"
 import Vuex from "vuex"
+import {
+  MP_CHARS,
+  SET_CLIENT,
+  SET_HOST,
+  SET_MP_CHAR,
+  SET_OTHER_CHARS,
+  GET_MP_ACTIVE,
+  GET_MP_PLAYER,
+  GET_MP_PLAYERS,
+  GET_MP_PLAYER_SELF,
+  GET_ROOM_NAME,
+} from "./store-types"
+import { CharacterData } from "@/characterData"
+import { Err, OK, log } from "@/util"
 
-import Client from "@/components/multiplay/client.ts"
-import Host from "@/components/multiplay/host.ts"
+import { FLHost, FLPlayer } from "@/components/multiplay/fl-node"
+import { UserData, PeerId } from "@/components/multiplay/protocol"
 
 Vue.use(Vuex)
 
-export const SET_MP_CHAR = "SET_MULTIPLAYER_CHARACTER"
-export const SET_HOST = "SET_HOST"
-export const SET_CLIENT = "SET_CLIENT"
-
-export const GET_MP_ACTIVE = "get multiplayer active"
-export const GET_ROOM_NAME = "get room name"
-export const GET_CLIENT_ID = "get client id"
-
 export const store = new Vuex.Store({
   state: {
-    multiPlayerCharacter: <CharacterData | null>null,
-    client: new Client(),
-    host: <Host | null>null,
+    [MP_CHARS]: <(CharacterData | null)[]>[],
+    client: new FLPlayer(),
+    host: new FLHost(),
   },
   getters: {
     [GET_MP_ACTIVE](state) {
       return state.client.connected
     },
     [GET_ROOM_NAME](state) {
-      return state.client.roomName
+      return state.client.hostId
+    },
+    [GET_MP_PLAYER](state): (peerId: PeerId) => UserData | undefined {
+      return (peerId: PeerId) =>
+        state.client.users.find((user) => user.peerId === peerId)
+    },
+    // Return own mp character
+    [GET_MP_PLAYER_SELF](state): UserData | undefined {
+      return state.client.users.find(
+        (user) => user.peerId === state.client.peerId
+      )
+    },
+    [GET_MP_PLAYERS](state): UserData[] {
+      return state.client.users
     },
   },
   mutations: {
-    [SET_MP_CHAR](state, charData: CharacterData) {
-      state.multiPlayerCharacter = charData
+    /* Player picks char(s) to use in MP */
+    [SET_MP_CHAR](state, chars: CharacterData[]) {
+      state[MP_CHARS] = chars
     },
-    [SET_HOST](state, host: Host) {
+    [SET_OTHER_CHARS](state, characters: UserData[]) {
+      console.log("committing chars?", characters)
+    },
+    [SET_HOST](state, host: FLHost) {
       state.host = host
     },
-    [SET_CLIENT](state, client: Client) {
+    [SET_CLIENT](state, client: FLPlayer) {
       state.client = client
     },
   },
   // Info: https://vuex.vuejs.org/guide/actions.html
-  actions: {},
+  actions: {
+    async hostGame({ state }, { userData, roomName }: SHost) {
+      return hostGame(state.host, state.client, roomName, userData)
+    },
+    async joinGame({ state }, { userData, roomName }: SHost) {
+      // TODO: Improve error handling
+      await state.client.start()
+      await state.client.connectTo(roomName, userData)
+    },
+  },
 })
+
+interface SHost {
+  userData: UserData
+  roomName: string
+}
+
+async function hostGame(
+  host: FLHost,
+  client: FLPlayer,
+  roomName: string,
+  userData: UserData
+) {
+  // Setup host
+  log("setup host")
+  try {
+    await host.start(roomName)
+  } catch (err) {
+    return Err("host error", err)
+  }
+  // Setup client
+  log("setup client")
+  try {
+    await client.start()
+  } catch (err) {
+    return Err("client error", err)
+  }
+  host.adminId = client.peerId
+  // Connect client to host
+  userData = { ...userData, peerId: client.peerId }
+  try {
+    await client.connectTo(host.peerId, userData)
+  } catch (err) {
+    return Err("client could not connect to host", err)
+  }
+  return OK()
+}

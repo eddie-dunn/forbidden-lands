@@ -3,18 +3,16 @@
 import Peer from "peerjs"
 import { Component, Vue, Prop, Watch } from "vue-property-decorator"
 
-import { GET_ROOM_NAME } from "@/store/store.ts"
 import {
-  UserListMsg,
-  ChatMessage,
-  ServerMessage,
-  User,
-} from "@/components/multiplay/multi"
-import Host from "@/components/multiplay/host.ts"
-import Client from "@/components/multiplay/client.ts"
+  GET_MP_ACTIVE,
+  GET_ROOM_NAME,
+  SET_OTHER_CHARS,
+} from "@/store/store-types.ts"
+import { FLPlayer, ChatMessage } from "@/components/multiplay/fl-node"
 
 import FLInput from "@/components/base/FLInput.vue"
 import CharacterCard from "@/components/base/CharacterCard.vue"
+import { Protocol, ProtocolTypes, UserData } from "./protocol"
 
 /*
  * Vue component for displaying chat messages
@@ -28,60 +26,69 @@ import CharacterCard from "@/components/base/CharacterCard.vue"
 export default class ChatWindow extends Vue {
   @Prop({ required: true }) userName!: string
   @Prop({ required: false }) admins!: string[]
-  @Prop({ required: true }) client!: Client
+
+  get client(): FLPlayer {
+    return this.$store.state.client
+  }
 
   chatMessage = ""
 
-  get users(): User[] {
-    return this.client.userList
-  }
-
-  get charList() {
-    return this.users.filter((user: User) => {
-      return user.peerId !== this.id && !!user.charData
-    }) // Get all connected users except self
+  get users(): UserData[] {
+    return this.client.users
   }
 
   get id() {
-    return this.client.clientId
+    return this.client.peerId
   }
 
   get charData() {
     return this.$store.state.multiPlayerCharacter
   }
 
-  get messages(): (ChatMessage | ServerMessage)[] {
-    const chatBox = this.$refs.messageBox
+  /** Return chat messages. Has side effect of scrolling down chat container. */
+  get messages(): ChatMessage[] {
+    const chatBox = this.$refs.messageBox as any
     chatBox &&
       this.$nextTick(() => {
-        ;(chatBox as any).scrollTop = (chatBox as any).scrollHeight
+        chatBox.scrollTop = chatBox.scrollHeight
       })
-    return this.client.chatMessages
+    return this.client.messages
   }
 
   get roomName() {
     return this.$store.getters[GET_ROOM_NAME]
   }
-
-  thisUserClass(username: string): string {
-    return this.userName === username ? "bold" : ""
+  get mpActive() {
+    return this.$store.getters[GET_MP_ACTIVE]
   }
 
-  formatUserName(user: User) {
-    // TODO: Display user card
-    if (!user.admin) return user.username
-    return `GM ${user.username}`
+  nameIsBold(user: UserData): string {
+    return this.id === user.peerId ? "bold" : ""
   }
 
-  formatChat(msg: ChatMessage | ServerMessage): string {
-    if (msg.type === "server-message") {
-      return `<< ${msg.message} >>`
+  formatUserName(user: UserData) {
+    if (["gm", "admin"].includes(user.role)) {
+      return `GM ${user.username}`
     }
-    return `${msg.username}: ${msg.message}`
+    return user.username
+  }
+
+  formatChat(chat: ChatMessage): string {
+    if (chat.message.type === "!? server chat") {
+      return `<< ${chat.message.msg} >>`
+    }
+    return `${chat.username}: ${chat.message.msg}`
   }
 
   _sendMsg(msg: string) {
-    this.client.sendChat(msg)
+    if (!msg) return
+    const chatMsg: Protocol.Chat = {
+      type: ProtocolTypes.chat,
+      msg,
+      from: this.id,
+      to: null,
+    }
+    this.client.broadcast(chatMsg)
     this.chatMessage = ""
   }
 }
@@ -89,37 +96,22 @@ export default class ChatWindow extends Vue {
 
 <template>
   <div class="multiplayer-chat">
-    <div class="room-stats">Room name: {{ roomName }}</div>
-    <div>Ping: FIXME</div>
-    <h3>Characters</h3>
-    <div class="character-list">
-      <div class="card-wrapper" v-if="charData">
-        <CharacterCard :clickDisabled="true" :charData="charData" />
-      </div>
+    <div class="userlist border">
+      <!-- TODO: make drawer on small screen sizes -->
       <div
-        v-for="(char, index) in charList"
-        v-bind:key="index + char.peerId"
-        class="card-wrapper"
+        v-for="(user, index) in users"
+        v-bind:key="index + user"
+        :class="[nameIsBold(user), 'username']"
       >
-        <CharacterCard :clickDisabled="true" :charData="char.charData" />
+        {{ formatUserName(user) }}
       </div>
     </div>
 
-    <h3>Users</h3>
-    <div
-      v-for="(user, index) in users"
-      v-bind:key="index + user"
-      :class="thisUserClass(user.username)"
-    >
-      {{ formatUserName(user) }}
-    </div>
-
-    <h3>Messages</h3>
     <div class="chat-box">
-      <div class="message-box" ref="messageBox">
+      <div class="message-box border" ref="messageBox">
         <div
           v-for="(message, index) in messages"
-          v-bind:key="index + message.message"
+          v-bind:key="'chat' + index"
           class="message-item"
         >
           {{ formatChat(message) }}
@@ -133,9 +125,14 @@ export default class ChatWindow extends Vue {
           type="text"
           v-on:keyup.enter.exact="_sendMsg(chatMessage)"
         />
-        <button class="button" @click="_sendMsg(chatMessage)">Send</button>
+        <button
+          class="button chat-button"
+          :disabled="!chatMessage"
+          @click="_sendMsg(chatMessage)"
+        >
+          >
+        </button>
       </div>
-      <div>HELLO {{ charList }}</div>
     </div>
   </div>
 
@@ -146,16 +143,20 @@ export default class ChatWindow extends Vue {
 @import "~Style/colors.less";
 .send-chat {
   display: flex;
-  margin: 1rem 0;
+  margin-top: 0.5rem;
+}
+
+.border {
+  border: 2px solid @pastel-green;
 }
 
 .chat-input {
-  margin-right: 0.5rem;
   flex-grow: 1;
+  width: 10ch;
 }
 
-.chat-box {
-  margin: 2rem;
+.chat-button {
+  padding: 0 1rem;
 }
 
 .message-box {
@@ -163,24 +164,26 @@ export default class ChatWindow extends Vue {
   flex-direction: column;
   height: 200px;
   overflow-y: scroll;
-  border: 2px solid @pastel-green;
-  padding: 1rem;
+  padding: 0.4rem;
 }
 
 .message-item {
   font-family: "Courier New", Courier, monospace;
 }
 
-.character-list {
-  display: flex;
-  margin: 0.8rem;
-  overflow-x: auto;
+.multiplayer-chat {
+  display: grid;
+  grid-template-columns: minmax(10ch, 1fr) 3fr;
+  grid-gap: 0.5rem;
+  margin: 0.5rem;
 }
 
-.card-wrapper {
-  padding: 5px;
-  margin: 0 3px 10px 3px;
-  width: 170px;
-  flex: 0 0 auto;
+.userlist {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.username {
+  margin: 0.2rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 </style>

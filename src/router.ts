@@ -1,5 +1,5 @@
-import Home from "./views/Home.vue"
 import CharacterEditor from "@/views/CharacterCreatorView.vue"
+import Home from "./views/Home.vue"
 import Router from "vue-router"
 import Vue from "vue"
 
@@ -23,15 +23,34 @@ function characterEditorRoutes() {
     {
       path: "/active/edit/:id",
       props: true,
-      name: "character_creator-edit-active",
+      // props: (route: any) => ({ id: route.id, fromRoute: route.id }),
+      name: "character_creator-active-edit",
+      component: () => import("./views/CharacterCreatorView.vue"),
+    },
+    {
+      path: "/active/view/:id",
+      // props: true,
+      props: (route: any) => ({ id: route.params.id, fromRoute: route }),
+      name: "character_creator-active-view",
       component: () => import("./views/CharacterCreatorView.vue"),
     },
     {
       path: "/new/template/edit",
-      props: (route: any) => ({ templateData: route.query }),
+      props: (route: any) => ({ templateQueryData: route.query }),
       name: "character_creator-template-edit",
       component: () => import("./views/CharacterCreatorView.vue"),
       // component: CharacterEditor,
+    },
+    {
+      path: "/multiplayer/view/:peerId/:charId",
+      props: (route: any) => ({
+        id: route.params.charId,
+        peerId: route.params.peerId,
+        fromRoute: route,
+        multiplayer: true,
+      }),
+      name: "character-editor-mp-view",
+      component: () => import("./views/CharacterCreatorView.vue"),
     },
   ]
 }

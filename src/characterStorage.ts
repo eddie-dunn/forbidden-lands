@@ -93,15 +93,19 @@ const PATCHES = [
     return character
   },
   function patch5(character: CharacterData): CharacterData | null {
-    console.log("Validating portrait for", character.name, character.portrait)
+    // console.log("Validating portrait for", character.name, character.portrait)
     const matcher = /\/(img\/player_handbook_png-\d*\.)[\da-zA-Z]*\.png/
     const found = (character.portrait || "").match(matcher)
     if (found && found[1]) {
       const newName = __webpack_public_path__ + found[1] + "png"
-      console.log("OLDNAME", character.portrait, "NEWNAME", newName)
+      // console.log("OLDNAME", character.portrait, "NEWNAME", newName)
       character.portrait = newName
     }
     // return character
+    // Not saving patch until verified as working
+    // Check regex for multiple character versions for
+    //  - localhost
+    //  - bifrost
     return null
   },
 ]

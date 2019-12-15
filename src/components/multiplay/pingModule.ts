@@ -1,4 +1,9 @@
-import { INodeUser, PeerId, Protocol } from "@/components/multiplay/protocol"
+import {
+  INodeUser,
+  PeerId,
+  Protocol,
+  ProtocolTypes,
+} from "@/components/multiplay/protocol"
 
 import uuid1 from "uuid/v1"
 
@@ -44,7 +49,7 @@ export class PingModule {
 
   ping(user: INodeUser): Protocol.Ping {
     const msg: Protocol.Ping = {
-      type: "ping",
+      type: ProtocolTypes.ping,
       pingId: uuid1(),
     }
     user.conn.send(msg)

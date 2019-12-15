@@ -5,6 +5,8 @@ import Modal from "@/components/Modal.vue"
 
 const VALID = "✓"
 const INVALID = "✖"
+export const EV_EDIT_CARD = "edit-card-clicked"
+export const EV_CARD_CLICKED = "char-card-clicked"
 
 /*
  * A component that displays a picture and character data.
@@ -20,6 +22,7 @@ export default Vue.extend({
     titleOverride: String,
     linkOverride: String,
     clickDisabled: Boolean,
+    link: String,
   },
   data() {
     return {
@@ -37,6 +40,8 @@ export default Vue.extend({
       return !this.charData
     },
     cardLink(): string {
+      // TODO: Convert to prop
+      if (this.link) return this.link
       if (this.linkOverride) return this.linkOverride
       if (this.empty) return `new`
       if (this.newChar) return `new/edit/${this.characterId}`
@@ -54,13 +59,13 @@ export default Vue.extend({
   },
   methods: {
     edit(ev: Event) {
-      if (ev) {
-        ev.preventDefault()
-      }
-      this.$router.push(this.cardLink)
+      if (ev) ev.preventDefault()
+      this.$emit(EV_EDIT_CARD)
+      if (!this.clickDisabled) this.$router.push(this.cardLink)
     },
     cardClicked() {
-      this.actionsActive = !this.actionsActive
+      if (!this.clickDisabled) this.actionsActive = !this.actionsActive
+      this.$emit(EV_CARD_CLICKED, this.cardLink)
     },
     remove() {
       if (this.charData) {
@@ -104,24 +109,28 @@ export default Vue.extend({
     <div
       v-else
       :class="['stat-card', 'row-full', !actionsActive ? 'transform' : '']"
+      @click="cardClicked"
     >
-      <div class="img-section">
-        <img class="top-image" :src="charData.portrait" />
-        <div class="img-header">
-          <h3>
-            <a class="undecorated-link" :href="cardLink" @click="edit">
-              {{ charData.name }}
-            </a>
-          </h3>
-          <div class="img-header-subtitle capitalize">
-            <!-- <span>{{ $t(this.charData.ageType) }}</span> -->
-            <span>{{ $t(charData.kin) }}</span>
-            <span>{{ $t(charData.profession) }}</span>
-          </div>
+      <div :class="['actions-overlay', !actionsActive ? 'invisible' : '']">
+        <slot> </slot>
+      </div>
+      <div class="img-header">
+        <h3>
+          <a class="undecorated-link" :href="cardLink" @click="edit">
+            {{ charData.name }}
+          </a>
+        </h3>
+        <div class="img-header-subtitle capitalize">
+          <!-- <span>{{ $t(this.charData.ageType) }}</span> -->
+          <span>{{ $t(charData.kin) }}</span>
+          <span>{{ $t(charData.profession) }}</span>
         </div>
       </div>
-      <div class="header"></div>
-      <div class="card-footer"></div>
+      <div class="img-section">
+        <img class="top-image" :src="charData.portrait" />
+        <div class="header"></div>
+        <div class="card-footer"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -140,6 +149,10 @@ h3 {
   }
   // margin-bottom: 0.1rem;
   margin: 0;
+}
+
+.invisible {
+  visibility: hidden;
 }
 
 .indicator {
@@ -203,8 +216,9 @@ h3 {
 }
 
 .img-section {
-  position: relative;
+  position: absolute;
   height: 100%;
+  z-index: -1;
 }
 
 .img-header {
@@ -216,7 +230,6 @@ h3 {
   padding: 0.4rem 0;
   // background: #66666699;
   background: rgba(0, 0, 0, 0.64);
-  position: absolute;
   bottom: 0;
   width: 100%;
   color: white;
@@ -247,6 +260,7 @@ h3 {
 }
 
 .stat-card {
+  position: relative;
   text-align: left;
   display: flex;
   flex-direction: column;
@@ -265,8 +279,9 @@ h3 {
   justify-content: space-between;
 }
 
-.card-buttons {
-  position: absolute;
+.card-buttons,
+.actions-overlay {
+  // position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
