@@ -2,6 +2,7 @@
 import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 
+import uuid1 from "uuid/v1"
 import SvgIcon from "@/components/SvgIcon.vue"
 
 @Component({
@@ -18,6 +19,10 @@ export default class FLInput extends Vue {
   @Prop({ default: false }) required!: boolean
   @Prop({ default: () => {} }) enterCb!: Function
 
+  get _id(): string {
+    return this.id || uuid1()
+  }
+
   inputEvent($event: any) {
     this.$emit("input", $event.target.value)
   }
@@ -26,7 +31,7 @@ export default class FLInput extends Vue {
 
 <template>
   <div class="fl-input">
-    <label :for="id">
+    <label :for="_id">
       <SvgIcon v-if="iconName" class="" :name="iconName" />
       <span>{{ label }}</span>
       <span v-if="required" class="required-sign">*</span>
@@ -34,7 +39,7 @@ export default class FLInput extends Vue {
     <input
       v-bind="$attrs"
       :required="required"
-      :id="id"
+      :id="_id"
       class="input"
       :type="type"
       v-on:keyup.enter.exact="() => enterCb && enterCb()"
