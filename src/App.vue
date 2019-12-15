@@ -105,6 +105,10 @@ body {
   font-weight: bold;
 }
 
+.center {
+  text-align: center;
+}
+
 .navbar {
   display: flex;
   align-items: center;
