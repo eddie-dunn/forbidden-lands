@@ -36,6 +36,7 @@ function stringChar(characterData: CharacterData) {
 export default class CharacterEditor extends Vue {
   @Prop({ required: true }) charData!: CharacterData
   @Prop({ default: false }) viewOnly!: boolean
+  @Prop({ default: false }) isTemplateData!: boolean
 
   // TODO: Get from localStorage instead
   charDataCopyStr: string = stringChar(this.charData)
@@ -53,9 +54,15 @@ export default class CharacterEditor extends Vue {
     return stringChar(this.charData) !== this.charDataCopyStr
   }
 
-  closeClicked() {
-    this.$router.push("/")
+  get closeText(): any {
+    if (this.isTemplateData) return this.$t("Back")
+    return this.$t("Close")
   }
+
+  closeClicked() {
+    this.$router.back()
+  }
+
   saveClicked(event: any) {
     if (!event || !this.charData.name) return
     if (this.status === "new") {
@@ -72,19 +79,23 @@ export default class CharacterEditor extends Vue {
 <template>
   <div class="character_creator">
     <div class="detail-form">
-      <BaseCard class="row-half" :charData="charData" :viewOnly="true" />
-      <PortraitCard class="row-half" :charData="charData" />
-      <FlavorCard class="row-full" :charData="charData" />
-      <SkillCard class="row-half" :charData="charData" />
-      <TalentCard class="row-half" :charData="charData" />
-      <GearCard class="row-full" :charData="charData" />
-      <MountCard class="row-half" :charData="charData" />
+      <BaseCard class="row-half" :charData="charData" :viewOnly="viewOnly" />
+      <PortraitCard
+        class="row-half"
+        :charData="charData"
+        :viewOnly="viewOnly"
+      />
+      <FlavorCard class="row-full" :charData="charData" :viewOnly="viewOnly" />
+      <SkillCard class="row-half" :charData="charData" :viewOnly="viewOnly" />
+      <TalentCard class="row-half" :charData="charData" :viewOnly="viewOnly" />
+      <GearCard class="row-full" :charData="charData" :viewOnly="viewOnly" />
+      <MountCard class="row-half" :charData="charData" :viewOnly="viewOnly" />
       <SessionCard
-        v-if="status === 'active'"
+        v-if="status === 'active' && !viewOnly"
         class="row-half"
         :charData="charData"
       />
-      <NoteCard class="row-full" :charData="charData" />
+      <NoteCard v-if="!viewOnly" class="row-full" :charData="charData" />
     </div>
 
     <div class="action-bar-wrapper">
@@ -93,13 +104,17 @@ export default class CharacterEditor extends Vue {
           :type="!charDataUpdated ? 'cancel' : 'danger'"
           @click="closeClicked"
         >
-          {{ $t("Close") }}
+          {{ closeText }}
         </FLButton>
       </div>
       <div class="action-bar-middle"></div>
 
       <div class="action-bar-right">
-        <FLButton :type="!charDataUpdated ? 'cancel' : ''" @click="saveClicked">
+        <FLButton
+          v-if="!viewOnly"
+          :type="!charDataUpdated ? 'cancel' : ''"
+          @click="saveClicked"
+        >
           {{ $t("Save") }}
         </FLButton>
       </div>

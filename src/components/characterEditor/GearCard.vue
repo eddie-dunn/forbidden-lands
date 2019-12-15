@@ -15,13 +15,13 @@ import Card from "@/components/Card.vue"
 })
 export default class GearCard extends Vue {
   @Prop({ required: true }) charData!: CharacterData
-  @Prop({ default: true }) viewOnly!: boolean
+  @Prop({ default: false }) viewOnly!: boolean
 }
 </script>
 
 <template>
   <Card class="row-full" :title="$t('Gear')" :noSign="true">
-    <GearPicker :characterData="charData" />
+    <GearPicker :characterData="charData" :viewOnly="viewOnly" />
   </Card>
 </template>
 

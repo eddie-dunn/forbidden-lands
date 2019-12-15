@@ -21,7 +21,7 @@ export default class MountCard extends Vue {
 
 <template>
   <Card class="row-full" :title="$t('Mount')" :noSign="true">
-    <Mount :charData="charData" />
+    <Mount :charData="charData" :viewOnly="viewOnly" />
   </Card>
 </template>
 

@@ -18,6 +18,7 @@ import FLNumberInput from "@/components/FLNumberInput.vue"
 })
 export default class XPModal extends Vue {
   @Prop({ required: true }) charData!: CharacterData
+  @Prop({ default: false }) viewOnly!: boolean
 
   addingMount = false
   showAddItem = false
@@ -96,7 +97,12 @@ export default class XPModal extends Vue {
         <div class="button-row right-adjusted">
           <div>
             <label for="mount-name" class="block"> {{ $t("Name") }}</label>
-            <input id="mount-name" type="text" v-model="charData.mount.name" />
+            <input
+              id="mount-name"
+              type="text"
+              v-model="charData.mount.name"
+              :disabled="viewOnly"
+            />
           </div>
 
           <div class="mount-attrib-row">
@@ -108,6 +114,7 @@ export default class XPModal extends Vue {
                 id="mount-strength"
                 fontSize="1.3rem"
                 v-model.number="charData.mount.strength"
+                :disabled="viewOnly"
               />
             </span>
             <span>
@@ -118,6 +125,7 @@ export default class XPModal extends Vue {
                 id="mount-agility"
                 fontSize="1.3rem"
                 v-model.number="charData.mount.agility"
+                :disabled="viewOnly"
               />
             </span>
           </div>
@@ -138,7 +146,11 @@ export default class XPModal extends Vue {
         <tbody>
           <tr v-for="item in inventory" v-bind:key="item.name">
             <td>
-              <input type="checkbox" v-model="item.selected" />
+              <input
+                type="checkbox"
+                v-model="item.selected"
+                :disabled="viewOnly"
+              />
             </td>
             <td>{{ item.name }}</td>
             <td class="bonus-cell">{{ item.bonus || "" }}</td>
@@ -149,10 +161,14 @@ export default class XPModal extends Vue {
         <div>{{ $t("Encumbrance") }}: {{ gearWeight }}/{{ gearWeightMax }}</div>
         <div class="">
           <label for="is-mounted">{{ $t("Mounted") }}</label>
-          <input type="checkbox" v-model="charData.mount.mounted" />
+          <input
+            type="checkbox"
+            v-model="charData.mount.mounted"
+            :disabled="viewOnly"
+          />
         </div>
       </div>
-      <div class="button-row">
+      <div v-if="!viewOnly" class="button-row">
         <button
           class="button button-danger"
           :disabled="!selected"

@@ -49,11 +49,13 @@ export default class ExpandableSection extends Vue {
   }
 
   get incrementDisabled() {
+    if (this.disabled || !this.canIncrement) return true
     if (!this.max || !this.value) return false
     return Number(this.value) >= Number(this.max)
   }
 
   get decrementDisabled() {
+    if (this.disabled || !this.canDecrement) return true
     if (!this.min) return false
     return Number(this.value) <= Number(this.min)
   }
@@ -65,7 +67,7 @@ export default class ExpandableSection extends Vue {
     <button
       class="fl-number-button shared"
       type="button"
-      :disabled="decrementDisabled || !canDecrement || disabled"
+      :disabled="decrementDisabled"
       @click="decrement"
       tabindex="-1"
       :style="cssProps"
@@ -89,7 +91,7 @@ export default class ExpandableSection extends Vue {
     <button
       class="fl-number-button shared"
       type="button"
-      :disabled="incrementDisabled || !canIncrement || disabled"
+      :disabled="incrementDisabled"
       @click="increment"
       tabindex="-1"
       :style="cssProps"

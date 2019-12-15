@@ -27,6 +27,7 @@ export default class PortraitCard extends Vue {
     <div class="flex-row-wrap space-around appearance-section">
       <PicturePicker
         :portrait="charData.portrait"
+        :viewOnly="viewOnly"
         @pickedPicture="setImgSource"
       />
     </div>

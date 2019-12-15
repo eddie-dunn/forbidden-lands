@@ -27,6 +27,8 @@ type VType = Vue & { focus: () => {} }
 })
 export default class ExpandableSection extends Vue {
   @Prop({ required: true }) characterData!: CharacterData
+  @Prop({ default: false }) viewOnly!: boolean
+
   showAddItem = false
   showEditItem = false
   showConfirmDeleteItem = false
@@ -295,19 +297,23 @@ export default class ExpandableSection extends Vue {
               v-bind:key="item.name + index"
             >
               <td>
-                <input type="checkbox" v-model="item.selected" />
+                <input
+                  type="checkbox"
+                  v-model="item.selected"
+                  :disabled="viewOnly"
+                />
               </td>
               <td>
                 <input
                   type="checkbox"
-                  :disabled="!equippable(item)"
                   v-model="item.equipped"
+                  :disabled="!equippable(item) || viewOnly"
                 />
               </td>
               <td>
                 <SvgIcon :name="iconFor(item)" :title="item.type" />
               </td>
-              <td @click="editItem(item)" class="clickable-cell">
+              <td @click="!viewOnly && editItem(item)" class="clickable-cell">
                 {{ item.name }}
               </td>
               <td>{{ item.bonus || "" }}</td>
@@ -316,7 +322,7 @@ export default class ExpandableSection extends Vue {
         </table>
         <div>{{ $t("Encumbrance") }}: {{ gearWeight }}/{{ gearWeightMax }}</div>
 
-        <div class="button-row">
+        <div v-if="!viewOnly" class="button-row">
           <button
             :disabled="!itemsSelected"
             class="button button-danger"
@@ -428,7 +434,7 @@ export default class ExpandableSection extends Vue {
         <label for="food">{{ $t("Food") }}</label>
         <select
           v-model="characterData.gear.consumables.food"
-          :disabled="status === 'new'"
+          :disabled="status === 'new' || viewOnly"
         >
           <option
             v-for="val in [0, 6, 8, 10, 12]"
@@ -444,7 +450,7 @@ export default class ExpandableSection extends Vue {
         <label for="water">{{ $t("Water") }}</label>
         <select
           v-model.number="characterData.gear.consumables.water"
-          :disabled="status === 'new'"
+          :disabled="status === 'new' || viewOnly"
         >
           <option
             v-for="val in [0, 6, 8, 10, 12]"
@@ -460,7 +466,7 @@ export default class ExpandableSection extends Vue {
         <label for="arrows">{{ $t("Arrows") }}</label>
         <select
           v-model.number="characterData.gear.consumables.arrows"
-          :disabled="status === 'new'"
+          :disabled="status === 'new' || viewOnly"
         >
           <option
             v-for="val in [0, 6, 8, 10, 12]"
@@ -476,7 +482,7 @@ export default class ExpandableSection extends Vue {
         <label for="torches">{{ $t("Torches") }}</label>
         <select
           v-model.number="characterData.gear.consumables.torches"
-          :disabled="status === 'new'"
+          :disabled="status === 'new' || viewOnly"
         >
           <option
             v-for="val in [0, 6, 8, 10, 12]"
@@ -503,6 +509,7 @@ export default class ExpandableSection extends Vue {
           min="0"
           max="300"
           v-model="characterData.gear.money.copper"
+          :disabled="viewOnly"
         />
       </div>
       <div class="money-item">
@@ -515,6 +522,7 @@ export default class ExpandableSection extends Vue {
           min="0"
           max="300"
           v-model="characterData.gear.money.silver"
+          :disabled="viewOnly"
         />
       </div>
       <div class="money-item">
@@ -526,6 +534,7 @@ export default class ExpandableSection extends Vue {
           fontSize="1.2rem"
           :min="0"
           v-model="characterData.gear.money.gold"
+          :disabled="viewOnly"
         />
       </div>
     </div>

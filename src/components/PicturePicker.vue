@@ -20,6 +20,9 @@ const AppProps = Vue.extend({
     portrait: {
       required: true,
     },
+    viewOnly: {
+      type: Boolean,
+    },
   },
   watch: {
     selected_portrait: {
@@ -51,6 +54,7 @@ export default class PicturePicker extends AppProps {
   selected_portrait = this.portrait || getRandomPictureFromGallery(IMAGES)
 
   showPicker() {
+    if (this.viewOnly) return
     this.showModal = true
   }
   closePicker() {

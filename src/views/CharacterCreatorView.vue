@@ -4,6 +4,9 @@ import { Component, Prop, Watch } from "vue-property-decorator"
 
 import { getNewCharacterData, CharacterData } from "@/characterData"
 import { getCharDataFromQuery, CharDataQueryObj } from "@/util/characterUtil"
+import { GET_MP_PLAYER } from "@/store/store-types"
+import { UserData, PeerId } from "@/components/multiplay/protocol"
+import { errlog } from "@/util"
 
 import CharacterEditorMain from "@/components/characterEditor/CharacterEditorMain.vue"
 
@@ -18,6 +21,18 @@ function initCharData(
   return $characterStore.characterById(charId) || getNewCharacterData()
 }
 
+const getPlayerChar = (
+  user: UserData | undefined,
+  charId: string
+): CharacterData | null => {
+  if (!user) return null
+  const char = user.characters.find((char) => {
+    if (!char) return false
+    return char.metadata.id === charId
+  })
+  return char || null
+}
+
 @Component({
   components: {
     CharacterEditorMain,
@@ -26,40 +41,38 @@ function initCharData(
 export default class CharacterEditorView extends Vue {
   @Prop({ default: "" }) id!: string
   @Prop({ default: null }) templateQueryData!: null | CharDataQueryObj
+  @Prop({ default: null }) fromRoute!: any // figure out to know who navigateed to this page
+  @Prop({ default: false }) multiplayer!: boolean
+  @Prop({ default: "" }) peerId!: string
 
-  charData = initCharData(this.$characterStore, this.id, this.templateQueryData)
-  beforeRouteEnter(to: any, from: any, next: any) {
-    // called before the route that renders this component is confirmed.
-    // does NOT have access to `this` component instance,
-    // because it has not been created yet when this guard is called!
-    // console.log("beforeRouteEnter to/from/next", to, from, next)
-    console.log("enter")
-    next()
-  }
-  beforeRouteUpdate(to: any, from: any, next: any) {
-    // called when the route that renders this component has changed,
-    // but this component is reused in the new route.
-    // For example, for a route with dynamic params `/foo/:id`, when we
-    // navigate between `/foo/1` and `/foo/2`, the same `Foo` component instance
-    // will be reused, and this hook will be called when that happens.
-    // has access to `this` component instance.
-    // console.log("beforeRouteUpdate to/from/next", to, from, next)
-    next()
-  }
-  beforeRouteLeave(to: any, from: any, next: any) {
-    // called when the route that renders this component is about to
-    // be navigated away from.
-    // has access to `this` component instance.
-    // console.log("beforeRouteLeave to/from/next", to, from, next)
-    console.log("enter")
-    next()
+  charData: null | CharacterData = null
+
+  created() {
+    if (this.multiplayer) {
+      const user: UserData | undefined = this.$store.getters[GET_MP_PLAYER](
+        this.peerId
+      )
+      const char = getPlayerChar(user, this.id)
+      if (!char) {
+        errlog("character not found", this.peerId, this.id)
+        return
+      }
+      this.charData = char
+    } else {
+      this.charData = initCharData(
+        this.$characterStore,
+        this.id,
+        this.templateQueryData
+      )
+    }
   }
 }
 </script>
 
 <template>
   <CharacterEditorMain
-    :useTemplateData="templateQueryData"
+    :isTemplateData="!!templateQueryData"
+    :viewOnly="this.multiplayer"
     :charData="charData"
   />
 </template>
