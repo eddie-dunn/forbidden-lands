@@ -4,11 +4,6 @@ import Peer from "peerjs"
 import { Component, Vue } from "vue-property-decorator"
 
 import { GET_MP_ACTIVE, MP_CHARS } from "@/store/store-types.ts"
-import {
-  UserListMsg,
-  ChatMessage,
-  ServerMessage,
-} from "@/components/multiplay/multi"
 import MultiplayerCharList from "@/components/multiplay/MultiplayerCharList.vue"
 import ChatWindow from "@/components/multiplay/ChatWindow.vue"
 import FLInput from "@/components/base/FLInput.vue"
