@@ -16,7 +16,8 @@ import {
 import { CharacterData } from "@/characterData"
 import { Err, OK, log } from "@/util"
 
-import { FLHost, FLPlayer } from "@/components/multiplay/fl-node"
+import { FLPlayer } from "@/components/multiplay/fl-player"
+import { FLHost } from "@/components/multiplay/fl-host"
 import { UserData, PeerId } from "@/components/multiplay/protocol"
 
 Vue.use(Vuex)

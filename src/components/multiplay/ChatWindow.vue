@@ -8,7 +8,8 @@ import {
   GET_ROOM_NAME,
   SET_OTHER_CHARS,
 } from "@/store/store-types.ts"
-import { FLPlayer, ChatMessage } from "@/components/multiplay/fl-node"
+import { ChatMessage } from "@/components/multiplay/fl-node"
+import { FLPlayer } from "@/components/multiplay/fl-player"
 
 import FLInput from "@/components/base/FLInput.vue"
 import CharacterCard from "@/components/base/CharacterCard.vue"
