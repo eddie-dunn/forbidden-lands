@@ -2,10 +2,14 @@
 import Vue from "vue"
 import LocaleChanger from "@/components/LocaleChanger.vue"
 import NavButton from "@/components/NavButton.vue"
+
+import Notify from "@/components/base/Notify.vue"
+
 export default Vue.extend({
   components: {
     LocaleChanger,
     NavButton,
+    Notify,
   },
   data() {
     return {
@@ -26,6 +30,17 @@ export default Vue.extend({
       }
       this.registration.waiting.postMessage("skipWaiting")
     },
+    notify(
+      message: string,
+      type?: "info" | "warning" | "error",
+      displayTime?: number
+    ) {
+      this.$notify({
+        type: type || "info",
+        message,
+        displayTime,
+      })
+    },
   },
   created() {
     // Service worker update from:
@@ -42,6 +57,13 @@ export default Vue.extend({
 
 <template>
   <div id="app">
+    <!-- notify test -->
+    <button v-if="$debugMode" @click="notify('200ms', 'warning', 2000)">
+      Notify 2000ms
+    </button>
+    <button v-if="$debugMode" @click="notify('HELLO')">Notify</button>
+    <Notify />
+
     <div class="navbar navbar-top">
       <div class="navbar-left">
         <div v-if="false">
@@ -50,7 +72,7 @@ export default Vue.extend({
           <NavButton type="refresh" />
         </div>
         <div class="route-links">
-          <router-link to="/">{{ $t("List") }}</router-link>
+          <router-link to="/" exact>{{ $t("List") }}</router-link>
           |
           <router-link to="/dice">{{ $t("Dice") }}</router-link>
           |
@@ -128,7 +150,7 @@ body {
     font-weight: bold;
     color: #2c3e50;
     text-decoration: none;
-    &.router-link-exact-active {
+    &.router-link-active {
       color: @color-background;
     }
   }
