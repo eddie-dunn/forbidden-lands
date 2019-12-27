@@ -91,7 +91,7 @@ export class FLHost extends AbstractNode {
     return OK()
   }
   handleConnect(conn: DataConnection) {
-    log(this.nodeType, "got connection", conn.metadata)
+    log(this.nodeType, "got connection", conn.metadata, conn.peer)
     const metadata = conn.metadata as UserData
     if (metadata.origin !== "FLC") {
       errlog("Invalid connection attempt from", conn)
@@ -99,9 +99,9 @@ export class FLHost extends AbstractNode {
     }
     // Override metadata provided role based on config:
     const role =
-      this.adminId === metadata.peerId
+      this.adminId === conn.peer
         ? "admin"
-        : this.gmIds.includes(metadata.peerId)
+        : this.gmIds.includes(conn.peer)
         ? "gm"
         : "player"
     const user: INodeUser = {

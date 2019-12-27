@@ -36,7 +36,6 @@ export class HostMessageHandler {
   handleMsgChat(users: INodeUser[], chat: Protocol.Chat): ActionSendMsg[] {
     if (chat.to) {
       const recipient = users.filter((user) => user.peerId === chat.to)
-      // return { actions: [{ recipients: recipient, msg: chat }] }
       return [
         {
           actionType: "sendMsg",

@@ -12,7 +12,6 @@ import { ChatMessage } from "@/components/multiplay/fl-node"
 import { FLPlayer } from "@/components/multiplay/fl-player"
 
 import FLInput from "@/components/base/FLInput.vue"
-import CharacterCard from "@/components/base/CharacterCard.vue"
 import { Protocol, ProtocolTypes, UserData } from "./protocol"
 
 /*
@@ -20,7 +19,6 @@ import { Protocol, ProtocolTypes, UserData } from "./protocol"
  */
 @Component({
   components: {
-    CharacterCard,
     FLInput,
   },
 })

@@ -2,9 +2,11 @@
 import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 
+import { BusEvent, EventBus } from "@/util/eventBus"
+import { Protocol, ProtocolTypes } from "@/components/multiplay/protocol"
 import { getNewCharacterData, CharacterData } from "@/characterData"
 import { getCharDataFromQuery, CharDataQueryObj } from "@/util/characterUtil"
-import { GET_MP_PLAYER } from "@/store/store-types"
+import { GET_MP_PLAYER, GET_MP_ACTIVE } from "@/store/store-types"
 import { UserData, PeerId } from "@/components/multiplay/protocol"
 import { errlog } from "@/util"
 
@@ -46,6 +48,11 @@ export default class CharacterEditorView extends Vue {
   @Prop({ default: "" }) peerId!: string
 
   charData: null | CharacterData = null
+  mKey = 0
+
+  get mpActive(): boolean {
+    return this.$store.getters[GET_MP_ACTIVE]
+  }
 
   created() {
     if (this.multiplayer) {
@@ -66,6 +73,25 @@ export default class CharacterEditorView extends Vue {
       )
     }
   }
+  mounted() {
+    EventBus.$on(BusEvent.characterUpdate, (data: Protocol.MsgCharacter) => {
+      if (
+        !this.charData ||
+        data.type !== ProtocolTypes.charData ||
+        data.character.metadata.id !== this.charData.metadata.id
+      ) {
+        return
+      }
+      if (JSON.stringify(this.charData) === JSON.stringify(data.character)) {
+        return
+      }
+      this.charData = data.character
+      this.mKey++
+    })
+  }
+  destroyed() {
+    EventBus.$off(BusEvent.characterUpdate)
+  }
 }
 </script>
 
@@ -74,6 +100,7 @@ export default class CharacterEditorView extends Vue {
     :isTemplateData="!!templateQueryData"
     :viewOnly="this.multiplayer"
     :charData="charData"
+    :key="mKey"
   />
 </template>
 

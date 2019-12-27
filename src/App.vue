@@ -74,6 +74,12 @@ export default Vue.extend({
         <div class="route-links">
           <router-link to="/" exact>{{ $t("List") }}</router-link>
           |
+          <span v-if="$debugMode">
+            <router-link to="/multiplayer" exact>
+              {{ $t("Multiplay") }}
+            </router-link>
+            |
+          </span>
           <router-link to="/dice">{{ $t("Dice") }}</router-link>
           |
           <router-link to="/about">{{ $t("About") }}</router-link>

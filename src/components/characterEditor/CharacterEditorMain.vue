@@ -2,6 +2,7 @@
 import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 
+import { MP_SAVE_CHAR } from "@/store/store-types"
 import { CharacterData, calcCharacterXP } from "@/characterData"
 
 import FLButton from "@/components/base/FLButton.vue"
@@ -57,6 +58,7 @@ export default class CharacterEditor extends Vue {
     )
   }
   get charDataUpdated(): boolean {
+    if (this.viewOnly) return false
     return stringChar(this.charData) !== this.charDataCopyStr
   }
 
@@ -82,6 +84,7 @@ export default class CharacterEditor extends Vue {
       // points have been spent on leveling up character
       this.charData.metadata.xpAtCreation = this.totalXp
     }
+    this.$store.commit(MP_SAVE_CHAR, this.charData)
     this.$characterStore.addCharacter(this.charData)
     this.charDataCopyStr = stringChar(this.charData)
   }

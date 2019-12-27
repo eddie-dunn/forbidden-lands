@@ -1,6 +1,9 @@
 // State
 export const MP_CHARS = "CHARS FOR MULTIPLAYER"
 
+// Action
+export const MP_SAVE_CHAR = "SAVE CHARACTER"
+
 // Setters
 export const SET_MP_CHAR = "SET_MULTIPLAYER_CHARACTER"
 export const SET_OTHER_CHARS = "SET_OTHER_CHARS"

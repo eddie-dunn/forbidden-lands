@@ -3,6 +3,7 @@ import Vue from "vue"
 import Vuex from "vuex"
 import {
   MP_CHARS,
+  MP_SAVE_CHAR,
   SET_CLIENT,
   SET_HOST,
   SET_MP_CHAR,
@@ -62,6 +63,10 @@ export const store = new Vuex.Store({
     },
     [SET_CLIENT](state, client: FLPlayer) {
       state.client = client
+    },
+    [MP_SAVE_CHAR](state, charData: CharacterData) {
+      if (!state.client.connected) return
+      state.client.notifyCharUpdate(charData)
     },
   },
   // Info: https://vuex.vuejs.org/guide/actions.html

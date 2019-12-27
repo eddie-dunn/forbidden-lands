@@ -36,20 +36,21 @@ export class PlayerMessageHandler {
   handleChar(
     users: UserData[],
     charUpdate: Protocol.MsgCharacter
-  ): ReactionUpdateUsers {
+  ): ReactionUpdateChar {
     const nusers = users.map((user) => {
-      if ((user.peerId = charUpdate.peerId)) {
-        user.characters.map((char) => {
-          if (char && char.metadata.id === charUpdate.character.metadata.id) {
-            return charUpdate.character
-          }
-          return char
-        })
+      if (user.peerId !== charUpdate.peerId) {
+        return user
       }
-      return user
+      const nchars = user.characters.map((char) => {
+        if (char && char.metadata.id === charUpdate.character.metadata.id) {
+          return charUpdate.character
+        }
+        return char
+      })
+      return { ...user, characters: nchars }
     })
     return {
-      action: "update userlist",
+      action: "update character",
       data: nusers,
     }
   }
@@ -58,7 +59,7 @@ export class PlayerMessageHandler {
     userUpdate: Protocol.MsgUser
   ): ReactionUpdateUsers {
     const nusers = users.map((user) => {
-      if ((user.peerId = userUpdate.peerId)) {
+      if (user.peerId === userUpdate.peerId) {
         return userUpdate
       }
       return user
@@ -101,11 +102,17 @@ type PlayerHandle =
   | ReactionChat
   | ReactionNull
   | ReactionUpdateUsers
+  | ReactionUpdateChar
   | ReactionPing
 
 interface ReactionChat {
   action: "add chat"
   data: Protocol.Chat | Protocol.ServerChat
+}
+
+interface ReactionUpdateChar {
+  action: "update character"
+  data: UserData[]
 }
 
 interface ReactionUpdateUsers {

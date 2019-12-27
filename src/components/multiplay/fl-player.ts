@@ -1,4 +1,5 @@
 import { AbstractNode, ChatMessage, PlayerNode } from "./fl-node"
+import { BusEvent, EventBus } from "@/util/eventBus"
 import { Err, OK, Result } from "@/util"
 import {
   INodeUser,
@@ -7,6 +8,8 @@ import {
   UserData,
 } from "@/components/multiplay/protocol"
 import { PlayerMessageHandler, PlayerReceive } from "./playerMessageHandler"
+
+import { CharacterData } from "@/characterData"
 
 export class FLPlayer extends AbstractNode implements PlayerNode {
   private handler = new PlayerMessageHandler()
@@ -52,6 +55,16 @@ export class FLPlayer extends AbstractNode implements PlayerNode {
     this.handler.playerId = this.peerId
     return result
   }
+
+  public notifyCharUpdate(charData: CharacterData) {
+    const msg: Protocol.MsgCharacter = {
+      type: ProtocolTypes.charData,
+      peerId: this.peerId,
+      character: charData,
+    }
+    this.hostConn.conn.send(msg)
+  }
+
   _addChat(data: Protocol.Chat | Protocol.ServerChat) {
     const username = (
       this.users.find((user) => user.peerId === data.from) || {
@@ -61,14 +74,17 @@ export class FLPlayer extends AbstractNode implements PlayerNode {
     const newMsg = { username, message: data }
     this.messages.push(newMsg)
   }
+
   _receiveData(data: PlayerReceive): Result {
-    const ev = this.handler.dispatchMsg(this.connBox, data)
+    const ev = this.handler.dispatchMsg(this.users, data)
     switch (ev.action) {
       case "add chat":
         this._addChat(ev.data)
         break
       case "update userlist":
+      case "update character":
         this.users = ev.data
+        EventBus.$emit(BusEvent.characterUpdate, data)
         break
       case "send pong":
         this.hostConn.conn.send(ev.data)
