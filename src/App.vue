@@ -91,6 +91,7 @@ body {
   max-width: 1024px;
   margin: 0 auto;
   min-height: 100vh;
+  position: relative;
 }
 
 .navbar-left {
@@ -110,6 +111,11 @@ body {
 }
 
 .navbar {
+  @media (min-height: 500px) {
+    position: sticky;
+    top: 0;
+  }
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
