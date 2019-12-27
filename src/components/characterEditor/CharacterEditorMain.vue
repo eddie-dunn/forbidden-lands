@@ -38,8 +38,14 @@ export default class CharacterEditor extends Vue {
   @Prop({ default: false }) viewOnly!: boolean
   @Prop({ default: false }) isTemplateData!: boolean
 
-  // TODO: Get from localStorage instead
-  charDataCopyStr: string = stringChar(this.charData)
+  charDataCopyStr: string = stringChar(this.initialData)
+
+  get initialData(): CharacterData {
+    return (
+      this.$characterStore.storedCharacter(this.charData.metadata.id) ||
+      this.charData
+    )
+  }
 
   get status() {
     return this.charData.metadata.status
@@ -60,6 +66,12 @@ export default class CharacterEditor extends Vue {
   }
 
   closeClicked() {
+    if (
+      this.charDataUpdated &&
+      this.$characterStore.characterById(this.charData.metadata.id)
+    ) {
+      this.$characterStore.addCharacter(this.initialData) // reset data
+    }
     this.$router.back()
   }
 

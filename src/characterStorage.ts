@@ -218,6 +218,10 @@ export class Store {
     return this.storage[characterId] || null
   }
 
+  storedCharacter(characterId: string): CharacterData | null {
+    return loadCharacterFromLocalStorage(characterId)
+  }
+
   removeCharacter(characterId: string, commit: boolean = true): void {
     delete this._storage[characterId]
     if (commit) {
