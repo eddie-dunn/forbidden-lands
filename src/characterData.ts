@@ -116,7 +116,9 @@ export interface Gear {
   }
 }
 
-export interface CharacterData {
+// TODO: Rename CharacterData => CharData
+export type CharacterData = CharData
+export interface CharData {
   age: number | null
   ageType: Age
   appearance: string

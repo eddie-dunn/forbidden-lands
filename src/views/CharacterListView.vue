@@ -3,11 +3,7 @@ import { Component, Vue, Watch } from "vue-property-decorator"
 import Card from "@/components/Card.vue"
 import CharacterCard from "@/components/CharacterCard.vue"
 import Expander from "@/components/ExpandableSection.vue"
-import {
-  loadAllCharactersFromLocalStorage,
-  Store,
-  SaveData,
-} from "@/characterStorage"
+import { SaveData } from "@/localstorage/characterStorage"
 import FileReader from "@/components/FileReader.vue"
 import { setTimeout } from "timers"
 

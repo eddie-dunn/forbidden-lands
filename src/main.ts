@@ -3,7 +3,7 @@ import "./registerServiceWorker"
 import { Notification, notify } from "@/util/notifications"
 
 import App from "./App.vue"
-import { Store as CharacterStore } from "@/characterStorage"
+import { Store as CharacterStore } from "@/localstorage/characterStorage"
 import Vue from "vue"
 import i18n from "./i18n"
 import router from "./router"
