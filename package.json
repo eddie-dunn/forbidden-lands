@@ -50,7 +50,7 @@
     "svgo-loader": "^2.1.0",
     "ts-interface-builder": "^0.1.8",
     "ts-jest": "^23.0.0",
-    "typescript": "^3.4.3",
+    "typescript": "~3.6.4",
     "vue-cli-plugin-i18n": "^0.6.0",
     "vue-cli-plugin-svg-sprite": "^1.0.0",
     "vue-template-compiler": "^2.5.21"
