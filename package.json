@@ -56,13 +56,6 @@
       "autoprefixer": {}
     }
   },
-  "browserslist": [
-    "> 1% in SE",
-    "last 2 and_ff versions",
-    "not IE 11",
-    "not ios_saf < 12",
-    "not samsung < 9"
-  ],
   "jest": {
     "moduleFileExtensions": [
       "js",
