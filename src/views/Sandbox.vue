@@ -1,18 +1,22 @@
 <template>
   <div class="home">
     <h1>SANDBOX</h1>
+
     <ExpandableSection label="Vue app info" class="text-center">
       <img alt="Vue logo" src="../assets/logo.png" />
       <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
     </ExpandableSection>
+
     <ExpandableSection label="Notify" saveStateId="notify-test">
       <div class="sandbox-content">
-        <FLButton @click="notify('test')">Test</FLButton>
-        <FLButton @click="notify('test 200 ms', 'warning', 2000)">
+        <FLButton @click="notifyVue('test')">Test</FLButton>
+        <FLButton @click="notifyVue('test 2000 ms', 'warning', 2000)">
           Test 2000ms
         </FLButton>
+        <FLButton @click="notify()">Test raw notify</FLButton>
       </div>
     </ExpandableSection>
+
     <ExpandableSection label="Modal">
       <Modal v-if="modalOpen" @close="toggleModal(false)" :maximized="false">
         <div slot="header">
@@ -39,6 +43,7 @@ import HelloWorld from "@/components/HelloWorld.vue"
 import ExpandableSection from "@/components/ExpandableSection.vue"
 import FLButton from "@/components/base/FLButton.vue"
 import Modal from "@/components/Modal.vue"
+import { Notification, notify } from "@/util/notifications"
 
 @Component({
   components: {
@@ -55,7 +60,7 @@ export default class Home extends Vue {
     this.modalOpen = open
   }
 
-  notify(
+  notifyVue(
     message: string,
     type?: "info" | "warning" | "error",
     displayTime?: number
@@ -66,6 +71,14 @@ export default class Home extends Vue {
       displayTime,
     })
   }
+  notify() {
+    const msg: Notification = {
+      type: "error",
+      message: "raw notification",
+      displayTime: 4000,
+    }
+    notify(msg)
+  }
 }
 </script>
 
@@ -73,9 +86,11 @@ export default class Home extends Vue {
 .sandbox-content {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   margin: 1rem;
   * > {
     margin-right: 1rem;
+    margin-bottom: 1rem;
     width: max-content;
   }
 }
