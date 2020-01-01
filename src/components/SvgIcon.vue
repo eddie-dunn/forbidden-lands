@@ -73,5 +73,7 @@ export default {
   fill: currentColor;
   height: 24px;
   width: 24px;
+  display: inline-block;
+  vertical-align: middle;
 }
 </style>
