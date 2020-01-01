@@ -3,7 +3,6 @@ import Vue from "vue"
 import { Component, Prop } from "vue-property-decorator"
 import SvgIcon from "@/components/SvgIcon.vue"
 
-// TODO: Implement saving last state to local storage
 const BASE_STORE_KEY = "__fl_expandable_section"
 
 @Component({
@@ -36,11 +35,6 @@ export default class ExpandableSection extends Vue {
     return !!state
   }
 
-  save() {
-    // console.log("saving state", this.key, this.isExpanded)
-    localStorage.setItem(this.key, this.isExpanded ? "open" : "")
-  }
-
   expandToggle(ev: any) {
     if (ev.type === "click") this.isExpanded = !this.isExpanded
     else if (this.focused && ev.code === "Enter") {
@@ -48,7 +42,8 @@ export default class ExpandableSection extends Vue {
     }
 
     if (this.saveStateId) {
-      this.save() // save state if id is supplied
+      // save toggled state if id is supplied
+      localStorage.setItem(this.key, this.isExpanded ? "open" : "")
     }
   }
 
@@ -127,7 +122,6 @@ export default class ExpandableSection extends Vue {
 .expander {
   cursor: pointer;
   margin: 0.5rem 0.2rem;
-  text-align: left;
   font-size: 2rem;
   outline-color: ~"@{pastel-green}55";
   display: flex;
@@ -136,7 +130,6 @@ export default class ExpandableSection extends Vue {
 
 .expander-content {
   cursor: default;
-  text-align: left;
   height: auto;
 }
 
