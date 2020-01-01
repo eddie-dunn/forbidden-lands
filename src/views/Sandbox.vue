@@ -13,6 +13,23 @@
         </FLButton>
       </div>
     </ExpandableSection>
+    <ExpandableSection label="Modal">
+      <Modal v-if="modalOpen" @close="toggleModal(false)" :maximized="false">
+        <div slot="header">
+          Modal header
+        </div>
+        <div slot="body">
+          Modal contents
+        </div>
+        <div slot="footer" class="sandbox-modal-footer">
+          <FLButton @click="toggleModal(false)" type="cancel">Cancel</FLButton>
+          <FLButton @click="toggleModal(false)">OK</FLButton>
+        </div>
+      </Modal>
+      <div class="sandbox-content">
+        <FLButton @click="toggleModal(true)">Open modal</FLButton>
+      </div>
+    </ExpandableSection>
   </div>
 </template>
 
@@ -21,15 +38,23 @@ import { Component, Vue } from "vue-property-decorator"
 import HelloWorld from "@/components/HelloWorld.vue"
 import ExpandableSection from "@/components/ExpandableSection.vue"
 import FLButton from "@/components/base/FLButton.vue"
+import Modal from "@/components/Modal.vue"
 
 @Component({
   components: {
     HelloWorld,
     ExpandableSection,
     FLButton,
+    Modal,
   },
 })
 export default class Home extends Vue {
+  modalOpen = false
+
+  toggleModal(open: boolean) {
+    this.modalOpen = open
+  }
+
   notify(
     message: string,
     type?: "info" | "warning" | "error",
@@ -53,5 +78,11 @@ export default class Home extends Vue {
     margin-right: 1rem;
     width: max-content;
   }
+}
+
+.sandbox-modal-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.3rem;
 }
 </style>

@@ -91,9 +91,11 @@ export default class PicturePicker extends AppProps {
 <template>
   <div>
     <!-- <a href="#" id="show-modal" @click="showPicker()">Show Modal</a> -->
-    <Modal v-if="showModal" @close="closePicker()">
+    <Modal v-if="showModal" @close="closePicker()" :toggleBodyOverflow="true">
       <div slot="header">
         <h3>{{ $t("Select picture") }}</h3>
+      </div>
+      <div class="modal-body" slot="body">
         <div class="tab-bar">
           <div
             @click.self="galleryClicked"
@@ -108,8 +110,6 @@ export default class PicturePicker extends AppProps {
             {{ $t("Get from URL") }}
           </div>
         </div>
-      </div>
-      <div class="modal-body" slot="body">
         <div class="gallery-view">
           <div class="url-view" v-if="showGetUrl">
             <form class="url-view-form" v-on:submit.prevent="urlButtonClicked">
@@ -164,7 +164,6 @@ export default class PicturePicker extends AppProps {
           </div>
         </div>
       </div>
-      <div slot="footer"></div>
     </Modal>
 
     <div>
@@ -195,12 +194,16 @@ export default class PicturePicker extends AppProps {
 }
 
 .modal-body {
-  overflow-y: auto;
-  max-height: 99%;
+  // overflow-y: auto;
+  // max-height: 99%;
   // border: solid #42b98344 2px;
-  border-top: solid @pastel-green 5px;
   // padding: 1rem;
   // margin: 1rem;
+}
+
+.gallery-view {
+  overflow-y: auto;
+  max-height: 99%;
 }
 
 .url-view {
@@ -231,12 +234,22 @@ export default class PicturePicker extends AppProps {
 //   top: 0;
 // }
 
+.tab-bar {
+  padding-left: 1rem;
+  border-bottom: solid @pastel-green 5px;
+  position: sticky;
+  top: 0;
+  background: white;
+}
+
 .tab {
   background: white;
   color: @pastel-green;
   padding: 0.5rem;
   margin-right: 5px;
-  outline: solid 1px @pastel-green;
+  border-top: solid 1px @pastel-green;
+  border-left: solid 1px @pastel-green;
+  border-right: solid 1px @pastel-green;
   display: inline-block;
   cursor: pointer;
   &:active {
