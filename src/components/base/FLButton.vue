@@ -35,7 +35,7 @@ export default class FLButton extends Vue {
   }
   outline: 0;
   text-decoration: none;
-  padding: 0.5rem 2rem;
+  padding: 0.5rem 1rem;
   display: inline-block;
   color: #fff;
   background-color: @pastel-green;

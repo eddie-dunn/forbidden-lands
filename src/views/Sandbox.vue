@@ -9,8 +9,12 @@
 
     <ExpandableSection label="Notify" saveStateId="notify-test">
       <div class="sandbox-content">
-        <FLButton @click="notifyVue('test')">Test</FLButton>
-        <FLButton @click="notifyVue('test 2000 ms', 'warning', 2000)">
+        <FLButton @click="notifyVue('Info')">Test info</FLButton>
+        <FLButton @click="notifyVue(longWarningText, 'warning')">
+          Test warning
+        </FLButton>
+        <FLButton @click="notifyVue('Error', 'error')">Test error</FLButton>
+        <FLButton @click="notifyVue('test 2000 ms', null, 2000)">
           Test 2000ms
         </FLButton>
         <FLButton @click="notify()">Test raw notify</FLButton>
@@ -78,6 +82,16 @@ export default class Home extends Vue {
       displayTime: 4000,
     }
     notify(msg)
+  }
+
+  get longWarningText() {
+    return `Warning: Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+    enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+    aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
+    in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
+    sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
+    mollit anim id est laborum.`
   }
 }
 </script>

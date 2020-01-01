@@ -4,9 +4,14 @@ import { Component, Prop, Watch } from "vue-property-decorator"
 
 import { notify, notifier, Notification } from "@/util/notifications"
 import { EventBus, BusEvent } from "@/util/eventBus"
+import FLButton from "@/components/base/FLButton.vue"
+import SvgIcon from "@/components/SvgIcon.vue"
 
 @Component({
-  components: {},
+  components: {
+    FLButton,
+    SvgIcon,
+  },
 })
 export default class Notify extends Vue {
   notifications: Notification[] = []
@@ -18,12 +23,25 @@ export default class Notify extends Vue {
   }
 
   notificationClass(notification: Notification) {
-    const notificationClassType = `notification-${notification.type}`
-    return `notification ${notificationClassType}`
+    return `notification-${notification.type}`
+  }
+
+  colorClass(notification: Notification) {
+    return `color-${notification.type}`
   }
 
   close(id: string) {
     notifier.remove(id)
+  }
+
+  icon(notification: Notification) {
+    return `alert-${notification.type}`
+  }
+  closeSymbol(notification: Notification) {
+    if (notification.displayTime) {
+      return "check"
+    }
+    return "close"
   }
 }
 </script>
@@ -33,12 +51,23 @@ export default class Notify extends Vue {
     <div
       v-for="(notification, index) in notifications"
       :key="'notification' + index"
-      :class="notificationClass(notification)"
+      :class="['notification', notificationClass(notification)]"
     >
       <span class="message">
-        {{ notification.type }}: {{ notification.message }}
+        <SvgIcon
+          :name="icon(notification)"
+          title="Close"
+          :class="colorClass(notification)"
+        />
+        {{ notification.message }}
       </span>
-      <button class="message-button" @click="close(notification.id)">X</button>
+      <FLButton
+        type="cancel"
+        :class="['message-button', colorClass(notification)]"
+        @click="close(notification.id)"
+      >
+        <SvgIcon :name="closeSymbol(notification)" title="Close" />
+      </FLButton>
     </div>
   </div>
 </template>
@@ -58,20 +87,23 @@ export default class Notify extends Vue {
   align-items: baseline;
 
   background: gray;
-  margin: 1rem 0;
+  margin: 0.5rem;
   padding: 1rem;
+  background: @color-background;
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
 }
 
 .notification-warning {
-  background: orange;
+  border: 2px solid @color-warning;
 }
 
 .notification-info {
-  background: gray;
+  border: 2px solid @color-main;
 }
 
 .notification-error {
-  background: red;
+  border: 2px solid @color-danger;
 }
 
 .message {
@@ -81,5 +113,20 @@ export default class Notify extends Vue {
 }
 
 .message-button {
+  padding: 2px;
+  border: none;
+  box-shadow: none;
+}
+
+.color {
+  &-warning {
+    color: @color-warning;
+  }
+  &-error {
+    color: @color-danger;
+  }
+  &-info {
+    color: @color-main;
+  }
 }
 </style>

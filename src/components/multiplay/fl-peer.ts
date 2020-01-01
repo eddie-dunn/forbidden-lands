@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import { Err, OK, Result, errlog, log } from "@/util"
+import { Notification, notify } from "@/util/notifications"
 import { PeerId, PeerJSError, UserData } from "@/components/multiplay/protocol"
 
 import Peer from "peerjs"
@@ -158,7 +159,10 @@ function handlePeerJsError(err: any) {
     case "unavailable-id":
     case "network":
     case "peer-unavailable":
-      alert(err)
+      notify({
+        type: "error",
+        message: err,
+      })
       break
     default:
       /* eslint-disable-next-line no-console */
