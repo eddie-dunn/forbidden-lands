@@ -79,6 +79,10 @@ export default Vue.extend({
               {{ $t("Multiplay") }}
             </router-link>
             |
+            <router-link to="/sandbox" exact>
+              {{ $t("Sandbox") }}
+            </router-link>
+            |
           </span>
           <router-link to="/dice">{{ $t("Dice") }}</router-link>
           |
