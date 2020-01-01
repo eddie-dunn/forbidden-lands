@@ -9,7 +9,7 @@ import SvgIcon from "@/components/SvgIcon.vue"
     SvgIcon,
   },
 })
-export default class FLInput extends Vue {
+export default class FLButton extends Vue {
   @Prop({ default: "button" }) formButtonType!: string
   @Prop({ default: "" }) type!: "" | "danger" | "cancel" | "ghost"
 }
