@@ -147,7 +147,7 @@ body {
       color: @color-background;
     }
   }
-  z-index: 10;
+  z-index: @z-navbar;
 
   &-top {
     top: 0px;

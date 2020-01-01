@@ -107,7 +107,7 @@ export default class Modal extends Vue {
 
 .modal-mask {
   position: fixed;
-  z-index: 500;
+  z-index: @z-modal;
   top: 0;
   left: 0;
   width: 100%;

@@ -190,15 +190,6 @@ export default class PicturePicker extends AppProps {
 .picture-container {
   position: relative;
   min-width: 30ch;
-  // max-height: 400px;
-}
-
-.modal-body {
-  // overflow-y: auto;
-  // max-height: 99%;
-  // border: solid #42b98344 2px;
-  // padding: 1rem;
-  // margin: 1rem;
 }
 
 .gallery-view {
@@ -229,21 +220,16 @@ export default class PicturePicker extends AppProps {
   width: 100%;
 }
 
-// .tab-bar {
-//   position: sticky;
-//   top: 0;
-// }
-
 .tab-bar {
   padding-left: 1rem;
   border-bottom: solid @pastel-green 5px;
   position: sticky;
   top: 0;
-  background: white;
+  background: @color-background;
 }
 
 .tab {
-  background: white;
+  background: @color-background;
   color: @pastel-green;
   padding: 0.5rem;
   margin-right: 5px;
