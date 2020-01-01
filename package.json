@@ -51,21 +51,6 @@
     "vue-cli-plugin-svg-sprite": "^1.0.0",
     "vue-template-compiler": "^2.6.10"
   },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "@vue/prettier",
-      "@vue/typescript"
-    ],
-    "rules": {},
-    "parserOptions": {
-      "parser": "@typescript-eslint/parser"
-    }
-  },
   "postcss": {
     "plugins": {
       "autoprefixer": {}
