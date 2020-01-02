@@ -7,6 +7,7 @@ import ExpandableSection from "@/components/ExpandableSection.vue"
 import NumberInput from "@/components/FLNumberInput.vue"
 import DiceInput from "@/components/dice/DiceInput.vue"
 import DiceResult from "@/components/dice/DiceResult.vue"
+import FLButton from "@/components/base/FLButton.vue"
 
 enum DiceType {
   White,
@@ -64,6 +65,7 @@ function sidesFor(diceType: DiceType): number {
     DiceInput,
     DiceResult,
     ExpandableSection,
+    FLButton,
     NumberInput,
     SvgIcon,
   },
@@ -231,12 +233,12 @@ export default class DiceRoller extends Vue {
       </div>
     </div>
 
-    <div class="navbar navbar-bottom">
-      <button class="button button-white" @click="resetDice">
+    <div class="button-bar">
+      <FLButton type="cancel" @click="resetDice">
         {{ $t("Reset") }}
-      </button>
-      <button class="button" @click="pushRoll">{{ $t("Push") }}</button>
-      <button class="button" @click="rollDice">{{ $t("Roll dice") }}</button>
+      </FLButton>
+      <FLButton type="danger" @click="pushRoll">{{ $t("Push") }}</FLButton>
+      <FLButton @click="rollDice">{{ $t("Roll dice") }}</FLButton>
     </div>
   </div>
 </template>
@@ -250,7 +252,26 @@ export default class DiceRoller extends Vue {
 .dice-view {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+
+  .content {
+    flex-grow: 1;
+    overflow-y: auto;
+    overflow-x: hidden; // due to weird bug adding scrollbar to button-bar
+  }
+
+  .button-bar {
+    flex-shrink: 0;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 0.3rem;
+    position: sticky;
+    bottom: 0;
+  }
+  .navbar-bottom::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .roll-result {
@@ -280,23 +301,8 @@ export default class DiceRoller extends Vue {
   align-items: center;
 }
 
-.content {
-  flex-grow: 2;
-}
-
 .dice-inputs {
   display: flex;
   flex-wrap: wrap;
-}
-
-.navbar-bottom {
-  overflow-x: scroll;
-  scrollbar-width: none;
-  > button {
-    margin: 0 0.24rem;
-  }
-}
-.navbar-bottom::-webkit-scrollbar {
-  display: none;
 }
 </style>

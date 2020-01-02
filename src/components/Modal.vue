@@ -145,7 +145,6 @@ export default class Modal extends Vue {
   text-align: center;
   color: #42b983;
   padding-left: 1rem;
-  margin-bottom: 0.4rem;
   display: flex;
   &-title {
     flex-grow: 1;
@@ -154,10 +153,9 @@ export default class Modal extends Vue {
 }
 
 .__modal-body {
-  overflow: auto;
+  overflow-y: auto;
   max-height: 100vh;
   flex-grow: 1;
-  margin: 0 0.5rem 0.5rem 0.5rem;
 }
 
 .__modal-footer {

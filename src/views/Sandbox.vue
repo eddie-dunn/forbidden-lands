@@ -9,22 +9,36 @@
 
     <ExpandableSection label="Notify" saveStateId="notify-test">
       <div class="sandbox-content">
-        <FLButton @click="notifyVue('Info')">Test info</FLButton>
+        <FLButton type="ghost" @click="notifyVue('Info')">Test info</FLButton>
         <FLButton @click="notifyVue(longWarningText, 'warning')">
           Test warning
         </FLButton>
-        <FLButton @click="notifyVue('Error', 'error')">Test error</FLButton>
-        <FLButton @click="notifyVue('test 2000 ms', null, 2000)">
+        <FLButton type="danger" @click="notifyVue('Error', 'error')"
+          >Test error</FLButton
+        >
+        <FLButton type="cancel" @click="notifyVue('test 2000 ms', null, 2000)">
           Test 2000ms
         </FLButton>
         <FLButton @click="notify()">Test raw notify</FLButton>
       </div>
     </ExpandableSection>
 
-    <ExpandableSection label="Modal">
+    <ExpandableSection label="Modal" saveStateId="modal-test">
+      <Modal
+        v-if="diceModalOpen"
+        @close="diceModalOpen = false"
+        title="Dice modal"
+      >
+        <div slot="header">
+          This is an awesome dice modal
+        </div>
+        <div slot="body" style="height: 100%">
+          <DiceRoller style="height: 100%" />
+        </div>
+      </Modal>
       <Modal
         v-if="modalOpen"
-        @close="toggleModal(false)"
+        @close="modalOpen = false"
         :maximized="false"
         title="Title"
       >
@@ -32,15 +46,16 @@
           Extra header contents
         </div>
         <div slot="body">
-          Modal contents
+          This is the body contents
         </div>
         <div slot="footer" class="sandbox-modal-footer">
-          <FLButton @click="toggleModal(false)" type="cancel">Cancel</FLButton>
-          <FLButton @click="toggleModal(false)">OK</FLButton>
+          <FLButton @click="modalOpen = false" type="cancel">Cancel</FLButton>
+          <FLButton @click="modalOpen = false">OK</FLButton>
         </div>
       </Modal>
       <div class="sandbox-content">
-        <FLButton @click="toggleModal(true)">Open modal</FLButton>
+        <FLButton @click="modalOpen = true">Open modal</FLButton>
+        <FLButton @click="diceModalOpen = true">Open Dice Modal</FLButton>
       </div>
     </ExpandableSection>
   </div>
@@ -53,9 +68,11 @@ import ExpandableSection from "@/components/ExpandableSection.vue"
 import FLButton from "@/components/base/FLButton.vue"
 import Modal from "@/components/Modal.vue"
 import { Notification, notify } from "@/util/notifications"
+import DiceRoller from "@/components/dice/DiceRoller.vue"
 
 @Component({
   components: {
+    DiceRoller,
     HelloWorld,
     ExpandableSection,
     FLButton,
@@ -64,10 +81,7 @@ import { Notification, notify } from "@/util/notifications"
 })
 export default class Home extends Vue {
   modalOpen = false
-
-  toggleModal(open: boolean) {
-    this.modalOpen = open
-  }
+  diceModalOpen = false
 
   notifyVue(
     message: string,

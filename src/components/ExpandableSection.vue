@@ -145,6 +145,8 @@ export default class ExpandableSection extends Vue {
 
 .expander-label {
   display: inline-block;
+  text-align: left;
+  width: max-content;
   // white-space: nowrap;
   &::first-letter {
     text-transform: uppercase;
