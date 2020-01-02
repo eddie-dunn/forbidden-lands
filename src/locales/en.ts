@@ -376,6 +376,9 @@ export default {
   // Param
   "PHB_ref": "Page {page} in the Player's Handbook",
 
+  // Key
+  "CONFIRM_DELETE_CHAR": "Are you sure you wish to delete this character?",
+
   // Longer
   "Roll dice before session starts": "Roll dice before session starts",
   "XP_DESCR": `

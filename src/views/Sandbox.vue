@@ -22,9 +22,14 @@
     </ExpandableSection>
 
     <ExpandableSection label="Modal">
-      <Modal v-if="modalOpen" @close="toggleModal(false)" :maximized="false">
+      <Modal
+        v-if="modalOpen"
+        @close="toggleModal(false)"
+        :maximized="false"
+        title="Title"
+      >
         <div slot="header">
-          Modal header
+          Extra header contents
         </div>
         <div slot="body">
           Modal contents

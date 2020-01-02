@@ -91,11 +91,13 @@ export default class PicturePicker extends AppProps {
 <template>
   <div>
     <!-- <a href="#" id="show-modal" @click="showPicker()">Show Modal</a> -->
-    <Modal v-if="showModal" @close="closePicker()" :toggleBodyOverflow="true">
+    <Modal
+      v-if="showModal"
+      @close="closePicker()"
+      :toggleBodyOverflow="true"
+      :title="$t('Select picture')"
+    >
       <div slot="header">
-        <h3>{{ $t("Select picture") }}</h3>
-      </div>
-      <div class="modal-body" slot="body">
         <div class="tab-bar">
           <div
             @click.self="galleryClicked"
@@ -110,6 +112,8 @@ export default class PicturePicker extends AppProps {
             {{ $t("Get from URL") }}
           </div>
         </div>
+      </div>
+      <div class="modal-body" slot="body">
         <div class="gallery-view">
           <div class="url-view" v-if="showGetUrl">
             <form class="url-view-form" v-on:submit.prevent="urlButtonClicked">
@@ -222,10 +226,10 @@ export default class PicturePicker extends AppProps {
 
 .tab-bar {
   padding-left: 1rem;
-  border-bottom: solid @pastel-green 5px;
   position: sticky;
   top: 0;
   background: @color-background;
+  text-align: left;
 }
 
 .tab {

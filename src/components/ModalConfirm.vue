@@ -21,10 +21,7 @@ export default class ModalConfirm extends Vue {
 </script>
 
 <template>
-  <Modal @close="close" :maximized="false">
-    <h3 slot="header">
-      {{ title }}
-    </h3>
+  <Modal @close="close" :maximized="false" :title="title">
     <div slot="body">
       {{ body }}
     </div>

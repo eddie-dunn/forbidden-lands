@@ -322,6 +322,8 @@ export default {
   ...talents2,
   ...GearDescriptions,
 
+  "CONFIRM_DELETE_CHAR": "Vill du verkligen radera din rollperson?",
+
   "About": "Om",
   "Activate": "Aktivera",
   "Active": "Aktiva",
@@ -350,7 +352,6 @@ export default {
   "Cold": "Nedkyld",
   "Comment": "Kommentar",
   "Conditions": "Tillstånd",
-  "Confirm delete": "Vill du verkligen radera din rollperson?",
   "Consumables": "Förbrukningsvaror",
   "Create new character": "Skapa ny rollperson",
   "D": "T",

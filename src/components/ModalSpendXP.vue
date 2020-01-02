@@ -51,15 +51,17 @@ export default class XPModal extends Vue {
   close() {
     this.$emit("close")
   }
+
+  get title() {
+    return `${this.$t("XP")}: ${this.charDataCopy.experience}`
+  }
 }
 </script>
 
 <template>
-  <Modal class="xp-modal" @close="close" :maximized="true">
-    <div slot="header" class="header">
-      <h2>{{ $t("XP") }}: {{ charDataCopy.experience }}</h2>
-      <div>{{ $t("Total spent") }}: {{ xpSpent }}</div>
-      <div class="tab-bar"></div>
+  <Modal class="xp-modal" @close="close" :maximized="true" :title="title">
+    <div slot="header">
+      <div class="spent">{{ $t("Total spent") }}: {{ xpSpent }}</div>
     </div>
     <div slot="body" class="modal-body">
       <h3 class="capitalize">{{ $t("talents") }}</h3>
@@ -101,16 +103,16 @@ h2 {
   max-width: 60rem;
 }
 
-.header {
-  border-bottom: solid @pastel-green 5px;
-}
-
 .modal-button-row {
   // border-top: solid @pastel-green 5px;
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
   padding: 0.5rem;
+}
+
+.spent {
+  margin: 0.5rem;
 }
 
 .xp-modal {

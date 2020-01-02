@@ -78,11 +78,12 @@ export default class AddItem extends Vue {
 </script>
 
 <template>
-  <Modal class="inventory-modal" @close="close" :maximized="true">
-    <div v-if="title" slot="header" class="header">
-      <h2>{{ title }}</h2>
-    </div>
-
+  <Modal
+    class="inventory-modal"
+    @close="close"
+    :maximized="true"
+    :title="title"
+  >
     <div slot="body" class="modal-body">
       <div class="new-item-form" @submit.prevent="submit">
         <label for="gear-name">{{ $t("Name") }}</label>

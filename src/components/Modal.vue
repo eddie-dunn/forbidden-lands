@@ -14,6 +14,7 @@ export default class Modal extends Vue {
   @Prop({ default: "70%" }) width!: string
   @Prop({ default: "70%" }) height!: string
   @Prop({ default: false }) toggleBodyOverflow!: boolean
+  @Prop({ default: "" }) title!: string
 
   close(param: string): void {
     this.$emit("close", param)
@@ -52,6 +53,7 @@ export default class Modal extends Vue {
         </div>
         <div class="__modal-header">
           <div class="__modal-header-title capitalize-first">
+            <h2 v-if="title">{{ title }}</h2>
             <slot name="header">
               <!-- <h2>default header with a lot of text and stuff</h2> -->
             </slot>
@@ -148,6 +150,7 @@ export default class Modal extends Vue {
   &-title {
     flex-grow: 1;
   }
+  border-bottom: 4px solid @pastel-green;
 }
 
 .__modal-body {

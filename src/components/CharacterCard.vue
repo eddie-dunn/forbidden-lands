@@ -91,9 +91,15 @@ export default Vue.extend({
 
 <template>
   <div class="character-card">
-    <Modal v-if="modalActive" @close="closeModal()" :maximized="false">
-      <div slot="header">{{ $t("Confirm delete") }}</div>
-      <div slot="body"></div>
+    <Modal
+      v-if="modalActive"
+      @close="closeModal()"
+      :maximized="false"
+      :title="$t('Remove')"
+    >
+      <div slot="body" class="modal-body">
+        {{ $t("CONFIRM_DELETE_CHAR") }}
+      </div>
       <div class="modal-button-row" slot="footer">
         <button @click="closeModal()" class="button">{{ $t("Cancel") }}</button>
         <button @click="remove()" class="button button-red">OK</button>
@@ -103,9 +109,11 @@ export default Vue.extend({
       v-if="modalConfirmActivate"
       @close="modalConfirmActivate = false"
       :maximized="false"
+      :title="$t('Confirm activate')"
     >
-      <div slot="header">{{ $t("Confirm activate") }}</div>
-      <div slot="body">{{ $t("CONFIRM_ACTIVATE_INVALID_CHAR") }}</div>
+      <div slot="body" class="modal-body">
+        {{ $t("CONFIRM_ACTIVATE_INVALID_CHAR") }}
+      </div>
       <div class="modal-button-row" slot="footer">
         <button @click="modalConfirmActivate = false" class="button">
           {{ $t("Cancel") }}
@@ -242,6 +250,10 @@ h3 {
     background: ~"@{pastel-green}ee";
     color: white;
   }
+}
+
+.modal-body {
+  padding: 1rem;
 }
 
 .modal-button-row {

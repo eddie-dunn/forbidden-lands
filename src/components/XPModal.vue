@@ -59,9 +59,13 @@ export default class XPModal extends Vue {
 </script>
 
 <template>
-  <Modal class="xp-modal" @close="close" :maximized="true">
-    <div slot="header" class="header">
-      <h2>{{ $t("Post session") }}</h2>
+  <Modal
+    class="xp-modal"
+    @close="close"
+    :maximized="true"
+    :title="$t('Post session')"
+  >
+    <div slot="header">
       <div class="tab-bar">
         <div
           v-for="(tab, index) in tabs"
