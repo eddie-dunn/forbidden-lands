@@ -5,7 +5,6 @@ import {
   KinName,
   Profession,
   Sex,
-  Skill,
   TalentAll,
 } from "@/types"
 import { CLASS as PROFESSION_MAP, getSkillMax } from "@/classes.ts"
@@ -58,6 +57,7 @@ export interface CharacterMetaData {
   xpAtCreation: number
 }
 
+// TODO: User interfaces instead
 type BaseItem = {
   bonus: number
   bonusType: string // Attribute[type], Skill[type], white/red/black dice

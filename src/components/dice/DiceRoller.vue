@@ -71,19 +71,24 @@ function sidesFor(diceType: DiceType): number {
   },
 })
 export default class DiceRoller extends Vue {
-  DiceType = DiceType
+  @Prop({ default: 3 }) white!: number
+  @Prop({ default: 2 }) red!: number
+  @Prop({ default: 1 }) black!: number
+  @Prop({ default: null }) green!: number
+  @Prop({ default: null }) blue!: number
+  @Prop({ default: null }) orange!: number
+  @Prop({ default: false }) showReset!: boolean
 
-  showLog = false
-  numberInputValue = 0
+  DiceType = DiceType
 
   nbrDice: (number | null)[] = [
     /* Address by enum number */
-    3,
-    2,
-    1,
-    null,
-    null,
-    null,
+    this.white,
+    this.red,
+    this.black,
+    this.green,
+    this.blue,
+    this.orange,
   ]
   rollResult: number[][] = [
     /* Address by enum number */
@@ -122,6 +127,10 @@ export default class DiceRoller extends Vue {
 
   get pushed() {
     return this.rollResultLog.length >= 2
+  }
+
+  get artifactOpen() {
+    return this.green || this.blue || this.orange
   }
 
   pushRoll() {
@@ -189,7 +198,10 @@ export default class DiceRoller extends Vue {
         </div>
       </ExpandableSection>
 
-      <ExpandableSection :label="$t('Artifact dice')">
+      <ExpandableSection
+        :label="$t('Artifact dice')"
+        :defaultOpen="artifactOpen"
+      >
         <div class="dice-inputs">
           <DiceInput
             v-for="dice in artifactDice"
@@ -234,8 +246,11 @@ export default class DiceRoller extends Vue {
     </div>
 
     <div class="button-bar">
-      <FLButton type="cancel" @click="resetDice">
+      <FLButton v-if="showReset" type="cancel" @click="resetDice">
         {{ $t("Reset") }}
+      </FLButton>
+      <FLButton v-else type="cancel" @click="$emit('close')">
+        {{ $t("Close") }}
       </FLButton>
       <FLButton type="danger" @click="pushRoll">{{ $t("Push") }}</FLButton>
       <FLButton @click="rollDice">{{ $t("Roll dice") }}</FLButton>

@@ -16,6 +16,7 @@ import { getSkillMax, isClassSkill } from "@/classes.ts"
 import { getAgeType } from "@/age.ts"
 import SvgIcon from "@/components/SvgIcon.vue"
 import SkillInput from "@/components/SkillInput.vue"
+import SkillRoller from "@/components/SkillRoller.vue"
 import Vue from "vue"
 
 function calcSkillPoints(age) {
@@ -44,6 +45,7 @@ function skillsSortedByTranslation(vm, skills) {
 export default Vue.extend({
   components: {
     SkillInput,
+    SkillRoller,
     SvgIcon,
   },
   props: {
@@ -83,6 +85,7 @@ export default Vue.extend({
   data() {
     return {
       SKILLS,
+      skillRollerOpen: null,
     }
   },
   methods: {
@@ -112,6 +115,11 @@ export default Vue.extend({
         this.charData.experience += value
       }
     },
+    skillLabelClicked(skill) {
+      if (!this.$debugMode) return
+      if (this.characterStatus !== "active") return
+      this.skillRollerOpen = skill
+    },
   },
 })
 </script>
@@ -122,7 +130,12 @@ export default Vue.extend({
       {{ $t("Remaining") }}: {{ skillPoints - pointsSpent() }}
     </div>
     <div class="skillbox">
-      <div v-for="skill in skills" :key="skill.id" class="skillrow">
+      <div
+        v-for="skill in skills"
+        :key="skill.id"
+        class="skillrow"
+        @click="skillLabelClicked(skill)"
+      >
         <SvgIcon
           :name="iconFor(SKILLS[skill.id].attribute)"
           :title="skill.attribute"
@@ -147,6 +160,12 @@ export default Vue.extend({
       </div>
     </div>
 
+    <SkillRoller
+      v-if="skillRollerOpen"
+      @close="skillRollerOpen = null"
+      :skill="skillRollerOpen"
+      :charData="charData"
+    />
     <!-- spacer -->
   </div>
 </template>

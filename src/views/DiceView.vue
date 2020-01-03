@@ -12,7 +12,7 @@ export default class DiceView extends Vue {}
 </script>
 
 <template>
-  <DiceRoller class="dice-view" />
+  <DiceRoller class="dice-view" :showReset="true" />
 </template>
 
 <style scoped lang="less">

@@ -1,4 +1,3 @@
-import { $t } from "@/i18n"
 import { Attribute, Skill } from "@/types"
 import { ATTRIBUTE, SKILL as S } from "@/keys.ts"
 
@@ -22,7 +21,7 @@ Stealth ( AGILITY )
 Survival ( WITS )
 */
 
-interface SkillObj {
+export interface SkillObj {
   id: Skill
   attribute: Attribute
   rank: number | null
