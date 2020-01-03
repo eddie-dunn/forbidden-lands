@@ -4,7 +4,7 @@ import { Component, Prop, Watch } from "vue-property-decorator"
 
 import { BusEvent, EventBus } from "@/util/eventBus"
 import { Protocol, ProtocolTypes } from "@/components/multiplay/protocol"
-import { getNewCharacterData, CharacterData } from "@/characterData"
+import { getNewCharacterData, CharData } from "@/characterData"
 import { getCharDataFromQuery, CharDataQueryObj } from "@/util/characterUtil"
 import { GET_MP_PLAYER, GET_MP_ACTIVE } from "@/store/store-types"
 import { UserData, PeerId } from "@/components/multiplay/protocol"
@@ -16,7 +16,7 @@ function initCharData(
   $characterStore: any,
   charId: string,
   templateQueryData: CharDataQueryObj | null
-): CharacterData {
+): CharData {
   if (templateQueryData && templateQueryData.kinId) {
     return getCharDataFromQuery(templateQueryData)
   }
@@ -26,7 +26,7 @@ function initCharData(
 const getPlayerChar = (
   user: UserData | undefined,
   charId: string
-): CharacterData | null => {
+): CharData | null => {
   if (!user) return null
   const char = user.characters.find((char) => {
     if (!char) return false
@@ -43,11 +43,10 @@ const getPlayerChar = (
 export default class CharacterEditorView extends Vue {
   @Prop({ default: "" }) id!: string
   @Prop({ default: null }) templateQueryData!: null | CharDataQueryObj
-  @Prop({ default: null }) fromRoute!: any // figure out to know who navigateed to this page
   @Prop({ default: false }) multiplayer!: boolean
   @Prop({ default: "" }) peerId!: string
 
-  charData: null | CharacterData = null
+  charData: null | CharData = null
   mKey = 0
 
   get mpActive(): boolean {
@@ -85,12 +84,16 @@ export default class CharacterEditorView extends Vue {
       if (JSON.stringify(this.charData) === JSON.stringify(data.character)) {
         return
       }
-      this.charData = data.character
-      this.mKey++
+      this.updateCharData(data.character)
     })
   }
   destroyed() {
     EventBus.$off(BusEvent.characterUpdate)
+  }
+
+  updateCharData(data: CharData) {
+    this.charData = data
+    this.mKey++ // TODO: is there a better way to avoid re-rendering everything?
   }
 }
 </script>
@@ -101,7 +104,8 @@ export default class CharacterEditorView extends Vue {
     :viewOnly="this.multiplayer"
     :charData="charData"
     :key="mKey"
+    @chardata-updated="updateCharData"
   />
 </template>
 
-<style lang="less"></style>
+<style lang="less" scoped></style>

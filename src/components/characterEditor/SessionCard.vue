@@ -2,7 +2,7 @@
 import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 
-import { CharacterData } from "@/characterData"
+import { CharData } from "@/characterData"
 
 import XPModal from "@/components/XPModal.vue"
 import ModalSpendXP from "@/components/ModalSpendXP.vue"
@@ -16,7 +16,7 @@ import Card from "@/components/Card.vue"
   },
 })
 export default class SessionCard extends Vue {
-  @Prop({ required: true }) charData!: CharacterData
+  @Prop({ required: true }) charData!: CharData
   @Prop({ default: false }) viewOnly!: boolean
 
   showXPModal = false
@@ -26,8 +26,7 @@ export default class SessionCard extends Vue {
     return this.charData.metadata.status
   }
 
-  handleNewCharData(charData: CharacterData) {
-    // Use vuex instead or move data handling inside this component?
+  handleNewCharData(charData: CharData) {
     this.$emit("updated-chardata", charData)
   }
 }

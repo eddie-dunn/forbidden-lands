@@ -3,7 +3,7 @@ import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 
 import { MP_SAVE_CHAR } from "@/store/store-types"
-import { CharacterData, calcCharacterXP } from "@/characterData"
+import { CharData, calcCharacterXP } from "@/characterData"
 
 import FLButton from "@/components/base/FLButton.vue"
 import BaseCard from "@/components/characterEditor/BaseCard.vue"
@@ -16,7 +16,7 @@ import GearCard from "@/components/characterEditor/GearCard.vue"
 import MountCard from "@/components/characterEditor/MountCard.vue"
 import NoteCard from "@/components/characterEditor/NoteCard.vue"
 
-function stringChar(characterData: CharacterData) {
+function stringChar(characterData: CharData) {
   return JSON.stringify(characterData)
 }
 
@@ -35,13 +35,13 @@ function stringChar(characterData: CharacterData) {
   },
 })
 export default class CharacterEditor extends Vue {
-  @Prop({ required: true }) charData!: CharacterData
+  @Prop({ required: true }) charData!: CharData
   @Prop({ default: false }) viewOnly!: boolean
   @Prop({ default: false }) isTemplateData!: boolean
 
   charDataCopyStr: string = stringChar(this.initialData)
 
-  get initialData(): CharacterData {
+  get initialData(): CharData {
     return (
       this.$characterStore.storedCharacter(this.charData.metadata.id) ||
       this.charData
@@ -88,6 +88,10 @@ export default class CharacterEditor extends Vue {
     this.$characterStore.addCharacter(this.charData)
     this.charDataCopyStr = stringChar(this.charData)
   }
+
+  handleCharDataUpdate(data: CharData) {
+    this.$emit("chardata-updated", data)
+  }
 }
 </script>
 
@@ -109,6 +113,7 @@ export default class CharacterEditor extends Vue {
         v-if="status === 'active' && !viewOnly"
         class="row-half"
         :charData="charData"
+        v-on:updated-chardata="handleCharDataUpdate"
       />
       <NoteCard v-if="!viewOnly" class="row-full" :charData="charData" />
     </div>

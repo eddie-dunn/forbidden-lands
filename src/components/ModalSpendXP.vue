@@ -28,6 +28,7 @@ export default class XPModal extends Vue {
   showXPModal = this.show
 
   charDataCopy: CharacterData = JSON.parse(JSON.stringify(this.charData))
+  originalStatus = this.charData.metadata.status
 
   get xpSpent() {
     return (
@@ -36,7 +37,9 @@ export default class XPModal extends Vue {
     )
   }
   emitCharData() {
-    this.$emit("updated-chardata", this.charDataCopy)
+    const charData = { ...this.charDataCopy }
+    charData.metadata.status = this.originalStatus
+    this.$emit("updated-chardata", charData)
     this.close()
   }
 

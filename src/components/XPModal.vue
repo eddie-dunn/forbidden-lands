@@ -49,7 +49,6 @@ export default class XPModal extends Vue {
       active: index === 0,
       name,
     }))
-    this.charDataCopy.metadata.status = "levelup"
   }
 
   close() {
