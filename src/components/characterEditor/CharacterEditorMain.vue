@@ -3,7 +3,11 @@ import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 
 import { MP_SAVE_CHAR } from "@/store/store-types"
-import { CharData, calcCharacterXP } from "@/characterData"
+import {
+  CharData,
+  calcCharacterXP,
+  CharacterMetaDataStatus,
+} from "@/characterData"
 
 import FLButton from "@/components/base/FLButton.vue"
 import BaseCard from "@/components/characterEditor/BaseCard.vue"
@@ -89,6 +93,10 @@ export default class CharacterEditor extends Vue {
     this.charDataCopyStr = stringChar(this.charData)
   }
 
+  setStatus(status: CharacterMetaDataStatus) {
+    this.charData.metadata.status = status
+  }
+
   handleCharDataUpdate(data: CharData) {
     this.$emit("chardata-updated", data)
   }
@@ -97,6 +105,14 @@ export default class CharacterEditor extends Vue {
 
 <template>
   <div class="character_creator">
+    <div v-if="$debugMode" style="margin: 1rem">
+      <FLButton @click="setStatus('active')">
+        Set active
+      </FLButton>
+      <FLButton @click="setStatus('freeEdit')">
+        Set inactive
+      </FLButton>
+    </div>
     <div class="detail-form">
       <BaseCard class="row-half" :charData="charData" :viewOnly="viewOnly" />
       <PortraitCard
