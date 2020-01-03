@@ -350,6 +350,7 @@ export default {
   "Clothing": "Klädsel",
   "Coins": "Mynt",
   "Cold": "Nedkyld",
+  "Confirm": "Bekräfta",
   "Comment": "Kommentar",
   "Conditions": "Tillstånd",
   "Consumables": "Förbrukningsvaror",

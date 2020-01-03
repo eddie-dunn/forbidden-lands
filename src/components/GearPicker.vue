@@ -169,7 +169,7 @@ export default class ExpandableSection extends Vue {
       .filter((item) => item.selected)
       .map((item) => item.name)
       .join(", ")
-    return items
+    return `${this.$t("Drop")} ${items}?`
   }
 
   iconFor(item: Item) {
@@ -269,7 +269,6 @@ export default class ExpandableSection extends Vue {
 
     <ModalConfirm
       v-if="showConfirmDeleteItem"
-      :title="$t('Drop') + '?'"
       :body="deleteItemsBody"
       :confirmAction="dropItems"
       @close="showConfirmDeleteItem = false"
