@@ -3,11 +3,7 @@ import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 
 import { MP_SAVE_CHAR } from "@/store/store-types"
-import {
-  CharData,
-  calcCharacterXP,
-  CharacterMetaDataStatus,
-} from "@/characterData"
+import { CharData, CharacterMetaDataStatus } from "@/characterData"
 
 import FLButton from "@/components/base/FLButton.vue"
 import BaseCard from "@/components/characterEditor/BaseCard.vue"
@@ -55,12 +51,6 @@ export default class CharacterEditor extends Vue {
   get status() {
     return this.charData.metadata.status
   }
-  get totalXp(): number {
-    return (
-      calcCharacterXP(this.charData) -
-      (this.charData.metadata.xpAtCreation || 0)
-    )
-  }
   get charDataUpdated(): boolean {
     if (this.viewOnly) return false
     return stringChar(this.charData) !== this.charDataCopyStr
@@ -83,11 +73,6 @@ export default class CharacterEditor extends Vue {
 
   saveClicked(event: any) {
     if (!event || !this.charData.name) return
-    if (this.status === "new") {
-      // Save xp at creation, so that we later can calculate how many XP
-      // points have been spent on leveling up character
-      this.charData.metadata.xpAtCreation = this.totalXp
-    }
     this.$store.commit(MP_SAVE_CHAR, this.charData)
     this.$characterStore.addCharacter(this.charData)
     this.charDataCopyStr = stringChar(this.charData)

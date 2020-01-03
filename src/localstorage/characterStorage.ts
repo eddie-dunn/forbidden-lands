@@ -5,6 +5,7 @@ import {
   CharacterMetaDataStatus,
   getNewCharacterData,
   parseCharacterData,
+  calcCharacterXP,
 } from "@/characterData"
 import { runPatches } from "@/localstorage/charDataPatches"
 
@@ -130,6 +131,12 @@ export class Store {
   }
 
   activate(characterId: string, commit: boolean = true) {
+    const char = this._storage[characterId]
+    if (char.metadata.status === "new") {
+      // Save xp when new -> active, so that we later can calculate how many XP
+      // points have been spent on leveling up the character
+      char.metadata.xpAtCreation = calcCharacterXP(char)
+    }
     this._storage[characterId].metadata.status = "active"
     commit && this.commit()
   }
