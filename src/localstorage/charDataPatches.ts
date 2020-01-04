@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
-import { CharData, Item, calcCharacterXP, getNewGear } from "@/characterData"
+import { CharData, calcCharacterXP, getNewGear } from "@/characterData"
 import { TalentAll, TalentGeneral } from "@/types"
+import { Item } from "@/data/items/itemTypes"
 
 import { GENERAL_TALENTS } from "@/talents"
 import uuid1 from "uuid/v1"

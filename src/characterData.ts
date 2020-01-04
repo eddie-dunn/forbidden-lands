@@ -10,6 +10,7 @@ import {
 import { CLASS as PROFESSION_MAP, getSkillMax } from "@/classes.ts"
 import { SkillMap, getSkills } from "@/skills"
 import { getAgeType, getAttributePoints, getStartingTalents } from "@/age"
+import { Item } from "@/data/items/itemTypes"
 
 import { AGE } from "@/keys"
 import { KIN as KIN_MAP } from "@/kin"
@@ -56,49 +57,6 @@ export interface CharacterMetaData {
   startingItems?: string
   xpAtCreation: number
 }
-
-// TODO: User interfaces instead
-type BaseItem = {
-  bonus: number
-  bonusType: string // Attribute[type], Skill[type], white/red/black dice
-  equipped: boolean
-  name: string
-  type: "" | "armor" | "helmet" | "shield" | "weapon"
-  weight: number
-  selected?: boolean
-  id: string
-  features?: {}
-}
-
-export enum Range {
-  "armslength",
-  "near",
-  "short",
-  "long",
-}
-export type ItemWeapon = BaseItem & {
-  bonusType: "black"
-  comment?: string
-  damage: number
-  range: Range
-  type: "weapon"
-  features: {
-    blunt?: boolean
-    pointed?: boolean
-    edged?: boolean
-    parrying?: boolean
-    hook?: boolean
-    slow_loading?: boolean // crossbows
-  }
-}
-
-export type ItemArmor = BaseItem & {
-  armorType: "torso" | "head" | "shield"
-  bonusType: "black"
-  type: "armor"
-}
-
-export type Item = BaseItem | ItemArmor | ItemWeapon
 
 export interface Gear {
   equipped: Item[]

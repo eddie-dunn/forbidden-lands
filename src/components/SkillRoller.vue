@@ -6,7 +6,7 @@ import FLButton from "@/components/base/FLButton.vue"
 import Modal from "@/components/Modal.vue"
 import { Notification, notify } from "@/util/notifications"
 import DiceRoller from "@/components/dice/DiceRoller.vue"
-import { CharData, ItemWeapon } from "@/characterData"
+import { CharData } from "@/characterData"
 import { SkillObj } from "@/skills"
 import { Option, Optgroup, FLSelect } from "@/components/base/FLSelect.vue"
 

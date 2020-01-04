@@ -2,14 +2,9 @@
 import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 import { PROFESSION } from "@/classes"
-import {
-  CharacterData,
-  Gear,
-  Item,
-  ItemArmor,
-  ItemWeapon,
-  Range,
-} from "@/characterData"
+import { CharacterData, Gear } from "@/characterData"
+import { Item, ItemWeapon, Range } from "@/data/items/itemTypes"
+
 import FLNumberInput from "@/components/FLNumberInput.vue"
 import SvgIcon from "@/components/SvgIcon.vue"
 import ModalAddItem from "@/components/ModalAddItem.vue"
@@ -100,13 +95,11 @@ export default class ExpandableSection extends Vue {
   get gearWeight() {
     return (
       this.characterData.gear.inventory
-        .map((item) => item.weight)
+        .map((item) => Number(item.weight))
         .reduce((val, sum) => val + sum, 0) +
       Object.values(this.characterData.gear.money)
         .map((moneyAmount) => Math.floor(moneyAmount / 100))
-        .reduce((val, sum) => {
-          return val + sum
-        }, 0)
+        .reduce((val, sum) => val + sum, 0)
     )
   }
 

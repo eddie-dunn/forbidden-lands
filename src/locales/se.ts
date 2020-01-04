@@ -312,6 +312,56 @@ const GearDescriptions: GearDescriptionTranslations = {
   `,
 }
 
+const templateGear = {
+  // Shields
+  "small shield": "liten sköld",
+  "large shield": "stor sköld",
+  // Helmets
+  "studded leather cap": "nitläderhuva",
+  "open helmet": "öppen hjälm",
+  "closed helmet": "täckt hjälm",
+  "great helm": "tunnhjälm",
+  // Armor
+  "leather armor": "läderrustning",
+  "studded leather": "nitläder",
+  "chainmail": "ringbrynja",
+  "plate armor": "helrustning",
+  // Ranged Weapons
+  "rock": "sten",
+  "throwing knife": "kastkniv",
+  "throwing axe": "kastyxa",
+  "throwing spear": "kastspjut",
+  "sling": "slunga",
+  "short bow": "kortbåge",
+  "longbow": "långbåge",
+  "light crossbow": "lätt armborst",
+  "heavy crossbow": "tungt armborst",
+  // Melee Weapons
+  "knife": "kniv",
+  "dagger": "dolk",
+  "falchion": "huggare",
+  "shortsword": "kortsvärd",
+  "broadsword": "bredsdvärd",
+  "longsword": "slagsvärd",
+  "two handed sword": "tvåhandssvärd",
+  "scimitar": "kroksabel",
+  "handaxe": "handyxa",
+  "battleaxe": "stridsyxa",
+  "two handed axe": "tvåhandsyxa",
+  "mace": "stridsklubba",
+  "morningstar": "morgonstjärna",
+  "warhammer": "stridshammare",
+  "heavy warhammer": "tung stridshammare",
+  "flail": "stridsgissel",
+  "wooden club": "träklubba",
+  "large wooden club": "stor träklubba",
+  "staff": "trästav",
+  "short spear": "kortspjut",
+  "long spear": "långspjut",
+  "halberd": "hillebard",
+  "trident": "treudd",
+}
+
 export default {
   ...age,
   ...attributes,
@@ -321,6 +371,7 @@ export default {
   ...talents,
   ...talents2,
   ...GearDescriptions,
+  ...templateGear,
 
   "CONFIRM_DELETE_CHAR": "Vill du verkligen radera din rollperson?",
 
@@ -361,6 +412,7 @@ export default {
   "Deactivate": "Gör inaktiv",
   "Dehydrated": "Uttorkad",
   "Delete": "Ta bort",
+  "Details": "Detaljer",
   "Dice": "Tärningar",
   "Drop": "Släng",
   "Edit": "Redigera",
@@ -428,6 +480,7 @@ export default {
   "Starting gear": "Utrustning vid start",
   "Starving": "Utsvulten",
   "Talent": "Talang",
+  "Template": "Mall",
   "Tiny": "Småsak",
   "Tired": "Sömnlös",
   "Torches": "Facklor",

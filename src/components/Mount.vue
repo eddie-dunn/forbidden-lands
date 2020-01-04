@@ -4,7 +4,8 @@
 import Modal from "@/components/Modal.vue"
 import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
-import { CharacterData, CharacterTalent, Item } from "@/characterData"
+import { CharacterData, CharacterTalent } from "@/characterData"
+import { Item } from "@/data/items/itemTypes"
 
 import ModalAddItem from "@/components/ModalAddItem.vue"
 import FLNumberInput from "@/components/FLNumberInput.vue"
@@ -46,7 +47,7 @@ export default class XPModal extends Vue {
 
   get gearWeight() {
     return this.inventory
-      .map((item) => item.weight)
+      .map((item) => Number(item.weight))
       .reduce((val, sum) => val + sum, 0)
   }
 
