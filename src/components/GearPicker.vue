@@ -1,4 +1,7 @@
 <script lang="ts">
+// TODO: Replace option / select with FLSelect
+// TODO: Split up into multiple components
+
 import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 import { PROFESSION } from "@/classes"
@@ -6,14 +9,14 @@ import { CharacterData, Gear } from "@/characterData"
 import { Item, ItemWeapon, Range } from "@/data/items/itemTypes"
 
 import FLNumberInput from "@/components/FLNumberInput.vue"
+import FLButton from "@/components/base/FLButton.vue"
 import SvgIcon from "@/components/SvgIcon.vue"
 import ModalAddItem from "@/components/ModalAddItem.vue"
 import ModalConfirm from "@/components/ModalConfirm.vue"
 
-type VType = Vue & { focus: () => {} }
-
 @Component({
   components: {
+    FLButton,
     FLNumberInput,
     ModalAddItem,
     ModalConfirm,
@@ -315,23 +318,19 @@ export default class ExpandableSection extends Vue {
         <div>{{ $t("Encumbrance") }}: {{ gearWeight }}/{{ gearWeightMax }}</div>
 
         <div v-if="!viewOnly" class="button-row">
-          <button
+          <FLButton
+            type="danger"
             :disabled="!itemsSelected"
-            class="button button-danger"
             @click="showConfirmDeleteItem = true"
           >
             {{ $t("Drop") }}
-          </button>
-          <button
-            :disabled="!itemsSelected || !hasMount"
-            class="button"
-            @click="moveItems"
-          >
+          </FLButton>
+          <FLButton :disabled="!itemsSelected || !hasMount" @click="moveItems">
             {{ $t("Move to mount") }}
-          </button>
-          <button @click="showAddItem = true" class="button">
+          </FLButton>
+          <FLButton @click="showAddItem = true">
             {{ $t("Add") }}
-          </button>
+          </FLButton>
         </div>
       </div>
 
@@ -627,9 +626,6 @@ label {
 }
 
 .money {
-  // display: flex;
-  // flex-wrap: wrap;
-  // justify-content: space-between;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(15ch, 1fr));
   grid-gap: 10px;
@@ -640,16 +636,5 @@ label {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  /* display: none; <- Crashes Chrome on hover */
-  -webkit-appearance: none;
-  margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
-}
-
-input[type="number"] {
-  -moz-appearance: textfield; /* Firefox */
 }
 </style>

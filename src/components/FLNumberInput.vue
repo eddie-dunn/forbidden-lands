@@ -109,7 +109,6 @@ export default class ExpandableSection extends Vue {
 
 .fl-number-input {
   width: var(--width);
-  border: solid 1px;
   border: solid 1px @pastel-green;
   border-left: 0;
   border-right: 0;
@@ -123,7 +122,9 @@ export default class ExpandableSection extends Vue {
 }
 
 .fl-number-button {
-  // border: solid 1px black;
+  @media print {
+    display: none;
+  }
   border: solid 1px @pastel-green;
   background: @pastel-green;
   color: white;

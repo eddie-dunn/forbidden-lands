@@ -99,24 +99,36 @@ export default class CharacterEditor extends Vue {
       </FLButton>
     </div>
     <div class="detail-form">
-      <BaseCard class="row-half" :charData="charData" :viewOnly="viewOnly" />
+      <BaseCard class="row half" :charData="charData" :viewOnly="viewOnly" />
       <PortraitCard
-        class="row-half"
+        class="row half"
         :charData="charData"
         :viewOnly="viewOnly"
       />
-      <FlavorCard class="row-full" :charData="charData" :viewOnly="viewOnly" />
-      <SkillCard class="row-half" :charData="charData" :viewOnly="viewOnly" />
-      <TalentCard class="row-half" :charData="charData" :viewOnly="viewOnly" />
-      <GearCard class="row-full" :charData="charData" :viewOnly="viewOnly" />
-      <MountCard class="row-half" :charData="charData" :viewOnly="viewOnly" />
+      <FlavorCard class="row full" :charData="charData" :viewOnly="viewOnly" />
+      <SkillCard
+        class="row half skill"
+        :charData="charData"
+        :viewOnly="viewOnly"
+      />
+      <TalentCard
+        class="row half talent"
+        :charData="charData"
+        :viewOnly="viewOnly"
+      />
+      <GearCard class="row full" :charData="charData" :viewOnly="viewOnly" />
+      <MountCard class="row half" :charData="charData" :viewOnly="viewOnly" />
       <SessionCard
         v-if="status === 'active' && !viewOnly"
-        class="row-half"
+        class="row full print-hide"
         :charData="charData"
         v-on:updated-chardata="handleCharDataUpdate"
       />
-      <NoteCard v-if="!viewOnly" class="row-full" :charData="charData" />
+      <NoteCard
+        v-if="!viewOnly"
+        class="row full break-before break-avoid"
+        :charData="charData"
+      />
     </div>
 
     <div class="action-bar-wrapper">
@@ -149,15 +161,17 @@ export default class CharacterEditor extends Vue {
 @import "~Style/colors.less";
 
 .action-bar-wrapper {
+  @media print {
+    display: none;
+  }
   display: flex;
   overflow: auto;
   position: sticky;
   bottom: 0;
-  overflow: hidden;
   margin: 0 0.25rem;
-  background: #fffe;
-  border: solid ~"@{pastel-green}99" 2px;
-  padding: 0.5rem;
+  background: #fffc;
+  box-shadow: @box-shadow-normal;
+  padding: 0.4rem;
   justify-content: space-around;
 }
 
@@ -179,25 +193,41 @@ export default class CharacterEditor extends Vue {
 }
 
 .detail-form {
-  width: 100%;
-  margin: auto;
   margin-top: 1rem;
 
-  row-gap: 0.5rem;
   display: flex;
   flex-wrap: wrap;
-  flex: 1 1 40%;
   justify-content: space-evenly;
   align-content: stretch;
 }
 
-.row-full {
-  flex-basis: 100%;
-  flex-grow: 2;
+.break-avoid {
+  break-inside: avoid;
 }
 
-.row-half {
-  flex-basis: 40%;
+.print-hide.print-hide {
+  @media print {
+    display: none;
+  }
+}
+
+.row {
+  @media print {
+    break-inside: avoid;
+    margin: 0 0;
+    &.talent,
+    &.skill {
+      flex-basis: 100%;
+    }
+  }
+}
+
+.full {
+  flex-basis: 100%;
+}
+
+.half {
   flex-grow: 1;
+  flex-basis: 49%;
 }
 </style>

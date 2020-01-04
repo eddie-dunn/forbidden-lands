@@ -30,6 +30,9 @@ export default class FLButton extends Vue {
 @import "~Style/colors.less";
 
 .button {
+  @media print {
+    display: none;
+  }
   &::-moz-focus-inner {
     border: 0;
   }

@@ -9,9 +9,11 @@ import { Item } from "@/data/items/itemTypes"
 
 import ModalAddItem from "@/components/ModalAddItem.vue"
 import FLNumberInput from "@/components/FLNumberInput.vue"
+import FLButton from "@/components/base/FLButton.vue"
 
 @Component({
   components: {
+    FLButton,
     FLNumberInput,
     Modal,
     ModalAddItem,
@@ -170,23 +172,15 @@ export default class XPModal extends Vue {
         </div>
       </div>
       <div v-if="!viewOnly" class="button-row">
-        <button
-          class="button button-danger"
-          :disabled="!selected"
-          @click="dropItems"
-        >
+        <FLButton type="danger" :disabled="!selected" @click="dropItems">
           {{ $t("Drop") }}
-        </button>
-        <button class="button" :disabled="!selected" @click="moveItems">
+        </FLButton>
+        <FLButton :disabled="!selected" @click="moveItems">
           {{ $t("Move to backpack") }}
-        </button>
-        <button
-          class="button"
-          :disabled="!hasMount"
-          @click="showAddItem = true"
-        >
+        </FLButton>
+        <FLButton :disabled="!hasMount" @click="showAddItem = true">
           {{ $t("Add") }}
-        </button>
+        </FLButton>
       </div>
     </div>
 
@@ -211,7 +205,6 @@ table {
   table-layout: fixed;
   width: 100%;
   border-collapse: collapse;
-  // border: 3px solid purple;
   th {
     font-variant-caps: small-caps;
     font-weight: normal;

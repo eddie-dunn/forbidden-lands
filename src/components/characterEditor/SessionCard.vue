@@ -7,10 +7,12 @@ import { CharData } from "@/characterData"
 import XPModal from "@/components/XPModal.vue"
 import ModalSpendXP from "@/components/ModalSpendXP.vue"
 import Card from "@/components/Card.vue"
+import FLButton from "@/components/base/FLButton.vue"
 
 @Component({
   components: {
     Card,
+    FLButton,
     XPModal,
     ModalSpendXP,
   },
@@ -34,13 +36,13 @@ export default class SessionCard extends Vue {
 
 <template>
   <Card :title="$t('Post session')" :noSign="true">
-    <div class="flex-row-wrap space-around">
-      <button class="button spacing" @click="showXPModal = true">
+    <div class="flex-row-wrap">
+      <FLButton class="spacing" @click="showXPModal = true">
         {{ $t("Add XP/Reputation") }}
-      </button>
-      <button class="button spacing" @click="showSpendXPModal = true">
+      </FLButton>
+      <FLButton class="spacing" @click="showSpendXPModal = true">
         {{ $t("Spend XP") }}
-      </button>
+      </FLButton>
     </div>
 
     <XPModal

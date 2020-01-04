@@ -141,7 +141,7 @@ export default class Talentelect extends Vue {
 
 <template>
   <div class="talent-row">
-    <label for="talent">{{ label }}</label>
+    <label v-if="label" for="talent">{{ label }}</label>
     <select
       id="talent"
       v-bind:value="value"

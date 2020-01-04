@@ -126,9 +126,12 @@ body {
 }
 
 .navbar {
-  @media (min-height: 500px) {
+  @media only screen and (min-height: 600px) {
     position: sticky;
     top: 0;
+  }
+  @media print {
+    display: none;
   }
   position: relative;
   display: flex;

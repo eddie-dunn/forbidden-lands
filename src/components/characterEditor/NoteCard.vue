@@ -17,7 +17,12 @@ export default class NoteCard extends Vue {
 
 <template>
   <Card :title="$t('Notes')" :noSign="true">
-    <textarea v-model="charData.notes" rows="10" class="note-area"></textarea>
+    <textarea
+      v-model="charData.notes"
+      rows="10"
+      cols="20"
+      class="note-area"
+    ></textarea>
   </Card>
 </template>
 
@@ -27,5 +32,8 @@ export default class NoteCard extends Vue {
   width: 96%;
   margin: 0 1% 10px 2%;
   max-width: 100%;
+  @media print {
+    height: 50rem;
+  }
 }
 </style>

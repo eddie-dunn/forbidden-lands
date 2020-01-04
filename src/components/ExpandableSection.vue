@@ -135,6 +135,9 @@ export default class ExpandableSection extends Vue {
 
 .icon-left {
   display: inline-block;
+  @media print {
+    display: none;
+  }
   margin: 0 0.5rem;
   & > svg {
     width: 2rem;
