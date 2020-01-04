@@ -90,6 +90,7 @@ export default Vue.extend({
 
 <style lang="less">
 @import "~Style/colors.less";
+
 body {
   margin: 0;
   color: @color-text;
@@ -97,6 +98,7 @@ body {
 
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
+  // font-family: "Averia Libre", "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -138,7 +140,7 @@ body {
   align-items: center;
   justify-content: space-between;
 
-  background: @background-color;
+  background: @color-background;
   box-shadow: @box-shadow-normal;
   padding: 10px;
 
@@ -179,6 +181,7 @@ body {
   display: none;
 }
 
+// TODO: Replace all instances of input with FLInput
 input[type="number"],
 input[type="text"] {
   min-height: 1rem;
@@ -197,6 +200,7 @@ input[type="text"] {
   }
 }
 
+// TODO: Replace all instances of select with FLSelect
 select {
   background-color: @background-color;
   color: @slate-black;
@@ -219,6 +223,7 @@ select {
 //   border: 0;
 // }
 
+// TODO: Replace all instances of class="button" with FLButton
 .button {
   &::-moz-focus-inner {
     border: 0;
@@ -314,6 +319,7 @@ select {
   }
 }
 
+// TODO: Are these needed? Remove or implement FLDice such that they can be removed
 .dice {
   &-white {
     color: white;
