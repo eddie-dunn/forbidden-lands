@@ -129,11 +129,11 @@ export default Vue.extend({
     <div v-if="characterStatus === 'new'">
       {{ $t("Remaining") }}: {{ skillPoints - pointsSpent() }}
     </div>
-    <div class="skillbox">
+    <div :class="['skillbox', canEditSkills ? 'skillbox-edit' : '']">
       <div
         v-for="skill in skills"
         :key="skill.id"
-        class="skillrow"
+        :class="['skillrow', canEditSkills ? 'skillrow-edit' : '']"
         @click="skillLabelClicked(skill)"
       >
         <SvgIcon
@@ -148,9 +148,14 @@ export default Vue.extend({
             { 'class-skill': isClassSkill(skill.id, profession) },
           ]"
         >
-          {{ $t(skill.id) }}
+          <div class="inline-block">{{ $t(skill.id) }}</div>
         </label>
+        <div v-if="!canEditSkills" class="skill-view">
+          {{ charData.skills[skill.id].rank }}
+        </div>
         <SkillInput
+          v-if="canEditSkills"
+          class="skill-input"
           :status="characterStatus"
           :experience="charData.experience"
           :max="getSkillMaxRank(skill.id)"
@@ -166,28 +171,39 @@ export default Vue.extend({
       :skill="skillRollerOpen"
       :charData="charData"
     />
+
     <!-- spacer -->
   </div>
 </template>
 
 <style lang="less" scoped>
+.inline-block {
+  display: inline-block;
+}
+
 .attribute-icon {
   flex-shrink: 0;
 }
 
 .skillbox {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(19ch, 1fr));
-  row-gap: 1.2rem;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  &.skillbox-edit {
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  }
+  row-gap: 1rem;
   column-gap: 3px;
+  margin: 1rem 0;
 }
 
 .skillrow {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  // flex: 1 1 auto;
-  // flex-basis: 30%;
+  display: grid;
+  grid-template-columns: auto 2fr 1fr;
+  &.skillrow-edit {
+    grid-template-columns: auto 2fr;
+  }
+  grid-gap: 3px;
 }
 
 .class-skill {
@@ -196,19 +212,18 @@ export default Vue.extend({
 
 .skill-name {
   text-transform: capitalize;
-  margin-right: auto;
-  margin-left: 0.2rem;
-  margin-right: 0.2rem;
   overflow-x: scroll;
   scrollbar-width: none;
-  flex-grow: 1;
 }
 .skill-name::-webkit-scrollbar {
   display: none; // Safari and Chrome
 }
 
 .skill-input {
-  margin-left: 0.2rem;
+  grid-column-start: 2;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
 }
 
 // input:valid.with-checkbox + span::before {
