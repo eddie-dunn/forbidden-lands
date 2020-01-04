@@ -136,7 +136,7 @@ body {
   justify-content: space-between;
 
   background: @background-color;
-  box-shadow: 0px 1px 4px #5f5f5fff;
+  box-shadow: @box-shadow-normal;
   padding: 10px;
 
   a {

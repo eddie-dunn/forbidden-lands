@@ -40,7 +40,7 @@ export default Vue.extend({
 
 <template>
   <Expander
-    :class="['card']"
+    class="card"
     :defaultOpen="defaultOpen"
     :iconRight="sign"
     :iconRightOK="valid"
@@ -84,9 +84,7 @@ h3 {
 
 .card {
   margin: 0 0.25rem 0.5rem 0.25rem;
-  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2),
-    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
-  min-width: 18rem;
+  box-shadow: @box-shadow-normal;
   background: @background-color;
 }
 

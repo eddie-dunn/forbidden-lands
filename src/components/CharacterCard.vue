@@ -327,7 +327,8 @@ h3 {
   align-content: space-between;
   height: 100%;
   height: 400px;
-  box-shadow: 0px 1px 5px #555;
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.7),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.1), 0px 2px 1px -1px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 
