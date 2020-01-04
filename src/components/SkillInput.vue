@@ -87,7 +87,7 @@ export default class ExpandableSection extends Vue {
     <FLNumberInput
       v-bind="$attrs"
       class="skill-input"
-      fontSize="1.2rem"
+      fontSize="1.7rem"
       :placeholder="getPlaceholder"
       :min="getMin"
       :max="getMax"

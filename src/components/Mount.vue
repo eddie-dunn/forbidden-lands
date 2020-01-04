@@ -115,7 +115,7 @@ export default class XPModal extends Vue {
               </label>
               <FLNumberInput
                 id="mount-strength"
-                fontSize="1.3rem"
+                fontSize="1.7rem"
                 v-model.number="charData.mount.strength"
                 :disabled="viewOnly"
               />
@@ -126,7 +126,7 @@ export default class XPModal extends Vue {
               </label>
               <FLNumberInput
                 id="mount-agility"
-                fontSize="1.3rem"
+                fontSize="1.7rem"
                 v-model.number="charData.mount.agility"
                 :disabled="viewOnly"
               />

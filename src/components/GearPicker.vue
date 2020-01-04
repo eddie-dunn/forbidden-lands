@@ -496,7 +496,7 @@ export default class ExpandableSection extends Vue {
         </label>
         <FLNumberInput
           id="copper"
-          fontSize="1.2rem"
+          fontSize="1.7rem"
           min="0"
           max="300"
           v-model="characterData.gear.money.copper"
@@ -509,7 +509,7 @@ export default class ExpandableSection extends Vue {
         </label>
         <FLNumberInput
           id="silver"
-          fontSize="1.2rem"
+          fontSize="1.7rem"
           min="0"
           max="300"
           v-model="characterData.gear.money.silver"
@@ -522,7 +522,7 @@ export default class ExpandableSection extends Vue {
         </label>
         <FLNumberInput
           id="gold"
-          fontSize="1.2rem"
+          fontSize="1.7rem"
           :min="0"
           v-model="characterData.gear.money.gold"
           :disabled="viewOnly"

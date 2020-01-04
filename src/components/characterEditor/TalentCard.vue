@@ -59,13 +59,14 @@ export default class TalentCard extends Vue {
       @talents-updated="updateTalents"
     />
 
-    <div v-if="!isNewChar" class="willpower flex-row-wrap space-around">
+    <div v-if="!isNewChar" class="willpower">
       <label for="willpower">
         {{ $t("Willpower") }}
       </label>
       <FLNumberInput
+        class="nbr-input"
         id="willpower"
-        fontSize="1.2rem"
+        fontSize="1.7rem"
         min="0"
         max="10"
         :disabled="viewOnly"
@@ -75,4 +76,11 @@ export default class TalentCard extends Vue {
   </Card>
 </template>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.willpower {
+  text-align: center;
+}
+.nbr-input {
+  justify-content: center;
+}
+</style>

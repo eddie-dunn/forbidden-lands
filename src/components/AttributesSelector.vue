@@ -162,7 +162,7 @@ export default Vue.extend({
             </span>
             <NumberInput
               v-if="baseAttributesEditable"
-              fontSize="1.4rem"
+              fontSize="1.7rem"
               :id="attribute"
               :name="attribute"
               type="number"
@@ -175,7 +175,7 @@ export default Vue.extend({
           </td>
           <td v-if="active">
             <NumberInput
-              fontSize="1.4rem"
+              fontSize="1.7rem"
               :id="attribute"
               :name="attribute"
               :disabled="viewOnly"
