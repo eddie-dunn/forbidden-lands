@@ -3,18 +3,23 @@ import Vue from "vue"
 import LocaleChanger from "@/components/LocaleChanger.vue"
 import NavButton from "@/components/NavButton.vue"
 import Notify from "@/components/base/Notify.vue"
+import NavDrawer from "@/components/base/NavDrawer.vue"
+import SvgIcon from "@/components/SvgIcon.vue"
 
 export default Vue.extend({
   components: {
     LocaleChanger,
     NavButton,
+    NavDrawer,
     Notify,
+    SvgIcon,
   },
   data() {
     return {
       refreshing: false,
       registration: null as any,
       updateExists: false,
+      showNav: false,
     }
   },
   methods: {
@@ -57,23 +62,17 @@ export default Vue.extend({
         <div class="route-links">
           <router-link to="/" exact>{{ $t("List") }}</router-link>
           |
-          <span v-if="$debugMode">
-            <router-link to="/multiplayer" exact>
-              {{ $t("Multiplay") }}
-            </router-link>
-            |
-            <router-link to="/sandbox" exact>
-              {{ $t("Sandbox") }}
-            </router-link>
-            |
-          </span>
           <router-link to="/dice">{{ $t("Dice") }}</router-link>
           |
           <router-link to="/about">{{ $t("About") }}</router-link>
         </div>
       </div>
       <div class="navbar-right">
-        <LocaleChanger />
+        <!-- TODO: Enable nav when portal-vue is setup to display page titles -->
+        <div v-if="$debugMode" @click="showNav = true" class="show-nav">
+          <SvgIcon name="more_vert" title="Show options" />
+        </div>
+        <LocaleChanger v-else />
       </div>
     </div>
     <button
@@ -85,6 +84,27 @@ export default Vue.extend({
       New version available! Click to update
     </button>
     <router-view />
+
+    <NavDrawer :visible="showNav" @close="showNav = false" class="nav-body">
+      <section class="nav-section">
+        <h2>Navigation</h2>
+        <div class="route-links" @click="showNav = false">
+          <router-link to="/" exact>{{ $t("Characters") }}</router-link>
+          <router-link to="/multiplayer" exact>
+            {{ $t("Multiplay") + " (beta)" }}
+          </router-link>
+          <router-link to="/sandbox" exact v-if="$debugMode">
+            {{ $t("Sandbox") }}
+          </router-link>
+          <router-link to="/dice">{{ $t("Dice") }}</router-link>
+          <router-link to="/about">{{ $t("About") }}</router-link>
+        </div>
+      </section>
+      <section class="nav-section">
+        <h2>Options</h2>
+        <div>{{ $t("Language") }} <LocaleChanger /></div>
+      </section>
+    </NavDrawer>
   </div>
 </template>
 
@@ -94,6 +114,28 @@ export default Vue.extend({
 body {
   margin: 0;
   color: @color-text;
+}
+
+.show-nav {
+  display: inline-block;
+  cursor: pointer;
+}
+.nav-body {
+  a {
+    font-weight: bold;
+    color: @color-text;
+    text-decoration: none;
+    &.router-link-active {
+      color: @color-main;
+    }
+  }
+}
+.nav-section {
+  padding: 0 0.4rem;
+}
+.route-links {
+  display: flex;
+  flex-direction: column;
 }
 
 #app {

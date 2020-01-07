@@ -437,6 +437,7 @@ export default {
   "Inventory": "Ägodelar",
   "Kin talent": "Släktestalang",
   "Kin": "Släkte",
+  "Language": "Språk",
   "Light": "Lätt",
   "List": "Lista",
   "Long": "Lång",

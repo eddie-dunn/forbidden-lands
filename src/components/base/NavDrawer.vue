@@ -22,7 +22,11 @@ export default class NavDrawer extends Vue {
 </script>
 
 <template>
-  <div :class="['overlay', visible ? 'visible' : '']" @click.self="close">
+  <div class="nav">
+    <div
+      :class="['overlay', visible ? 'visible' : '']"
+      @click.self="close"
+    ></div>
     <nav :class="['nav-drawer', visible ? 'nav-show' : '']">
       <h2 class="heading">
         <FLButton
@@ -32,9 +36,11 @@ export default class NavDrawer extends Vue {
         >
         <div class="title">{{ title }}</div>
       </h2>
-      <slot class="body">
-        content
-      </slot>
+      <div class="body">
+        <slot>
+          content
+        </slot>
+      </div>
     </nav>
   </div>
 </template>
@@ -56,18 +62,19 @@ export default class NavDrawer extends Vue {
 }
 
 .nav-drawer {
-  background: @color-background;
   position: fixed;
   top: 0;
   right: 0;
   height: 100%;
-  width: 50vw;
-  max-width: 30rem;
-  min-width: 300px;
+  width: 20rem;
+  max-width: calc(100vw - 20px);
   z-index: @z-navbar-2;
 
+  background: @color-background;
+  color: @color-text;
   text-align: left;
   box-shadow: @box-shadow-normal;
+  overflow: auto;
 
   transform: translateX(100%);
   transition: transform 0.2s ease-in-out;
@@ -83,7 +90,7 @@ export default class NavDrawer extends Vue {
 }
 
 .body {
-  padding: 1rem;
+  padding-bottom: 20vh;
 }
 
 .title {
