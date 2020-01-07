@@ -58,6 +58,21 @@
         <FLButton @click="diceModalOpen = true">Open Dice Modal</FLButton>
       </div>
     </ExpandableSection>
+    <ExpandableSection label="NavDrawer" saveStateId="drawer-test">
+      <div @click="navOpen = true" class="show-nav">
+        <SvgIcon name="more_vert" title="Show options" />
+        <span>Open NavDrawer</span>
+      </div>
+      <NavDrawer
+        @close="navOpen = false"
+        :visible="navOpen"
+        title="Navbar test"
+      >
+        This is the navdrawer content.
+      </NavDrawer>
+    </ExpandableSection>
+    <ExpandableSection label="Icons" saveStateId="__icon-test">
+    </ExpandableSection>
   </div>
 </template>
 
@@ -66,9 +81,11 @@ import { Component, Vue } from "vue-property-decorator"
 import HelloWorld from "@/components/HelloWorld.vue"
 import ExpandableSection from "@/components/ExpandableSection.vue"
 import FLButton from "@/components/base/FLButton.vue"
+import NavDrawer from "@/components/base/NavDrawer.vue"
 import Modal from "@/components/Modal.vue"
 import { Notification, notify } from "@/util/notifications"
 import DiceRoller from "@/components/dice/DiceRoller.vue"
+import SvgIcon from "@/components/SvgIcon.vue"
 
 @Component({
   components: {
@@ -77,11 +94,14 @@ import DiceRoller from "@/components/dice/DiceRoller.vue"
     ExpandableSection,
     FLButton,
     Modal,
+    NavDrawer,
+    SvgIcon,
   },
 })
 export default class Home extends Vue {
   modalOpen = false
   diceModalOpen = false
+  navOpen = false
 
   notifyVue(
     message: string,
@@ -115,7 +135,9 @@ export default class Home extends Vue {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
+@import "~Style/colors.less";
+
 .sandbox-content {
   display: flex;
   flex-direction: row;
@@ -132,5 +154,15 @@ export default class Home extends Vue {
   display: flex;
   justify-content: space-between;
   padding: 0.3rem;
+}
+
+.show-nav {
+  display: block;
+  background: @color-main;
+  color: @color-text;
+  cursor: pointer;
+  text-align: right;
+  padding: 0.3rem;
+  box-shadow: @box-shadow-normal;
 }
 </style>
