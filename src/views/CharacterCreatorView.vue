@@ -81,7 +81,10 @@ export default class CharacterEditorView extends Vue {
       ) {
         return
       }
-      if (JSON.stringify(this.charData) === JSON.stringify(data.character)) {
+      if (
+        JSON.stringify(this.charData) === JSON.stringify(data.character) ||
+        this.$characterStore.characterById(data.character.metadata.id)
+      ) {
         return
       }
       this.updateCharData(data.character)
