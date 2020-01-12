@@ -100,7 +100,12 @@ export default Vue.extend({
     </button>
     <router-view />
 
-    <NavDrawer :visible="showNav" @close="showNav = false" class="nav-body">
+    <NavDrawer
+      title="FLC"
+      :visible="showNav"
+      @close="showNav = false"
+      class="nav-body"
+    >
       <section class="nav-section">
         <h2>Navigation</h2>
         <div class="route-links" @click="showNav = false">

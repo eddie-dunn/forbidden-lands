@@ -28,12 +28,12 @@ export default class NavDrawer extends Vue {
       @click.self="close"
     ></div>
     <nav :class="['nav-drawer', visible ? 'nav-show' : '']">
-      <h2 class="heading">
-        <div class="title">{{ title }}</div>
-        <div @click="close" class="show-nav">
+      <div class="heading">
+        <h2 v-if="title" class="title">{{ title }}</h2>
+        <div @click="close" class="nav-show-button">
           <SvgIcon name="more_vert" title="Show options" />
         </div>
-      </h2>
+      </div>
       <div class="body">
         <slot>
           content
@@ -45,6 +45,10 @@ export default class NavDrawer extends Vue {
 
 <style lang="less" scoped>
 @import "~Style/colors.less";
+
+h2 {
+  margin: 0.25em 0;
+}
 
 .overlay {
   background: rgba(50, 50, 50, 50%);
@@ -74,12 +78,19 @@ export default class NavDrawer extends Vue {
   box-shadow: @box-shadow-normal;
   overflow: auto;
 
+  font-size: 1.3rem;
+
   transform: translateX(100%);
   transition: transform 0.2s ease-in-out;
 }
 
 .nav-show {
   transform: translateX(0);
+  &-button {
+    display: inline-block;
+    margin-left: auto;
+    margin-right: 0;
+  }
 }
 
 .heading {
@@ -94,10 +105,10 @@ export default class NavDrawer extends Vue {
 }
 
 .title {
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
+  font-size: 1.4rem;
   flex-grow: 1;
+  margin: 0;
+  text-align: center;
 }
 
 .visible {
