@@ -128,7 +128,7 @@ export default class CharacterTemplateView extends Vue {
 <template>
   <div class="character-template">
     <div class="templates-grid">
-      <div>
+      <div class="right-align">
         <button class="button button-green" @click="rollAll">
           Randomize all
         </button>
@@ -247,5 +247,10 @@ export default class CharacterTemplateView extends Vue {
   &-item {
     flex-grow: 1;
   }
+}
+
+.right-align {
+  text-align: right;
+  margin-top: 1rem;
 }
 </style>
