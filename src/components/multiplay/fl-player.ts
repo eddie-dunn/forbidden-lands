@@ -11,6 +11,10 @@ import { PlayerMessageHandler, PlayerReceive } from "./playerMessageHandler"
 
 import { CharacterData } from "@/characterData"
 
+function emitCharUpdate(update: PlayerReceive) {
+  EventBus.$emit(BusEvent.characterUpdate, update)
+}
+
 export class FLPlayer extends AbstractNode implements PlayerNode {
   private handler = new PlayerMessageHandler()
   constructor(public nodeType: string = "FLPlayer") {
@@ -84,7 +88,7 @@ export class FLPlayer extends AbstractNode implements PlayerNode {
       case "update userlist":
       case "update character":
         this.users = ev.data
-        EventBus.$emit(BusEvent.characterUpdate, data)
+        emitCharUpdate(data)
         break
       case "send pong":
         this.hostConn.conn.send(ev.data)

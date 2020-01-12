@@ -8,8 +8,6 @@ import MultiplayerCharList from "@/components/multiplay/MultiplayerCharList.vue"
 import ChatWindow from "@/components/multiplay/ChatWindow.vue"
 import FLInput from "@/components/base/FLInput.vue"
 import FLCheckbox from "@/components/base/FLCheckbox.vue"
-import { FLPlayer } from "@/components/multiplay/fl-player"
-import { FLHost } from "@/components/multiplay/fl-host"
 import { UserData } from "@/components/multiplay/protocol"
 import { randomName } from "@/util"
 

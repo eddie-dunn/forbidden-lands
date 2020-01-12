@@ -94,15 +94,11 @@ export default class CharacterEditorView extends Vue {
   mounted() {
     EventBus.$on(BusEvent.characterUpdate, (data: Protocol.MsgCharacter) => {
       if (
+        !this.multiplayer ||
         !this.charData ||
         data.type !== ProtocolTypes.charData ||
-        data.character.metadata.id !== this.charData.metadata.id
-      ) {
-        return
-      }
-      if (
-        JSON.stringify(this.charData) === JSON.stringify(data.character) ||
-        this.$characterStore.characterById(data.character.metadata.id)
+        data.character.metadata.id !== this.charData.metadata.id ||
+        JSON.stringify(this.charData) === JSON.stringify(data.character)
       ) {
         return
       }
