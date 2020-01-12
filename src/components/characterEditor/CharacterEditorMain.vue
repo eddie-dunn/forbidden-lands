@@ -2,7 +2,7 @@
 import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 
-import { MP_SAVE_CHAR } from "@/store/store-types"
+import { MP_SAVE_CHAR, SET_PAGE_SUBTITLE } from "@/store/store-types"
 import { CharData, CharacterMetaDataStatus } from "@/characterData"
 
 import FLButton from "@/components/base/FLButton.vue"
@@ -40,6 +40,18 @@ export default class CharacterEditor extends Vue {
   @Prop({ default: false }) isTemplateData!: boolean
 
   charDataCopyStr: string = stringChar(this.initialData)
+
+  mounted() {
+    this.setPageSubtitle()
+  }
+  destroyed() {
+    this.$store.commit(SET_PAGE_SUBTITLE, "")
+  }
+
+  @Watch("charData.name")
+  setPageSubtitle() {
+    this.$store.commit(SET_PAGE_SUBTITLE, this.charData.name)
+  }
 
   get initialData(): CharData {
     return (

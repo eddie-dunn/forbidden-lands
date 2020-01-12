@@ -13,6 +13,12 @@ import {
   GET_MP_PLAYERS,
   GET_MP_PLAYER_SELF,
   GET_ROOM_NAME,
+  PAGE_TITLE,
+  GET_PAGE_TITLE,
+  SET_PAGE_TITLE,
+  PAGE_SUBTITLE,
+  GET_PAGE_SUBTITLE,
+  SET_PAGE_SUBTITLE,
 } from "./store-types"
 import { CharacterData } from "@/characterData"
 import { Err, OK, log } from "@/util"
@@ -28,6 +34,8 @@ export const store = new Vuex.Store({
     [MP_CHARS]: <(CharacterData | null)[]>[],
     client: new FLPlayer(),
     host: new FLHost(),
+    [PAGE_TITLE]: "Forbidden Lands Companion",
+    [PAGE_SUBTITLE]: "",
   },
   getters: {
     [GET_MP_ACTIVE](state) {
@@ -49,6 +57,12 @@ export const store = new Vuex.Store({
     [GET_MP_PLAYERS](state): UserData[] {
       return state.client.users
     },
+    [GET_PAGE_TITLE](state) {
+      return state[PAGE_TITLE]
+    },
+    [GET_PAGE_SUBTITLE](state) {
+      return state[PAGE_SUBTITLE]
+    },
   },
   mutations: {
     /* Player picks char(s) to use in MP */
@@ -67,6 +81,13 @@ export const store = new Vuex.Store({
     [MP_SAVE_CHAR](state, charData: CharacterData) {
       if (!state.client.connected) return
       state.client.notifyCharUpdate(charData)
+    },
+    /** Other */
+    [SET_PAGE_TITLE](state, title: string) {
+      state[PAGE_TITLE] = title
+    },
+    [SET_PAGE_SUBTITLE](state, title: string) {
+      state[PAGE_SUBTITLE] = title
     },
   },
   // Info: https://vuex.vuejs.org/guide/actions.html

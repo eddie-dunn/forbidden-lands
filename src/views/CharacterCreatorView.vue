@@ -6,7 +6,12 @@ import { BusEvent, EventBus } from "@/util/eventBus"
 import { Protocol, ProtocolTypes } from "@/components/multiplay/protocol"
 import { getNewCharacterData, CharData } from "@/characterData"
 import { getCharDataFromQuery, CharDataQueryObj } from "@/util/characterUtil"
-import { GET_MP_PLAYER, GET_MP_ACTIVE } from "@/store/store-types"
+import {
+  GET_MP_PLAYER,
+  GET_MP_ACTIVE,
+  SET_PAGE_TITLE,
+  SET_PAGE_SUBTITLE,
+} from "@/store/store-types"
 import { UserData, PeerId } from "@/components/multiplay/protocol"
 import { errlog } from "@/util"
 
@@ -16,11 +21,21 @@ function initCharData(
   $characterStore: any,
   charId: string,
   templateQueryData: CharDataQueryObj | null
-): CharData {
+): { charData: CharData; type: "template" | "loaded" | "new" } {
   if (templateQueryData && templateQueryData.kinId) {
-    return getCharDataFromQuery(templateQueryData)
+    return {
+      charData: getCharDataFromQuery(templateQueryData),
+      type: "template",
+    }
   }
-  return $characterStore.characterById(charId) || getNewCharacterData()
+  const loadedCharData = $characterStore.characterById(charId)
+  if (loadedCharData) {
+    return { charData: loadedCharData, type: "loaded" }
+  }
+  return {
+    charData: getNewCharacterData(),
+    type: "new",
+  }
 }
 
 const getPlayerChar = (
@@ -64,12 +79,16 @@ export default class CharacterEditorView extends Vue {
         return
       }
       this.charData = char
+      this.$store.commit(SET_PAGE_TITLE, "View")
     } else {
-      this.charData = initCharData(
+      const { charData, type } = initCharData(
         this.$characterStore,
         this.id,
         this.templateQueryData
       )
+      const title = { new: "Create", template: "Create", loaded: "Edit" }[type]
+      this.$store.commit(SET_PAGE_TITLE, title)
+      this.charData = charData
     }
   }
   mounted() {

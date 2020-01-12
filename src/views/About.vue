@@ -1,10 +1,15 @@
 <script>
+import { SET_PAGE_TITLE } from "@/store/store-types"
+
 export default {
   name: "about_page",
   data() {
     return {
       buildVersion: __APP_VERSION__,
     }
+  },
+  mounted() {
+    this.$store.commit(SET_PAGE_TITLE, "About FLC")
   },
 }
 </script>

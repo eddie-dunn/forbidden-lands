@@ -6,6 +6,7 @@ import Expander from "@/components/ExpandableSection.vue"
 import { SaveData } from "@/localstorage/characterStorage"
 import FileReader from "@/components/FileReader.vue"
 import { setTimeout } from "timers"
+import { SET_PAGE_TITLE } from "@/store/store-types"
 
 function generateDateString(): string {
   return "backup-" + new Date().toISOString() + ".charlist.flcdata"
@@ -31,6 +32,10 @@ export default class CharacterListView extends Vue {
   newCharacters = this.$characterStore.charactersByStatus(["new", undefined])
   activeCharacters = this.$characterStore.activeCharacters
   inactiveCharacters = this.$characterStore.charactersByStatus("freeEdit")
+
+  mounted() {
+    this.$store.commit(SET_PAGE_TITLE, "Characters")
+  }
 
   updateCharacters() {
     // There is probably be a better way to handle this, but it will do for now
@@ -98,7 +103,6 @@ export default class CharacterListView extends Vue {
 
 <template>
   <div class="character-list-container">
-    <h1>{{ $t("Characters") }}</h1>
     <Expander
       :label="$t('New')"
       :defaultOpen="true"

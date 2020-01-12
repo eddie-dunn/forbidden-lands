@@ -1,15 +1,19 @@
 <script lang="ts">
 import Vue from "vue"
 import LocaleChanger from "@/components/LocaleChanger.vue"
-import NavButton from "@/components/NavButton.vue"
 import Notify from "@/components/base/Notify.vue"
 import NavDrawer from "@/components/base/NavDrawer.vue"
 import SvgIcon from "@/components/SvgIcon.vue"
 
+import {
+  GET_PAGE_TITLE,
+  GET_PAGE_SUBTITLE,
+  GET_MP_ACTIVE,
+} from "@/store/store-types"
+
 export default Vue.extend({
   components: {
     LocaleChanger,
-    NavButton,
     NavDrawer,
     Notify,
     SvgIcon,
@@ -20,6 +24,7 @@ export default Vue.extend({
       registration: null as any,
       updateExists: false,
       showNav: false,
+      showDiceModal: false,
     }
   },
   methods: {
@@ -33,6 +38,18 @@ export default Vue.extend({
         return
       }
       this.registration.waiting.postMessage("skipWaiting")
+    },
+  },
+  computed: {
+    pageTitle(): string {
+      return this.$store.getters[GET_PAGE_TITLE]
+    },
+    pageSubtitle(): string {
+      const sub = this.$store.getters[GET_PAGE_SUBTITLE]
+      return sub ? ": " + sub : ""
+    },
+    showMp(): boolean {
+      return this.$store.getters[GET_MP_ACTIVE]
     },
   },
   created() {
@@ -53,26 +70,24 @@ export default Vue.extend({
     <Notify />
 
     <div class="navbar navbar-top">
-      <div class="navbar-left">
-        <div v-if="false">
-          <NavButton type="back" />
-          <NavButton type="forward" />
-          <NavButton type="refresh" />
-        </div>
-        <div class="route-links">
-          <router-link to="/" exact>{{ $t("List") }}</router-link>
-          |
-          <router-link to="/dice">{{ $t("Dice") }}</router-link>
-          |
-          <router-link to="/about">{{ $t("About") }}</router-link>
-        </div>
+      <div class="navbar-left no-scrollbar">
+        <router-link to="/" exact>
+          <SvgIcon name="home" title="Home" />
+        </router-link>
+        <h1 class="page-title capitalize">
+          {{ $t(pageTitle) }}{{ $t(pageSubtitle) }}
+        </h1>
       </div>
       <div class="navbar-right">
-        <!-- TODO: Enable nav when portal-vue is setup to display page titles -->
-        <div v-if="$debugMode" @click="showNav = true" class="show-nav">
+        <div v-if="showMp" class="nav-icon">
+          <router-link to="/multiplayer" exact>
+            <SvgIcon name="chat_bubble" title="Multiplayer" />
+          </router-link>
+        </div>
+
+        <div @click="showNav = true" class="show-nav">
           <SvgIcon name="more_vert" title="Show options" />
         </div>
-        <LocaleChanger v-else />
       </div>
     </div>
     <button
@@ -116,6 +131,15 @@ body {
   color: @color-text;
 }
 
+.page-title {
+  display: inline-block;
+  margin: 0;
+  font-size: 1.4em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .show-nav {
   display: inline-block;
   cursor: pointer;
@@ -133,6 +157,7 @@ body {
 .nav-section {
   padding: 0 0.4rem;
 }
+
 .route-links {
   display: flex;
   flex-direction: column;
@@ -153,10 +178,20 @@ body {
   position: relative;
 }
 
+.no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 .navbar-left {
-  > div {
-    display: inline-block;
-    margin-right: 1rem;
+  min-width: 0;
+  overflow: auto;
+  > h1,
+  a {
+    // display: inline-block;
+    margin-right: 0.5rem;
     vertical-align: middle;
   }
 }
@@ -181,18 +216,19 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  max-width: 100%;
 
   background: @color-background;
   box-shadow: @box-shadow-normal;
-  padding: 10px;
+  padding: 3px 10px;
 
   a {
     font-weight: bold;
     color: #2c3e50;
     text-decoration: none;
-    &.router-link-active {
-      color: @color-background;
-    }
+    // &.router-link-active {
+    //   color: @color-background;
+    // }
   }
   z-index: @z-navbar;
 

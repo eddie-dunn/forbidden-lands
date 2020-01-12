@@ -1,4 +1,5 @@
 <script lang="ts">
+// TODO: Remove me
 import { Component, Vue, Prop } from "vue-property-decorator"
 
 import SvgIcon from "@/components/SvgIcon.vue"

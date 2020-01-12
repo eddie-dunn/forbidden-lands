@@ -29,12 +29,10 @@ export default class NavDrawer extends Vue {
     ></div>
     <nav :class="['nav-drawer', visible ? 'nav-show' : '']">
       <h2 class="heading">
-        <FLButton
-          :class="['close-button', visible ? 'visible' : '']"
-          @click="close"
-          >></FLButton
-        >
         <div class="title">{{ title }}</div>
+        <div @click="close" class="show-nav">
+          <SvgIcon name="more_vert" title="Show options" />
+        </div>
       </h2>
       <div class="body">
         <slot>
@@ -87,6 +85,8 @@ export default class NavDrawer extends Vue {
 .heading {
   margin: 0 0 1rem 0;
   display: flex;
+  align-items: center;
+  padding: 0 10px;
 }
 
 .body {
@@ -98,10 +98,6 @@ export default class NavDrawer extends Vue {
   margin-right: auto;
   text-align: center;
   flex-grow: 1;
-}
-
-.close-button {
-  transition: none;
 }
 
 .visible {

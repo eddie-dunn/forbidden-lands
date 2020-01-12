@@ -1,6 +1,6 @@
 <script>
 import { LOCALE_KEY } from "@/i18n"
-// const LOCALE_KEY = "__localeSetting"
+import { SET_PAGE_TITLE, GET_PAGE_TITLE } from "@/store/store-types"
 const DEFAULT_LOCALE = "en"
 
 export default {
@@ -13,6 +13,9 @@ export default {
   watch: {
     "$i18n.locale"() {
       localStorage.setItem(LOCALE_KEY, this.$i18n.locale)
+
+      const pageTitle = this.$store.getters[GET_PAGE_TITLE]
+      this.$store.commit(SET_PAGE_TITLE, pageTitle)
     },
   },
 }

@@ -1,7 +1,5 @@
 <template>
   <div class="home">
-    <h1>SANDBOX</h1>
-
     <ExpandableSection label="Vue app info" class="text-center">
       <img alt="Vue logo" src="../assets/logo.png" />
       <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
@@ -78,6 +76,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator"
+import { SET_PAGE_TITLE } from "@/store/store-types"
 import HelloWorld from "@/components/HelloWorld.vue"
 import ExpandableSection from "@/components/ExpandableSection.vue"
 import FLButton from "@/components/base/FLButton.vue"
@@ -102,6 +101,10 @@ export default class Home extends Vue {
   modalOpen = false
   diceModalOpen = false
   navOpen = false
+
+  mounted() {
+    this.$store.commit(SET_PAGE_TITLE, "Sandbox")
+  }
 
   notifyVue(
     message: string,
