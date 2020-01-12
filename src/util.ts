@@ -32,7 +32,6 @@ export const log = console.log
 const NAMES = [
   "Alice",
   "Bob",
-  "Charles",
   // radio
   "Alpha",
   "Bravo",

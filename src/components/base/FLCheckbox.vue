@@ -12,11 +12,11 @@ import SvgIcon from "@/components/SvgIcon.vue"
 export default class FLCheckbox extends Vue {
   @Prop({ default: false }) value!: boolean
   @Prop({ default: "" }) label!: string
-  @Prop({ default: "text" }) type!: string
   @Prop({ default: "" }) iconName!: string
   @Prop({ default: false }) required!: boolean
   @Prop({ default: () => {} }) enterCb!: Function
   @Prop({ default: "flcheckbox" }) id!: string
+  @Prop({ default: false }) column!: boolean
 
   inputEvent($event: any) {
     this.$emit("input", $event.target.checked)
@@ -25,8 +25,8 @@ export default class FLCheckbox extends Vue {
 </script>
 
 <template>
-  <div class="fl-input">
-    <label :for="id">
+  <div :class="['fl-input', column ? 'column' : '']">
+    <label class="label" :for="id">
       <SvgIcon v-if="iconName" class="" :name="iconName" />
       <span>{{ label }}</span>
       <span v-if="required" class="required-sign">*</span>
@@ -48,14 +48,21 @@ export default class FLCheckbox extends Vue {
 
 .fl-input {
   display: inline-flex;
+}
+
+.column {
   flex-direction: column;
-  align-items: flex-start;
+}
+
+.label {
+  display: inline-block;
 }
 
 .input {
-  width: 100%;
+  display: inline-block;
   box-sizing: border-box;
-  flex-grow: 1;
+  height: 20px;
+  width: 20px;
 }
 
 .required-sign {

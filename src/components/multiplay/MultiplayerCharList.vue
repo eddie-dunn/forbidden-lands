@@ -44,7 +44,7 @@ export default class MultiplayerCharList extends Vue {
   }
   isSelected(charData: CharacterData | null): boolean {
     if (!charData) {
-      return !!this.selectedChars.find((char) => char === null)
+      return this.selectedChars.find((char) => char === null) === null
     }
     return !!this.selectedChars.find(
       (char) => !!char && char.metadata.id === charData.metadata.id
@@ -124,7 +124,7 @@ export default class MultiplayerCharList extends Vue {
       @click="() => portraitClicked(charData)"
     >
       <CharacterCard
-        :titleOverride="!!charData ? '' : '_T No character'"
+        :titleOverride="!!charData ? '' : $t('no character')"
         :clickDisabled="true"
         :charData="charData"
         :linkOverride="linkOverride(charData)"
@@ -138,7 +138,6 @@ export default class MultiplayerCharList extends Vue {
 
 .character-list {
   display: flex;
-  margin: 0.8rem;
   overflow-x: auto;
 }
 

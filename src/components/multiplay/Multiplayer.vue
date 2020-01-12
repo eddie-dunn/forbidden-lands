@@ -20,7 +20,7 @@ import { randomName } from "@/util"
   },
 })
 export default class Multiplayer extends Vue {
-  roomName: string = "Super Room"
+  roomName: string = randomName(3)
   userName: string = randomName(2)
   hostGame: boolean = false
 
@@ -76,11 +76,13 @@ export default class Multiplayer extends Vue {
 
     <!-- Create game -->
     <div v-if="!connected">
-      <h3>Characters <span class="required">*</span></h3>
+      <h3 class="capitalize-first">
+        {{ $t("select character") }} <span class="required">*</span>
+      </h3>
       <MultiplayerCharList />
       <div class="flexy">
         <FLInput
-          class="flexy-item"
+          class="flexy-item flexy-auto-row"
           label="Nickname"
           :required="true"
           :disabled="connected"
@@ -88,14 +90,18 @@ export default class Multiplayer extends Vue {
           v-model="userName"
         />
         <FLInput
-          class="flexy-item"
+          class="flexy-item flexy-auto-row"
           label="Room"
           :required="true"
           :disabled="connected"
           :enterCb="onClickConnect"
           v-model="roomName"
         />
-        <FLCheckbox class="flexy-item" label="Host game" v-model="hostGame" />
+        <FLCheckbox
+          class="flexy-item flexy-full-row"
+          label="Host game"
+          v-model="hostGame"
+        />
         <!-- TODO: Add password at some point? -->
         <!-- TODO: Enable others to join as GMs -->
       </div>
@@ -128,6 +134,7 @@ export default class Multiplayer extends Vue {
 .multiplayer {
   text-align: left;
   padding-bottom: 30vh;
+  margin: 0 0.5rem;
 }
 
 .required {
@@ -139,13 +146,18 @@ h3 {
 }
 
 .flexy {
-  margin: 0.5rem;
+  margin: 0.5rem 0;
   display: inline-flex;
   flex-wrap: wrap;
   .flexy-item {
-    flex: 1 1 auto;
     margin-right: 0.5rem;
     margin-top: 0.5rem;
+  }
+  &-auto-row {
+    flex: 1 1 auto;
+  }
+  &-full-row {
+    flex: 1 1 100%;
   }
 }
 

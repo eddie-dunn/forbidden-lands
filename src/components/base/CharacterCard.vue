@@ -270,7 +270,7 @@ h3 {
   align-content: space-between;
   height: 100%;
   height: 400px;
-  box-shadow: 0px 1px 5px #555;
+  box-shadow: @box-shadow-strong;
   overflow: hidden;
 }
 
