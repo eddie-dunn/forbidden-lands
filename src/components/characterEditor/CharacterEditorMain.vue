@@ -4,6 +4,8 @@ import { Component, Prop, Watch } from "vue-property-decorator"
 
 import { MP_SAVE_CHAR, SET_PAGE_SUBTITLE } from "@/store/store-types"
 import { CharData, CharacterMetaDataStatus } from "@/characterData"
+import SvgIcon from "@/components/SvgIcon.vue"
+import DiceModal from "@/components/dice/DiceModal.vue"
 
 import FLButton from "@/components/base/FLButton.vue"
 import BaseCard from "@/components/characterEditor/BaseCard.vue"
@@ -32,6 +34,8 @@ function stringChar(characterData: CharData) {
     SessionCard,
     SkillCard,
     TalentCard,
+    SvgIcon,
+    DiceModal,
   },
 })
 export default class CharacterEditor extends Vue {
@@ -40,6 +44,7 @@ export default class CharacterEditor extends Vue {
   @Prop({ default: false }) isTemplateData!: boolean
 
   charDataCopyStr: string = stringChar(this.initialData)
+  showDiceModal = false
 
   mounted() {
     this.setPageSubtitle()
@@ -144,7 +149,7 @@ export default class CharacterEditor extends Vue {
     </div>
 
     <div class="action-bar-wrapper">
-      <div class="action-bar-left">
+      <div class="action-bar action-bar-left">
         <FLButton
           :type="!charDataUpdated ? 'cancel' : 'danger'"
           @click="closeClicked"
@@ -152,9 +157,13 @@ export default class CharacterEditor extends Vue {
           {{ closeText }}
         </FLButton>
       </div>
-      <div class="action-bar-middle"></div>
+      <div class="action-bar action-bar-center">
+        <div class="nav-icon" @click="showDiceModal = !showDiceModal">
+          <SvgIcon name="rolling-dices" title="Roll dice" />
+        </div>
+      </div>
 
-      <div class="action-bar-right">
+      <div class="action-bar action-bar-right">
         <FLButton
           v-if="!viewOnly"
           :type="!charDataUpdated ? 'cancel' : ''"
@@ -165,6 +174,7 @@ export default class CharacterEditor extends Vue {
       </div>
     </div>
 
+    <DiceModal v-if="showDiceModal" @close="showDiceModal = false" />
     <!-- end -->
   </div>
 </template>
@@ -184,20 +194,20 @@ export default class CharacterEditor extends Vue {
   background: #fffc;
   box-shadow: @box-shadow-normal;
   padding: 0.4rem;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
 .action-bar {
-  &-right {
-    justify-self: flex-end;
-    display: flex;
-    flex: 1 1 33%;
-    justify-content: flex-end;
-  }
+  flex: 1 1 auto;
   &-left {
-    justify-self: flex-start;
+    text-align: left;
   }
-  align-items: center;
+  // &-center {
+  // }
+  &-right {
+    text-align: right;
+  }
+  // align-items: center;
 }
 
 .character_creator {
@@ -241,5 +251,19 @@ export default class CharacterEditor extends Vue {
 .half {
   flex-grow: 1;
   flex-basis: 49%;
+}
+
+.nav-icon {
+  display: inline-flex;
+  justify-self: center;
+  align-items: center;
+  cursor: pointer;
+  color: @color-text;
+  height: 100%;
+  > svg {
+    flex: 1 1 auto;
+    height: 32px;
+    width: 32px;
+  }
 }
 </style>
