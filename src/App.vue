@@ -69,18 +69,21 @@ export default Vue.extend({
   <div id="app">
     <Notify />
 
+    <!-- TODO: Create separate component for navbar -->
     <div class="navbar navbar-top">
-      <div class="navbar-left no-scrollbar">
-        <router-link to="/" exact>
+      <div class="navbar-left ">
+        <router-link class="nav-icon" to="/" exact>
           <SvgIcon name="home" title="Home" />
         </router-link>
+      </div>
+      <div class="navbar-center no-scrollbar">
         <h1 class="page-title capitalize">
           {{ $t(pageTitle) }}{{ $t(pageSubtitle) }}
         </h1>
       </div>
       <div class="navbar-right">
         <div v-if="showMp" class="nav-icon">
-          <router-link to="/multiplayer" exact>
+          <router-link class="nav-icon" to="/multiplayer" exact>
             <SvgIcon name="chat_bubble" title="Multiplayer" />
           </router-link>
         </div>
@@ -137,12 +140,11 @@ body {
 }
 
 .page-title {
+  margin: 0 6px;
+  min-width: 0;
   display: inline-block;
-  margin: 0;
   font-size: 1.4em;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .show-nav {
@@ -193,20 +195,26 @@ body {
 .navbar-left {
   min-width: 0;
   overflow: auto;
-  > h1,
-  a {
-    // display: inline-block;
-    margin-right: 0.5rem;
-    vertical-align: middle;
+}
+
+.navbar-center {
+  min-width: 0;
+  display: inline-block;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.navbar-right {
+  display: flex;
+}
+
+.nav-icon {
+  text-decoration: none;
+  color: #2c3e50;
+  &.router-link-active {
+    color: @color-background;
   }
-}
-
-.bold {
-  font-weight: bold;
-}
-
-.center {
-  text-align: center;
 }
 
 .navbar {
@@ -225,16 +233,8 @@ body {
 
   background: @color-background;
   box-shadow: @box-shadow-normal;
-  padding: 3px 10px;
+  padding: 3px;
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    text-decoration: none;
-    // &.router-link-active {
-    //   color: @color-background;
-    // }
-  }
   z-index: @z-navbar;
 
   &-top {
@@ -400,6 +400,14 @@ select {
   &-right {
     text-align: right;
   }
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.center {
+  text-align: center;
 }
 
 // TODO: Are these needed? Remove or implement FLDice such that they can be removed
