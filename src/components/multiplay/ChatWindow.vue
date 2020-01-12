@@ -12,6 +12,7 @@ import { ChatMessage } from "@/components/multiplay/fl-node"
 import { FLPlayer } from "@/components/multiplay/fl-player"
 
 import FLInput from "@/components/base/FLInput.vue"
+import SvgIcon from "@/components/SvgIcon.vue"
 import { Protocol, ProtocolTypes, UserData } from "./protocol"
 
 /*
@@ -20,6 +21,7 @@ import { Protocol, ProtocolTypes, UserData } from "./protocol"
 @Component({
   components: {
     FLInput,
+    SvgIcon,
   },
 })
 export default class ChatWindow extends Vue {
@@ -129,7 +131,7 @@ export default class ChatWindow extends Vue {
           :disabled="!chatMessage"
           @click="_sendMsg(chatMessage)"
         >
-          >
+          <SvgIcon name="send" title="Send" />
         </button>
       </div>
     </div>
@@ -155,7 +157,8 @@ export default class ChatWindow extends Vue {
 }
 
 .chat-button {
-  padding: 0 1rem;
+  padding: 0 0.25rem;
+  box-shadow: none;
 }
 
 .message-box {
