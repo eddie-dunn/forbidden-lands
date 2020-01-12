@@ -116,7 +116,6 @@ export default Vue.extend({
       }
     },
     skillLabelClicked(skill) {
-      if (!this.$debugMode) return
       if (this.characterStatus !== "active") return
       this.skillRollerOpen = skill
     },
