@@ -1,17 +1,17 @@
 <script lang="ts">
 // TODO: Look into http://youmightnotneedjs.com/#tabs for tabs
+import Vue from "vue"
+import { Component, Prop, Watch } from "vue-property-decorator"
 
 import uuid1 from "uuid/v1"
 import Modal from "@/components/Modal.vue"
 import FLButton from "@/components/base/FLButton.vue"
 import FLInput from "@/components/base/FLInput.vue"
-import Vue from "vue"
-import { Component, Prop, Watch } from "vue-property-decorator"
 import { CharacterData, CharacterTalent } from "@/characterData"
 import { allItems } from "@/data/items/items.ts"
 import { Item } from "@/data/items/itemTypes"
 import { capitalize } from "@/util"
-
+import ItemTemplatePicker from "@/components/gear/ItemTemplatePicker.vue"
 import FLNumberInput from "@/components/FLNumberInput.vue"
 
 function defaultItem(): Item {
@@ -32,6 +32,7 @@ function defaultItem(): Item {
     FLButton,
     FLInput,
     FLNumberInput,
+    ItemTemplatePicker,
     Modal,
   },
 })
@@ -97,6 +98,19 @@ export default class AddItem extends Vue {
         ) >= 0
     )
   }
+  get rangedWeapons() {
+    return this.filteredItems.filter(
+      (item) => item.type === "weapon" && item.skill === "marksmanship"
+    )
+  }
+  get meleeWeapons() {
+    return this.filteredItems.filter(
+      (item) => item.type === "weapon" && item.skill === "melee"
+    )
+  }
+  get armorTemplates() {
+    return this.filteredItems.filter((item) => item.type === "armor")
+  }
   selectTemplateItem(id: string) {
     const item = allItems
       .filter((item) => item.id === id)
@@ -108,6 +122,11 @@ export default class AddItem extends Vue {
       this.tmpGear = item
       this.showNew()
     }
+  }
+  onTemplatePicked(item: any) {
+    console.log("item picked", item)
+    this.tmpGear = item
+    this.showNew()
   }
 }
 </script>
@@ -125,22 +144,10 @@ export default class AddItem extends Vue {
     </div>
     <div slot="body" class="modal-body">
       <!-- Template view -->
-      <div v-if="templateActive" class="template-items">
-        <FLInput
-          :label="$t('Filter')"
-          v-model="activeFilter"
-          class="template-filter"
-        />
-        <FLButton
-          type="ghost"
-          v-for="item in filteredItems"
-          :key="item.id"
-          class="template-item capitalize-first"
-          @click="selectTemplateItem(item.id)"
-        >
-          {{ $t(item.name) }}
-        </FLButton>
-      </div>
+      <ItemTemplatePicker
+        v-if="templateActive"
+        @template-picked="onTemplatePicked"
+      />
 
       <!-- Item detail view -->
       <div v-if="newActive" class="new-item-form">
@@ -366,22 +373,6 @@ h2 {
 .tab-bar {
   text-align: left;
   margin: 0 1rem;
-}
-
-.template-items {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(15ch, 1fr));
-  grid-gap: 10px;
-}
-
-.template-filter {
-  grid-column-start: 1;
-  grid-column-end: -1;
-}
-
-.template-item {
-  cursor: pointer;
-  font-size: 1rem;
 }
 
 .inventory-modal {

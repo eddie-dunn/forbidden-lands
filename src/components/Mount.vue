@@ -7,7 +7,7 @@ import { Component, Prop, Watch } from "vue-property-decorator"
 import { CharacterData, CharacterTalent } from "@/characterData"
 import { Item } from "@/data/items/itemTypes"
 
-import ModalAddItem from "@/components/ModalAddItem.vue"
+import ModalAddItem from "@/components/gear/ModalAddItem.vue"
 import FLNumberInput from "@/components/FLNumberInput.vue"
 import FLButton from "@/components/base/FLButton.vue"
 

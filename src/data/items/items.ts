@@ -608,8 +608,8 @@ export namespace rangedWeapons {
       skill: "marksmanship",
     },
     {
-      id: "Heavy crossbow",
-      name: "Heavy crossbow",
+      id: "heavy crossbow",
+      name: "heavy crossbow",
       grip: 2,
       bonus: 1,
       damage: 3,
