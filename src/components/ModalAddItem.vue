@@ -91,7 +91,10 @@ export default class AddItem extends Vue {
   activeFilter = ""
   get filteredItems() {
     return allItems.filter(
-      (item) => (this.$t(item.name) as string).indexOf(this.activeFilter) >= 0
+      (item) =>
+        (this.$t(item.name) as string).indexOf(
+          this.activeFilter.toLowerCase()
+        ) >= 0
     )
   }
   selectTemplateItem(id: string) {
