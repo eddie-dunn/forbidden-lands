@@ -31,7 +31,7 @@ export default class NavDrawer extends Vue {
       <div class="heading">
         <h2 v-if="title" class="title">{{ title }}</h2>
         <div @click="close" class="nav-show-button">
-          <SvgIcon name="more_vert" title="Show options" />
+          <SvgIcon name="close" title="Show options" />
         </div>
       </div>
       <div class="body">
@@ -90,6 +90,7 @@ h2 {
     display: inline-block;
     margin-left: auto;
     margin-right: 0;
+    cursor: pointer;
   }
 }
 

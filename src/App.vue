@@ -89,7 +89,7 @@ export default Vue.extend({
         </div>
 
         <div @click="showNav = true" class="show-nav">
-          <SvgIcon name="more_vert" title="Show options" />
+          <SvgIcon name="menu_open" title="Show options" />
         </div>
       </div>
     </div>
@@ -151,6 +151,7 @@ body {
   display: inline-block;
   cursor: pointer;
 }
+
 .nav-body {
   a {
     font-weight: bold;

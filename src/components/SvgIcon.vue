@@ -9,8 +9,6 @@
 </template>
 
 <script>
-import "@/assets/icons/d6-2.svg"
-
 function importAll(r) {
   return r.keys().map(r)
 }
@@ -48,8 +46,8 @@ export default {
       if (img) return img.url
       else {
         /* eslint-disable no-console */
-        console.error("+++ image not found:", name)
-        console.error("+++ IMG_MAP:", IMG_MAP)
+        console.error("+++ image not found:", this.name)
+        // console.error("+++ IMG_MAP:", IMG_MAP)
         /* eslint-enable no-console */
       }
       return img.url

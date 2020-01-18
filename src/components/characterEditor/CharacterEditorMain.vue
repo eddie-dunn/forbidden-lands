@@ -160,6 +160,7 @@ export default class CharacterEditor extends Vue {
       <div class="action-bar action-bar-center">
         <div class="nav-icon" @click="showDiceModal = !showDiceModal">
           <SvgIcon name="rolling-dices" title="Roll dice" />
+          <!-- <SvgIcon name="perspective-dice-six-faces-six" title="Roll dice" /> -->
         </div>
       </div>
 

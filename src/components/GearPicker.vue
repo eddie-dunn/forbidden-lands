@@ -173,7 +173,7 @@ export default class ExpandableSection extends Vue {
       case "armor":
         return "leather-armor"
       case "helmet":
-        return "brutal-helm"
+        return "barbute"
       case "shield":
         return "shield"
       case "weapon":
@@ -347,7 +347,7 @@ export default class ExpandableSection extends Vue {
           <tbody>
             <tr>
               <td>
-                <SvgIcon name="brutal-helm" />
+                <SvgIcon name="barbute" />
               </td>
               <td
                 @click="editItem(equippedHelmet)"
@@ -523,7 +523,8 @@ export default class ExpandableSection extends Vue {
         <FLNumberInput
           id="gold"
           fontSize="1.7rem"
-          :min="0"
+          min="0"
+          max="300"
           v-model="characterData.gear.money.gold"
           :disabled="viewOnly"
         />
