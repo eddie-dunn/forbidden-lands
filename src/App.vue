@@ -88,7 +88,7 @@ export default Vue.extend({
           </router-link>
         </div>
 
-        <div @click="showNav = true" class="show-nav">
+        <div @click="showNav = true" class="nav-icon">
           <SvgIcon name="menu_open" title="Show options" />
         </div>
       </div>
@@ -145,11 +145,6 @@ body {
   display: inline-block;
   font-size: 1.4em;
   white-space: nowrap;
-}
-
-.show-nav {
-  display: inline-block;
-  cursor: pointer;
 }
 
 .nav-body {
@@ -212,7 +207,8 @@ body {
 
 .nav-icon {
   text-decoration: none;
-  color: #2c3e50;
+  color: @color-text;
+  margin: 5px;
   &.router-link-active {
     color: @color-background;
   }

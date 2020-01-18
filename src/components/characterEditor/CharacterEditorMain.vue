@@ -158,7 +158,7 @@ export default class CharacterEditor extends Vue {
         </FLButton>
       </div>
       <div class="action-bar action-bar-center">
-        <div class="nav-icon" @click="showDiceModal = !showDiceModal">
+        <div class="dice-icon" @click="showDiceModal = !showDiceModal">
           <SvgIcon name="rolling-dices" title="Roll dice" />
           <!-- <SvgIcon name="perspective-dice-six-faces-six" title="Roll dice" /> -->
         </div>
@@ -254,10 +254,7 @@ export default class CharacterEditor extends Vue {
   flex-basis: 49%;
 }
 
-.nav-icon {
-  display: inline-flex;
-  justify-self: center;
-  align-items: center;
+.dice-icon {
   cursor: pointer;
   color: @color-text;
   height: 100%;
