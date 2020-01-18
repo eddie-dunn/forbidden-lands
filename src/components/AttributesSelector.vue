@@ -135,10 +135,12 @@ export default Vue.extend({
   </div>
 
   <div v-else>
-    <table style="width: 100%">
+    <table class="attribute-table">
       <thead>
         <tr>
-          <th></th>
+          <th class="capitalize">
+            {{ $t("attribute") }}
+          </th>
           <th v-if="active">{{ $t("Damage") }}</th>
           <th v-if="active" class="empty-cell"></th>
         </tr>
@@ -206,6 +208,11 @@ export default Vue.extend({
 </template>
 
 <style lang="less" scoped>
+.attribute-table {
+  width: 100%;
+  margin: 1rem 0;
+}
+
 .attribute-item {
   display: flex;
   flex-grow: 0;

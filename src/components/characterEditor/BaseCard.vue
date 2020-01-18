@@ -50,7 +50,6 @@ export default class BaseCard extends Vue {
 
     <div class="base-data-sub">
       <div>
-        <h4>{{ $t("Attributes") }}</h4>
         <AttributesSelector :charData="charData" :viewOnly="viewOnly" />
       </div>
       <div v-if="status !== 'new'">

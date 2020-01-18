@@ -500,6 +500,7 @@ export default {
 
   // Lowercase
   "armslength": "armslängd",
+  "attribute": "grundegenskap",
   "blunt": "trubbig",
   "childhood": "uppväxt",
   "create from template": "skapa från mall",
