@@ -78,7 +78,7 @@ export default {
           >the repo hosting the project</a
         >
         or
-        <a href="mailto:eddie.dunn+flc@gmail.com">email me</a>.
+        <a href="mailto:forbidden.lands.companion@gmail.com">email me</a>.
       </p>
 
       <h2>Technical Details</h2>
