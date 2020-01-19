@@ -12,6 +12,7 @@ import SvgIcon from "@/components/SvgIcon.vue"
 export default class FLButton extends Vue {
   @Prop({ default: "button" }) formButtonType!: string
   @Prop({ default: "" }) type!: "" | "danger" | "cancel" | "ghost"
+  @Prop({ default: "white" }) color!: "main" | "danger" | "white" | "inherit"
 }
 </script>
 
@@ -20,7 +21,7 @@ export default class FLButton extends Vue {
     v-bind="$attrs"
     :type="formButtonType"
     @click="$emit('click', $event)"
-    :class="['button', 'button-' + type]"
+    :class="['button', 'button-' + type, 'color-' + color]"
   >
     <slot></slot>
   </button>
@@ -44,29 +45,28 @@ export default class FLButton extends Vue {
   background-color: @pastel-green;
   transition: all 0.15s ease;
   box-sizing: border-box;
-  border: 1px solid #4fc08d;
+  border: none;
   cursor: pointer;
-  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
-    0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+  box-shadow: @box-shadow-normal;
 
   &:active {
     transform: scale(0.97);
   }
   &:focus {
-    outline: @color-danger dotted 1px;
+    outline: #0002 dotted 1px;
   }
 
   &-red,
   &-danger {
     color: #fff;
     background-color: @pastel-red;
-    border: 1px solid @pastel-red;
   }
 
   &-white,
   &-cancel {
     background-color: white;
     color: #4fc08d;
+    // border: 1px solid @pastel-green;
   }
 
   &-shadow,
@@ -74,14 +74,11 @@ export default class FLButton extends Vue {
     font-weight: bold;
     background-color: white;
     color: #4fc08d;
-    border: 1px #0000;
-    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
-      0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+    box-shadow: none;
   }
 
   &:disabled {
     background: slategray;
-    border: 1px solid slategray;
     color: lightgray;
     &:hover {
       cursor: not-allowed;
@@ -90,5 +87,17 @@ export default class FLButton extends Vue {
       transform: unset;
     }
   }
+}
+
+.color-main {
+  color: @color-main;
+}
+
+.color-danger {
+  color: @color-danger;
+}
+
+.color-inherit {
+  color: inherit;
 }
 </style>

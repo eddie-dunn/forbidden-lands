@@ -69,7 +69,20 @@
         This is the navdrawer content.
       </NavDrawer>
     </ExpandableSection>
-    <ExpandableSection label="Icons" saveStateId="__icon-test">
+    <ExpandableSection label="Buttons" saveStateId="__icon-test">
+      <div class="sandbox-grid">
+        <h4>FLButton</h4>
+        <FLButton>Base button</FLButton>
+        <FLButton type="danger">Danger button</FLButton>
+        <FLButton type="cancel">Cancel button</FLButton>
+        <FLButton type="ghost" :disabled="true">Disabled button</FLButton>
+        <FLButton type="ghost">Ghost button</FLButton>
+        <FLButton type="ghost" color="danger">Ghost button danger</FLButton>
+        <h4>IconButton</h4>
+        <IconButton icon="check" color="main"></IconButton>
+        <IconButton icon="delete" color="danger"></IconButton>
+        <IconButton icon="chat_bubble">With text</IconButton>
+      </div>
     </ExpandableSection>
   </div>
 </template>
@@ -85,9 +98,11 @@ import Modal from "@/components/Modal.vue"
 import { Notification, notify } from "@/util/notifications"
 import DiceRoller from "@/components/dice/DiceRoller.vue"
 import SvgIcon from "@/components/SvgIcon.vue"
+import IconButton from "@/components/base/IconButton.vue"
 
 @Component({
   components: {
+    IconButton,
     DiceRoller,
     HelloWorld,
     ExpandableSection,
@@ -167,5 +182,17 @@ export default class Home extends Vue {
   text-align: right;
   padding: 0.3rem;
   box-shadow: @box-shadow-normal;
+}
+
+.sandbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(calc(40% - 11px), 1fr));
+  grid-gap: 10px;
+  margin: 5px;
+  h4 {
+    grid-column-start: 1;
+    grid-column-end: -1;
+    margin: 0.2rem;
+  }
 }
 </style>
