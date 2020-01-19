@@ -48,9 +48,6 @@ export default class Modal extends Vue {
           this.maximized ? 'modal-container-full' : '',
         ]"
       >
-        <div v-if="false" class="close-button-container" @click="close()">
-          <SvgIcon name="close-button" title="Close" class="close-button" />
-        </div>
         <div class="__modal-header">
           <div class="__modal-header-title capitalize-first">
             <h2 v-if="title">{{ title }}</h2>
@@ -59,7 +56,7 @@ export default class Modal extends Vue {
             </slot>
           </div>
           <div class="close-button-container" @click="close()">
-            <SvgIcon name="close-button" title="Close" class="close-button" />
+            <SvgIcon name="close" title="Close" class="close-button" />
           </div>
         </div>
 
@@ -86,7 +83,8 @@ export default class Modal extends Vue {
   width: 2rem;
   height: 2rem;
   cursor: pointer;
-  fill: white;
+  // fill: white;
+  fill: @pastel-red;
   &:hover {
     fill: @pastel-red;
   }
@@ -95,8 +93,8 @@ export default class Modal extends Vue {
 .close-button-container {
   width: 2rem;
   height: 2rem;
-  border-radius: 50%;
-  background: @pastel-red;
+  // border-radius: 50%;
+  // background: @pastel-red;
   margin-top: 3px;
   margin-right: 3px;
   &:hover {

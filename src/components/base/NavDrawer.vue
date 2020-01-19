@@ -28,11 +28,9 @@ export default class NavDrawer extends Vue {
       @click.self="close"
     ></div>
     <nav :class="['nav-drawer', visible ? 'nav-show' : '']">
-      <div class="heading">
-        <h2 v-if="title" class="title">{{ title }}</h2>
-        <div @click="close" class="nav-show-button">
-          <SvgIcon name="close" title="Show options" />
-        </div>
+      <h2 v-if="title" class="title">{{ title }}</h2>
+      <div @click="close" class="nav-show-button">
+        <SvgIcon name="close" title="Show options" />
       </div>
       <div class="body">
         <slot>
@@ -86,30 +84,19 @@ h2 {
 
 .nav-show {
   transform: translateX(0);
-  &-button {
-    display: inline-block;
-    margin-left: auto;
-    margin-right: 0;
-    cursor: pointer;
-  }
 }
 
-.heading {
-  margin: 0 0 1rem 0;
-  display: flex;
-  align-items: center;
-  padding: 0 10px;
-}
-
-.body {
-  padding-bottom: 20vh;
+.nav-show-button {
+  cursor: pointer;
+  position: absolute;
+  right: 0.4rem;
+  top: 0.1rem;
 }
 
 .title {
   font-size: 1.4rem;
   flex-grow: 1;
-  margin: 0;
-  text-align: center;
+  margin: 0 1rem;
 }
 
 .visible {

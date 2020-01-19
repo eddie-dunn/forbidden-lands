@@ -124,7 +124,6 @@ export default class AddItem extends Vue {
     }
   }
   onTemplatePicked(item: any) {
-    console.log("item picked", item)
     this.tmpGear = item
     this.showNew()
   }
