@@ -78,6 +78,7 @@ export default class DiceRoller extends Vue {
   @Prop({ default: null }) blue!: number
   @Prop({ default: null }) orange!: number
   @Prop({ default: false }) showReset!: boolean
+  @Prop({ default: false }) openArtifact!: boolean
 
   DiceType = DiceType
 
@@ -130,7 +131,7 @@ export default class DiceRoller extends Vue {
   }
 
   get artifactOpen() {
-    return this.green || this.blue || this.orange
+    return this.green || this.blue || this.orange || this.openArtifact
   }
 
   pushRoll() {
