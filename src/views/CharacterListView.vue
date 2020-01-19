@@ -176,7 +176,7 @@ export default class CharacterListView extends Vue {
       </div>
     </Expander>
 
-    <Expander :label="$t('Import/Export')">
+    <Expander v-if="false" :label="$t('Import/Export')">
       <div class="import-export text-left">
         <h3>Export</h3>
         <button

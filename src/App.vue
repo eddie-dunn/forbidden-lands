@@ -4,6 +4,7 @@ import LocaleChanger from "@/components/LocaleChanger.vue"
 import Notify from "@/components/base/Notify.vue"
 import NavDrawer from "@/components/base/NavDrawer.vue"
 import SvgIcon from "@/components/SvgIcon.vue"
+import Backup from "@/components/Backup.vue"
 
 import {
   GET_PAGE_TITLE,
@@ -13,6 +14,7 @@ import {
 
 export default Vue.extend({
   components: {
+    Backup,
     LocaleChanger,
     NavDrawer,
     Notify,
@@ -121,6 +123,7 @@ export default Vue.extend({
       <section class="nav-section">
         <h2>Options</h2>
         <div>{{ $t("Language") }} <LocaleChanger /></div>
+        <Backup />
       </section>
     </NavDrawer>
   </div>
