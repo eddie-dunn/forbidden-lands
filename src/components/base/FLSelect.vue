@@ -22,6 +22,7 @@ export class FLSelect extends Vue {
   @Prop({ default: () => [] }) optgroups!: Optgroup[]
   @Prop({ default: false }) disabled!: boolean
   @Prop({ default: "" }) initial!: string
+  @Prop({ default: true }) initialDisabled!: boolean
 
   value: any = null
 
@@ -43,7 +44,12 @@ export default FLSelect
   <div class="fl-select">
     <label :for="label" class="label">{{ label }}</label>
     <select :id="label" :value="value" @input="onInput" :disabled="disabled">
-      <option v-if="initial" key="disabled" :disabled="true" :value="null">
+      <option
+        v-if="initial"
+        key="disabled"
+        :disabled="initialDisabled"
+        :value="null"
+      >
         {{ initial }}
       </option>
 
