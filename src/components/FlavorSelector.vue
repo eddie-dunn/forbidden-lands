@@ -28,9 +28,9 @@ export default Vue.extend({
   },
   computed: {
     appearancePlaceholder(): string {
-      return `${this.$t("Face")}:\n${this.$t("Body")}:\n${this.$t(
+      return `${this.$t("Face")}, ${this.$t("Body")}, ${this.$t(
         "Clothing"
-      )}:\n`
+      )} etc`
     },
   },
 })
