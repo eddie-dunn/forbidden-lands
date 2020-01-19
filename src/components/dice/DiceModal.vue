@@ -17,9 +17,9 @@ interface Dice {
 
 function defaultDice(): Dice {
   return {
-    white: 3,
-    red: 2,
-    black: 1,
+    white: null,
+    red: null,
+    black: null,
     green: null,
     blue: null,
     orange: null,
