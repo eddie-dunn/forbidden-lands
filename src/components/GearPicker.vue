@@ -392,7 +392,7 @@ export default class ExpandableSection extends Vue {
             <tr>
               <th>{{ $t("Name") }}</th>
               <th class="bonus-cell">Bonus</th>
-              <th class="bonus-cell">{{ $t("Damage") }}</th>
+              <th class="bonus-cell capitalize">{{ $t("dmg") }}</th>
               <th>{{ $t("Range") }}</th>
               <th>{{ $t("Features") }}</th>
             </tr>

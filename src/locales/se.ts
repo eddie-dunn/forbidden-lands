@@ -504,6 +504,7 @@ export default {
   "blunt": "trubbig",
   "childhood": "uppväxt",
   "create from template": "skapa från mall",
+  "dmg": "skada",
   "edged": "egg",
   "female": "kvinna",
   "formative event": "livshändelse",
