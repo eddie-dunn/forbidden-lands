@@ -13,6 +13,15 @@ import SvgIcon from "@/components/SvgIcon.vue"
 export default class CloseButton extends Vue {
   @Prop({ required: true }) icon!: string
   @Prop({ default: "inherit" }) color!: "main" | "danger" | "inherit"
+  @Prop({ default: "24px" }) width!: string
+  @Prop({ default: "24px" }) height!: string
+
+  get cssVars() {
+    return {
+      width: this.width,
+      height: this.height,
+    }
+  }
 }
 </script>
 
@@ -23,7 +32,7 @@ export default class CloseButton extends Vue {
     type="ghost"
     @click="$emit('click', $event)"
   >
-    <SvgIcon v-if="icon" :name="icon"></SvgIcon>
+    <SvgIcon v-if="icon" :name="icon" :style="cssVars"></SvgIcon>
     <slot></slot>
   </FLButton>
 </template>

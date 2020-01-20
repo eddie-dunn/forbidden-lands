@@ -17,6 +17,7 @@ import SkillCard from "@/components/characterEditor/SkillCard.vue"
 import GearCard from "@/components/characterEditor/GearCard.vue"
 import MountCard from "@/components/characterEditor/MountCard.vue"
 import NoteCard from "@/components/characterEditor/NoteCard.vue"
+import IconButton from "@/components/base/IconButton.vue"
 
 function stringChar(characterData: CharData) {
   return JSON.stringify(characterData)
@@ -24,18 +25,19 @@ function stringChar(characterData: CharData) {
 
 @Component({
   components: {
-    FLButton,
     BaseCard,
+    DiceModal,
+    FLButton,
     FlavorCard,
     GearCard,
+    IconButton,
     MountCard,
     NoteCard,
     PortraitCard,
     SessionCard,
     SkillCard,
-    TalentCard,
     SvgIcon,
-    DiceModal,
+    TalentCard,
   },
 })
 export default class CharacterEditor extends Vue {
@@ -158,10 +160,17 @@ export default class CharacterEditor extends Vue {
         </FLButton>
       </div>
       <div class="action-bar action-bar-center">
-        <div class="dice-icon" @click="showDiceModal = !showDiceModal">
+        <!-- <div class="dice-icon" @click="showDiceModal = !showDiceModal">
           <SvgIcon name="rolling-dices" title="Roll dice" />
-          <!-- <SvgIcon name="perspective-dice-six-faces-six" title="Roll dice" /> -->
-        </div>
+          <SvgIcon name="perspective-dice-six-faces-six" title="Roll dice" />
+        </div> -->
+        <IconButton
+          class="dice-icon"
+          height="32px"
+          width="32px"
+          icon="rolling-dices"
+          @click="showDiceModal = !showDiceModal"
+        ></IconButton>
       </div>
 
       <div class="action-bar action-bar-right">
@@ -255,13 +264,6 @@ export default class CharacterEditor extends Vue {
 }
 
 .dice-icon {
-  cursor: pointer;
-  color: @color-text;
   height: 100%;
-  > svg {
-    flex: 1 1 auto;
-    height: 32px;
-    width: 32px;
-  }
 }
 </style>
