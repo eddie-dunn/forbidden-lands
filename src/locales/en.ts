@@ -437,4 +437,7 @@ export default {
     However, even if the stats are invalid it is still possible to save and
     activate your character, should you wish to do so.
   `,
+  "GENERATE_DOWNLOAD_LINK": "Genererate download link",
+  "IMPORT_WARNING":
+    "Warning: Importing a backup will replace all your current settings and characters",
 }

@@ -5,7 +5,7 @@ import FileReader from "@/components/FileReader.vue"
 import { setTimeout } from "timers"
 
 function generateDateString(): string {
-  return "backup-" + new Date().toISOString() + ".charlist.flcdata"
+  return "backup-" + new Date().toISOString() + ".flcdata"
 }
 
 @Component({
@@ -16,20 +16,22 @@ function generateDateString(): string {
 export default class Backup extends Vue {
   importKey = 1
 
-  importData: SaveData | null = null
-  importName = ""
+  importData: any = null
 
   exportBlob: string = ""
   exportFilename: string = ""
 
   generateBlob() {
-    this.exportBlob = this.$characterStore.getStorageDataBlob()
-    this.exportFilename = generateDateString()
-    // Release blob and reset backup data if backup has not been downloaded
-    // within time limit:
+    const exportString = JSON.stringify({ ...localStorage })
+    const blob = new Blob([exportString])
+    const blobUrl = window.URL.createObjectURL(blob)
     setTimeout(() => {
-      this.releaseBlob()
-    }, 25000)
+      window.URL.revokeObjectURL(blobUrl)
+      this.exportFilename = ""
+      this.exportBlob = ""
+    }, 24000)
+    this.exportBlob = blobUrl
+    this.exportFilename = generateDateString()
     return this.exportBlob
   }
 
@@ -46,15 +48,25 @@ export default class Backup extends Vue {
 
   importDataLoaded(filedata: any) {
     this.importData = JSON.parse(filedata.data)
-    this.importName = filedata.name
   }
 
   importBackup() {
     if (!this.importData) return
-    this.$characterStore.replaceData(this.importData, true)
+    if (this.importData.savedCharacters) {
+      // new import
+      Object.entries(this.importData).map(([key, val]) => {
+        localStorage.setItem(key, String(val))
+      })
+    } else {
+      // old import
+      this.$characterStore.replaceData(this.importData, true)
+    }
+
     this.importData = null
     this.importKey++
-    // TODO: Decide if forcing a window reload is ok or not upon importing
+    this.$router.push("/")
+    // Importing and overwriting all stored data is a fairly destructive action,
+    // so forcing a reload is the safest alternative:
     window.location.reload()
   }
 }
@@ -69,41 +81,31 @@ export default class Backup extends Vue {
       @click="generateBlob"
       :disabled="!!exportBlob"
     >
-      <!-- TODO: Translate -->
-      Generate backup
+      {{ $t("GENERATE_DOWNLOAD_LINK") }}
     </button>
     <div class="" v-if="exportBlob">
       <a
-        class="download-link"
+        class="download-link button wide"
         :href="exportBlob"
         :download="exportFilename"
         @click="downloadClicked"
       >
-        <!-- TODO: Translate -->
-        Download data
+        {{ $t("Download data") }}
       </a>
-      <div>
-        <!-- TODO: Translate -->
-        (to choose destination folder, right click/long press and select "Save
-        link as...")
-      </div>
     </div>
     <h3>Import</h3>
     <FileReader
-      label="Select file"
+      :label="$t('Select import file')"
       @load="importDataLoaded"
-      accept=".charlist.flcdata"
+      accept=".flcdata"
       :key="importKey"
     >
       <div v-if="importData">
         <button class="button button-red" @click="importBackup">
-          <!-- TODO: Translate -->
-          Import backup
+          {{ $t("Import backup") }}
         </button>
         <p>
-          <!-- TODO: Translate -->
-          N.B: Importing character list data will overwrite all your current
-          characters!
+          {{ $t("IMPORT_WARNING") }}
         </p>
       </div>
     </FileReader>

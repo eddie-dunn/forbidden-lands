@@ -417,6 +417,7 @@ export default {
   "Details": "Detaljer",
   "Dice": "Tärningar",
   "Dice roller": "Kasta tärning",
+  "Download data": "Ladda ner",
   "Drop": "Släng",
   "Edit": "Redigera",
   "Encumbrance": "Belastning",
@@ -436,6 +437,7 @@ export default {
   "Get": "Hämta",
   "Heavy": "Tung",
   "Helmet": "Hjälm",
+  "Import backup": "Importera backup",
   "Inactive": "Inaktiva",
   "Inventory": "Ägodelar",
   "Kin talent": "Släktestalang",
@@ -477,6 +479,7 @@ export default {
   "Roll dice": "Kasta tärning",
   "Save & Close": "Spara & Stäng",
   "Save": "Spara",
+  "Select import file": "Välj fil att importera",
   "Select picture": "Välj bild",
   "Select talent": "Välj talang",
   "Shield": "Sköld",
@@ -582,5 +585,8 @@ export default {
     Din rollperson uppfyller inte reglerna för skapande av en ny rollperson.
     Är du säker på att du vill aktivera den?
   `,
+  "GENERATE_DOWNLOAD_LINK": "Generera nedladdningslänk",
+  "IMPORT_WARNING":
+    "Varning: En import skriver över alla dina nuvarande rollpersoner och inställningar",
   "Confirm activate": "Bekräfta aktivering",
 }
