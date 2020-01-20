@@ -159,7 +159,6 @@ export default class CharacterTemplateView extends Vue {
       </div>
 
       <!-- formative event -->
-      <!-- <div v-for="index in formativeEventNumber" v-bind:key="index"> -->
       <FormativeEventTemplate
         v-for="index in formativeEventNumber"
         v-bind:key="index"

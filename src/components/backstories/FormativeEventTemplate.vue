@@ -25,7 +25,7 @@
 
       <label
         class="small-caps bold template-grid-title"
-        :for="'profession-' + selectedProfessionId + '-' + index"
+        :for="'event-' + selectedProfessionId + '-' + index"
       >
         <span class="bold text-center">{{ index + 1 }}</span>
         {{ formativeData.name }}
