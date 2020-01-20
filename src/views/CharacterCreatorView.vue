@@ -15,7 +15,7 @@ import {
 import { UserData, PeerId } from "@/components/multiplay/protocol"
 import { errlog } from "@/util"
 
-import CharacterEditorMain from "@/components/characterEditor/CharacterEditorMain.vue"
+import CharacterSheet from "@/components/characterEditor/CharacterSheet.vue"
 
 function initCharData(
   $characterStore: any,
@@ -52,7 +52,7 @@ const getPlayerChar = (
 
 @Component({
   components: {
-    CharacterEditorMain,
+    CharacterSheet,
   },
 })
 export default class CharacterEditorView extends Vue {
@@ -117,7 +117,7 @@ export default class CharacterEditorView extends Vue {
 </script>
 
 <template>
-  <CharacterEditorMain
+  <CharacterSheet
     :isTemplateData="!!templateQueryData"
     :viewOnly="this.multiplayer"
     :charData="charData"
