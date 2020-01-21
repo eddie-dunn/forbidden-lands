@@ -1,10 +1,10 @@
 <template>
   <TemplateSelect
     :title="$t(value.id)"
+    :description="description"
     :diceValue="value.diceRoll"
     @randomClicked="randomClicked"
   >
-    <div>{{ $t("Class talent") }}, {{ $t(professionId) }}</div>
     <div
       v-for="(talent, index) in characterTemplate.PROFESSION_TALENTS[
         professionId
@@ -55,6 +55,10 @@ export default class CharacterTemplateChildhood extends Vue {
   setTalent(talentId: string, index: number) {
     const data = { id: talentId, diceRoll: (1 + index) * 2 - 1 }
     this.$emit("input", data)
+  }
+
+  get description() {
+    return this.$t("Class talent") + ", " + this.$t(this.professionId)
   }
 
   randomClicked() {

@@ -1,9 +1,11 @@
 <template>
   <!-- Childhood  -->
-  <TemplateSelect :title="title" :diceValue="value" @randomClicked="emitRandom">
-    <div class="capitalize-first">
-      {{ $t("childhood") }}, {{ $t(selectedKinId) }}
-    </div>
+  <TemplateSelect
+    :title="title"
+    :description="description"
+    :diceValue="value"
+    @randomClicked="emitRandom"
+  >
     <div
       v-for="(childhoodData, index) in characterTemplate.CHILDHOOD[
         selectedKinId
@@ -87,6 +89,9 @@ export default class CharacterTemplateChildhood extends Vue {
 
   get title() {
     return characterTemplate.CHILDHOOD[this.selectedKinId][this.value - 1].name
+  }
+  get description() {
+    return this.$t("childhood") + ", " + this.$t(this.selectedKinId)
   }
 
   emitRandom() {

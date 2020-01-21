@@ -65,6 +65,7 @@ export default class CharacterTemplateChildhood extends Vue {
 <template>
   <TemplateSelect
     :title="title || '?'"
+    :description="$t('age')"
     :numeralValue="value || 0"
     @randomClicked="randomClicked"
   >

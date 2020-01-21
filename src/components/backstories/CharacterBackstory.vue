@@ -143,20 +143,18 @@ export default class CharacterTemplateView extends Vue {
         :selectedKinId="selectedKin.id"
       />
 
-      <div class="grid-2-col">
-        <!-- profession  -->
-        <ProfessionTemplate
-          class="grid-2-col-item"
-          v-model="selectedProfession"
-        />
+      <!-- profession  -->
+      <ProfessionTemplate
+        class="grid-2-col-item"
+        v-model="selectedProfession"
+      />
 
-        <!-- profession talent -->
-        <TalentTemplate
-          class="grid-2-col-item"
-          v-model="selectedTalent"
-          :professionId="selectedProfession.id"
-        />
-      </div>
+      <!-- profession talent -->
+      <TalentTemplate
+        class="grid-2-col-item"
+        v-model="selectedTalent"
+        :professionId="selectedProfession.id"
+      />
 
       <!-- formative event -->
       <FormativeEventTemplate
@@ -236,7 +234,7 @@ export default class CharacterTemplateView extends Vue {
 
 .templates-grid {
   display: grid;
-  grid-gap: 1rem;
+  grid-gap: 0.7rem;
 }
 
 .grid-2-col {

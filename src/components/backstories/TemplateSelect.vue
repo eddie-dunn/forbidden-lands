@@ -14,6 +14,7 @@ import Card from "@/components/Card.vue"
 })
 export default class TemplateSelect extends Vue {
   @Prop({ default: "" }) title!: string
+  @Prop({ default: "" }) description!: string
   @Prop({}) diceValue!: number
   @Prop({}) numeralValue!: number
 
@@ -31,6 +32,7 @@ export default class TemplateSelect extends Vue {
   <!-- <div class="card"> -->
   <Card :noSign="true" :defaultOpen="false">
     <template v-slot:header>
+      <div v-if="description" class="description">{{ description }}</div>
       <div class="heading capitalize">
         {{ title }}
       </div>
@@ -90,13 +92,23 @@ export default class TemplateSelect extends Vue {
   padding: 0.5rem 1rem;
 }
 
+.description {
+  font-size: 0.7rem;
+  opacity: 65%;
+  &::first-letter {
+    text-transform: capitalize;
+  }
+}
+
 .dice-icon {
   height: 30px;
   width: 30px;
 }
 
 .heading {
-  font-size: 24px;
-  display: inline-block;
+  // font-size: 24px;
+  font-size: 20px;
+  line-height: 1;
+  // display: inline-block;
 }
 </style>
