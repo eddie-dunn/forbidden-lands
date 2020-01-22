@@ -59,6 +59,13 @@ export default Vue.extend({
     // https://medium.com/@dougallrich/give-users-control-over-app-updates-in-vue-cli-3-pwas-20453aedc1f2
     document.addEventListener("swUpdated", this.showRefreshUI, { once: true })
     navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (!sessionStorage.getItem("__hasPreviousSW")) {
+        /* eslint-disable no-console */
+        console.warn("SETTING SW")
+        /* eslint-enable no-console */
+        sessionStorage.setItem("__hasPreviousSW", "true")
+        return
+      }
       if (this.refreshing) return
       this.refreshing = true
       window.location.reload()
