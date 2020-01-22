@@ -48,7 +48,9 @@ export default Vue.extend({
     },
     pageSubtitle(): string {
       const sub = this.$store.getters[GET_PAGE_SUBTITLE]
-      return sub ? ": " + sub : ""
+      if (sub && this.pageTitle) return ": " + sub
+      if (sub && !this.pageTitle) return sub
+      return sub
     },
     showMp(): boolean {
       return this.$store.getters[GET_MP_ACTIVE]

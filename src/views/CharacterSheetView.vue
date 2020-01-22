@@ -86,7 +86,7 @@ export default class CharacterEditorView extends Vue {
         this.id,
         this.templateQueryData
       )
-      const title = { new: "Create", template: "Create", loaded: "Edit" }[type]
+      const title = { new: "Create", template: "Create", loaded: "" }[type]
       this.$store.commit(SET_PAGE_TITLE, title)
       this.charData = charData
     }
