@@ -98,12 +98,13 @@ export default Vue.extend({
       </div>
       <div class="navbar-right">
         <div v-if="showMp" class="nav-icon">
-          <router-link class="nav-icon" to="/multiplayer" exact>
+          <router-link class="nav-icon-highlight" to="/multiplayer" exact>
             <SvgIcon name="chat_bubble" title="Multiplayer" />
           </router-link>
         </div>
 
         <IconButton
+          style="margin-right: .5rem;"
           height="32px"
           width="32px"
           icon="rolling-dices"
@@ -226,8 +227,12 @@ body {
   text-decoration: none;
   color: @color-text;
   margin: 5px;
+}
+
+.nav-icon-highlight {
+  color: @color-background;
   &.router-link-active {
-    color: @color-background;
+    color: @color-text;
   }
 }
 
