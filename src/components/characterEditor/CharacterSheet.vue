@@ -4,9 +4,8 @@ import { Component, Prop, Watch } from "vue-property-decorator"
 
 import { MP_SAVE_CHAR, SET_PAGE_SUBTITLE } from "@/store/store-types"
 import { CharData, CharacterMetaDataStatus } from "@/characterData"
-import SvgIcon from "@/components/SvgIcon.vue"
-import DiceModal from "@/components/dice/DiceModal.vue"
 
+import SvgIcon from "@/components/SvgIcon.vue"
 import FLButton from "@/components/base/FLButton.vue"
 import BaseCard from "@/components/characterEditor/BaseCard.vue"
 import SessionCard from "@/components/characterEditor/SessionCard.vue"
@@ -17,7 +16,6 @@ import SkillCard from "@/components/characterEditor/SkillCard.vue"
 import GearCard from "@/components/characterEditor/GearCard.vue"
 import MountCard from "@/components/characterEditor/MountCard.vue"
 import NoteCard from "@/components/characterEditor/NoteCard.vue"
-import IconButton from "@/components/base/IconButton.vue"
 
 function stringChar(characterData: CharData) {
   return JSON.stringify(characterData)
@@ -26,11 +24,9 @@ function stringChar(characterData: CharData) {
 @Component({
   components: {
     BaseCard,
-    DiceModal,
     FLButton,
     FlavorCard,
     GearCard,
-    IconButton,
     MountCard,
     NoteCard,
     PortraitCard,
@@ -159,19 +155,6 @@ export default class CharacterEditor extends Vue {
           {{ closeText }}
         </FLButton>
       </div>
-      <div class="action-bar action-bar-center">
-        <!-- <div class="dice-icon" @click="showDiceModal = !showDiceModal">
-          <SvgIcon name="rolling-dices" title="Roll dice" />
-          <SvgIcon name="perspective-dice-six-faces-six" title="Roll dice" />
-        </div> -->
-        <IconButton
-          class="dice-icon"
-          height="32px"
-          width="32px"
-          icon="rolling-dices"
-          @click="showDiceModal = !showDiceModal"
-        ></IconButton>
-      </div>
 
       <div class="action-bar action-bar-right">
         <FLButton
@@ -184,7 +167,6 @@ export default class CharacterEditor extends Vue {
       </div>
     </div>
 
-    <DiceModal v-if="showDiceModal" @close="showDiceModal = false" />
     <!-- end -->
   </div>
 </template>

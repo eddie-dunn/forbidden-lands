@@ -72,7 +72,7 @@ export default class FLButton extends Vue {
   &-shadow,
   &-ghost {
     font-weight: bold;
-    background-color: white;
+    background-color: transparent;
     color: #4fc08d;
     box-shadow: none;
   }

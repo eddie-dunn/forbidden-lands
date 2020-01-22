@@ -5,6 +5,8 @@ import Notify from "@/components/base/Notify.vue"
 import NavDrawer from "@/components/base/NavDrawer.vue"
 import SvgIcon from "@/components/SvgIcon.vue"
 import Backup from "@/components/Backup.vue"
+import IconButton from "@/components/base/IconButton.vue"
+import DiceModal from "@/components/dice/DiceModal.vue"
 
 import {
   GET_PAGE_TITLE,
@@ -15,6 +17,8 @@ import {
 export default Vue.extend({
   components: {
     Backup,
+    DiceModal,
+    IconButton,
     LocaleChanger,
     NavDrawer,
     Notify,
@@ -99,9 +103,14 @@ export default Vue.extend({
           </router-link>
         </div>
 
-        <div @click="showNav = true" class="nav-icon">
-          <SvgIcon name="menu_open" title="Show options" />
-        </div>
+        <IconButton
+          height="32px"
+          width="32px"
+          icon="rolling-dices"
+          @click="showDiceModal = !showDiceModal"
+        ></IconButton>
+
+        <IconButton icon="menu_open" @click="showNav = !showNav"></IconButton>
       </div>
     </div>
     <button
@@ -135,6 +144,8 @@ export default Vue.extend({
         <Backup />
       </section>
     </NavDrawer>
+
+    <DiceModal v-if="showDiceModal" @close="showDiceModal = false" />
   </div>
 </template>
 
