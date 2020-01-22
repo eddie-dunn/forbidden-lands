@@ -22,6 +22,8 @@ import AgeTemplate from "@/components/backstories/AgeTemplate.vue"
 import ProfessionTemplate from "@/components/backstories/ProfessionTemplate.vue"
 import TalentTemplate from "@/components/backstories/TalentTemplate.vue"
 import TemplateSelect from "@/components/backstories/TemplateSelect.vue"
+import ActionBar from "@/components/base/ActionBar.vue"
+import FLButton from "@/components/base/FLButton.vue"
 
 type SkillObj = { [S in Skill]?: number }
 function mergeSkills(skills1: SkillObj, skills2: SkillObj) {
@@ -41,8 +43,10 @@ function mergeSkills(skills1: SkillObj, skills2: SkillObj) {
 
 @Component({
   components: {
+    ActionBar,
     AgeTemplate,
     ChildhoodTemplate,
+    FLButton,
     FormativeEventTemplate,
     KinTemplate,
     ProfessionTemplate,
@@ -56,7 +60,7 @@ export default class CharacterTemplateView extends Vue {
   childhoodNum = rollDice(6)
   selectedProfession = rollProfession()
   selectedTalent = rollTalent(this.selectedProfession.id)
-  age = 18
+  age = rollAge(kinTransform(this.selectedKin.id))
   formativeEvents = this.getFormativeEvents()
 
   rollAll() {
@@ -98,13 +102,13 @@ export default class CharacterTemplateView extends Vue {
     return getStartingTalentsFromType(this.ageType)
   }
 
-  @Watch("ageType")
+  @Watch("ageType", { immediate: true })
   updateFormativeEvent() {
     this.formativeEvents = this.getFormativeEvents()
   }
 
-  characterTemplateData(): CharDataQueryObj {
-    return {
+  get characterTemplateData(): CharDataQueryObj {
+    const roll = {
       kinId: this.selectedKin.id,
       professionId: this.selectedProfession.id,
       talentId: this.selectedTalent.id,
@@ -112,6 +116,7 @@ export default class CharacterTemplateView extends Vue {
       formativeEvents: String(this.formativeEvents),
       age: String(this.age),
     }
+    return roll
   }
 
   backClicked() {
@@ -119,7 +124,7 @@ export default class CharacterTemplateView extends Vue {
   }
 
   nextClicked() {
-    const query = this.characterTemplateData()
+    const query = this.characterTemplateData
     this.$router.push({ name: "character_creator-template-edit", query })
   }
 }
@@ -163,78 +168,44 @@ export default class CharacterTemplateView extends Vue {
         v-model="formativeEvents[index - 1]"
         :selectedProfessionId="selectedProfession.id"
       />
-      <!-- </div> -->
     </div>
 
     <div v-if="false">
       <!-- TODO: Add summary -->
       <pre style="overflow: scroll">
-        {{ JSON.stringify(characterTemplateData(), null, 2) }}
+        {{ JSON.stringify(characterTemplateData, null, 2) }}
       </pre>
     </div>
 
-    <div class="action-bar-wrapper">
-      <div class="action-bar-left">
-        <button
-          class="item-action-bar button button-white"
-          @click="backClicked"
-        >
+    <ActionBar>
+      <template v-slot:left>
+        <FLButton @click="backClicked" type="cancel">
           {{ $t("Back") }}
-        </button>
-      </div>
-      <div class="action-bar-middle"></div>
-
-      <div class="action-bar-right">
-        <button
-          :class="['button', 'button-shadow', 'item-action-bar']"
-          @click="nextClicked"
-          :disabled="age < 1"
-        >
+        </FLButton>
+      </template>
+      <template v-slot:right>
+        <FLButton @click="nextClicked" :disabled="age < 1">
           {{ $t("Next") }}
-        </button>
-      </div>
-    </div>
+        </FLButton>
+      </template>
+    </ActionBar>
+
+    <!-- spacer -->
   </div>
 </template>
 
 <style scoped lang="less">
 @import "~Style/colors.less";
 
-.action-bar-wrapper {
-  display: flex;
-  overflow: auto;
-  // width: 100%;
-  position: sticky;
-  bottom: 0;
-  overflow: hidden;
-  margin: 0 0.25rem;
-  background: #fffe;
-  border: solid ~"@{pastel-green}99" 2px;
-  padding: 0.5rem;
-  justify-content: space-around;
-}
-
-.action-bar {
-  &-right {
-    justify-self: flex-end;
-    display: flex;
-    flex: 1 1 33%;
-    justify-content: flex-end;
-  }
-  &-left {
-    justify-self: flex-start;
-  }
-  align-items: center;
-}
-
 .character-template {
-  text-align: left;
-  margin: 0.3rem;
+  margin: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
 .templates-grid {
-  display: grid;
-  grid-gap: 0.7rem;
+  flex: 1 auto;
 }
 
 .grid-2-col {
@@ -248,6 +219,6 @@ export default class CharacterTemplateView extends Vue {
 
 .right-align {
   text-align: right;
-  margin-top: 1rem;
+  margin: 1rem 0;
 }
 </style>

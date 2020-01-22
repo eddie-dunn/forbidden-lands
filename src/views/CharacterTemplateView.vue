@@ -18,9 +18,14 @@ export default class CharacterTemplateView extends Vue {
 </script>
 
 <template>
-  <div class="character-template">
+  <section class="character-template-view">
     <CharacterBackstory />
-  </div>
+  </section>
 </template>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.character-template-view {
+  display: flex;
+  flex: 1 1 auto;
+}
+</style>

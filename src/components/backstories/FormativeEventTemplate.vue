@@ -84,7 +84,7 @@ export default class CharacterTemplateChildhood extends Vue {
 
   get eventName() {
     return characterTemplate.FORMATIVE_EVENTS[this.selectedProfessionId][
-      this.value - 1
+      (this.value || 1) - 1
     ].name
   }
 
@@ -124,12 +124,9 @@ export default class CharacterTemplateChildhood extends Vue {
 
   &-title {
     grid-area: title;
-    // grid-column-start: 2;
-    // grid-column-end: -1;
   }
   &-story {
     grid-area: story;
-    // grid-column: 2;
   }
   &-radio {
     grid-area: radio;

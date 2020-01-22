@@ -86,6 +86,7 @@ h3 {
   margin: 0 0.25rem 0.5rem 0.25rem;
   box-shadow: @box-shadow-normal;
   background: @background-color;
+  padding: 1px;
 }
 
 .header {

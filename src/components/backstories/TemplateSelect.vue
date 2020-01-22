@@ -2,13 +2,11 @@
 import Vue from "vue"
 import { Component, Prop } from "vue-property-decorator"
 import SvgIcon from "@/components/SvgIcon.vue"
-import ExpandableSection from "@/components/ExpandableSection.vue"
 import Card from "@/components/Card.vue"
 
 @Component({
   components: {
     Card,
-    ExpandableSection,
     SvgIcon,
   },
 })
@@ -84,7 +82,6 @@ export default class TemplateSelect extends Vue {
   display: inline-flex;
   justify-content: baseline;
   margin: 0 2px;
-  // border-color: black;
 }
 
 .button-numeral {
@@ -94,7 +91,7 @@ export default class TemplateSelect extends Vue {
 
 .description {
   font-size: 0.7rem;
-  opacity: 65%;
+  color: gray;
   &::first-letter {
     text-transform: capitalize;
   }
@@ -106,9 +103,7 @@ export default class TemplateSelect extends Vue {
 }
 
 .heading {
-  // font-size: 24px;
   font-size: 20px;
   line-height: 1;
-  // display: inline-block;
 }
 </style>
