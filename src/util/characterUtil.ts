@@ -77,9 +77,30 @@ export function getCharDataFromQuery(query: CharDataQueryObj): CharacterData {
   }) // set general talents
 
   // TODO: Add dedent? https://github.com/dmnd/dedent
-  let notes = fevents.map(({ name, story }) => {
-    return `## ${capitalize(name)}\n\n${story}`.trim()
-  })
+
+  const stringifyObj = (o: any) => {
+    return Object.entries(o)
+      .map(
+        ([key, value]) =>
+          `${capitalize(String(key))} ${capitalize(String(value))}`
+      )
+      .join(", ")
+  }
+
+  let formativeEventNotes = fevents.map(
+    ({ name, story, skills, talent, items }) => {
+      return `
+## ${capitalize(name)}
+
+${story}
+
+Items: ${items}
+Skills: ${stringifyObj(skills)}
+Talent: ${capitalize(talent)}
+`.trim()
+    }
+  )
+
   charData.notes = `
 # ${capitalize(kinId)} ${capitalize(professionId)}
 
@@ -87,7 +108,10 @@ export function getCharDataFromQuery(query: CharDataQueryObj): CharacterData {
 
 ${childhood.story}
 
-${notes.join("\n\n")}
+Attributes: ${stringifyObj(childhood.attributes)}
+Skills: ${stringifyObj(childhood.skills)}
+
+${formativeEventNotes.join("\n\n")}
 `.trim()
 
   charData.age = Number(age)
