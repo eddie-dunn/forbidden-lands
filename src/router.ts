@@ -10,32 +10,32 @@ function characterEditorRoutes() {
       path: "/new",
       // alias: "/character-creator/new",
       name: "character_creator-new",
-      component: () => import("./views/CharacterCreatorView.vue"),
+      component: () => import("./views/CharacterSheetView.vue"),
     },
     {
       path: "/new/edit/:id",
       // alias: "/character-creator/new/edit/:id",
       props: true,
       name: "character_creator-edit-new",
-      component: () => import("./views/CharacterCreatorView.vue"),
+      component: () => import("./views/CharacterSheetView.vue"),
     },
     {
       path: "/active/edit/:id",
       props: true,
       name: "character_creator-active-edit",
-      component: () => import("./views/CharacterCreatorView.vue"),
+      component: () => import("./views/CharacterSheetView.vue"),
     },
     {
       path: "/active/view/:id",
       props: (route: any) => ({ id: route.params.id, fromRoute: route }),
       name: "character_creator-active-view",
-      component: () => import("./views/CharacterCreatorView.vue"),
+      component: () => import("./views/CharacterSheetView.vue"),
     },
     {
       path: "/new/template/edit",
       props: (route: any) => ({ templateQueryData: route.query }),
       name: "character_creator-template-edit",
-      component: () => import("./views/CharacterCreatorView.vue"),
+      component: () => import("./views/CharacterSheetView.vue"),
     },
     {
       path: "/multiplayer/view/:peerId/:charId",
@@ -46,7 +46,7 @@ function characterEditorRoutes() {
         multiplayer: true,
       }),
       name: "character-editor-mp-view",
-      component: () => import("./views/CharacterCreatorView.vue"),
+      component: () => import("./views/CharacterSheetView.vue"),
     },
   ]
 }
