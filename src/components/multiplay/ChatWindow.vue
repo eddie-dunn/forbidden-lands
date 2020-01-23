@@ -10,10 +10,11 @@ import {
 } from "@/store/store-types.ts"
 import { ChatMessage } from "@/components/multiplay/fl-node"
 import { FLPlayer } from "@/components/multiplay/fl-player"
+import { Protocol, ProtocolTypes, UserData } from "./protocol"
 
 import FLInput from "@/components/base/FLInput.vue"
 import SvgIcon from "@/components/SvgIcon.vue"
-import { Protocol, ProtocolTypes, UserData } from "./protocol"
+import IconButton from "@/components/base/IconButton.vue"
 
 /*
  * Vue component for displaying chat messages
@@ -21,6 +22,7 @@ import { Protocol, ProtocolTypes, UserData } from "./protocol"
 @Component({
   components: {
     FLInput,
+    IconButton,
     SvgIcon,
   },
 })
@@ -97,6 +99,7 @@ export default class ChatWindow extends Vue {
 
 <template>
   <div class="multiplayer-chat">
+    <h2 class="room-bar">{{ roomName }}</h2>
     <div class="userlist border">
       <!-- TODO: make drawer on small screen sizes -->
       <div
@@ -120,20 +123,21 @@ export default class ChatWindow extends Vue {
       </div>
 
       <div class="send-chat">
-        <input
+        <FLInput
           class="chat-input"
           v-model="chatMessage"
           type="text"
-          v-on:keyup.enter.exact="_sendMsg(chatMessage)"
+          :enterCb="() => _sendMsg(chatMessage)"
         />
-        <button
-          class="button chat-button"
-          :disabled="!chatMessage"
+        <IconButton
+          class="chat-button"
+          icon="send"
           @click="_sendMsg(chatMessage)"
         >
-          <SvgIcon name="send" title="Send" />
-        </button>
+        </IconButton>
       </div>
+
+      <!-- spacer -->
     </div>
   </div>
 
@@ -142,23 +146,35 @@ export default class ChatWindow extends Vue {
 
 <style lang="less" scoped>
 @import "~Style/colors.less";
+.room-bar {
+  grid-column-start: 1;
+  grid-column-end: -1;
+  margin: 0;
+  margin-bottom: -2px;
+  font-size: 1rem;
+  text-align: center;
+  background: @color-main;
+  padding-top: 5px;
+  padding-bottom: 2px;
+}
+
 .send-chat {
   display: flex;
-  margin-top: 0.5rem;
+  margin-top: 5px;
 }
 
 .border {
-  border: 2px solid @pastel-green;
+  border: 2px solid @pastel-green-transparent;
 }
 
 .chat-input {
   flex-grow: 1;
-  width: 10ch;
 }
 
 .chat-button {
   padding: 0 0.25rem;
-  box-shadow: none;
+  color: white;
+  background: @color-main;
 }
 
 .message-box {
@@ -176,8 +192,8 @@ export default class ChatWindow extends Vue {
 .multiplayer-chat {
   display: grid;
   grid-template-columns: minmax(10ch, 1fr) 3fr;
-  grid-gap: 0.5rem;
-  margin: 0.5rem;
+  margin: 0.5rem 0;
+  grid-column-gap: 5px;
 }
 
 .userlist {
