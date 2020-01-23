@@ -50,7 +50,8 @@ export default class FLButton extends Vue {
   box-shadow: @box-shadow-normal;
 
   &:active {
-    transform: scale(0.97);
+    // transform: scale(0.97);
+    transform: translate(0px, 1px);
   }
   &:focus {
     outline: #0002 dotted 1px;
