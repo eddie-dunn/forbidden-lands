@@ -96,7 +96,7 @@ export default class DiceRoller extends Vue {
   ]
   rollResultLog: number[][][] = []
 
-  accumulator = (sum: number, value: number) => sum + value
+  accumulator = (sum: number, value: number | null) => sum + Number(value)
 
   get totals() {
     const rolls = this.rollResultLog[0]
@@ -132,6 +132,15 @@ export default class DiceRoller extends Vue {
 
   get artifactOpen() {
     return this.green || this.blue || this.orange || this.openArtifact
+  }
+
+  get pushDisabled() {
+    return this.rollResultLog.length < 1
+  }
+
+  get rollDisabled() {
+    // return true
+    return this.nbrDice.reduce(this.accumulator, 0) < 1
   }
 
   pushRoll() {
@@ -253,8 +262,12 @@ export default class DiceRoller extends Vue {
       <FLButton v-else type="cancel" @click="$emit('close')">
         {{ $t("Close") }}
       </FLButton>
-      <FLButton type="danger" @click="pushRoll">{{ $t("Push") }}</FLButton>
-      <FLButton @click="rollDice">{{ $t("Roll dice") }}</FLButton>
+      <FLButton type="danger" @click="pushRoll" :disabled="pushDisabled">
+        {{ $t("Push") }}
+      </FLButton>
+      <FLButton @click="rollDice" :disabled="rollDisabled">
+        {{ $t("Roll dice") }}
+      </FLButton>
     </div>
   </div>
 </template>

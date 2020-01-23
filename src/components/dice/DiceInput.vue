@@ -34,7 +34,7 @@ export default class DiceInput extends Vue {
       :id="color"
       :value="value"
       @input="emit"
-      :min="0"
+      min="0"
       :enterCb="rollCb"
       :ctrlEnterCb="pushCb"
     />
