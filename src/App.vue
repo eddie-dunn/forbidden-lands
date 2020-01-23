@@ -90,19 +90,18 @@ export default Vue.extend({
         <router-link class="nav-icon" to="/" exact>
           <SvgIcon name="home" title="Home" />
         </router-link>
-      </div>
-      <div class="navbar-center no-scrollbar">
-        <h1 class="page-title capitalize">
-          {{ $t(pageTitle) }}{{ $t(pageSubtitle) }}
-        </h1>
-      </div>
-      <div class="navbar-right">
         <div v-if="showMp" class="nav-icon">
           <router-link class="nav-icon-highlight" to="/multiplayer" exact>
             <SvgIcon name="chat_bubble" title="Multiplayer" />
           </router-link>
         </div>
-
+      </div>
+      <div class="navbar-center">
+        <h1 class="page-title capitalize">
+          {{ $t(pageTitle) }}{{ $t(pageSubtitle) }}
+        </h1>
+      </div>
+      <div class="navbar-right">
         <IconButton
           style="margin-right: .5rem;"
           height="32px"
@@ -159,7 +158,7 @@ body {
 }
 
 .page-title {
-  margin: 0 6px;
+  margin: 0;
   min-width: 0;
   display: inline-block;
   font-size: 1.4em;
@@ -207,19 +206,22 @@ body {
 }
 
 .navbar-left {
+  flex: 0 0 auto;
   min-width: 0;
-  overflow: auto;
+  display: flex;
 }
 
 .navbar-center {
+  flex: 1 1 auto;
   min-width: 0;
   display: inline-block;
   margin: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow: auto;
+  .no-scrollbar();
 }
 
 .navbar-right {
+  flex: 0 0 auto;
   display: flex;
 }
 
