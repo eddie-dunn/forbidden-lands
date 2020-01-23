@@ -7,6 +7,7 @@ import { GET_MP_ACTIVE, MP_CHARS } from "@/store/store-types.ts"
 import MultiplayerCharList from "@/components/multiplay/MultiplayerCharList.vue"
 import ChatWindow from "@/components/multiplay/ChatWindow.vue"
 import FLInput from "@/components/base/FLInput.vue"
+import FLButton from "@/components/base/FLButton.vue"
 import FLCheckbox from "@/components/base/FLCheckbox.vue"
 import { UserData } from "@/components/multiplay/protocol"
 import { randomName } from "@/util"
@@ -14,6 +15,7 @@ import { randomName } from "@/util"
 @Component({
   components: {
     ChatWindow,
+    FLButton,
     FLCheckbox,
     FLInput,
     MultiplayerCharList,
@@ -105,24 +107,25 @@ export default class Multiplayer extends Vue {
         <!-- TODO: Add password at some point? -->
         <!-- TODO: Enable others to join as GMs -->
       </div>
-      <button
-        :class="['button', 'flexy-button', connected ? 'button-danger' : '']"
+      <FLButton
+        :class="['flexy-button']"
         :disabled="!canJoin || connected"
         @click="onClickConnect"
       >
         {{ startGameText }}
-      </button>
+      </FLButton>
     </div>
 
     <!-- Active game -->
     <div v-if="connected">
-      <button
-        :class="['button', 'flexy-button', connected ? 'button-danger' : '']"
+      <FLButton
+        type="danger"
+        :class="['flexy-button']"
         :disabled="!connected"
         @click="onClickDisconnect"
       >
         {{ "Disconnect" }}
-      </button>
+      </FLButton>
       <MultiplayerCharList />
       <ChatWindow :userName="userName" />
     </div>

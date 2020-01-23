@@ -282,10 +282,10 @@ export default class AddItem extends Vue {
     </div>
 
     <div class="modal-button-row" slot="footer">
-      <button @click="close" class="button button-cancel">
+      <FLButton @click="close" type="cancel">
         {{ $t("Cancel") }}
-      </button>
-      <button @click="save" class="button">OK</button>
+      </FLButton>
+      <FLButton @click="save">OK</FLButton>
     </div>
 
     <!-- spacer -->

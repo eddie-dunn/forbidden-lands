@@ -25,6 +25,7 @@ import {
 } from "@/characterData"
 import Vue from "vue"
 import { TranslateResult } from "vue-i18n"
+import FLButton from "@/components/base/FLButton.vue"
 import TalentSelect from "@/components/TalentSelect.vue"
 
 export function getTalentObjects(
@@ -45,6 +46,7 @@ export function getTalentObjects(
 
 const TalentSelector = Vue.extend({
   components: {
+    FLButton,
     TalentSelect,
   },
   props: {
@@ -268,9 +270,9 @@ export default TalentSelector
     </div>
 
     <div v-if="canAddTalent">
-      <button class="button add-talent" @click="addTalent()">
+      <FLButton class="button add-talent" @click="addTalent()">
         {{ $t("Add talent") }}
-      </button>
+      </FLButton>
     </div>
 
     <!-- end -->

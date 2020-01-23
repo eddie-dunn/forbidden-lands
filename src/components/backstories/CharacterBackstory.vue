@@ -134,9 +134,9 @@ export default class CharacterTemplateView extends Vue {
   <div class="character-template">
     <div class="templates-grid">
       <div class="right-align">
-        <button class="button button-green" @click="rollAll">
+        <FLButton @click="rollAll">
           Randomize all
-        </button>
+        </FLButton>
       </div>
       <KinTemplate v-model="selectedKin" />
 

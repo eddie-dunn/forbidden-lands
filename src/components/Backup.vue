@@ -1,8 +1,9 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator"
 import { SaveData } from "@/localstorage/characterStorage"
-import FileReader from "@/components/FileReader.vue"
 import { setTimeout } from "timers"
+import FLButton from "@/components/base/FLButton.vue"
+import FileReader from "@/components/FileReader.vue"
 
 function generateDateString(): string {
   return "backup-" + new Date().toISOString() + ".flcdata"
@@ -11,6 +12,7 @@ function generateDateString(): string {
 @Component({
   components: {
     FileReader,
+    FLButton,
   },
 })
 export default class Backup extends Vue {
@@ -75,17 +77,12 @@ export default class Backup extends Vue {
 <template>
   <div class="import-export text-left">
     <h3>Export</h3>
-    <button
-      v-if="!exportBlob"
-      class="button"
-      @click="generateBlob"
-      :disabled="!!exportBlob"
-    >
+    <FLButton v-if="!exportBlob" @click="generateBlob" :disabled="!!exportBlob">
       {{ $t("GENERATE_DOWNLOAD_LINK") }}
-    </button>
+    </FLButton>
     <div class="" v-if="exportBlob">
       <a
-        class="download-link button wide"
+        class="download-link wide"
         :href="exportBlob"
         :download="exportFilename"
         @click="downloadClicked"
@@ -101,9 +98,9 @@ export default class Backup extends Vue {
       :key="importKey"
     >
       <div v-if="importData">
-        <button class="button button-red" @click="importBackup">
+        <FLButton type="danger" @click="importBackup">
           {{ $t("Import backup") }}
-        </button>
+        </FLButton>
         <p>
           {{ $t("IMPORT_WARNING") }}
         </p>

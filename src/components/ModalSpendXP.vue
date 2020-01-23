@@ -12,9 +12,11 @@ import {
 
 import SkillSelector from "@/components/SkillSelector.vue"
 import TalentSelector from "@/components/TalentSelector.vue"
+import FLButton from "@/components/base/FLButton.vue"
 
 @Component({
   components: {
+    FLButton,
     Modal,
     SkillSelector,
     TalentSelector,
@@ -81,10 +83,10 @@ export default class XPModal extends Vue {
     </div>
 
     <div class="modal-button-row" slot="footer">
-      <button @click="close" class="button button-cancel">
+      <FLButton @click="close" type="cancel">
         {{ $t("Cancel") }}
-      </button>
-      <button @click="emitCharData" class="button">OK</button>
+      </FLButton>
+      <FLButton @click="emitCharData">OK</FLButton>
     </div>
 
     <!-- spacer -->

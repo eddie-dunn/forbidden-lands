@@ -1,11 +1,14 @@
 <script lang="ts">
 import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
+
+import FLButton from "@/components/base/FLButton.vue"
 import Modal from "@/components/Modal.vue"
 // https://github.com/vuejs/vue-class-component/blob/master/example/src/App.vue
 
 @Component({
   components: {
+    FLButton,
     Modal,
   },
 })
@@ -33,10 +36,12 @@ export default class ModalConfirm extends Vue {
       {{ body }}
     </div>
     <div class="modal-button-row" slot="footer">
-      <button @click="close" class="button button-cancel">
+      <FLButton @click="close">
         {{ $t("Cancel") }}
-      </button>
-      <button @click="confirmAction" class="button button-danger">OK</button>
+      </FLButton>
+      <FLButton @click="confirmAction">
+        OK
+      </FLButton>
     </div>
   </Modal>
 </template>

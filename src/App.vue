@@ -6,6 +6,7 @@ import NavDrawer from "@/components/base/NavDrawer.vue"
 import SvgIcon from "@/components/SvgIcon.vue"
 import Backup from "@/components/Backup.vue"
 import IconButton from "@/components/base/IconButton.vue"
+import FLButton from "@/components/base/FLButton.vue"
 import DiceModal from "@/components/dice/DiceModal.vue"
 
 import {
@@ -18,6 +19,7 @@ export default Vue.extend({
   components: {
     Backup,
     DiceModal,
+    FLButton,
     IconButton,
     LocaleChanger,
     NavDrawer,
@@ -113,14 +115,14 @@ export default Vue.extend({
         <IconButton icon="menu_open" @click="showNav = !showNav"></IconButton>
       </div>
     </div>
-    <button
+    <FLButton
       v-if="updateExists"
+      type="danger"
       style="margin: 1rem"
-      class="button button-danger"
       @click="refreshApp"
     >
       New version available! Click to update
-    </button>
+    </FLButton>
     <router-view />
 
     <NavDrawer :visible="showNav" @close="showNav = false" class="nav-body">

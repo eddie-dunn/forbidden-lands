@@ -1,8 +1,11 @@
 <script lang="ts">
 import Vue from "vue"
 import Component from "vue-class-component"
-import Modal from "@/components/Modal.vue"
+
 import UrlStorage from "@/localStorage"
+
+import FLButton from "@/components/base/FLButton.vue"
+import Modal from "@/components/Modal.vue"
 
 function importAll(r: any) {
   return r.keys().map(r)
@@ -36,6 +39,7 @@ const AppProps = Vue.extend({
 
 @Component({
   components: {
+    FLButton,
     Modal,
   },
 })
@@ -122,9 +126,9 @@ export default class PicturePicker extends AppProps {
                 id="external url"
                 v-model="imgUrl"
               />
-              <div class="button" @click="urlButtonClicked">
+              <FLButton @click="urlButtonClicked">
                 {{ $t("Get") }}
-              </div>
+              </FLButton>
             </form>
             <div class="picture-grid">
               <div
@@ -141,13 +145,13 @@ export default class PicturePicker extends AppProps {
                     url === selected_portrait ? 'portrait-selected' : '',
                   ]"
                 />
-                <button
-                  type="button"
-                  class="button button-red delete-button"
+                <FLButton
+                  class="delete-button"
+                  type="danger"
                   @click="deleteUrl(index)"
                 >
                   {{ $t("Delete") }}
-                </button>
+                </FLButton>
               </div>
             </div>
           </div>

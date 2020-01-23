@@ -176,56 +176,7 @@ export default class CharacterListView extends Vue {
       </div>
     </Expander>
 
-    <Expander v-if="false" :label="$t('Import/Export')">
-      <div class="import-export text-left">
-        <h3>Export</h3>
-        <button
-          v-if="!exportBlob"
-          class="button"
-          @click="generateBlob"
-          :disabled="!!exportBlob"
-        >
-          <!-- TODO: Translate -->
-          Generate backup
-        </button>
-        <div class="download-link" v-if="exportBlob">
-          <a
-            :href="exportBlob"
-            :download="exportFilename"
-            @click="downloadClicked"
-          >
-            <!-- TODO: Translate -->
-            Download data
-          </a>
-          <span>
-            <!-- TODO: Translate -->
-            (to choose destination folder, right click/long press and select
-            "Save link as...")
-          </span>
-        </div>
-        <h3>Import</h3>
-        <FileReader
-          label="Select file"
-          @load="importDataLoaded"
-          accept=".charlist.flcdata"
-          :key="importKey"
-        >
-          <button
-            v-if="importData"
-            class="button button-red"
-            @click="importBackup"
-          >
-            <!-- TODO: Translate -->
-            Import backup
-          </button>
-          <p v-if="importData">
-            <!-- TODO: Translate -->
-            N.B: Importing character list data will overwrite all your current
-            characters!
-          </p>
-        </FileReader>
-      </div>
-    </Expander>
+    <!-- spacer -->
   </div>
 </template>
 

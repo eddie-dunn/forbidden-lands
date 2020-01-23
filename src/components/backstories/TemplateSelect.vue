@@ -1,12 +1,14 @@
 <script lang="ts">
 import Vue from "vue"
 import { Component, Prop } from "vue-property-decorator"
+import FLButton from "@/components/base/FLButton.vue"
 import SvgIcon from "@/components/SvgIcon.vue"
 import Card from "@/components/Card.vue"
 
 @Component({
   components: {
     Card,
+    FLButton,
     SvgIcon,
   },
 })
@@ -36,9 +38,10 @@ export default class TemplateSelect extends Vue {
       </div>
     </template>
     <template v-slot:icon-right>
-      <button
+      <FLButton
         v-if="diceValue"
-        class="button button-white button-ghost button-icon"
+        type="cancel"
+        class="button-icon"
         @click.stop="rollClicked"
       >
         <SvgIcon
@@ -56,19 +59,16 @@ export default class TemplateSelect extends Vue {
           :name="`d6-${diceResults[1]}`"
           class="dice-icon dice-red"
         />
-      </button>
-      <button
+      </FLButton>
+      <FLButton
         v-else-if="numeralValue || numeralValue === 0"
         @click.stop="rollClicked"
-        class="button button-white button-ghost button-numeral"
+        type="cancel"
+        class="button-numeral"
       >
         {{ numeralValue }}
-      </button>
+      </FLButton>
     </template>
-    <button v-if="false" class="button-icon" @click="rollClicked">
-      <SvgIcon :name="`rolling-dice-cup`" class="dice-icon" />
-      <span v-if="false">{{ $t("roll") }}</span>
-    </button>
     <slot :diceValue="diceValue">
       <!-- contents of TemplateSelect, passing result of roller as prop -->
     </slot>

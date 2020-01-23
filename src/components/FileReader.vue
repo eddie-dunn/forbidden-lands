@@ -2,12 +2,15 @@
 // Inspired by https://alligator.io/vuejs/file-reader-component/
 
 import { Component, Vue, Prop } from "vue-property-decorator"
+
+import FLButton from "@/components/base/FLButton.vue"
 import IconButton from "@/components/base/IconButton.vue"
 
 export type Vrefs = Vue & { click: () => void }
 
 @Component({
   components: {
+    FLButton,
     IconButton,
   },
 })
@@ -45,7 +48,7 @@ export default class FLFileReader extends Vue {
 
 <template>
   <div class="filereader">
-    <label :for="inputFile" class="button text-reader">
+    <label :for="inputFile" class="text-reader">
       {{ label }}
       <input
         :key="inputFile"
@@ -58,9 +61,9 @@ export default class FLFileReader extends Vue {
     </label>
     <!-- Created a button that triggers the input in order to force clicks to register properly -->
     <div>
-      <button v-if="!filename" class="button filereader-button" @click="click">
+      <FLButton v-if="!filename" class="filereader-button" @click="click">
         {{ label }}
-      </button>
+      </FLButton>
       <div class="filename" v-if="filename">
         <div>
           {{ filename }}

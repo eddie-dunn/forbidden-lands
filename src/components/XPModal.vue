@@ -6,10 +6,12 @@ import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 import { CharacterData, CharacterTalent } from "@/characterData"
 
+import FLButton from "@/components/base/FLButton.vue"
 import FLNumberInput from "@/components/FLNumberInput.vue"
 
 @Component({
   components: {
+    FLButton,
     FLNumberInput,
     Modal,
   },
@@ -123,10 +125,10 @@ export default class XPModal extends Vue {
     </div>
 
     <div class="modal-button-row" slot="footer">
-      <button @click="close" class="button button-cancel">
+      <FLButton @click="close" type="cancel">
         {{ $t("Cancel") }}
-      </button>
-      <button @click="emitNewXP" class="button">OK</button>
+      </FLButton>
+      <FLButton @click="emitNewXP">OK</FLButton>
     </div>
 
     <!-- spacer -->

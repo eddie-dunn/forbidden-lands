@@ -1,6 +1,7 @@
 <script lang="ts">
 import Vue from "vue"
 import { CharacterData, validateNewCharacter } from "@/characterData"
+import FLButton from "@/components/base/FLButton.vue"
 import Modal from "@/components/Modal.vue"
 
 const VALID = "✓"
@@ -9,6 +10,7 @@ const INVALID = "✖"
 export default Vue.extend({
   name: "CharacterCreatorCard",
   components: {
+    FLButton,
     Modal,
   },
   props: {
@@ -91,6 +93,7 @@ export default Vue.extend({
 
 <template>
   <div class="character-card">
+    <!-- TODO: Replace with ModalConfirm -->
     <Modal
       v-if="modalActive"
       @close="closeModal()"
@@ -105,6 +108,8 @@ export default Vue.extend({
         <button @click="remove()" class="button button-red">OK</button>
       </div>
     </Modal>
+
+    <!-- TODO: Replace with ModalConfirm -->
     <Modal
       v-if="modalConfirmActivate"
       @close="modalConfirmActivate = false"
@@ -137,28 +142,27 @@ export default Vue.extend({
           :class="['card-buttons', actionsActive ? '' : 'hidden']"
           @click.self="cardClicked"
         >
-          <button class="button button-red" @click.self="confirmRemove">
+          <FLButton type="danger" @click.self="confirmRemove">
             {{ $t("Remove") }}
-          </button>
-          <button class="button" @click="edit">
+          </FLButton>
+          <FLButton @click="edit">
             {{
               charData.metadata.status === "active" ? $t("View") : $t("Edit")
             }}
-          </button>
-          <button
+          </FLButton>
+          <FLButton
             v-if="charData.metadata.status !== 'active'"
-            :class="['button', newChar && !newCharValid ? 'button-danger' : '']"
+            :type="newChar && !newCharValid ? 'danger' : 'main'"
             @click="activateClicked"
           >
             {{ $t("Activate") }}
-          </button>
-          <button
+          </FLButton>
+          <FLButton
             v-if="charData.metadata.status === 'active'"
-            class="button"
             @click="deactivate"
           >
             {{ $t("Deactivate") }}
-          </button>
+          </FLButton>
         </div>
         <img
           class="top-image"
