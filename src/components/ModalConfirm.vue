@@ -17,6 +17,7 @@ export default class ModalConfirm extends Vue {
   @Prop({ default: "" }) title!: string
   @Prop({ default: "" }) body!: string
   @Prop({ default: true }) showTitle!: boolean
+  @Prop({ default: false }) danger!: boolean
 
   get mTitle() {
     if (!this.showTitle) return ""
@@ -36,10 +37,10 @@ export default class ModalConfirm extends Vue {
       {{ body }}
     </div>
     <div class="modal-button-row" slot="footer">
-      <FLButton @click="close">
+      <FLButton type="cancel" @click="close">
         {{ $t("Cancel") }}
       </FLButton>
-      <FLButton @click="confirmAction">
+      <FLButton :type="danger ? 'danger' : 'main'" @click="confirmAction">
         OK
       </FLButton>
     </div>

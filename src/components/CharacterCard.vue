@@ -2,7 +2,7 @@
 import Vue from "vue"
 import { CharacterData, validateNewCharacter } from "@/characterData"
 import FLButton from "@/components/base/FLButton.vue"
-import Modal from "@/components/Modal.vue"
+import ModalConfirm from "@/components/ModalConfirm.vue"
 
 const VALID = "✓"
 const INVALID = "✖"
@@ -11,7 +11,7 @@ export default Vue.extend({
   name: "CharacterCreatorCard",
   components: {
     FLButton,
-    Modal,
+    ModalConfirm,
   },
   props: {
     charData: Object as () => CharacterData | null,
@@ -93,39 +93,22 @@ export default Vue.extend({
 
 <template>
   <div class="character-card">
-    <!-- TODO: Replace with ModalConfirm -->
-    <Modal
+    <ModalConfirm
       v-if="modalActive"
-      @close="closeModal()"
-      :maximized="false"
+      :confirmAction="() => remove()"
+      @close="() => closeModal()"
       :title="$t('Remove')"
-    >
-      <div slot="body" class="modal-body">
-        {{ $t("CONFIRM_DELETE_CHAR") }}
-      </div>
-      <div class="modal-button-row" slot="footer">
-        <button @click="closeModal()" class="button">{{ $t("Cancel") }}</button>
-        <button @click="remove()" class="button button-red">OK</button>
-      </div>
-    </Modal>
+      :body="$t('CONFIRM_DELETE_CHAR')"
+      :danger="true"
+    ></ModalConfirm>
 
-    <!-- TODO: Replace with ModalConfirm -->
-    <Modal
+    <ModalConfirm
       v-if="modalConfirmActivate"
+      :confirmAction="() => activate()"
       @close="modalConfirmActivate = false"
-      :maximized="false"
-      :title="$t('Confirm activate')"
-    >
-      <div slot="body" class="modal-body">
-        {{ $t("CONFIRM_ACTIVATE_INVALID_CHAR") }}
-      </div>
-      <div class="modal-button-row" slot="footer">
-        <button @click="modalConfirmActivate = false" class="button">
-          {{ $t("Cancel") }}
-        </button>
-        <button @click="activate()" class="button button-red">OK</button>
-      </div>
-    </Modal>
+      :title="$t('Conform activate')"
+      :body="$t('CONFIRM_ACTIVATE_INVALID_CHAR')"
+    ></ModalConfirm>
 
     <div v-if="!this.charData" class="stat-card row-full transform">
       <div class="placeholder" @click="edit()">
