@@ -11,7 +11,7 @@ import SvgIcon from "@/components/SvgIcon.vue"
 })
 export default class FLButton extends Vue {
   @Prop({ default: "button" }) formButtonType!: string
-  @Prop({ default: "" }) type!: "" | "danger" | "cancel" | "ghost"
+  @Prop({ default: "main" }) type!: "" | "danger" | "cancel" | "ghost" | "main"
   @Prop({ default: "white" }) color!: "main" | "danger" | "white" | "inherit"
 }
 </script>
@@ -75,10 +75,16 @@ export default class FLButton extends Vue {
     background-color: transparent;
     color: #4fc08d;
     box-shadow: none;
+    &:disabled {
+      background: transparent;
+    }
   }
 
   &:disabled {
-    background: slategray;
+    &:not(.button-ghost) {
+      background: slategray;
+    }
+
     color: lightgray;
     &:hover {
       cursor: not-allowed;

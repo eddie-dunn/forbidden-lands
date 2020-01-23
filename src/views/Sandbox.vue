@@ -75,12 +75,14 @@
         <FLButton>Base button</FLButton>
         <FLButton type="danger">Danger button</FLButton>
         <FLButton type="cancel">Cancel button</FLButton>
-        <FLButton type="ghost" :disabled="true">Disabled button</FLButton>
+        <FLButton type="main" :disabled="true">Disabled button</FLButton>
         <FLButton type="ghost">Ghost button</FLButton>
         <FLButton type="ghost" color="danger">Ghost button danger</FLButton>
+        <FLButton type="ghost" :disabled="true">Ghost button disabled</FLButton>
         <h4>IconButton</h4>
         <IconButton icon="check" color="main"></IconButton>
         <IconButton icon="delete" color="danger"></IconButton>
+        <IconButton icon="add" :disabled="true"></IconButton>
         <IconButton icon="chat_bubble">With text</IconButton>
       </div>
     </ExpandableSection>
