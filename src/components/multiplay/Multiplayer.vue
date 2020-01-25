@@ -74,8 +74,6 @@ export default class Multiplayer extends Vue {
 
 <template>
   <div class="multiplayer">
-    <!-- <TabView :views="views" :disabled="activeConnection" /> -->
-
     <!-- Create game -->
     <div v-if="!connected">
       <h3 class="capitalize-first">
