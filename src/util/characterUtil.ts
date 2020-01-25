@@ -1,15 +1,20 @@
-import { CharacterData, getNewCharacterData } from "@/characterData"
+import {
+  CharacterData,
+  getNewCharacterData,
+  AttributeData,
+} from "@/characterData"
 import {
   ExtendedKinName,
   KinName,
   Profession,
   Skill,
-  TalentAll,
   TalentProfession,
+  Age,
 } from "@/types.ts"
 
 import { capitalize } from "@/util"
 import characterTemplate from "@/data/character_template/character_template"
+import { getAgeType, getAttributePoints } from "@/age"
 
 export function stringChar(characterData: CharacterData) {
   return JSON.stringify(characterData)
@@ -115,7 +120,11 @@ ${formativeEventNotes.join("\n\n")}
 `.trim()
 
   charData.age = Number(age)
-  charData.attributes = childhood.attributes
+  charData.attributes = adjustAttributesByAge(
+    childhood.attributes,
+    Number(age),
+    kinTransform(kinId)
+  )
 
   // Adjust skills according to template
   const mergedSkills = fevents
@@ -129,4 +138,33 @@ ${formativeEventNotes.join("\n\n")}
 
   charData.metadata.startingItems = fevents.map((f) => f.items).join("\n")
   return charData
+}
+
+function adjustAttributesByAge(
+  attributes: AttributeData,
+  age: number,
+  kin: KinName
+): AttributeData {
+  const ageType: Age = getAgeType(age, kin)
+  const newAttributes: AttributeData = { ...attributes }
+  const attributesPointTotal = (a: AttributeData) => {
+    return (
+      Number(a.agility) +
+      Number(a.empathy) +
+      Number(a.strength) +
+      Number(a.wits)
+    )
+  }
+  const expected = getAttributePoints(ageType)
+  while (attributesPointTotal(newAttributes) > expected) {
+    if (newAttributes.strength && newAttributes.strength > 3) {
+      newAttributes.strength--
+    } else if (newAttributes.agility && newAttributes.agility > 2) {
+      newAttributes.agility--
+    } else if (newAttributes.wits && newAttributes.wits > 2) {
+      newAttributes.wits--
+    }
+  }
+  console.log("returning", { ...attributes }, "->", newAttributes, ageType)
+  return newAttributes
 }
