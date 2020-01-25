@@ -13,6 +13,7 @@ import { Item } from "@/data/items/itemTypes"
 import { capitalize } from "@/util"
 import ItemTemplatePicker from "@/components/gear/ItemTemplatePicker.vue"
 import FLNumberInput from "@/components/FLNumberInput.vue"
+import TabBar from "@/components/base/TabBar.vue"
 
 function defaultItem(): Item {
   return {
@@ -34,6 +35,7 @@ function defaultItem(): Item {
     FLNumberInput,
     ItemTemplatePicker,
     Modal,
+    TabBar,
   },
 })
 export default class AddItem extends Vue {
@@ -123,9 +125,33 @@ export default class AddItem extends Vue {
       this.showNew()
     }
   }
+
   onTemplatePicked(item: any) {
     this.tmpGear = item
     this.showNew()
+    this.tabIndex = 1
+  }
+
+  tabIndex = 0
+  onTabClicked(index: number) {
+    this.tabIndex = index
+  }
+
+  get tabButtons() {
+    return [
+      {
+        name: this.$t("Template"),
+        onClick: () => {
+          this.showTemplate()
+        },
+      },
+      {
+        name: this.$t("Details"),
+        onClick: () => {
+          this.showNew()
+        },
+      },
+    ]
   }
 }
 </script>
@@ -138,8 +164,12 @@ export default class AddItem extends Vue {
     :title="title"
   >
     <div v-if="!editItem" slot="header" class="item-modal-header">
-      <FLButton @click="showTemplate">{{ $t("Template") }}</FLButton>
-      <FLButton @click="showNew">{{ $t("Details") }}</FLButton>
+      <TabBar
+        v-if="true"
+        :buttons="tabButtons"
+        @tab-active="onTabClicked"
+        :currentTabIndex="tabIndex"
+      />
     </div>
     <div slot="body" class="modal-body">
       <!-- Template view -->
@@ -294,10 +324,6 @@ export default class AddItem extends Vue {
 
 <style lang="less" scoped>
 @import "~Style/colors.less";
-h2 {
-  margin: 0rem 1rem 1rem 1rem;
-}
-
 .flex {
   display: flex;
 }
@@ -309,18 +335,6 @@ h2 {
 .grid-row-full {
   grid-column-start: 1;
   grid-column-end: -1;
-}
-
-.item-modal-header {
-  text-align: left;
-  > button {
-    margin-right: 4px;
-    box-shadow: none;
-    border: none;
-    &:active {
-      transform: translateY(2px);
-    }
-  }
 }
 
 .modal-body {
@@ -338,40 +352,12 @@ h2 {
   align-items: center;
 }
 
-.header {
-  border-bottom: solid @pastel-green 5px;
-}
-
 .modal-button-row {
   border-top: solid @pastel-green 5px;
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
   padding: 0.5rem;
-}
-
-.tab {
-  background: white;
-  color: @pastel-green;
-  padding: 0.5rem;
-  margin-right: 5px;
-  outline: solid 1px @pastel-green;
-  display: inline-block;
-  cursor: pointer;
-  &:active {
-    transform: translateY(3px);
-    background: @pastel-green;
-    color: white;
-  }
-  &--active {
-    background: @pastel-green;
-    color: white;
-  }
-}
-
-.tab-bar {
-  text-align: left;
-  margin: 0 1rem;
 }
 
 .inventory-modal {
