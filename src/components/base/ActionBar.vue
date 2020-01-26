@@ -37,15 +37,17 @@ export default class InfoBox extends Vue {}
   display: flex;
   overflow: auto;
   position: sticky;
+  pointer-events: none;
+  // .old-version();
   bottom: 0;
-  background: #fffc;
-  box-shadow: @box-shadow-normal;
-  padding: 0.4rem;
   justify-content: space-between;
 }
 
 .action-bar {
-  flex: 1 1 auto;
+  padding: 0.25rem;
+  margin: 0.25rem 0.25rem;
+  pointer-events: all;
+  flex: 0 1 auto;
   &-left {
     text-align: left;
   }
@@ -55,5 +57,11 @@ export default class InfoBox extends Vue {}
     text-align: right;
   }
   // align-items: center;
+}
+
+.old-version {
+  pointer-events: all;
+  background: #fffc;
+  box-shadow: @box-shadow-normal;
 }
 </style>

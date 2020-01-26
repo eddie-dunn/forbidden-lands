@@ -198,13 +198,13 @@ export default class CharacterTemplateView extends Vue {
 @import "~Style/colors.less";
 
 .character-template {
-  margin: 0.25rem;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
 
 .templates-grid {
+  margin: 0.25rem 0;
   flex: 1 auto;
 }
 
@@ -219,6 +219,6 @@ export default class CharacterTemplateView extends Vue {
 
 .right-align {
   text-align: right;
-  margin: 1rem 0;
+  margin: 1rem 0.5rem;
 }
 </style>

@@ -7,6 +7,7 @@ import { CharData, CharacterMetaDataStatus } from "@/characterData"
 
 import SvgIcon from "@/components/SvgIcon.vue"
 import FLButton from "@/components/base/FLButton.vue"
+import ActionBar from "@/components/base/ActionBar.vue"
 import BaseCard from "@/components/characterEditor/BaseCard.vue"
 import SessionCard from "@/components/characterEditor/SessionCard.vue"
 import TalentCard from "@/components/characterEditor/TalentCard.vue"
@@ -23,6 +24,7 @@ function stringChar(characterData: CharData) {
 
 @Component({
   components: {
+    ActionBar,
     BaseCard,
     FLButton,
     FlavorCard,
@@ -146,17 +148,16 @@ export default class CharacterEditor extends Vue {
       />
     </div>
 
-    <div class="action-bar-wrapper">
-      <div class="action-bar action-bar-left">
+    <ActionBar>
+      <template v-slot:left>
         <FLButton
           :type="!charDataUpdated ? 'cancel' : 'danger'"
           @click="closeClicked"
         >
           {{ closeText }}
         </FLButton>
-      </div>
-
-      <div class="action-bar action-bar-right">
+      </template>
+      <template v-slot:right>
         <FLButton
           v-if="!viewOnly"
           :type="!charDataUpdated ? 'cancel' : ''"
@@ -164,8 +165,8 @@ export default class CharacterEditor extends Vue {
         >
           {{ $t("Save") }}
         </FLButton>
-      </div>
-    </div>
+      </template>
+    </ActionBar>
 
     <!-- end -->
   </div>
@@ -173,34 +174,6 @@ export default class CharacterEditor extends Vue {
 
 <style lang="less" scoped>
 @import "~Style/colors.less";
-
-.action-bar-wrapper {
-  @media print {
-    display: none;
-  }
-  display: flex;
-  overflow: auto;
-  position: sticky;
-  bottom: 0;
-  margin: 0 0.25rem;
-  background: #fffc;
-  box-shadow: @box-shadow-normal;
-  padding: 0.4rem;
-  justify-content: space-between;
-}
-
-.action-bar {
-  flex: 1 1 auto;
-  &-left {
-    text-align: left;
-  }
-  // &-center {
-  // }
-  &-right {
-    text-align: right;
-  }
-  // align-items: center;
-}
 
 .character_creator {
   margin-bottom: 20vh;
