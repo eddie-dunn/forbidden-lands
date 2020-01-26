@@ -15,9 +15,8 @@ self.addEventListener("message", (e) => {
   }
 })
 
-workbox.clientsClaim()
+workbox.core.clientsClaim()
 
 // The precaching code provided by Workbox.
 self.__precacheManifest = [].concat(self.__precacheManifest || [])
-workbox.precaching.suppressWarnings()
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {})

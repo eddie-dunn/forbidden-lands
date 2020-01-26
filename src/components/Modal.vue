@@ -1,34 +1,40 @@
 <script lang="ts">
 /* eslint-disable no-console */
-import Vue from "vue"
-import Component from "vue-class-component"
+import { Component, Prop, Vue } from "vue-property-decorator"
 import SvgIcon from "@/components/SvgIcon.vue"
 // https://github.com/vuejs/vue-class-component/blob/master/example/src/App.vue
 
-const Props = Vue.extend({
+@Component({
   components: {
     SvgIcon,
   },
-  props: {
-    maximized: {
-      type: Boolean,
-      default: true,
-    },
-    width: {
-      type: String,
-      default: "70%",
-    },
-    height: {
-      type: String,
-      default: "70%",
-    },
-    // TODO: Add css parsing, see FLNumberInput
-  },
 })
+export default class Modal extends Vue {
+  @Prop({ default: true }) maximized!: boolean
+  @Prop({ default: "70%" }) width!: string
+  @Prop({ default: "70%" }) height!: string
+  @Prop({ default: false }) toggleBodyOverflow!: boolean
+  @Prop({ default: "" }) title!: string
 
-export default class Modal extends Props {
   close(param: string): void {
     this.$emit("close", param)
+  }
+
+  bodyOverflow(show: boolean) {
+    if (!this.toggleBodyOverflow) return
+    if (!show) {
+      document.querySelector("body")!.setAttribute("style", "overflow: hidden")
+    } else {
+      document.querySelector("body")!.removeAttribute("style")
+    }
+  }
+
+  mounted() {
+    this.bodyOverflow(false)
+  }
+
+  destroyed() {
+    this.bodyOverflow(true)
   }
 }
 </script>
@@ -42,17 +48,20 @@ export default class Modal extends Props {
           this.maximized ? 'modal-container-full' : '',
         ]"
       >
-        <div class="close-button-container" @click="close()">
-          <SvgIcon name="close-button" title="Close" class="close-button" />
-        </div>
-        <div class="__modal-header capitalize-first">
-          <slot name="header">
-            <!-- <h2>default header with a lot of text and stuff</h2> -->
-          </slot>
+        <div class="__modal-header">
+          <div class="__modal-header-title capitalize-first">
+            <h2 v-if="title">{{ title }}</h2>
+            <slot name="header">
+              <!-- <h2>default header with a lot of text and stuff</h2> -->
+            </slot>
+          </div>
+          <div class="close-button-container" @click="close()">
+            <SvgIcon name="close" title="Close" class="close-button" />
+          </div>
         </div>
 
         <div class="__modal-body">
-          <slot name="body" class="__modal-body">
+          <slot name="body">
             default body
           </slot>
         </div>
@@ -74,7 +83,8 @@ export default class Modal extends Props {
   width: 2rem;
   height: 2rem;
   cursor: pointer;
-  fill: white;
+  // fill: white;
+  fill: @pastel-red;
   &:hover {
     fill: @pastel-red;
   }
@@ -83,9 +93,8 @@ export default class Modal extends Props {
 .close-button-container {
   width: 2rem;
   height: 2rem;
-  border-radius: 50%;
-  background: @pastel-red;
-  margin-left: auto;
+  // border-radius: 50%;
+  // background: @pastel-red;
   margin-top: 3px;
   margin-right: 3px;
   &:hover {
@@ -98,7 +107,7 @@ export default class Modal extends Props {
 
 .modal-mask {
   position: fixed;
-  z-index: 500;
+  z-index: @z-modal;
   top: 0;
   left: 0;
   width: 100%;
@@ -133,13 +142,18 @@ export default class Modal extends Props {
 .__modal-header {
   text-align: center;
   color: #42b983;
+  padding-left: 1rem;
+  display: flex;
+  &-title {
+    flex-grow: 1;
+  }
+  border-bottom: 4px solid @pastel-green;
 }
 
 .__modal-body {
-  overflow: auto;
+  overflow-y: auto;
   max-height: 100vh;
   flex-grow: 1;
-  margin: 0 0.5rem 0.5rem 0.5rem;
 }
 
 .__modal-footer {

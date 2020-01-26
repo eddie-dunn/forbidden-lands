@@ -4,13 +4,16 @@
 import Modal from "@/components/Modal.vue"
 import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
-import { CharacterData, CharacterTalent, Item } from "@/characterData"
+import { CharacterData, CharacterTalent } from "@/characterData"
+import { Item } from "@/data/items/itemTypes"
 
-import ModalAddItem from "@/components/ModalAddItem.vue"
+import ModalAddItem from "@/components/gear/ModalAddItem.vue"
 import FLNumberInput from "@/components/FLNumberInput.vue"
+import FLButton from "@/components/base/FLButton.vue"
 
 @Component({
   components: {
+    FLButton,
     FLNumberInput,
     Modal,
     ModalAddItem,
@@ -18,6 +21,7 @@ import FLNumberInput from "@/components/FLNumberInput.vue"
 })
 export default class XPModal extends Vue {
   @Prop({ required: true }) charData!: CharacterData
+  @Prop({ default: false }) viewOnly!: boolean
 
   addingMount = false
   showAddItem = false
@@ -45,7 +49,7 @@ export default class XPModal extends Vue {
 
   get gearWeight() {
     return this.inventory
-      .map((item) => item.weight)
+      .map((item) => Number(item.weight))
       .reduce((val, sum) => val + sum, 0)
   }
 
@@ -96,7 +100,12 @@ export default class XPModal extends Vue {
         <div class="button-row right-adjusted">
           <div>
             <label for="mount-name" class="block"> {{ $t("Name") }}</label>
-            <input id="mount-name" type="text" v-model="charData.mount.name" />
+            <input
+              id="mount-name"
+              type="text"
+              v-model="charData.mount.name"
+              :disabled="viewOnly"
+            />
           </div>
 
           <div class="mount-attrib-row">
@@ -106,8 +115,9 @@ export default class XPModal extends Vue {
               </label>
               <FLNumberInput
                 id="mount-strength"
-                fontSize="1.3rem"
+                fontSize="1.7rem"
                 v-model.number="charData.mount.strength"
+                :disabled="viewOnly"
               />
             </span>
             <span>
@@ -116,8 +126,9 @@ export default class XPModal extends Vue {
               </label>
               <FLNumberInput
                 id="mount-agility"
-                fontSize="1.3rem"
+                fontSize="1.7rem"
                 v-model.number="charData.mount.agility"
+                :disabled="viewOnly"
               />
             </span>
           </div>
@@ -138,7 +149,11 @@ export default class XPModal extends Vue {
         <tbody>
           <tr v-for="item in inventory" v-bind:key="item.name">
             <td>
-              <input type="checkbox" v-model="item.selected" />
+              <input
+                type="checkbox"
+                v-model="item.selected"
+                :disabled="viewOnly"
+              />
             </td>
             <td>{{ item.name }}</td>
             <td class="bonus-cell">{{ item.bonus || "" }}</td>
@@ -149,27 +164,23 @@ export default class XPModal extends Vue {
         <div>{{ $t("Encumbrance") }}: {{ gearWeight }}/{{ gearWeightMax }}</div>
         <div class="">
           <label for="is-mounted">{{ $t("Mounted") }}</label>
-          <input type="checkbox" v-model="charData.mount.mounted" />
+          <input
+            type="checkbox"
+            v-model="charData.mount.mounted"
+            :disabled="viewOnly"
+          />
         </div>
       </div>
-      <div class="button-row">
-        <button
-          class="button button-danger"
-          :disabled="!selected"
-          @click="dropItems"
-        >
+      <div v-if="!viewOnly" class="button-row">
+        <FLButton type="danger" :disabled="!selected" @click="dropItems">
           {{ $t("Drop") }}
-        </button>
-        <button class="button" :disabled="!selected" @click="moveItems">
+        </FLButton>
+        <FLButton :disabled="!selected" @click="moveItems">
           {{ $t("Move to backpack") }}
-        </button>
-        <button
-          class="button"
-          :disabled="!hasMount"
-          @click="showAddItem = true"
-        >
+        </FLButton>
+        <FLButton :disabled="!hasMount" @click="showAddItem = true">
           {{ $t("Add") }}
-        </button>
+        </FLButton>
       </div>
     </div>
 
@@ -194,7 +205,6 @@ table {
   table-layout: fixed;
   width: 100%;
   border-collapse: collapse;
-  // border: 3px solid purple;
   th {
     font-variant-caps: small-caps;
     font-weight: normal;

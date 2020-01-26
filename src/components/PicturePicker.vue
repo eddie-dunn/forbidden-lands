@@ -1,8 +1,11 @@
 <script lang="ts">
 import Vue from "vue"
 import Component from "vue-class-component"
-import Modal from "@/components/Modal.vue"
+
 import UrlStorage from "@/localStorage"
+
+import FLButton from "@/components/base/FLButton.vue"
+import Modal from "@/components/Modal.vue"
 
 function importAll(r: any) {
   return r.keys().map(r)
@@ -20,6 +23,9 @@ const AppProps = Vue.extend({
     portrait: {
       required: true,
     },
+    viewOnly: {
+      type: Boolean,
+    },
   },
   watch: {
     selected_portrait: {
@@ -33,6 +39,7 @@ const AppProps = Vue.extend({
 
 @Component({
   components: {
+    FLButton,
     Modal,
   },
 })
@@ -51,6 +58,7 @@ export default class PicturePicker extends AppProps {
   selected_portrait = this.portrait || getRandomPictureFromGallery(IMAGES)
 
   showPicker() {
+    if (this.viewOnly) return
     this.showModal = true
   }
   closePicker() {
@@ -87,9 +95,13 @@ export default class PicturePicker extends AppProps {
 <template>
   <div>
     <!-- <a href="#" id="show-modal" @click="showPicker()">Show Modal</a> -->
-    <Modal v-if="showModal" @close="closePicker()">
+    <Modal
+      v-if="showModal"
+      @close="closePicker()"
+      :toggleBodyOverflow="true"
+      :title="$t('Select picture')"
+    >
       <div slot="header">
-        <h3>{{ $t("Select picture") }}</h3>
         <div class="tab-bar">
           <div
             @click.self="galleryClicked"
@@ -114,9 +126,9 @@ export default class PicturePicker extends AppProps {
                 id="external url"
                 v-model="imgUrl"
               />
-              <div class="button" @click="urlButtonClicked">
+              <FLButton @click="urlButtonClicked">
                 {{ $t("Get") }}
-              </div>
+              </FLButton>
             </form>
             <div class="picture-grid">
               <div
@@ -133,13 +145,13 @@ export default class PicturePicker extends AppProps {
                     url === selected_portrait ? 'portrait-selected' : '',
                   ]"
                 />
-                <button
-                  type="button"
-                  class="button button-red delete-button"
+                <FLButton
+                  class="delete-button"
+                  type="danger"
                   @click="deleteUrl(index)"
                 >
                   {{ $t("Delete") }}
-                </button>
+                </FLButton>
               </div>
             </div>
           </div>
@@ -160,7 +172,6 @@ export default class PicturePicker extends AppProps {
           </div>
         </div>
       </div>
-      <div slot="footer"></div>
     </Modal>
 
     <div>
@@ -187,16 +198,11 @@ export default class PicturePicker extends AppProps {
 .picture-container {
   position: relative;
   min-width: 30ch;
-  // max-height: 400px;
 }
 
-.modal-body {
+.gallery-view {
   overflow-y: auto;
   max-height: 99%;
-  // border: solid #42b98344 2px;
-  border-top: solid @pastel-green 5px;
-  // padding: 1rem;
-  // margin: 1rem;
 }
 
 .url-view {
@@ -222,17 +228,22 @@ export default class PicturePicker extends AppProps {
   width: 100%;
 }
 
-// .tab-bar {
-//   position: sticky;
-//   top: 0;
-// }
+.tab-bar {
+  padding-left: 1rem;
+  position: sticky;
+  top: 0;
+  background: @color-background;
+  text-align: left;
+}
 
 .tab {
-  background: white;
+  background: @color-background;
   color: @pastel-green;
   padding: 0.5rem;
   margin-right: 5px;
-  outline: solid 1px @pastel-green;
+  border-top: solid 1px @pastel-green;
+  border-left: solid 1px @pastel-green;
+  border-right: solid 1px @pastel-green;
   display: inline-block;
   cursor: pointer;
   &:active {

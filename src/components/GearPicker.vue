@@ -1,24 +1,22 @@
 <script lang="ts">
+// TODO: Replace option / select with FLSelect
+// TODO: Split up into multiple components
+
 import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 import { PROFESSION } from "@/classes"
-import {
-  CharacterData,
-  Gear,
-  Item,
-  ItemArmor,
-  ItemWeapon,
-  Range,
-} from "@/characterData"
-import FLNumberInput from "@/components/FLNumberInput.vue"
-import SvgIcon from "@/components/SvgIcon.vue"
-import ModalAddItem from "@/components/ModalAddItem.vue"
-import ModalConfirm from "@/components/ModalConfirm.vue"
+import { CharacterData, Gear } from "@/characterData"
+import { Item, ItemWeapon, Range } from "@/data/items/itemTypes"
 
-type VType = Vue & { focus: () => {} }
+import FLNumberInput from "@/components/FLNumberInput.vue"
+import FLButton from "@/components/base/FLButton.vue"
+import SvgIcon from "@/components/SvgIcon.vue"
+import ModalAddItem from "@/components/gear/ModalAddItem.vue"
+import ModalConfirm from "@/components/ModalConfirm.vue"
 
 @Component({
   components: {
+    FLButton,
     FLNumberInput,
     ModalAddItem,
     ModalConfirm,
@@ -27,6 +25,8 @@ type VType = Vue & { focus: () => {} }
 })
 export default class ExpandableSection extends Vue {
   @Prop({ required: true }) characterData!: CharacterData
+  @Prop({ default: false }) viewOnly!: boolean
+
   showAddItem = false
   showEditItem = false
   showConfirmDeleteItem = false
@@ -98,13 +98,11 @@ export default class ExpandableSection extends Vue {
   get gearWeight() {
     return (
       this.characterData.gear.inventory
-        .map((item) => item.weight)
+        .map((item) => Number(item.weight))
         .reduce((val, sum) => val + sum, 0) +
       Object.values(this.characterData.gear.money)
         .map((moneyAmount) => Math.floor(moneyAmount / 100))
-        .reduce((val, sum) => {
-          return val + sum
-        }, 0)
+        .reduce((val, sum) => val + sum, 0)
     )
   }
 
@@ -167,7 +165,7 @@ export default class ExpandableSection extends Vue {
       .filter((item) => item.selected)
       .map((item) => item.name)
       .join(", ")
-    return items
+    return `${this.$t("Drop")} ${items}?`
   }
 
   iconFor(item: Item) {
@@ -175,7 +173,7 @@ export default class ExpandableSection extends Vue {
       case "armor":
         return "leather-armor"
       case "helmet":
-        return "brutal-helm"
+        return "barbute"
       case "shield":
         return "shield"
       case "weapon":
@@ -267,7 +265,6 @@ export default class ExpandableSection extends Vue {
 
     <ModalConfirm
       v-if="showConfirmDeleteItem"
-      :title="$t('Drop') + '?'"
       :body="deleteItemsBody"
       :confirmAction="dropItems"
       @close="showConfirmDeleteItem = false"
@@ -295,19 +292,23 @@ export default class ExpandableSection extends Vue {
               v-bind:key="item.name + index"
             >
               <td>
-                <input type="checkbox" v-model="item.selected" />
+                <input
+                  type="checkbox"
+                  v-model="item.selected"
+                  :disabled="viewOnly"
+                />
               </td>
               <td>
                 <input
                   type="checkbox"
-                  :disabled="!equippable(item)"
                   v-model="item.equipped"
+                  :disabled="!equippable(item) || viewOnly"
                 />
               </td>
               <td>
                 <SvgIcon :name="iconFor(item)" :title="item.type" />
               </td>
-              <td @click="editItem(item)" class="clickable-cell">
+              <td @click="!viewOnly && editItem(item)" class="clickable-cell">
                 {{ item.name }}
               </td>
               <td>{{ item.bonus || "" }}</td>
@@ -316,24 +317,20 @@ export default class ExpandableSection extends Vue {
         </table>
         <div>{{ $t("Encumbrance") }}: {{ gearWeight }}/{{ gearWeightMax }}</div>
 
-        <div class="button-row">
-          <button
+        <div v-if="!viewOnly" class="button-row">
+          <FLButton
+            type="danger"
             :disabled="!itemsSelected"
-            class="button button-danger"
             @click="showConfirmDeleteItem = true"
           >
             {{ $t("Drop") }}
-          </button>
-          <button
-            :disabled="!itemsSelected || !hasMount"
-            class="button"
-            @click="moveItems"
-          >
+          </FLButton>
+          <FLButton :disabled="!itemsSelected || !hasMount" @click="moveItems">
             {{ $t("Move to mount") }}
-          </button>
-          <button @click="showAddItem = true" class="button">
+          </FLButton>
+          <FLButton @click="showAddItem = true">
             {{ $t("Add") }}
-          </button>
+          </FLButton>
         </div>
       </div>
 
@@ -350,7 +347,7 @@ export default class ExpandableSection extends Vue {
           <tbody>
             <tr>
               <td>
-                <SvgIcon name="brutal-helm" />
+                <SvgIcon name="barbute" />
               </td>
               <td
                 @click="editItem(equippedHelmet)"
@@ -395,7 +392,7 @@ export default class ExpandableSection extends Vue {
             <tr>
               <th>{{ $t("Name") }}</th>
               <th class="bonus-cell">Bonus</th>
-              <th class="bonus-cell">{{ $t("Damage") }}</th>
+              <th class="bonus-cell capitalize">{{ $t("dmg") }}</th>
               <th>{{ $t("Range") }}</th>
               <th>{{ $t("Features") }}</th>
             </tr>
@@ -428,7 +425,7 @@ export default class ExpandableSection extends Vue {
         <label for="food">{{ $t("Food") }}</label>
         <select
           v-model="characterData.gear.consumables.food"
-          :disabled="status === 'new'"
+          :disabled="status === 'new' || viewOnly"
         >
           <option
             v-for="val in [0, 6, 8, 10, 12]"
@@ -444,7 +441,7 @@ export default class ExpandableSection extends Vue {
         <label for="water">{{ $t("Water") }}</label>
         <select
           v-model.number="characterData.gear.consumables.water"
-          :disabled="status === 'new'"
+          :disabled="status === 'new' || viewOnly"
         >
           <option
             v-for="val in [0, 6, 8, 10, 12]"
@@ -460,7 +457,7 @@ export default class ExpandableSection extends Vue {
         <label for="arrows">{{ $t("Arrows") }}</label>
         <select
           v-model.number="characterData.gear.consumables.arrows"
-          :disabled="status === 'new'"
+          :disabled="status === 'new' || viewOnly"
         >
           <option
             v-for="val in [0, 6, 8, 10, 12]"
@@ -476,7 +473,7 @@ export default class ExpandableSection extends Vue {
         <label for="torches">{{ $t("Torches") }}</label>
         <select
           v-model.number="characterData.gear.consumables.torches"
-          :disabled="status === 'new'"
+          :disabled="status === 'new' || viewOnly"
         >
           <option
             v-for="val in [0, 6, 8, 10, 12]"
@@ -499,10 +496,11 @@ export default class ExpandableSection extends Vue {
         </label>
         <FLNumberInput
           id="copper"
-          fontSize="1.2rem"
+          fontSize="1.7rem"
           min="0"
           max="300"
           v-model="characterData.gear.money.copper"
+          :disabled="viewOnly"
         />
       </div>
       <div class="money-item">
@@ -511,10 +509,11 @@ export default class ExpandableSection extends Vue {
         </label>
         <FLNumberInput
           id="silver"
-          fontSize="1.2rem"
+          fontSize="1.7rem"
           min="0"
           max="300"
           v-model="characterData.gear.money.silver"
+          :disabled="viewOnly"
         />
       </div>
       <div class="money-item">
@@ -523,9 +522,11 @@ export default class ExpandableSection extends Vue {
         </label>
         <FLNumberInput
           id="gold"
-          fontSize="1.2rem"
-          :min="0"
+          fontSize="1.7rem"
+          min="0"
+          max="300"
           v-model="characterData.gear.money.gold"
+          :disabled="viewOnly"
         />
       </div>
     </div>
@@ -626,9 +627,6 @@ label {
 }
 
 .money {
-  // display: flex;
-  // flex-wrap: wrap;
-  // justify-content: space-between;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(15ch, 1fr));
   grid-gap: 10px;
@@ -639,16 +637,5 @@ label {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  /* display: none; <- Crashes Chrome on hover */
-  -webkit-appearance: none;
-  margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
-}
-
-input[type="number"] {
-  -moz-appearance: textfield; /* Firefox */
 }
 </style>

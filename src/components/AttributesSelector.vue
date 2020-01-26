@@ -38,6 +38,11 @@ export default Vue.extend({
       type: Object as () => CharacterData,
       required: true,
     },
+    viewOnly: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
   },
   created() {
     if (!this.charData.attributeDmg) {
@@ -130,10 +135,12 @@ export default Vue.extend({
   </div>
 
   <div v-else>
-    <table style="width: 100%">
+    <table class="attribute-table">
       <thead>
         <tr>
-          <th></th>
+          <th class="capitalize">
+            {{ $t("attribute") }}
+          </th>
           <th v-if="active">{{ $t("Damage") }}</th>
           <th v-if="active" class="empty-cell"></th>
         </tr>
@@ -157,7 +164,7 @@ export default Vue.extend({
             </span>
             <NumberInput
               v-if="baseAttributesEditable"
-              fontSize="1.4rem"
+              fontSize="1.7rem"
               :id="attribute"
               :name="attribute"
               type="number"
@@ -165,13 +172,15 @@ export default Vue.extend({
               min="2"
               :max="getMax(attribute)"
               v-model.number="charData.attributes[attribute]"
+              :disabled="viewOnly"
             />
           </td>
           <td v-if="active">
             <NumberInput
-              fontSize="1.4rem"
+              fontSize="1.7rem"
               :id="attribute"
               :name="attribute"
+              :disabled="viewOnly"
               placeholder=""
               type="number"
               min="0"
@@ -199,6 +208,11 @@ export default Vue.extend({
 </template>
 
 <style lang="less" scoped>
+.attribute-table {
+  width: 100%;
+  margin: 1rem 0;
+}
+
 .attribute-item {
   display: flex;
   flex-grow: 0;

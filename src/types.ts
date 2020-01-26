@@ -5,6 +5,10 @@ export type Attribute = "strength" | "agility" | "wits" | "empathy"
 
 export type DiceSides = 0 | 6 | 8 | 10 | 12 | 66 | 666 // 0 is no dice
 
+export type DiceTypes = "white" | "red" | "black" | "green" | "blue" | "orange"
+
+export type CombatAction = "parry" | "dodge" | "cast" | "melee" | "shoot"
+
 export type KinName =
   | "dwarf"
   | "elf"

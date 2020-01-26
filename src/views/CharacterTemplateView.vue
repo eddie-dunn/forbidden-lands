@@ -2,6 +2,7 @@
 import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 
+import { SET_PAGE_TITLE } from "@/store/store-types"
 import CharacterBackstory from "@/components/backstories/CharacterBackstory.vue"
 
 @Component({
@@ -9,14 +10,22 @@ import CharacterBackstory from "@/components/backstories/CharacterBackstory.vue"
     CharacterBackstory,
   },
 })
-export default class CharacterTemplateView extends Vue {}
+export default class CharacterTemplateView extends Vue {
+  mounted() {
+    this.$store.commit(SET_PAGE_TITLE, "Template")
+  }
+}
 </script>
 
 <template>
-  <div class="character-template">
-    <h1>Backstories</h1>
+  <section class="character-template-view">
     <CharacterBackstory />
-  </div>
+  </section>
 </template>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.character-template-view {
+  display: flex;
+  flex: 1 1 auto;
+}
+</style>

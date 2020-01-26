@@ -1,23 +1,24 @@
 <script lang="ts">
 // TODO: Look into http://youmightnotneedjs.com/#tabs for tabs
+import Vue from "vue"
+import { Component, Prop, Watch } from "vue-property-decorator"
 
 import uuid1 from "uuid/v1"
 import Modal from "@/components/Modal.vue"
-import Vue from "vue"
-import { Component, Prop, Watch } from "vue-property-decorator"
-import {
-  CharacterData,
-  CharacterTalent,
-  Item,
-  ItemWeapon,
-} from "@/characterData"
-
+import FLButton from "@/components/base/FLButton.vue"
+import FLInput from "@/components/base/FLInput.vue"
+import { CharacterData, CharacterTalent } from "@/characterData"
+import { allItems } from "@/data/items/items.ts"
+import { Item } from "@/data/items/itemTypes"
+import { capitalize } from "@/util"
+import ItemTemplatePicker from "@/components/gear/ItemTemplatePicker.vue"
 import FLNumberInput from "@/components/FLNumberInput.vue"
+import TabBar from "@/components/base/TabBar.vue"
 
 function defaultItem(): Item {
   return {
     bonus: 0,
-    bonusType: "",
+    bonusType: null,
     equipped: false,
     name: "",
     weight: 1,
@@ -29,15 +30,19 @@ function defaultItem(): Item {
 
 @Component({
   components: {
+    FLButton,
+    FLInput,
     FLNumberInput,
+    ItemTemplatePicker,
     Modal,
+    TabBar,
   },
 })
 export default class AddItem extends Vue {
-  @Prop({ default: () => defaultItem() }) editItem!: Item
+  @Prop({}) editItem!: Item | null
   @Prop({ default: "" }) title!: string
 
-  tmpGear: Item = JSON.parse(JSON.stringify(this.editItem))
+  tmpGear: Item = JSON.parse(JSON.stringify(this.editItem || defaultItem()))
 
   get isWeapon(): boolean {
     return this.tmpGear.type === "weapon"
@@ -74,22 +79,117 @@ export default class AddItem extends Vue {
   close() {
     this.$emit("close")
   }
+
+  templateActive = !this.editItem
+  newActive = !this.templateActive
+  showTemplate() {
+    this.newActive = false
+    this.templateActive = true
+  }
+  showNew() {
+    this.newActive = true
+    this.templateActive = false
+  }
+
+  activeFilter = ""
+  get filteredItems() {
+    return allItems.filter(
+      (item) =>
+        (this.$t(item.name) as string).indexOf(
+          this.activeFilter.toLowerCase()
+        ) >= 0
+    )
+  }
+  get rangedWeapons() {
+    return this.filteredItems.filter(
+      (item) => item.type === "weapon" && item.skill === "marksmanship"
+    )
+  }
+  get meleeWeapons() {
+    return this.filteredItems.filter(
+      (item) => item.type === "weapon" && item.skill === "melee"
+    )
+  }
+  get armorTemplates() {
+    return this.filteredItems.filter((item) => item.type === "armor")
+  }
+  selectTemplateItem(id: string) {
+    const item = allItems
+      .filter((item) => item.id === id)
+      .map((item) => {
+        return { ...item, name: capitalize(this.$t(item.name) as string) }
+      })
+      .pop()
+    if (item) {
+      this.tmpGear = item
+      this.showNew()
+    }
+  }
+
+  onTemplatePicked(item: any) {
+    this.tmpGear = item
+    this.showNew()
+    this.tabIndex = 1
+  }
+
+  tabIndex = 0
+  onTabClicked(index: number) {
+    this.tabIndex = index
+  }
+
+  get tabButtons() {
+    return [
+      {
+        name: this.$t("Template"),
+        onClick: () => {
+          this.showTemplate()
+        },
+      },
+      {
+        name: this.$t("Details"),
+        onClick: () => {
+          this.showNew()
+        },
+      },
+    ]
+  }
 }
 </script>
 
 <template>
-  <Modal class="inventory-modal" @close="close" :maximized="true">
-    <div v-if="title" slot="header" class="header">
-      <h2>{{ title }}</h2>
+  <Modal
+    class="inventory-modal"
+    @close="close"
+    :maximized="true"
+    :title="title"
+  >
+    <div v-if="!editItem" slot="header" class="item-modal-header">
+      <TabBar
+        v-if="true"
+        :buttons="tabButtons"
+        @tab-active="onTabClicked"
+        :currentTabIndex="tabIndex"
+      />
     </div>
-
     <div slot="body" class="modal-body">
-      <div class="new-item-form" @submit.prevent="submit">
+      <!-- Template view -->
+      <ItemTemplatePicker
+        v-if="templateActive"
+        @template-picked="onTemplatePicked"
+      />
+
+      <!-- Item detail view -->
+      <div v-if="newActive" class="new-item-form">
         <label for="gear-name">{{ $t("Name") }}</label>
-        <input type="text" v-model="tmpGear.name" placeholder="???" />
+        <input
+          id="gear-name"
+          type="text"
+          v-model="tmpGear.name"
+          placeholder="???"
+        />
 
         <label for="gear-type">{{ $t("Type") }}</label>
-        <select v-model="tmpGear.type">
+        <select id="gear-type" v-model="tmpGear.type">
           <option disabled value="">{{ $t("Choose") }}</option>
           <option value="armor">{{ $t("Armor") }}</option>
           <option value="helmet">{{ $t("Helmet") }}</option>
@@ -108,13 +208,13 @@ export default class AddItem extends Vue {
         </select>
 
         <label for="gear-bonus">Bonus</label>
-        <FLNumberInput v-model="tmpGear.bonus" max="9" fontSize="1.4rem" />
+        <FLNumberInput v-model="tmpGear.bonus" max="9" fontSize="1.7rem" />
 
         <label v-if="isWeapon" for="gear-damage">{{ $t("Damage") }}</label>
         <FLNumberInput
           v-if="isWeapon"
           v-model="tmpGear.damage"
-          fontSize="1.2rem"
+          fontSize="1.7rem"
           max="9"
         />
 
@@ -199,22 +299,23 @@ export default class AddItem extends Vue {
             </label>
           </div>
         </div>
-        <button class="hidden" ref="invisibleButton">Invisible</button>
-      </div>
 
-      <div v-if="tmpGear.type">
-        <h4>Info</h4>
-        <div>
-          {{ $t("PHB_ref", { page: pageFor(tmpGear.type) }) }}
+        <div v-if="tmpGear.type" class="grid-row-full">
+          <h4>Info</h4>
+          <div>
+            {{ $t("PHB_ref", { page: pageFor(tmpGear.type) }) }}
+          </div>
         </div>
+
+        <!-- End Item View -->
       </div>
     </div>
 
     <div class="modal-button-row" slot="footer">
-      <button @click="close" class="button button-cancel">
+      <FLButton @click="close" type="cancel">
         {{ $t("Cancel") }}
-      </button>
-      <button @click="save" class="button">OK</button>
+      </FLButton>
+      <FLButton @click="save">OK</FLButton>
     </div>
 
     <!-- spacer -->
@@ -223,10 +324,6 @@ export default class AddItem extends Vue {
 
 <style lang="less" scoped>
 @import "~Style/colors.less";
-h2 {
-  margin: 0rem 1rem 1rem 1rem;
-}
-
 .flex {
   display: flex;
 }
@@ -234,6 +331,10 @@ h2 {
 .grid-features {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(13ch, 1fr));
+}
+.grid-row-full {
+  grid-column-start: 1;
+  grid-column-end: -1;
 }
 
 .modal-body {
@@ -246,13 +347,9 @@ h2 {
 
 .new-item-form {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: auto 1fr;
   grid-gap: 1rem;
   align-items: center;
-}
-
-.header {
-  border-bottom: solid @pastel-green 5px;
 }
 
 .modal-button-row {
@@ -261,30 +358,6 @@ h2 {
   justify-content: space-around;
   flex-wrap: wrap;
   padding: 0.5rem;
-}
-
-.tab {
-  background: white;
-  color: @pastel-green;
-  padding: 0.5rem;
-  margin-right: 5px;
-  outline: solid 1px @pastel-green;
-  display: inline-block;
-  cursor: pointer;
-  &:active {
-    transform: translateY(3px);
-    background: @pastel-green;
-    color: white;
-  }
-  &--active {
-    background: @pastel-green;
-    color: white;
-  }
-}
-
-.tab-bar {
-  text-align: left;
-  margin: 0 1rem;
 }
 
 .inventory-modal {

@@ -1,18 +1,29 @@
 <script lang="ts">
 import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
+
+import FLButton from "@/components/base/FLButton.vue"
 import Modal from "@/components/Modal.vue"
 // https://github.com/vuejs/vue-class-component/blob/master/example/src/App.vue
 
 @Component({
   components: {
+    FLButton,
     Modal,
   },
 })
 export default class ModalConfirm extends Vue {
   @Prop({ required: true }) confirmAction!: CallableFunction
-  @Prop({ required: true }) title!: string
+  @Prop({ default: "" }) title!: string
   @Prop({ default: "" }) body!: string
+  @Prop({ default: true }) showTitle!: boolean
+  @Prop({ default: false }) danger!: boolean
+
+  get mTitle() {
+    if (!this.showTitle) return ""
+    if (this.title) return this.title
+    return this.$t("Confirm")
+  }
 
   close() {
     this.$emit("close")
@@ -21,24 +32,27 @@ export default class ModalConfirm extends Vue {
 </script>
 
 <template>
-  <Modal @close="close" :maximized="false">
-    <h3 slot="header">
-      {{ title }}
-    </h3>
-    <div slot="body">
+  <Modal @close="close" :maximized="false" :title="mTitle">
+    <div slot="body" class="body">
       {{ body }}
     </div>
     <div class="modal-button-row" slot="footer">
-      <button @click="close" class="button button-cancel">
+      <FLButton type="cancel" @click="close">
         {{ $t("Cancel") }}
-      </button>
-      <button @click="confirmAction" class="button button-danger">OK</button>
+      </FLButton>
+      <FLButton :type="danger ? 'danger' : 'main'" @click="confirmAction">
+        OK
+      </FLButton>
     </div>
   </Modal>
 </template>
 
 <style lang="less" scoped>
 @import "~Style/colors.less";
+
+.body {
+  padding: 1rem;
+}
 
 .modal-button-row {
   border-top: solid @pastel-green 5px;

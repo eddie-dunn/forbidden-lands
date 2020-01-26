@@ -12,9 +12,11 @@ import {
 
 import SkillSelector from "@/components/SkillSelector.vue"
 import TalentSelector from "@/components/TalentSelector.vue"
+import FLButton from "@/components/base/FLButton.vue"
 
 @Component({
   components: {
+    FLButton,
     Modal,
     SkillSelector,
     TalentSelector,
@@ -28,6 +30,7 @@ export default class XPModal extends Vue {
   showXPModal = this.show
 
   charDataCopy: CharacterData = JSON.parse(JSON.stringify(this.charData))
+  originalStatus = this.charData.metadata.status
 
   get xpSpent() {
     return (
@@ -36,7 +39,9 @@ export default class XPModal extends Vue {
     )
   }
   emitCharData() {
-    this.$emit("updated-chardata", this.charDataCopy)
+    const charData = { ...this.charDataCopy }
+    charData.metadata.status = this.originalStatus
+    this.$emit("updated-chardata", charData)
     this.close()
   }
 
@@ -51,15 +56,17 @@ export default class XPModal extends Vue {
   close() {
     this.$emit("close")
   }
+
+  get title() {
+    return `${this.$t("XP")}: ${this.charDataCopy.experience}`
+  }
 }
 </script>
 
 <template>
-  <Modal class="xp-modal" @close="close" :maximized="true">
-    <div slot="header" class="header">
-      <h2>{{ $t("XP") }}: {{ charDataCopy.experience }}</h2>
-      <div>{{ $t("Total spent") }}: {{ xpSpent }}</div>
-      <div class="tab-bar"></div>
+  <Modal class="xp-modal" @close="close" :maximized="true" :title="title">
+    <div slot="header">
+      <div class="spent">{{ $t("Total spent") }}: {{ xpSpent }}</div>
     </div>
     <div slot="body" class="modal-body">
       <h3 class="capitalize">{{ $t("talents") }}</h3>
@@ -76,10 +83,10 @@ export default class XPModal extends Vue {
     </div>
 
     <div class="modal-button-row" slot="footer">
-      <button @click="close" class="button button-cancel">
+      <FLButton @click="close" type="cancel">
         {{ $t("Cancel") }}
-      </button>
-      <button @click="emitCharData" class="button">OK</button>
+      </FLButton>
+      <FLButton @click="emitCharData">OK</FLButton>
     </div>
 
     <!-- spacer -->
@@ -101,16 +108,16 @@ h2 {
   max-width: 60rem;
 }
 
-.header {
-  border-bottom: solid @pastel-green 5px;
-}
-
 .modal-button-row {
   // border-top: solid @pastel-green 5px;
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
   padding: 0.5rem;
+}
+
+.spent {
+  margin: 0.5rem;
 }
 
 .xp-modal {

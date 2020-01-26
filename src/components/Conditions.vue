@@ -10,6 +10,7 @@ import FLNumberInput from "@/components/FLNumberInput.vue"
 })
 export default class ConditionInput extends Vue {
   @Prop({ required: true }) conditions!: Conditions
+  @Prop({ default: false }) viewOnly!: boolean
 
   conditionsCopy: Conditions = {
     cold: this.conditions.cold || false,
@@ -31,6 +32,7 @@ export default class ConditionInput extends Vue {
         type="checkbox"
         name="condition-tired"
         id="condition-tired"
+        :disabled="viewOnly"
         v-model="conditionsCopy.tired"
         @input="emit"
       />
@@ -42,6 +44,7 @@ export default class ConditionInput extends Vue {
         type="checkbox"
         name="condition-dehydrated"
         id="condition-dehydrated"
+        :disabled="viewOnly"
         v-model="conditionsCopy.dehydrated"
         @input="emit"
       />
@@ -53,6 +56,7 @@ export default class ConditionInput extends Vue {
         type="checkbox"
         name="condition-starving"
         id="condition-starving"
+        :disabled="viewOnly"
         v-model="conditionsCopy.starving"
         @input="emit"
       />
@@ -64,6 +68,7 @@ export default class ConditionInput extends Vue {
         type="checkbox"
         name="condition-cold"
         id="condition-cold"
+        :disabled="viewOnly"
         v-model="conditionsCopy.cold"
         @input="emit"
       />

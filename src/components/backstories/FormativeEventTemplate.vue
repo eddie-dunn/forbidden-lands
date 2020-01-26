@@ -1,12 +1,10 @@
 <template>
   <TemplateSelect
     :title="eventName"
+    :description="description"
     :diceValue="value"
     @randomClicked="emitRandom"
   >
-    <div class="capitalize-first">
-      {{ $t("formative event") + ", " + $t(selectedProfessionId) }}
-    </div>
     <div
       v-for="(formativeData, index) in characterTemplate.FORMATIVE_EVENTS[
         selectedProfessionId
@@ -25,7 +23,7 @@
 
       <label
         class="small-caps bold template-grid-title"
-        :for="'profession-' + selectedProfessionId + '-' + index"
+        :for="'event-' + selectedProfessionId + '-' + index"
       >
         <span class="bold text-center">{{ index + 1 }}</span>
         {{ formativeData.name }}
@@ -86,8 +84,14 @@ export default class CharacterTemplateChildhood extends Vue {
 
   get eventName() {
     return characterTemplate.FORMATIVE_EVENTS[this.selectedProfessionId][
-      this.value - 1
+      (this.value || 1) - 1
     ].name
+  }
+
+  get description() {
+    return (
+      this.$t("formative event") + ", " + this.$t(this.selectedProfessionId)
+    )
   }
 
   emitRandom() {
@@ -120,12 +124,9 @@ export default class CharacterTemplateChildhood extends Vue {
 
   &-title {
     grid-area: title;
-    // grid-column-start: 2;
-    // grid-column-end: -1;
   }
   &-story {
     grid-area: story;
-    // grid-column: 2;
   }
   &-radio {
     grid-area: radio;

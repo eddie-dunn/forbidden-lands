@@ -25,6 +25,7 @@ import {
 } from "@/characterData"
 import Vue from "vue"
 import { TranslateResult } from "vue-i18n"
+import FLButton from "@/components/base/FLButton.vue"
 import TalentSelect from "@/components/TalentSelect.vue"
 
 export function getTalentObjects(
@@ -45,6 +46,7 @@ export function getTalentObjects(
 
 const TalentSelector = Vue.extend({
   components: {
+    FLButton,
     TalentSelect,
   },
   props: {
@@ -191,7 +193,7 @@ const TalentSelector = Vue.extend({
     },
   },
   watch: {
-    "selectedTalents": {
+    ["selectedTalents"]: {
       immediate: true,
       handler() {
         // Set all undefined/falsy talent ranks to 1
@@ -200,7 +202,7 @@ const TalentSelector = Vue.extend({
         })
       },
     },
-    "ageType"() {
+    ["ageType"]() {
       // Reset all talent ranks to 1 if age is changed
       this.talentRanks = this.talentRanks.map(() => 1) as TalentRank[]
     },
@@ -211,7 +213,7 @@ const TalentSelector = Vue.extend({
     ["charData.kin"]() {
       this.$set(this.selectedTalents, 0, this.kinTalent)
     },
-    "exported": {
+    ["exported"]: {
       immediate: true,
       handler() {
         this.$emit("talents-updated", this.exported)
@@ -268,9 +270,9 @@ export default TalentSelector
     </div>
 
     <div v-if="canAddTalent">
-      <button class="button add-talent" @click="addTalent()">
+      <FLButton class="button add-talent" @click="addTalent()">
         {{ $t("Add talent") }}
-      </button>
+      </FLButton>
     </div>
 
     <!-- end -->

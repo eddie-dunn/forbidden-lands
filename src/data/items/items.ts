@@ -1,0 +1,740 @@
+import {
+  ItemWeapon,
+  Range,
+  ItemArmor,
+  ItemHelmet,
+  ItemShield,
+} from "./itemTypes"
+
+export namespace meleeWeapons {
+  // Start weapons
+
+  const knife: ItemWeapon = {
+    name: "knife",
+    grip: 1,
+    bonus: 1,
+    damage: 1,
+    range: Range.armslength,
+    cost: 1,
+    weight: 0.5,
+    features: {
+      pointed: true,
+    },
+    equipped: false,
+    bonusType: "black",
+    type: "weapon",
+    id: "base knife",
+    skill: "melee",
+  }
+
+  const dagger: ItemWeapon = {
+    name: "dagger",
+    grip: 1,
+    bonus: 1,
+    damage: 1,
+    range: Range.armslength,
+    cost: 2,
+    weight: 0.5,
+    features: {
+      pointed: true,
+      edged: true,
+    },
+    equipped: false,
+    bonusType: "black",
+    type: "weapon",
+    id: "base dagger",
+    skill: "melee",
+  }
+
+  const falchion: ItemWeapon = {
+    id: "base falchion",
+    name: "falchion",
+    grip: 1,
+    bonus: 1,
+    damage: 2,
+    range: Range.armslength,
+    cost: 4,
+    weight: 1,
+    features: {
+      pointed: true,
+      edged: true,
+    },
+    equipped: false,
+    bonusType: "black",
+    type: "weapon",
+    skill: "melee",
+  }
+
+  const shortsword: ItemWeapon = {
+    id: "base shortsword",
+    name: "shortsword",
+    grip: 1,
+    bonus: 2,
+    damage: 1,
+    range: Range.armslength,
+    cost: 6,
+    weight: 1,
+    features: {
+      pointed: true,
+      edged: true,
+      parrying: true,
+    },
+    equipped: false,
+    bonusType: "black",
+    type: "weapon",
+    skill: "melee",
+  }
+
+  const broadsword: ItemWeapon = {
+    id: "base broadsword",
+    name: "broadsword",
+    grip: 1,
+    bonus: 2,
+    damage: 2,
+    range: Range.armslength,
+    cost: 10,
+    weight: 1,
+    features: {
+      pointed: true,
+      edged: true,
+      parrying: true,
+    },
+    equipped: false,
+    bonusType: "black",
+    type: "weapon",
+    skill: "melee",
+  }
+
+  const longsword: ItemWeapon = {
+    id: "longsword",
+    name: "longsword",
+    grip: 1,
+    bonus: 2,
+    damage: 2,
+    range: Range.armslength,
+    cost: 18,
+    weight: 2,
+    features: {
+      pointed: true,
+      edged: true,
+      parrying: true,
+    },
+    equipped: false,
+    bonusType: "black",
+    type: "weapon",
+    skill: "melee",
+  }
+
+  const twohandedsword: ItemWeapon = {
+    id: "two handed sword",
+    name: "two handed sword",
+    grip: 2,
+    bonus: 2,
+    damage: 3,
+    range: Range.armslength,
+    cost: 40,
+    weight: 2,
+    features: {
+      edged: true,
+      pointed: true,
+      parrying: true,
+    },
+    equipped: false,
+    bonusType: "black",
+    type: "weapon",
+    skill: "melee",
+  }
+
+  const scimitar: ItemWeapon = {
+    id: "scimitar",
+    name: "scimitar",
+    grip: 1,
+    bonus: 1,
+    damage: 2,
+    range: Range.armslength,
+    cost: 8,
+    weight: 1,
+    features: {
+      edged: true,
+      pointed: true,
+      hook: true,
+      parrying: true,
+    },
+    equipped: false,
+    bonusType: "black",
+    type: "weapon",
+    skill: "melee",
+  }
+
+  const handaxe: ItemWeapon = {
+    id: "handaxe",
+    name: "handaxe",
+    grip: 1,
+    bonus: 2,
+    damage: 2,
+    range: Range.armslength,
+    cost: 2,
+    weight: 1,
+    features: {
+      edged: true,
+      hook: true,
+    },
+    equipped: false,
+    bonusType: "black",
+    type: "weapon",
+    skill: "melee",
+  }
+
+  const battleaxe: ItemWeapon = {
+    id: "battleaxe",
+    name: "battleaxe",
+    grip: 1,
+    bonus: 2,
+    damage: 2,
+    range: Range.armslength,
+    cost: 6,
+    weight: 2,
+    features: {
+      edged: true,
+      hook: true,
+    },
+    equipped: false,
+    bonusType: "black",
+    type: "weapon",
+    skill: "melee",
+  }
+
+  const twohandedaxe: ItemWeapon = {
+    id: "two handed axe",
+    name: "two handed axe",
+    grip: 2,
+    bonus: 2,
+    damage: 3,
+    range: Range.armslength,
+    cost: 18,
+    weight: 2,
+    features: {
+      edged: true,
+      hook: true,
+    },
+    equipped: false,
+    bonusType: "black",
+    type: "weapon",
+    skill: "melee",
+  }
+
+  const mace: ItemWeapon = {
+    id: "mace",
+    name: "mace",
+    grip: 1,
+    bonus: 2,
+    damage: 1,
+    range: Range.armslength,
+    cost: 4,
+    weight: 1,
+    features: {
+      blunt: true,
+    },
+    equipped: false,
+    bonusType: "black",
+    type: "weapon",
+    skill: "melee",
+  }
+
+  const morningstar: ItemWeapon = {
+    id: "morningstar",
+    name: "morningstar",
+    grip: 1,
+    bonus: 2,
+    damage: 2,
+    range: Range.armslength,
+    cost: 8,
+    weight: 1,
+    features: {
+      blunt: true,
+    },
+    bonusType: "black",
+    type: "weapon",
+    skill: "melee",
+  }
+
+  const warhammer: ItemWeapon = {
+    id: "warhammer",
+    name: "warhammer",
+    grip: 1,
+    bonus: 2,
+    damage: 2,
+    range: Range.armslength,
+    cost: 12,
+    weight: 1,
+    features: {
+      blunt: true,
+      hook: true,
+    },
+    bonusType: "black",
+    type: "weapon",
+    skill: "melee",
+  }
+
+  const flail: ItemWeapon = {
+    id: "flail",
+    name: "flail",
+    grip: 1,
+    bonus: 1,
+    damage: 2,
+    range: Range.near,
+    cost: 16,
+    weight: 1,
+    features: {
+      blunt: true,
+    },
+    bonusType: "black",
+    type: "weapon",
+    skill: "melee",
+  }
+
+  const woodenclub: ItemWeapon = {
+    id: "wooden club",
+    name: "wooden club",
+    grip: 1,
+    bonus: 1,
+    damage: 1,
+    range: Range.armslength,
+    cost: 1,
+    weight: 1,
+    features: {
+      blunt: true,
+    },
+    bonusType: "black",
+    type: "weapon",
+    skill: "melee",
+  }
+  const largewoodenclub: ItemWeapon = {
+    id: "large wooden club",
+    name: "large wooden club",
+    grip: 2,
+    bonus: 1,
+    damage: 2,
+    range: Range.armslength,
+    cost: 2,
+    weight: 2,
+    features: {
+      blunt: true,
+    },
+    bonusType: "black",
+    type: "weapon",
+    skill: "melee",
+  }
+
+  const heavywarhammer: ItemWeapon = {
+    id: "heavy warhammer",
+    name: "heavy warhammer",
+    grip: 2,
+    bonus: 2,
+    damage: 3,
+    range: Range.armslength,
+    cost: 22,
+    weight: 2,
+    features: {
+      blunt: true,
+      hook: true,
+    },
+    bonusType: "black",
+    type: "weapon",
+    skill: "melee",
+  }
+
+  const staff: ItemWeapon = {
+    id: "staff",
+    name: "staff",
+    grip: 2,
+    bonus: 1,
+    damage: 1,
+    range: Range.near,
+    cost: 1,
+    weight: 1,
+    features: {
+      blunt: true,
+      hook: true,
+      parrying: true,
+    },
+    bonusType: "black",
+    type: "weapon",
+    skill: "melee",
+  }
+
+  const shortspear: ItemWeapon = {
+    id: "short spear",
+    name: "short spear",
+    grip: 1,
+    bonus: 1,
+    damage: 1,
+    range: Range.near,
+    cost: 2,
+    weight: 1,
+    features: {
+      pointed: true,
+    },
+    bonusType: "black",
+    type: "weapon",
+    skill: "melee",
+  }
+
+  const longspear: ItemWeapon = {
+    id: "long spear",
+    name: "long spear",
+    grip: 2,
+    bonus: 2,
+    damage: 1,
+    range: Range.near,
+    cost: 4,
+    weight: 1,
+    features: {
+      pointed: true,
+    },
+    bonusType: "black",
+    type: "weapon",
+    skill: "melee",
+  }
+
+  const pike: ItemWeapon = {
+    id: "pike",
+    name: "pike",
+    grip: 2,
+    bonus: 2,
+    damage: 2,
+    range: Range.near,
+    cost: 12,
+    weight: 2,
+    features: {
+      pointed: true,
+    },
+    bonusType: "black",
+    type: "weapon",
+    skill: "melee",
+  }
+
+  const halberd: ItemWeapon = {
+    id: "halberd",
+    name: "halberd",
+    grip: 2,
+    bonus: 2,
+    damage: 2,
+    range: Range.near,
+    cost: 30,
+    weight: 2,
+    features: {
+      pointed: true,
+      edged: true,
+      hook: true,
+    },
+    bonusType: "black",
+    type: "weapon",
+    skill: "melee",
+  }
+
+  const trident: ItemWeapon = {
+    id: "trident",
+    name: "trident",
+    grip: 2,
+    bonus: 1,
+    damage: 2,
+    range: Range.near,
+    cost: 6,
+    weight: 1,
+    features: {
+      pointed: true,
+      hook: true,
+    },
+    bonusType: "black",
+    type: "weapon",
+    skill: "melee",
+  }
+
+  export const allMelee: ItemWeapon[] = [
+    // Swords
+    knife,
+    dagger,
+    falchion,
+    shortsword,
+    broadsword,
+    longsword,
+    twohandedsword,
+    scimitar,
+    // Axes
+    handaxe,
+    battleaxe,
+    twohandedaxe,
+    // Blunt
+    mace,
+    morningstar,
+    warhammer,
+    heavywarhammer,
+    flail,
+    woodenclub,
+    largewoodenclub,
+    // Polearms
+    staff,
+    shortspear,
+    longspear,
+    halberd,
+    trident,
+  ]
+  // End weapons
+}
+
+export namespace rangedWeapons {
+  export const allRanged: ItemWeapon[] = [
+    {
+      id: "rock",
+      name: "rock",
+      grip: 1,
+      bonus: 0,
+      damage: 1,
+      range: Range.short,
+      cost: 0,
+      weight: 0.5,
+      features: {},
+      equipped: false,
+      bonusType: "black",
+      type: "weapon",
+      skill: "marksmanship",
+    },
+    {
+      id: "throwing knife",
+      name: "throwing knife",
+      grip: 1,
+      bonus: 1,
+      damage: 1,
+      range: Range.short,
+      cost: 1,
+      weight: 0.5,
+      features: {},
+      equipped: false,
+      bonusType: "black",
+      type: "weapon",
+      skill: "marksmanship",
+    },
+    {
+      id: "throwing axe",
+      name: "throwing axe",
+      grip: 1,
+      bonus: 1,
+      damage: 2,
+      range: Range.short,
+      cost: 2,
+      weight: 1,
+      features: {},
+      equipped: false,
+      bonusType: "black",
+      type: "weapon",
+      skill: "marksmanship",
+    },
+    {
+      id: "throwing spear",
+      name: "throwing spear",
+      grip: 1,
+      bonus: 2,
+      damage: 1,
+      range: Range.short,
+      cost: 3,
+      weight: 1,
+      features: {},
+      equipped: false,
+      bonusType: "black",
+      type: "weapon",
+      skill: "marksmanship",
+    },
+    {
+      id: "sling",
+      name: "sling",
+      grip: 1,
+      bonus: 1,
+      damage: 1,
+      range: Range.short,
+      cost: 1,
+      weight: 0.5,
+      features: {},
+      equipped: false,
+      bonusType: "black",
+      type: "weapon",
+      skill: "marksmanship",
+    },
+    {
+      id: "short bow",
+      name: "short bow",
+      grip: 2,
+      bonus: 2,
+      damage: 1,
+      range: Range.short,
+      cost: 6,
+      weight: 0.5,
+      features: {},
+      equipped: false,
+      bonusType: "black",
+      type: "weapon",
+      skill: "marksmanship",
+    },
+    {
+      id: "longbow",
+      name: "longbow",
+      grip: 2,
+      bonus: 2,
+      damage: 1,
+      range: Range.long,
+      cost: 12,
+      weight: 1,
+      features: {},
+      equipped: false,
+      bonusType: "black",
+      type: "weapon",
+      skill: "marksmanship",
+    },
+    {
+      id: "light crossbow",
+      name: "light crossbow",
+      grip: 2,
+      bonus: 1,
+      damage: 2,
+      range: Range.long,
+      cost: 24,
+      weight: 1,
+      features: {
+        slow_loading: true,
+      },
+      equipped: false,
+      bonusType: "black",
+      type: "weapon",
+      skill: "marksmanship",
+    },
+    {
+      id: "heavy crossbow",
+      name: "heavy crossbow",
+      grip: 2,
+      bonus: 1,
+      damage: 3,
+      range: Range.long,
+      cost: 40,
+      weight: 2,
+      features: {
+        slow_loading: true,
+      },
+      equipped: false,
+      bonusType: "black",
+      type: "weapon",
+      skill: "marksmanship",
+    },
+  ]
+}
+
+export const allArmor: ItemArmor[] = [
+  {
+    id: "leather armor",
+    name: "leather armor",
+    bonus: 2,
+    cost: 3,
+    weight: 0.5,
+    bonusType: "black",
+    type: "armor",
+  },
+  {
+    id: "studded leather",
+    name: "studded leather",
+    bonus: 3,
+    cost: 5,
+    weight: 1,
+    bonusType: "black",
+    type: "armor",
+  },
+  {
+    id: "chainmail",
+    name: "chainmail",
+    bonus: 6,
+    cost: 24,
+    weight: 2,
+    comment: "Armor rating 3 against arrows and Stabs",
+    bonusType: "black",
+    type: "armor",
+  },
+  {
+    id: "plate armor",
+    name: "plate armor",
+    bonus: 8,
+    cost: 80,
+    weight: 2,
+    comment: "Modifies Move by -2",
+    skillMods: [{ id: "move", mod: -2 }],
+    bonusType: "black",
+    type: "armor",
+  },
+]
+
+const allHelmets: ItemHelmet[] = [
+  {
+    id: "studded leather cap",
+    name: "studded leather cap",
+    bonus: 1,
+    cost: 2,
+    weight: 0.5,
+    bonusType: "black",
+    type: "helmet",
+  },
+  {
+    id: "open helmet",
+    name: "open helmet",
+    bonus: 2,
+    cost: 8,
+    weight: 0.5,
+    bonusType: "black",
+    type: "helmet",
+  },
+  {
+    id: "closed helmet",
+    name: "closed helmet",
+    bonus: 3,
+    cost: 18,
+    weight: 1,
+    bonusType: "black",
+    type: "helmet",
+  },
+  {
+    id: "great helm",
+    name: "great helm",
+    bonus: 4,
+    cost: 30,
+    weight: 1,
+    comment: "Scouting -2",
+    skillMods: [{ id: "scouting", mod: -2 }],
+    bonusType: "black",
+    type: "helmet",
+  },
+]
+
+const allShields: ItemShield[] = [
+  {
+    id: "small shield",
+    name: "small shield",
+    bonus: 1,
+    cost: 6,
+    weight: 0.5,
+    bonusType: "black",
+    type: "shield",
+  },
+  {
+    id: "large shield",
+    name: "large shield",
+    bonus: 2,
+    cost: 15,
+    weight: 1,
+    bonusType: "black",
+    type: "shield",
+  },
+]
+
+export const allItems = [
+  ...rangedWeapons.allRanged,
+  ...meleeWeapons.allMelee,
+  ...allShields,
+  ...allArmor,
+  ...allHelmets,
+]

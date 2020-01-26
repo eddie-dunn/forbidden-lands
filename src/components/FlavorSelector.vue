@@ -14,6 +14,9 @@ export default Vue.extend({
       type: Object as () => CharacterData,
       required: true,
     },
+    viewOnly: {
+      type: Boolean,
+    },
   },
   created() {
     this.characterData = this.data
@@ -25,9 +28,9 @@ export default Vue.extend({
   },
   computed: {
     appearancePlaceholder(): string {
-      return `${this.$t("Face")}:\n${this.$t("Body")}:\n${this.$t(
+      return `${this.$t("Face")}, ${this.$t("Body")}, ${this.$t(
         "Clothing"
-      )}:\n`
+      )} etc`
     },
   },
 })
@@ -42,6 +45,7 @@ export default Vue.extend({
           class="textarea-fullwidth"
           id="appearance"
           v-model="characterData.appearance"
+          :disabled="viewOnly"
           :placeholder="appearancePlaceholder"
         ></textarea>
       </div>
@@ -50,6 +54,7 @@ export default Vue.extend({
         <textarea
           id="pride"
           class="textarea-fullwidth"
+          :disabled="viewOnly"
           v-model="characterData.pride"
           placeholder="..."
         ></textarea>
@@ -59,6 +64,7 @@ export default Vue.extend({
         <textarea
           id="dark-secret"
           class="textarea-fullwidth"
+          :disabled="viewOnly"
           v-model="characterData.darkSecret"
           placeholder="..."
         ></textarea>
@@ -68,6 +74,7 @@ export default Vue.extend({
         <textarea
           id="relationships"
           class="textarea-fullwidth"
+          :disabled="viewOnly"
           v-model="characterData.relationships"
           placeholder="..."
         ></textarea>

@@ -1,7 +1,8 @@
 <script lang="ts">
 import Vue from "vue"
 import { CharacterData, validateNewCharacter } from "@/characterData"
-import Modal from "@/components/Modal.vue"
+import FLButton from "@/components/base/FLButton.vue"
+import ModalConfirm from "@/components/ModalConfirm.vue"
 
 const VALID = "✓"
 const INVALID = "✖"
@@ -9,12 +10,14 @@ const INVALID = "✖"
 export default Vue.extend({
   name: "CharacterCreatorCard",
   components: {
-    Modal,
+    FLButton,
+    ModalConfirm,
   },
   props: {
     charData: Object as () => CharacterData | null,
     titleOverride: String,
     linkOverride: String,
+    clickDisabled: Boolean,
   },
   data() {
     return {
@@ -90,28 +93,22 @@ export default Vue.extend({
 
 <template>
   <div class="character-card">
-    <Modal v-if="modalActive" @close="closeModal()" :maximized="false">
-      <div slot="header">{{ $t("Confirm delete") }}</div>
-      <div slot="body"></div>
-      <div class="modal-button-row" slot="footer">
-        <button @click="closeModal()" class="button">{{ $t("Cancel") }}</button>
-        <button @click="remove()" class="button button-red">OK</button>
-      </div>
-    </Modal>
-    <Modal
+    <ModalConfirm
+      v-if="modalActive"
+      :confirmAction="() => remove()"
+      @close="() => closeModal()"
+      :title="$t('Remove')"
+      :body="$t('CONFIRM_DELETE_CHAR')"
+      :danger="true"
+    ></ModalConfirm>
+
+    <ModalConfirm
       v-if="modalConfirmActivate"
+      :confirmAction="() => activate()"
       @close="modalConfirmActivate = false"
-      :maximized="false"
-    >
-      <div slot="header">{{ $t("Confirm activate") }}</div>
-      <div slot="body">{{ $t("CONFIRM_ACTIVATE_INVALID_CHAR") }}</div>
-      <div class="modal-button-row" slot="footer">
-        <button @click="modalConfirmActivate = false" class="button">
-          {{ $t("Cancel") }}
-        </button>
-        <button @click="activate()" class="button button-red">OK</button>
-      </div>
-    </Modal>
+      :title="$t('Conform activate')"
+      :body="$t('CONFIRM_ACTIVATE_INVALID_CHAR')"
+    ></ModalConfirm>
 
     <div v-if="!this.charData" class="stat-card row-full transform">
       <div class="placeholder" @click="edit()">
@@ -128,28 +125,27 @@ export default Vue.extend({
           :class="['card-buttons', actionsActive ? '' : 'hidden']"
           @click.self="cardClicked"
         >
-          <button class="button button-red" @click.self="confirmRemove">
+          <FLButton type="danger" @click.self="confirmRemove">
             {{ $t("Remove") }}
-          </button>
-          <button class="button" @click="edit">
+          </FLButton>
+          <FLButton @click="edit">
             {{
               charData.metadata.status === "active" ? $t("View") : $t("Edit")
             }}
-          </button>
-          <button
+          </FLButton>
+          <FLButton
             v-if="charData.metadata.status !== 'active'"
-            :class="['button', newChar && !newCharValid ? 'button-danger' : '']"
+            :type="newChar && !newCharValid ? 'danger' : 'main'"
             @click="activateClicked"
           >
             {{ $t("Activate") }}
-          </button>
-          <button
+          </FLButton>
+          <FLButton
             v-if="charData.metadata.status === 'active'"
-            class="button"
             @click="deactivate"
           >
             {{ $t("Deactivate") }}
-          </button>
+          </FLButton>
         </div>
         <img
           class="top-image"
@@ -243,6 +239,10 @@ h3 {
   }
 }
 
+.modal-body {
+  padding: 1rem;
+}
+
 .modal-button-row {
   margin: 3px;
   margin: 0.5rem;
@@ -314,7 +314,8 @@ h3 {
   align-content: space-between;
   height: 100%;
   height: 400px;
-  box-shadow: 0px 1px 5px #555;
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.7),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.1), 0px 2px 1px -1px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 

@@ -1,10 +1,10 @@
 <template>
   <TemplateSelect
     :title="$t(value.id)"
+    :description="$t('Profession')"
     :diceValue="value.diceRoll"
     @randomClicked="randomClicked"
   >
-    <div>{{ $t("Profession") }}</div>
     <div
       v-for="(professsion, index) in PROFESSION_66"
       @click="setKinWithValue(professsion.d_min)"

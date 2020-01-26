@@ -3,13 +3,10 @@ import { Component, Vue, Watch } from "vue-property-decorator"
 import Card from "@/components/Card.vue"
 import CharacterCard from "@/components/CharacterCard.vue"
 import Expander from "@/components/ExpandableSection.vue"
-import {
-  loadAllCharactersFromLocalStorage,
-  Store,
-  SaveData,
-} from "@/characterStorage"
+import { SaveData } from "@/localstorage/characterStorage"
 import FileReader from "@/components/FileReader.vue"
 import { setTimeout } from "timers"
+import { SET_PAGE_TITLE } from "@/store/store-types"
 
 function generateDateString(): string {
   return "backup-" + new Date().toISOString() + ".charlist.flcdata"
@@ -35,6 +32,10 @@ export default class CharacterListView extends Vue {
   newCharacters = this.$characterStore.charactersByStatus(["new", undefined])
   activeCharacters = this.$characterStore.activeCharacters
   inactiveCharacters = this.$characterStore.charactersByStatus("freeEdit")
+
+  mounted() {
+    this.$store.commit(SET_PAGE_TITLE, "Characters")
+  }
 
   updateCharacters() {
     // There is probably be a better way to handle this, but it will do for now
@@ -102,7 +103,6 @@ export default class CharacterListView extends Vue {
 
 <template>
   <div class="character-list-container">
-    <h1>{{ $t("Characters") }}</h1>
     <Expander
       :label="$t('New')"
       :defaultOpen="true"
@@ -176,56 +176,7 @@ export default class CharacterListView extends Vue {
       </div>
     </Expander>
 
-    <Expander :label="$t('Import/Export')">
-      <div class="import-export">
-        <h3>Export</h3>
-        <button
-          v-if="!exportBlob"
-          class="button"
-          @click="generateBlob"
-          :disabled="!!exportBlob"
-        >
-          <!-- TODO: Translate -->
-          Generate backup
-        </button>
-        <div class="download-link" v-if="exportBlob">
-          <a
-            :href="exportBlob"
-            :download="exportFilename"
-            @click="downloadClicked"
-          >
-            <!-- TODO: Translate -->
-            Download data
-          </a>
-          <span>
-            <!-- TODO: Translate -->
-            (to choose destination folder, right click/long press and select
-            "Save link as...")
-          </span>
-        </div>
-        <h3>Import</h3>
-        <FileReader
-          label="Select file"
-          @load="importDataLoaded"
-          accept=".charlist.flcdata"
-          :key="importKey"
-        >
-          <button
-            v-if="importData"
-            class="button button-red"
-            @click="importBackup"
-          >
-            <!-- TODO: Translate -->
-            Import backup
-          </button>
-          <p v-if="importData">
-            <!-- TODO: Translate -->
-            N.B: Importing character list data will overwrite all your current
-            characters!
-          </p>
-        </FileReader>
-      </div>
-    </Expander>
+    <!-- spacer -->
   </div>
 </template>
 

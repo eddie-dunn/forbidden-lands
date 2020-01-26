@@ -376,6 +376,9 @@ export default {
   // Param
   "PHB_ref": "Page {page} in the Player's Handbook",
 
+  // Key
+  "CONFIRM_DELETE_CHAR": "Are you sure you wish to delete this character?",
+
   // Longer
   "Roll dice before session starts": "Roll dice before session starts",
   "XP_DESCR": `
@@ -434,4 +437,7 @@ export default {
     However, even if the stats are invalid it is still possible to save and
     activate your character, should you wish to do so.
   `,
+  "GENERATE_DOWNLOAD_LINK": "Genererate download link",
+  "IMPORT_WARNING":
+    "Warning: Importing a backup will replace all your current settings and characters",
 }

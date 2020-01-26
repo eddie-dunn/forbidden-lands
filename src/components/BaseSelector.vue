@@ -1,19 +1,29 @@
 <script lang="ts">
+import Vue from "vue"
+import VueI18n from "vue-i18n"
 /* eslint-disable no-console */
 import { AGE, CLASS, KIN } from "@/keys.ts"
 import { Age } from "@/types"
 import { capitalize } from "@/util"
 import { getAgeType, getAgeRange, getReputation } from "@/age"
 import { CLASS as PROFESSION } from "@/classes"
-import Vue from "vue"
 import { CharacterData } from "@/characterData"
-import VueI18n from "vue-i18n"
+
+import FLInput from "@/components/base/FLInput.vue"
 
 export default Vue.extend({
+  components: {
+    FLInput,
+  },
   props: {
     data: {
       type: Object as () => CharacterData,
       required: true,
+    },
+    viewOnly: {
+      type: Boolean,
+      default: false,
+      required: false,
     },
     // Functions
     capitalize: {
@@ -58,7 +68,7 @@ export default Vue.extend({
       return this.mdata.reputation || this.calcRep()
     },
     disabled(): boolean {
-      return this.data.metadata.status === "active"
+      return this.data.metadata.status === "active" || this.viewOnly
     },
   },
   watch: {
@@ -118,29 +128,25 @@ export default Vue.extend({
 <template>
   <div class="contentgroup">
     <div class="grid-3-col">
-      <div class="input-layout grid-full-width">
-        <label for="character-name">{{ $t("Name") }}</label>
-        <input
-          id="character-name"
-          type="text"
-          v-model="mdata.name"
-          :placeholder="nameSuggestion()"
-          required
-        />
-      </div>
+      <FLInput
+        v-model="mdata.name"
+        :placeholder="nameSuggestion()"
+        :label="$t('Name')"
+        :disabled="viewOnly"
+        id="character-name"
+        class="grid-full-width"
+        required
+      />
+      <FLInput
+        v-model="mdata.age"
+        type="number"
+        min="10"
+        max="999"
+        :placeholder="ageRange()"
+        :disabled="disabled"
+        :label="capitalize($t('age'))"
+      />
 
-      <div class="input-layout">
-        <label for="age" class="base-label">{{ $t("age") }}</label>
-        <input
-          :disabled="disabled"
-          id="age"
-          type="number"
-          v-model.number="mdata.age"
-          :placeholder="ageRange()"
-          min="10"
-          max="999"
-        />
-      </div>
       <div class="input-layout">
         <label for="character-kin" class="base-label">{{ $t("kin") }}</label>
         <select id="character-kin" v-model="mdata.kin" :disabled="disabled">
@@ -149,6 +155,7 @@ export default Vue.extend({
           </option>
         </select>
       </div>
+
       <div class="input-layout">
         <label for="character-class" class="base-label">
           {{ $t("Profession") }}

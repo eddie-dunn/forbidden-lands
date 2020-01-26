@@ -1,10 +1,15 @@
 <script>
+import { SET_PAGE_TITLE } from "@/store/store-types"
+
 export default {
   name: "about_page",
   data() {
     return {
       buildVersion: __APP_VERSION__,
     }
+  },
+  mounted() {
+    this.$store.commit(SET_PAGE_TITLE, "About FLC")
   },
 }
 </script>
@@ -73,7 +78,7 @@ export default {
           >the repo hosting the project</a
         >
         or
-        <a href="mailto:eddie.dunn+flc@gmail.com">email me</a>.
+        <a href="mailto:forbidden.lands.companion@gmail.com">email me</a>.
       </p>
 
       <h2>Technical Details</h2>

@@ -49,11 +49,13 @@ export default class ExpandableSection extends Vue {
   }
 
   get incrementDisabled() {
+    if (this.disabled || !this.canIncrement) return true
     if (!this.max || !this.value) return false
     return Number(this.value) >= Number(this.max)
   }
 
   get decrementDisabled() {
+    if (this.disabled || !this.canDecrement) return true
     if (!this.min) return false
     return Number(this.value) <= Number(this.min)
   }
@@ -64,7 +66,8 @@ export default class ExpandableSection extends Vue {
   <div class="fl-number-row">
     <button
       class="fl-number-button shared"
-      :disabled="decrementDisabled || !canDecrement || disabled"
+      type="button"
+      :disabled="decrementDisabled"
       @click="decrement"
       tabindex="-1"
       :style="cssProps"
@@ -87,7 +90,8 @@ export default class ExpandableSection extends Vue {
     />
     <button
       class="fl-number-button shared"
-      :disabled="incrementDisabled || !canIncrement || disabled"
+      type="button"
+      :disabled="incrementDisabled"
       @click="increment"
       tabindex="-1"
       :style="cssProps"
@@ -105,7 +109,6 @@ export default class ExpandableSection extends Vue {
 
 .fl-number-input {
   width: var(--width);
-  border: solid 1px;
   border: solid 1px @pastel-green;
   border-left: 0;
   border-right: 0;
@@ -113,10 +116,15 @@ export default class ExpandableSection extends Vue {
     color: @pastel-red;
     border: solid 1px @pastel-red;
   }
+  &:disabled {
+    border: 1px solid @color-main-transparent;
+  }
 }
 
 .fl-number-button {
-  // border: solid 1px black;
+  @media print {
+    display: none;
+  }
   border: solid 1px @pastel-green;
   background: @pastel-green;
   color: white;
