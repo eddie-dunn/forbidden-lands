@@ -150,7 +150,7 @@ export default Vue.extend({
           <div class="inline-block">{{ $t(skill.id) }}</div>
         </label>
         <div v-if="!canEditSkills" class="skill-view">
-          {{ charData.skills[skill.id].rank }}
+          {{ charData.skills[skill.id].rank || 0 }}
         </div>
         <SkillInput
           v-if="canEditSkills"
