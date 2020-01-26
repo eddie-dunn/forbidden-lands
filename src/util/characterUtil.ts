@@ -165,6 +165,5 @@ function adjustAttributesByAge(
       newAttributes.wits--
     }
   }
-  console.log("returning", { ...attributes }, "->", newAttributes, ageType)
   return newAttributes
 }
