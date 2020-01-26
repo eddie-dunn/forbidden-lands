@@ -176,6 +176,8 @@ export default Vue.extend({
 </template>
 
 <style lang="less" scoped>
+@import "~Style/colors.less";
+
 .inline-block {
   display: inline-block;
 }
@@ -186,23 +188,27 @@ export default Vue.extend({
 
 .skillbox {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(15ch, 1fr));
   &.skillbox-edit {
     grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
   }
   row-gap: 1rem;
-  column-gap: 3px;
+  column-gap: 1rem;
   margin: 1rem 0;
 }
 
 .skillrow {
   align-items: center;
   display: grid;
-  grid-template-columns: auto 2fr 1fr;
+  grid-template-columns: auto 2fr auto;
+  box-shadow: @box-shadow-normal;
+  padding: 3px;
   &.skillrow-edit {
     grid-template-columns: auto 2fr;
+    box-shadow: none;
   }
-  grid-gap: 3px;
+  grid-gap: 1px;
+  cursor: pointer;
 }
 
 .class-skill {
@@ -213,9 +219,14 @@ export default Vue.extend({
   text-transform: capitalize;
   overflow-x: scroll;
   scrollbar-width: none;
+  cursor: pointer;
 }
 .skill-name::-webkit-scrollbar {
   display: none; // Safari and Chrome
+}
+
+.skill-view {
+  padding-right: 5px;
 }
 
 .skill-input {
