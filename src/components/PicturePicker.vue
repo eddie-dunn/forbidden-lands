@@ -122,7 +122,7 @@ export default class PicturePicker extends AppProps {
           <div class="url-view" v-if="showGetUrl">
             <form class="url-view-form" v-on:submit.prevent="urlButtonClicked">
               <input
-                :placeholder="$t('Enter external URL...')"
+                :placeholder="$t('Enter external URL') + '...'"
                 id="external url"
                 v-model="imgUrl"
               />

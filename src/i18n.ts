@@ -14,7 +14,7 @@ const i18n = new VueI18n({
   // TODO: VUE_APP_I18N_LOCALE is never used; reconfigure?
   locale: CURRENT_LOCALE || process.env.VUE_APP_I18N_LOCALE,
   fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE,
-  silentTranslationWarn: true,
+  // silentTranslationWarn: true,
   messages: {
     // ...loadLocaleMessages(),
     se,
