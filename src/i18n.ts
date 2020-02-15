@@ -16,7 +16,7 @@ const i18n = new VueI18n({
   fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE,
   silentTranslationWarn: true,
   messages: {
-    /*...loadLocaleMessages(), */
+    // ...loadLocaleMessages(),
     se,
     en,
   },

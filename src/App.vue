@@ -100,7 +100,7 @@ export default Vue.extend({
       </div>
       <div class="navbar-center">
         <h1 class="page-title capitalize">
-          {{ $t(pageTitle) }}{{ $t(pageSubtitle) }}
+          {{ $t(pageTitle) }}{{ pageSubtitle }}
         </h1>
       </div>
       <div class="navbar-right">
