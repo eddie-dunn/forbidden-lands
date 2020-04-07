@@ -193,6 +193,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
 
+  position: relative;
   display: flex;
   flex-direction: column;
   max-width: 1024px;
