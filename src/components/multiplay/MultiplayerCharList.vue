@@ -24,6 +24,15 @@ export const EMIT_SELECTED_CHARS = "mpcharlist selected chars"
 export default class MultiplayerCharList extends Vue {
   selectedChars: (CharacterData | null)[] = this.$store.state[MP_CHARS]
 
+  mounted() {
+    const firstActiveChar = this.$characterStore.activeCharacters[0] || null
+    this.portraitClicked(firstActiveChar) // select first active char
+  }
+
+  destroyed() {
+    !this.mpActive && this.$store.commit(SET_MP_CHAR, [null]) // reset selected chars
+  }
+
   portraitClicked(charData: CharacterData | null) {
     if (charData) {
       const alreadySelected = this.isSelected(charData)
@@ -61,7 +70,7 @@ export default class MultiplayerCharList extends Vue {
     return this.$store.getters[GET_MP_PLAYERS]
   }
   get activeCharacters() {
-    return [null, ...this.$characterStore.activeCharacters]
+    return [...this.$characterStore.activeCharacters, null]
   }
   get selfPlayer(): UserData | undefined {
     return this.$store.getters[GET_MP_PLAYER_SELF]
