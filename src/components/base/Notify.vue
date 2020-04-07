@@ -76,10 +76,14 @@ export default class Notify extends Vue {
 @import "~Style/colors.less";
 
 .notifications {
-  position: absolute;
-  top: 10vh;
+  position: fixed;
+  top: 40px;
   z-index: @z-notifications;
   width: 100%;
+  max-width: 1024px;
+  @media print {
+    display: none;
+  }
 }
 
 .notification {

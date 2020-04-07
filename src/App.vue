@@ -84,8 +84,6 @@ export default Vue.extend({
 
 <template>
   <div id="app">
-    <Notify />
-
     <!-- TODO: Create separate component for navbar -->
     <div class="navbar navbar-top">
       <div class="navbar-left ">
@@ -148,6 +146,7 @@ export default Vue.extend({
     </NavDrawer>
 
     <DiceModal v-if="showDiceModal" @close="showDiceModal = false" />
+    <Notify />
   </div>
 </template>
 
