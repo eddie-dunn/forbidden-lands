@@ -38,14 +38,14 @@ export default class InfoBox extends Vue {}
   overflow: auto;
   position: sticky;
   pointer-events: none;
-  // .old-version();
+  .old-version();
   bottom: 0;
   justify-content: space-between;
 }
 
 .action-bar {
-  padding: 0.25rem;
-  margin: 0.25rem 0.25rem;
+  padding: 0.25rem 1.5rem;
+  margin: 0.25rem;
   pointer-events: all;
   flex: 0 1 auto;
   &-left {
