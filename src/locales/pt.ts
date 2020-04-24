@@ -9,42 +9,42 @@ import {
 } from "./localetypes"
 
 const age: AgeTranslations = {
-  "age": "age",
-  "adult": "adult",
-  "old": "old",
-  "young": "young",
+  "age": "idade",
+  "adult": "adulto",
+  "old": "idoso",
+  "young": "jovem",
   "": "?",
 }
 
 const professions: ProfessionTranslations = {
-  sorcerer: "sorcerer",
-  druid: "druid",
-  fighter: "fighter",
-  hunter: "hunter",
-  minstrel: "minstrel",
-  peddler: "peddler",
-  rider: "rider",
-  rogue: "rogue",
+  sorcerer: "feiticeiro",
+  druid: "druida",
+  fighter: "guerreiro",
+  hunter: "caçador",
+  minstrel: "menestrel",
+  peddler: "mascate",
+  rider: "cavaleiro",
+  rogue: "ladrão",
 }
 
 const attributes: AttributeTranslations = {
-  attributes: "attributes",
-  agility: "agility",
-  empathy: "empathy",
-  strength: "strength",
-  wits: "wits",
+  attributes: "atributos",
+  agility: "agilidade",
+  empathy: "empatia",
+  strength: "força",
+  wits: "perspicácia",
 }
 
 const kin: KinTranslations = {
-  kin: "kin",
-  dwarf: "dwarf",
-  elf: "elf",
+  kin: "parentesco",
+  dwarf: "anão",
+  elf: "elfo",
   goblin: "goblin",
-  halfelf: "halfelf",
+  halfelf: "meio-elfo",
   halfling: "halfling",
-  human: "human",
+  human: "humano",
   orc: "orc",
-  wolfkin: "wolfkin",
+  wolfkin: "lupino",
 
   alderlander: "alderlander",
   aslene: "aslene",
@@ -53,122 +53,122 @@ const kin: KinTranslations = {
 
 const talents: TalentTranslations = {
   // Kin
-  "True Grit": "True grit", // dwarf
-  "Inner Peace": "Inner peace", // elf
-  "Sneaky": "Sneaky", // goblin
-  "Psychic Power": "Psychic power", // half-elf
-  "Hard to Catch": "Hard to catch", // halfling
-  "Adaptive": "Adaptive", // human
-  "Unbreakable": "Unbreakable", // orc
-  "Hunting Instincts": "Hunting insticts", // wolfkin
+  "True Grit": "Verdadeira coragem", // dwarf
+  "Inner Peace": "Paz interior", // elf
+  "Sneaky": "Furtivo", // goblin
+  "Psychic Power": "Poder psíquico", // half-elf
+  "Hard to Catch": "Difícil de apanhar", // halfling
+  "Adaptive": "Adaptável", // human
+  "Unbreakable": "Inquebrável", // orc
+  "Hunting Instincts": "Instintos de Caçador", // wolfkin
 
-  "ambidextrous": "ambidextrous",
-  "axe fighter": "axe fighter",
-  "berserker": "berserker",
-  "bowyer": "bowyer",
-  "brawler": "brawler",
-  "builder": "builder",
-  "chef": "chef",
-  "cold blooded": "cold blooded",
-  "defender": "defender",
-  "dragonslayer": "dragonslayer",
-  "executioner": "executioner",
-  "fast footwork": "fast footwork",
-  "fast shooter": "fast shooter",
-  "fearless": "fearless",
-  "firm grip": "firm grip",
-  "fisher": "fisher",
-  "hammer fighter": "hammer fighter",
-  "herbalist": "herbalist",
-  "horseback fighter": "horseback fighter",
-  "incorruptible": "incorruptible",
-  "knife fighter": "knife fighter",
-  "lightning fast": "lightning fast",
-  "lockpicker": "lockpicker",
-  "lucky": "lucky",
-  "master of the hunt": "master of the hunt",
-  "melee charge": "melee charge",
+  "ambidextrous": "Ambidestro",
+  "axe fighter": "Lutador de Machados",
+  "berserker": "Berserker",
+  "bowyer": "Bowyer",
+  "brawler": "Brigão",
+  "builder": "Construtor",
+  "chef": "Chef",
+  "cold blooded": "Sangue Frio",
+  "defender": "Defensor",
+  "dragonslayer": "Matador de Dragões",
+  "executioner": "Carrasco",
+  "fast footwork": "Fast Footwork",
+  "fast shooter": "Atirador Rápido",
+  "fearless": "Destemido",
+  "firm grip": "Pulso firme",
+  "fisher": "Pescador",
+  "hammer fighter": "Lutador de Martelos",
+  "herbalist": "Herborista",
+  "horseback fighter": "Lutador a Cavalos",
+  "incorruptible": "Incorruptível",
+  "knife fighter": "Lutador de Facas",
+  "lightning fast": "Rápido como Relâmpago",
+  "lockpicker": "Arrombador",
+  "lucky": "Sortudo",
+  "master of the hunt": "Mestre da Caça",
+  "melee charge": "Carga corpo a corpo",
   "pack rat": "pack rat",
-  "pain resistant": "pain resistant",
-  "pathfinder": "pathfinder",
-  "poisoner": "poisoner",
+  "pain resistant": "Resistente a dor",
+  "pathfinder": "Desbravador",
+  "poisoner": "Envenenador",
   "quartermaster": "quartermaster",
-  "quickdraw": "snabbdrag",
-  "sailor": "sailor",
-  "sharpshooter": "sharpshooter",
-  "sharp tongue": "sharp tongue",
-  "shield fighter": "shield fighter",
-  "sixth sense": "sixth sense",
-  "smith": "smith",
-  "spear fighter": "spear fighter",
-  "steady feet": "steady feet",
-  "sword fighter": "sword fighter",
-  "tailor": "tailor",
-  "tanner": "tanner",
-  "threatening": "threatening",
-  "throwing arm": "throwing arm",
-  "wanderer": "wanderer",
+  "quickdraw": "Quickdraw",
+  "sailor": "Marinheiro",
+  "sharpshooter": "Bom atirador",
+  "sharp tongue": "Língua Afiada",
+  "shield fighter": "Lutador com Escudos",
+  "sixth sense": "Sexto Sentido",
+  "smith": "Ferreiro",
+  "spear fighter": "Lutador com Lanças",
+  "steady feet": "Pés firmes",
+  "sword fighter": "Lutador de Espadas",
+  "tailor": "Alfaiate",
+  "tanner": "Curtidor",
+  "threatening": "Ameaçador",
+  "throwing arm": "Braço Arremessador",
+  "wanderer": "Andarilho",
 
   // Druid
-  "Path of Healing": "Path of Healing",
-  "Path of Shifting Shapes": "Path of Shifting Shapes",
-  "Path of Sight": "Path of Sight",
+  "Path of Healing": "Caminho da Cura",
+  "Path of Shifting Shapes": "Caminho da Mudança de Forma",
+  "Path of Sight": "Caminho da Visão",
 
   // Fighter
-  "Path of the Blade": "Path of the Blade",
-  "Path of the Enemy": "Path of the Enemy",
-  "Path of the Shield": "Path of the Shield",
+  "Path of the Blade": "Caminho da Lâmina",
+  "Path of the Enemy": "Caminho dos Inimigo",
+  "Path of the Shield": "Caminho do Escudo",
 
   // HUNTER
-  "Path of the Arrow": "Path of the Arrow",
-  "Path of the Beast": "Path of the Beast",
-  "Path of the Forest": "Path of the Forest",
+  "Path of the Arrow": "Caminho da Flecha",
+  "Path of the Beast": "Caminho da Besta",
+  "Path of the Forest": "Caminho da Floresta",
 
   // MINSTREL
-  "Path of the Hymn": "Path of the Hymn",
-  "Path of the Song": "Path of the Song",
-  "Path of the Warcry": "Path of the Warcry",
+  "Path of the Hymn": "Caminho do Hino",
+  "Path of the Song": "Caminho da Canção",
+  "Path of the Warcry": "Caminho do Grito de Guerra",
 
   // Peddler
-  "Path of Gold": "Path of Gold",
-  "Path of Lies": "Path of Lies",
-  "Path of Many Things": "Path of Many Things",
+  "Path of Gold": "Caminho do Ouro",
+  "Path of Lies": "Caminho das Mentiras",
+  "Path of Many Things": "Caminho de Muitas Coisas",
 
   // Rider
-  "Path of the Companion": "Path of the Companion",
-  "Path of the Knight": "Path of the Knight",
-  "Path of the Plains": "Path of the Plains",
+  "Path of the Companion": "Caminho do Companheiro",
+  "Path of the Knight": "Caminho do Cavaleiro",
+  "Path of the Plains": "Caminho das Planícies",
 
   // Rogue
-  "Path of the Face": "Path of the Face",
-  "Path of the Killer": "Path of the Killer",
-  "Path of Poison": "Path of Poison",
+  "Path of the Face": "Caminho do Rosto",
+  "Path of the Killer": "Caminho do Assassino",
+  "Path of Poison": "Caminho do Veneno",
 
   // Sorcerer
-  "Path of Blood": "Path of Blood",
-  "Path of Death": "Path of Death",
-  "Path of Signs": "Path of Signs",
-  "Path of Stone": "Path of Stone",
+  "Path of Blood": "Caminho do Sangue",
+  "Path of Death": "Caminho da Morte",
+  "Path of Signs": "Caminho dos Sinais",
+  "Path of Stone": "Caminho da Pedra",
 }
 
 const skills: SkillTranslations = {
-  "skills": "skills",
-  "animal handling": "animal handling",
-  "crafting": "crafting",
-  "endurance": "endurance",
-  "healing": "healing",
-  "insight": "insight",
-  "lore": "lore",
-  "manipulation": "manipulation",
-  "marksmanship": "marksmanship",
-  "melee": "melee",
-  "might": "might",
-  "move": "move",
-  "performance": "performance",
-  "scouting": "scouting",
-  "sleight of hand": "sleight of hand",
-  "stealth": "stealth",
-  "survival": "survival",
+  "skills": "Habilidades",
+  "animal handling": "Trato com Animais",
+  "crafting": "Criação",
+  "endurance": "Resistência",
+  "healing": "Cura",
+  "insight": "Percepção",
+  "lore": "Tradição",
+  "manipulation": "Manipulação",
+  "marksmanship": "Pontaria",
+  "melee": "Corpo a corpo",
+  "might": "Poder",
+  "move": "Mover",
+  "performance": "Desempenho",
+  "scouting": "Patrulhar",
+  "sleight of hand": "Truques",
+  "stealth": "Furtividade",
+  "survival": "Sobrevivência",
 }
 
 const GearDescriptions: GearDescriptionTranslations = {

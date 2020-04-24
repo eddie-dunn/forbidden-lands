@@ -7,7 +7,12 @@ export default {
   name: "LocaleChanger",
   data() {
     return {
-      langs: ["se", "en"],
+      langs: [
+        //
+        "en",
+        "pt",
+        "se",
+      ],
     }
   },
   watch: {

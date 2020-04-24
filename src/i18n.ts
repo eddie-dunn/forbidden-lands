@@ -2,6 +2,7 @@ import Vue from "vue"
 import VueI18n from "vue-i18n"
 import en from "@/locales/en"
 import se from "@/locales/se"
+import pt from "@/locales/pt"
 
 Vue.use(VueI18n)
 
@@ -17,8 +18,9 @@ const i18n = new VueI18n({
   // silentTranslationWarn: true,
   messages: {
     // ...loadLocaleMessages(),
-    se,
     en,
+    pt,
+    se,
   },
 })
 
