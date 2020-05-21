@@ -13,7 +13,7 @@ export default class Modal extends Vue {
   @Prop({ default: true }) maximized!: boolean
   @Prop({ default: "70%" }) width!: string
   @Prop({ default: "70%" }) height!: string
-  @Prop({ default: false }) toggleBodyOverflow!: boolean
+  @Prop({ default: true }) toggleBodyOverflow!: boolean
   @Prop({ default: "" }) title!: string
 
   close(param: string): void {
@@ -106,6 +106,7 @@ export default class Modal extends Vue {
 }
 
 .modal-mask {
+  overscroll-behavior: contain;
   position: fixed;
   z-index: @z-modal;
   top: 0;
@@ -120,6 +121,7 @@ export default class Modal extends Vue {
 }
 
 .modal-container {
+  overscroll-behavior: contain;
   position: relative;
   display: flex;
   flex-direction: column;
