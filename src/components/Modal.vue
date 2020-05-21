@@ -50,14 +50,12 @@ export default class Modal extends Vue {
       >
         <div class="__modal-header">
           <div class="__modal-header-title capitalize-first">
-            <h2 v-if="title">{{ title }}</h2>
-            <slot name="header">
-              <!-- <h2>default header with a lot of text and stuff</h2> -->
-            </slot>
+            <h2 class="capitalize-first" v-if="title">{{ title }}</h2>
+            <slot name="header"></slot>
           </div>
-          <div class="close-button-container" @click="close()">
-            <SvgIcon name="close" title="Close" class="close-button" />
-          </div>
+          <button class="close-button" @click="close()">
+            <SvgIcon name="close" title="Close" class="close-button-img" />
+          </button>
         </div>
 
         <div class="__modal-body">
@@ -79,26 +77,37 @@ export default class Modal extends Vue {
 <style lang="less" scoped>
 @import "~Style/colors.less";
 
-.close-button {
+h2 {
+  margin: 0.5rem;
+}
+
+.close-button-img {
   width: 2rem;
   height: 2rem;
   cursor: pointer;
-  // fill: white;
   fill: @pastel-red;
   &:hover {
     fill: @pastel-red;
   }
 }
 
-.close-button-container {
+.close-button {
   width: 2rem;
   height: 2rem;
-  // border-radius: 50%;
-  // background: @pastel-red;
   margin-top: 3px;
   margin-right: 3px;
+
+  // Disable button appearance
+  background: transparent;
+  border: none;
+  padding: 0;
+  outline: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
   &:hover {
-    background: white;
+    transform: scale(1.1);
   }
   &:active {
     transform: translateY(2px);
@@ -142,10 +151,12 @@ export default class Modal extends Vue {
 }
 
 .__modal-header {
+  flex: 0 0 auto;
   text-align: center;
   color: #42b983;
   padding-left: 1rem;
   display: flex;
+
   &-title {
     flex-grow: 1;
   }

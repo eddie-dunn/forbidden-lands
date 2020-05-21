@@ -56,11 +56,11 @@ export default class TabBar extends Vue {
   margin-right: 0px;
   padding: 0.4rem 0.5rem 0.3rem 0.5rem;
   border-bottom: unset;
+  margin: 0;
 }
 
 .tab-bar {
   text-align: left;
-  // border-bottom: solid @pastel-green 5px;
   overflow-y: hidden;
 }
 </style>
