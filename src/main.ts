@@ -23,8 +23,8 @@ Vue.prototype.$characterStore = new CharacterStore()
 Vue.prototype.$notify = notify
 
 // $debugMode is used to toggle stuff that is not ready for production yet
-Vue.prototype.$debugMode = false
-// Vue.prototype.$debugMode = true // DISABLE THIS LINE BEFORE PROD BUILD!
+const DEBUG_MODE = Boolean(sessionStorage.getItem("FLC_DEBUG_MODE"))
+Vue.prototype.$debugMode = DEBUG_MODE
 
 new Vue({
   router,
