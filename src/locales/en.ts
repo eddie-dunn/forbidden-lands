@@ -408,7 +408,6 @@ export default {
   "epic": "epic",
   "female": "female",
   "formative event": "formative event",
-  "hello": "hello en",
   "helmets": "helmets",
   "hook": "hook",
   "legendary": "legendary",

@@ -414,7 +414,6 @@ export default {
   "long": "long",
   "male": "male",
   "melee weapons": "melee weapons",
-  "message": "hello i18n !!",
   "mighty": "mighty",
   "name": "name",
   "near": "near",
