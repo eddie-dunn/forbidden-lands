@@ -130,10 +130,6 @@ export default class DiceRoller extends Vue {
     return this.rollResultLog.length >= 2
   }
 
-  get artifactOpen() {
-    return this.green || this.blue || this.orange || this.openArtifact
-  }
-
   get pushDisabled() {
     return this.rollResultLog.length < 1
   }
@@ -194,35 +190,25 @@ export default class DiceRoller extends Vue {
 
 <template>
   <div class="dice-view">
-    <div class="content">
-      <ExpandableSection :label="$t('Basic dice')" :defaultOpen="true">
-        <div class="dice-inputs">
-          <DiceInput
-            v-for="dice in basicDice"
-            :key="dice.color"
-            :color="dice.color"
-            v-model="nbrDice[dice.type]"
-            :rollCb="rollDice"
-            :pushCb="pushRoll"
-          />
-        </div>
-      </ExpandableSection>
-
-      <ExpandableSection
-        :label="$t('Artifact dice')"
-        :defaultOpen="artifactOpen"
-      >
-        <div class="dice-inputs">
-          <DiceInput
-            v-for="dice in artifactDice"
-            :key="dice.color"
-            :color="dice.color"
-            v-model="nbrDice[dice.type]"
-            :rollCb="rollDice"
-            :pushCb="pushRoll"
-          />
-        </div>
-      </ExpandableSection>
+    <ExpandableSection :label="$t('Dice')" :defaultOpen="true" class="content">
+      <div class="dice-inputs">
+        <DiceInput
+          v-for="dice in basicDice"
+          :key="dice.color"
+          :color="dice.color"
+          v-model="nbrDice[dice.type]"
+          :rollCb="rollDice"
+          :pushCb="pushRoll"
+        />
+        <DiceInput
+          v-for="dice in artifactDice"
+          :key="dice.color"
+          :color="dice.color"
+          v-model="nbrDice[dice.type]"
+          :rollCb="rollDice"
+          :pushCb="pushRoll"
+        />
+      </div>
 
       <!-- Result summary -->
       <div v-if="totals.length > 0" class="result-box">
@@ -253,7 +239,7 @@ export default class DiceRoller extends Vue {
         <DiceResult color="blue" :rolls="rolls[DiceType.Blue]" />
         <DiceResult color="orange" :rolls="rolls[DiceType.Orange]" />
       </div>
-    </div>
+    </ExpandableSection>
 
     <div class="button-bar">
       <FLButton v-if="showReset" type="cancel" @click="resetDice">
@@ -279,8 +265,11 @@ export default class DiceRoller extends Vue {
 }
 
 .dice-view {
+  text-align: center;
+  overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 
   .content {
     flex-grow: 1;
@@ -317,7 +306,6 @@ export default class DiceRoller extends Vue {
 }
 
 .result-summary {
-  // font-size: calc(2.3rem - 1.1vmin);
   font-size: 2.5rem;
   display: flex;
   justify-content: baseline;
@@ -331,7 +319,12 @@ export default class DiceRoller extends Vue {
 }
 
 .dice-inputs {
-  display: flex;
-  flex-wrap: wrap;
+  display: inline-grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-auto-flow: column;
+  grid-row-gap: 0.5rem;
+  grid-column-gap: 2rem;
+  margin: 0.5rem;
 }
 </style>
