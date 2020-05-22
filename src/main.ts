@@ -1,5 +1,7 @@
 import "./registerServiceWorker"
 
+import { Route } from "vue-router/types/router"
+
 import { Notification, notify } from "@/util/notifications"
 
 import App from "./App.vue"
@@ -23,8 +25,23 @@ Vue.prototype.$characterStore = new CharacterStore()
 Vue.prototype.$notify = notify
 
 // $debugMode is used to toggle stuff that is not ready for production yet
-const DEBUG_MODE = Boolean(sessionStorage.getItem("FLC_DEBUG_MODE"))
+const DEBUG_KEY = "FLC_DEBUG_MODE"
+const DEBUG_MODE = Boolean(sessionStorage.getItem(DEBUG_KEY))
 Vue.prototype.$debugMode = DEBUG_MODE
+
+router.afterEach((to: Route) => {
+  const debugOn = ["1", "on", "true"].includes(
+    String(to.query.debug).toLowerCase()
+  )
+  const debugOff = ["0", "off", "false", ""].includes(
+    String(to.query.debug).toLowerCase()
+  )
+  if (debugOn || debugOff) {
+    if (debugOn) sessionStorage.setItem(DEBUG_KEY, "ON")
+    if (debugOff) sessionStorage.removeItem(DEBUG_KEY)
+    window.location.replace(window.location.pathname)
+  }
+})
 
 new Vue({
   router,
