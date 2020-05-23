@@ -141,8 +141,8 @@ export default Vue.extend({
           <th class="capitalize">
             {{ $t("attribute") }}
           </th>
+          <th></th>
           <th v-if="active">{{ $t("Damage") }}</th>
-          <th v-if="active" class="empty-cell"></th>
         </tr>
       </thead>
       <tbody>
@@ -150,17 +150,23 @@ export default Vue.extend({
           v-for="attribute in Object.keys(charData.attributes)"
           :key="attribute"
         >
-          <td class="attribute-item">
-            <SvgIcon
-              :name="iconFor(attribute)"
-              :title="attribute"
-              class="attribute-icon"
-            />
-            <label :for="attribute" class="attribute-item-label">
-              {{ $t(attribute) }}
-            </label>
+          <td class="'attribute-item">
+            <div class="attribute-item">
+              <SvgIcon
+                :name="iconFor(attribute)"
+                :title="attribute"
+                class="attribute-icon"
+              />
+              <label :for="attribute" class="attribute-item-label">
+                {{ $t(attribute) }}
+              </label>
+            </div>
+          </td>
+          <td>
             <span v-if="active" class="active-attributes">
-              {{ charData.attributes[attribute] }}
+              <span :class="[remaining(attribute) === 0 ? 'broken' : '']">
+                {{ remaining(attribute) }}</span
+              ><span>/{{ charData.attributes[attribute] }}</span>
             </span>
             <NumberInput
               v-if="baseAttributesEditable"
@@ -189,15 +195,6 @@ export default Vue.extend({
               v-model.number="charData.attributeDmg[attribute]"
             />
           </td>
-          <td
-            v-if="active"
-            :class="[
-              remaining(attribute) === 0 ? 'broken' : '',
-              'active-attributes',
-            ]"
-          >
-            {{ remaining(attribute) }}
-          </td>
         </tr>
       </tbody>
     </table>
@@ -208,22 +205,26 @@ export default Vue.extend({
 </template>
 
 <style lang="less" scoped>
+@import "~Style/colors.less";
+
+td {
+  padding: 5px 1rem 5px 0;
+}
 .attribute-table {
-  width: 100%;
   margin: 1rem 0;
 }
 
 .attribute-item {
   display: flex;
-  flex-grow: 0;
-  justify-content: flex-start;
-  align-items: center;
-  margin: 0.2rem;
+  // Enable these when dice-roller on click is implemented:
+  // padding: 0.5rem 1rem;
+  // box-shadow: @box-shadow-normal;
 }
 
 .active-attributes {
   font-family: monospace;
   font-size: 1.5rem;
+  letter-spacing: 5px;
 }
 
 .attribute-input {
@@ -245,9 +246,9 @@ export default Vue.extend({
 
 .broken {
   color: red;
-  &:after {
-    content: "✖";
-  }
+  // &:after {
+  //   content: "✖";
+  // }
 }
 
 .empty-cell {
