@@ -15,7 +15,7 @@ import {
 import { UserData, PeerId } from "@/components/multiplay/protocol"
 import { errlog } from "@/util"
 
-import CharacterSheet from "@/components/characterEditor/CharacterSheet.vue"
+import CharacterSheet from "@/components/sheet/CharacterSheet.vue"
 
 function initCharData(
   $characterStore: any,
