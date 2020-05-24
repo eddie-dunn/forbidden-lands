@@ -2,7 +2,8 @@
 import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 
-import AttributesSelector from "@/components/AttributesSelector.vue"
+import AttributesCreate from "@/components/sheet/attributes/AttributesCreate.vue"
+import AttributesActive from "@/components/sheet/attributes/AttributesActive.vue"
 import BaseSelector from "@/components/BaseSelector.vue"
 import Conditions from "@/components/Conditions.vue"
 import Card from "@/components/Card.vue"
@@ -21,7 +22,8 @@ import {
 
 @Component({
   components: {
-    AttributesSelector,
+    AttributesCreate,
+    AttributesActive,
     BaseSelector,
     Card,
     Conditions,
@@ -37,6 +39,10 @@ export default class BaseCard extends Vue {
   get valid() {
     return validateAttributes(this.charData) && validateBase(this.charData)
   }
+  // Attributes
+  get attributesEdit(): boolean {
+    return ["new", undefined, "freeEdit"].includes(this.status)
+  }
 }
 </script>
 
@@ -50,7 +56,12 @@ export default class BaseCard extends Vue {
 
     <div class="base-data-sub">
       <div>
-        <AttributesSelector :charData="charData" :viewOnly="viewOnly" />
+        <AttributesCreate
+          v-if="attributesEdit"
+          :charData="charData"
+          :viewOnly="viewOnly"
+        />
+        <AttributesActive v-else :charData="charData" :viewOnly="viewOnly" />
       </div>
       <div v-if="status !== 'new'">
         <h4>{{ $t("Conditions") }}</h4>

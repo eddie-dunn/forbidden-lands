@@ -374,6 +374,7 @@ export default {
   ...templateGear,
 
   "CONFIRM_DELETE_CHAR": "Vill du verkligen radera din rollperson?",
+  "ATTRIB_REMAINING": "Kvar",
 
   "About FLC": "Om FLC",
   "About": "Om",

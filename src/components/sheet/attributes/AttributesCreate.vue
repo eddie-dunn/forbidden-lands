@@ -56,20 +56,8 @@ export default Vue.extend({
     pointsLeft(): number {
       return this.pointsAvailable() - this.pointsSpent()
     },
-    characterStatus(): CharacterMetaDataStatus {
-      return this.charData.metadata.status
-    },
-    baseAttributesEditable(): boolean {
-      return ["new", undefined, "freeEdit"].includes(this.characterStatus)
-    },
-    active(): boolean {
-      return this.characterStatus === "active"
-    },
   },
   methods: {
-    getAttribArray(attribute: Attribute): number[] {
-      return [1, 2, 3, 4, 5, 6].slice(0, this.getMax(attribute))
-    },
     getMax(attribute: Attribute): number {
       return getMaxAttribLevel(
         attribute,
@@ -142,7 +130,6 @@ export default Vue.extend({
             {{ $t("attribute") }}
           </th>
           <th></th>
-          <th v-if="active">{{ $t("Damage") }}</th>
         </tr>
       </thead>
       <tbody>
@@ -151,7 +138,7 @@ export default Vue.extend({
           :key="attribute"
         >
           <td class="'attribute-item">
-            <div class="attribute-item">
+            <span class="attribute-item">
               <SvgIcon
                 :name="iconFor(attribute)"
                 :title="attribute"
@@ -160,16 +147,10 @@ export default Vue.extend({
               <label :for="attribute" class="attribute-item-label">
                 {{ $t(attribute) }}
               </label>
-            </div>
+            </span>
           </td>
           <td>
-            <span v-if="active" class="active-attributes">
-              <span :class="[remaining(attribute) === 0 ? 'broken' : '']">
-                {{ remaining(attribute) }}</span
-              ><span>/{{ charData.attributes[attribute] }}</span>
-            </span>
             <NumberInput
-              v-if="baseAttributesEditable"
               fontSize="1.7rem"
               :id="attribute"
               :name="attribute"
@@ -179,20 +160,6 @@ export default Vue.extend({
               :max="getMax(attribute)"
               v-model.number="charData.attributes[attribute]"
               :disabled="viewOnly"
-            />
-          </td>
-          <td v-if="active">
-            <NumberInput
-              fontSize="1.7rem"
-              :id="attribute"
-              :name="attribute"
-              :disabled="viewOnly"
-              placeholder=""
-              type="number"
-              min="0"
-              width="1ch"
-              :max="charData.attributes[attribute]"
-              v-model.number="charData.attributeDmg[attribute]"
             />
           </td>
         </tr>
@@ -207,31 +174,13 @@ export default Vue.extend({
 <style lang="less" scoped>
 @import "~Style/colors.less";
 
-td {
-  padding: 5px 1rem 5px 0;
-}
 .attribute-table {
   margin: 1rem 0;
+  border-spacing: 0.5rem;
 }
 
 .attribute-item {
   display: flex;
-  // Enable these when dice-roller on click is implemented:
-  // padding: 0.5rem 1rem;
-  // box-shadow: @box-shadow-normal;
-}
-
-.active-attributes {
-  font-family: monospace;
-  font-size: 1.5rem;
-  letter-spacing: 5px;
-}
-
-.attribute-input {
-  width: 2.5rem;
-  height: 1rem;
-  flex-basis: 1;
-  flex-grow: 0;
 }
 
 .attribute-icon {
@@ -244,16 +193,6 @@ td {
   text-transform: capitalize;
 }
 
-.broken {
-  color: red;
-  // &:after {
-  //   content: "✖";
-  // }
-}
-
-.empty-cell {
-  width: 5ch;
-}
 // input[type="number"].with-checkbox {
 //   // max-width: 50%;
 //   width: 3em;

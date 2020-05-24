@@ -266,6 +266,9 @@ export default {
   ...GearDescriptions,
   ...weapons,
 
+  // Keys
+  "ATTRIB_REMAINING": "Current",
+
   // Mixed case
 
   "About FLC": "About FLC",
@@ -403,6 +406,7 @@ export default {
   "blunt": "blunt",
   "childhood": "childhood",
   "create from template": "create from template",
+  "current": "current",
   "dmg": "dmg",
   "edged": "edged",
   "epic": "epic",

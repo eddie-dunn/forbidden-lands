@@ -10,7 +10,7 @@ import FLButton from "@/components/base/FLButton.vue"
 import DiceActions from "./DiceActions.vue"
 import ExpandableSection from "@/components/ExpandableSection.vue"
 
-interface Dice {
+export interface ArgDice {
   white: number | null
   red: number | null
   black: number | null
@@ -19,7 +19,7 @@ interface Dice {
   orange: number | null
 }
 
-function defaultDice(): Dice {
+function defaultDice(): ArgDice {
   return {
     white: null,
     red: null,
@@ -42,7 +42,7 @@ function defaultDice(): Dice {
 })
 export default class DiceModal extends Vue {
   @Prop({ default: "" }) title!: string
-  @Prop({ default: () => defaultDice() }) dice!: Dice
+  @Prop({ default: () => defaultDice() }) dice!: ArgDice
 
   close(ev: any) {
     this.$emit("close")
