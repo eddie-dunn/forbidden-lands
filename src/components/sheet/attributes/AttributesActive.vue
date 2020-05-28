@@ -224,13 +224,7 @@ export default Vue.extend({
   margin: 0 1rem;
 
   &.broken {
-    position: relative;
     color: red;
-    &:after {
-      content: "✖";
-      position: absolute;
-      right: 0;
-    }
   }
 }
 

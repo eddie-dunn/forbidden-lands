@@ -58,21 +58,6 @@ export default class TalentCard extends Vue {
       :charData="charData"
       @talents-updated="updateTalents"
     />
-
-    <div v-if="!isNewChar" class="willpower">
-      <label for="willpower">
-        {{ $t("Willpower") }}
-      </label>
-      <FLNumberInput
-        class="nbr-input"
-        id="willpower"
-        fontSize="1.7rem"
-        min="0"
-        max="10"
-        :disabled="viewOnly"
-        v-model="charData.willpower"
-      />
-    </div>
   </Card>
 </template>
 

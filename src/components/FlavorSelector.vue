@@ -96,15 +96,15 @@ label,
   justify-content: space-around;
   div > {
     flex: 1 1 100%;
-    text-align: center;
+    text-align: left;
     margin-bottom: 0.5rem;
-    @media (min-width: 768px) {
-      flex-basis: 50%;
-    }
+    // @media (min-width: 768px) {
+    //   flex-basis: 50%;
+    // }
   }
 }
 .textarea-fullwidth {
-  width: 95%;
+  width: 99%;
   height: 4rem;
 }
 </style>

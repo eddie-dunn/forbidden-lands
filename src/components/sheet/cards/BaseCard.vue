@@ -7,6 +7,8 @@ import AttributesActive from "@/components/sheet/attributes/AttributesActive.vue
 import BaseSelector from "@/components/BaseSelector.vue"
 import Conditions from "@/components/Conditions.vue"
 import Card from "@/components/Card.vue"
+import FlavorSelector from "@/components/FlavorSelector.vue"
+
 import {
   getNewCharacterData,
   CharacterData,
@@ -22,11 +24,12 @@ import {
 
 @Component({
   components: {
-    AttributesCreate,
     AttributesActive,
+    AttributesCreate,
     BaseSelector,
     Card,
     Conditions,
+    FlavorSelector,
   },
 })
 export default class BaseCard extends Vue {
@@ -37,7 +40,7 @@ export default class BaseCard extends Vue {
     return this.charData.metadata.status
   }
   get valid() {
-    return validateAttributes(this.charData) && validateBase(this.charData)
+    return validateBase(this.charData)
   }
   // Attributes
   get attributesEdit(): boolean {
@@ -48,31 +51,21 @@ export default class BaseCard extends Vue {
 
 <template>
   <Card
-    :title="$t('Base data')"
+    :title="$t('character')"
     :valid="valid"
     :noSign="viewOnly || (valid && status !== 'new')"
   >
     <BaseSelector :data="charData" :viewOnly="viewOnly" />
-
-    <div class="base-data-sub">
-      <div>
-        <AttributesCreate
-          v-if="attributesEdit"
-          :charData="charData"
-          :viewOnly="viewOnly"
-        />
-        <AttributesActive v-else :charData="charData" :viewOnly="viewOnly" />
-      </div>
-      <div v-if="status !== 'new'">
-        <h4>{{ $t("Conditions") }}</h4>
-        <Conditions
-          :conditions="this.charData.conditions || {}"
-          :viewOnly="viewOnly"
-          v-model="charData.conditions"
-        />
-      </div>
-    </div>
+    <FlavorSelector
+      :data="charData"
+      :viewOnly="viewOnly"
+      class="flavor-input"
+    />
   </Card>
 </template>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.flavor-input {
+  margin: 1rem 0;
+}
+</style>

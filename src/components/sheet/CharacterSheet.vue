@@ -12,11 +12,11 @@ import BaseCard from "@/components/sheet/cards/BaseCard.vue"
 import SessionCard from "@/components/sheet/cards/SessionCard.vue"
 import TalentCard from "@/components/sheet/cards/TalentCard.vue"
 import PortraitCard from "@/components/sheet/cards/PortraitCard.vue"
-import FlavorCard from "@/components/sheet/cards/FlavorCard.vue"
 import SkillCard from "@/components/sheet/cards/SkillCard.vue"
 import GearCard from "@/components/sheet/cards/GearCard.vue"
 import MountCard from "@/components/sheet/cards/MountCard.vue"
 import NoteCard from "@/components/sheet/cards/NoteCard.vue"
+import StateCard from "@/components/sheet/cards/StateCard.vue"
 
 function stringChar(characterData: CharData) {
   return JSON.stringify(characterData)
@@ -27,13 +27,13 @@ function stringChar(characterData: CharData) {
     ActionBar,
     BaseCard,
     FLButton,
-    FlavorCard,
     GearCard,
     MountCard,
     NoteCard,
     PortraitCard,
     SessionCard,
     SkillCard,
+    StateCard,
     SvgIcon,
     TalentCard,
   },
@@ -122,14 +122,14 @@ export default class CharacterEditor extends Vue {
         :charData="charData"
         :viewOnly="viewOnly"
       />
-      <FlavorCard class="row full" :charData="charData" :viewOnly="viewOnly" />
-      <SkillCard
-        class="row half skill"
+      <StateCard class="row half" :charData="charData" :viewOnly="viewOnly" />
+      <TalentCard
+        class="row half talent"
         :charData="charData"
         :viewOnly="viewOnly"
       />
-      <TalentCard
-        class="row half talent"
+      <SkillCard
+        class="row half skill"
         :charData="charData"
         :viewOnly="viewOnly"
       />
@@ -216,9 +216,5 @@ export default class CharacterEditor extends Vue {
 .half {
   flex-grow: 1;
   flex-basis: 49%;
-}
-
-.dice-icon {
-  height: 100%;
 }
 </style>
