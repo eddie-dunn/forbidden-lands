@@ -184,16 +184,17 @@ export default Vue.extend({
 
 .attribute-icon {
   flex-shrink: 0;
+  margin-right: 5px;
 }
 
 .skillbox {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15ch, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
   &.skillbox-edit {
-    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
   }
   row-gap: 1rem;
-  column-gap: 1rem;
+  column-gap: 0.5rem;
   margin: 1rem 0;
 }
 
@@ -203,6 +204,7 @@ export default Vue.extend({
   grid-template-columns: auto 2fr auto;
   box-shadow: @box-shadow-normal;
   padding: 3px;
+  min-height: 3rem;
   &.skillrow-edit {
     grid-template-columns: auto 2fr;
     box-shadow: none;
@@ -230,7 +232,8 @@ export default Vue.extend({
 }
 
 .skill-input {
-  grid-column-start: 2;
+  grid-column-start: 1;
+  grid-column-end: -1;
   justify-content: center;
   align-items: center;
   align-self: center;
