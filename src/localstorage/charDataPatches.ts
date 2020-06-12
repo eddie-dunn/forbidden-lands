@@ -87,8 +87,7 @@ const charDataPatches: CharDataPatch[] = [
     }
     return character
   },
-  // Ephemeral patches
-  function patch5(character: CharData): null {
+  function updateLocalPortraitUrl(character: CharData): CharData {
     console.log("Validating portrait for", character.name, character.portrait)
     const matcher = /\/(img\/player_handbook_png-\d*\.)[\da-zA-Z]*\.png/
     const found = (character.portrait || "").match(matcher)
@@ -97,13 +96,13 @@ const charDataPatches: CharDataPatch[] = [
       console.log("OLDNAME", character.portrait, "NEWNAME", newName)
       character.portrait = newName
     }
-    // return character
-    // Not saving patch until verified as working
-    // Check regex for multiple character versions for
-    //  - localhost
-    //  - bifrost
-    return null
+    return character
   },
+  // Permanent patches
+  // function permanentPatchExample(character: CharData): CharData {}
+
+  // Ephemeral patches
+  // function ephemeralPatchExample(character: CharData): null {}
 ]
 
 function _apply(
@@ -119,7 +118,7 @@ function _apply(
   // Exec
   patches.map((patch, patchVersion) => {
     if (cCopy.metadata.dataVersion < patchVersion) {
-      console.log("Running patch", patchVersion)
+      console.log(`Running patch ${patchVersion}: '${patch.name}'`)
       const tempPatch = !patch(cCopy)
       if (tempPatch) {
         temporaryPatchApplied = true
