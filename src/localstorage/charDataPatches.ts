@@ -38,7 +38,7 @@ const charDataPatches: CharDataPatch[] = [
         strength: 0,
         agility: 0,
         inventory: [],
-      }
+      } as any
     }
     if (!character.willpower) {
       character.willpower = 0
@@ -95,6 +95,12 @@ const charDataPatches: CharDataPatch[] = [
       const newName = __webpack_public_path__ + found[1] + "png"
       console.log("OLDNAME", character.portrait, "NEWNAME", newName)
       character.portrait = newName
+    }
+    return character
+  },
+  function addMountSkills(character: CharData): CharData {
+    if (!character.mount.skills) {
+      character.mount.skills = []
     }
     return character
   },
