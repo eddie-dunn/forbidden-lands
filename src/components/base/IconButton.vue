@@ -15,6 +15,7 @@ export default class CloseButton extends Vue {
   @Prop({ default: "inherit" }) color!: "main" | "danger" | "inherit"
   @Prop({ default: "24px" }) width!: string
   @Prop({ default: "24px" }) height!: string
+  @Prop({ default: null }) title!: string | null
 
   get cssVars() {
     return {
@@ -29,6 +30,7 @@ export default class CloseButton extends Vue {
   <FLButton
     v-bind="$attrs"
     :class="['icon-button', 'color-' + color]"
+    :title="title"
     type="ghost"
     @click="$emit('click', $event)"
   >
