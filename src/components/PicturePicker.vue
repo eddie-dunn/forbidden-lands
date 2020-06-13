@@ -4,6 +4,7 @@ import Component from "vue-class-component"
 
 import UrlStorage from "@/localStorage"
 
+import IconButton from "@/components/base/IconButton.vue"
 import FLButton from "@/components/base/FLButton.vue"
 import Modal from "@/components/Modal.vue"
 
@@ -40,6 +41,7 @@ const AppProps = Vue.extend({
 @Component({
   components: {
     FLButton,
+    IconButton,
     Modal,
   },
 })
@@ -93,8 +95,7 @@ export default class PicturePicker extends AppProps {
 </script>
 
 <template>
-  <div>
-    <!-- <a href="#" id="show-modal" @click="showPicker()">Show Modal</a> -->
+  <div class="picture-picker">
     <Modal
       v-if="showModal"
       @close="closePicker()"
@@ -174,7 +175,7 @@ export default class PicturePicker extends AppProps {
       </div>
     </Modal>
 
-    <div>
+    <div class="img-box">
       <img
         @click="showPicker()"
         v-if="selected_portrait || true"
@@ -183,12 +184,37 @@ export default class PicturePicker extends AppProps {
         alt="Character Portrait"
       />
       <img v-else class="chosen-portrait portrait placeholder" src="" />
+      <IconButton class="edit-icon" icon="edit" @click="showPicker" />
     </div>
   </div>
 </template>
 
 <style lang="less" scoped>
 @import "~Style/colors.less";
+
+.picture-picker {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.img-box {
+  position: relative;
+  box-shadow: @box-shadow-normal;
+  margin: 2rem 0.5rem;
+}
+
+.edit-icon {
+  position: absolute;
+  bottom: -6px;
+  right: -6px;
+  border-radius: 50%;
+  padding: 5px;
+  color: @color-text;
+  background: @color-main;
+  background: white;
+  box-shadow: @box-shadow-normal;
+}
 
 .delete-button {
   position: absolute;

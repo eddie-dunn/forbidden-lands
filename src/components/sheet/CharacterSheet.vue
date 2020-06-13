@@ -117,12 +117,12 @@ export default class CharacterEditor extends Vue {
     </div>
 
     <div class="detail-form">
-      <BaseCard class="row half" :charData="charData" :viewOnly="viewOnly" />
       <PortraitCard
         class="row half"
         :charData="charData"
         :viewOnly="viewOnly"
       />
+      <BaseCard class="row half" :charData="charData" :viewOnly="viewOnly" />
       <StateCard class="row half" :charData="charData" :viewOnly="viewOnly" />
       <TalentCard
         class="row half talent"

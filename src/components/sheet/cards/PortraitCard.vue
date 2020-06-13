@@ -24,13 +24,11 @@ export default class PortraitCard extends Vue {
 
 <template>
   <Card class="row-half" :title="$t('Portrait')" :noSign="true">
-    <div class="flex-row-wrap space-around appearance-section">
-      <PicturePicker
-        :portrait="charData.portrait"
-        :viewOnly="viewOnly"
-        @pickedPicture="setImgSource"
-      />
-    </div>
+    <PicturePicker
+      :portrait="charData.portrait"
+      :viewOnly="viewOnly"
+      @pickedPicture="setImgSource"
+    />
   </Card>
 </template>
 
