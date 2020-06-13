@@ -95,97 +95,55 @@ export default class XPModal extends Vue {
 
 <template>
   <div class="other-gear">
-    <div>
-      <div>
-        <div class="button-row right-adjusted">
-          <div>
-            <label for="mount-name" class="block"> {{ $t("Name") }}</label>
+    <h4>{{ $t("Carried by mount") }}</h4>
+    <table>
+      <thead>
+        <tr>
+          <th class="bonus-cell"></th>
+          <th>{{ $t("Name") }}</th>
+          <th class="bonus-cell">Bonus</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in inventory" v-bind:key="item.name">
+          <td>
             <input
-              id="mount-name"
-              type="text"
-              v-model="charData.mount.name"
+              type="checkbox"
+              v-model="item.selected"
               :disabled="viewOnly"
             />
-          </div>
-
-          <div class="mount-attrib-row">
-            <span>
-              <label for="mount-strength" class="capitalize block">
-                {{ $t("strength") }}
-              </label>
-              <FLNumberInput
-                id="mount-strength"
-                fontSize="1.7rem"
-                v-model.number="charData.mount.strength"
-                :disabled="viewOnly"
-              />
-            </span>
-            <span>
-              <label for="mount-agility" class="capitalize block">
-                {{ $t("agility") }}
-              </label>
-              <FLNumberInput
-                id="mount-agility"
-                fontSize="1.7rem"
-                v-model.number="charData.mount.agility"
-                :disabled="viewOnly"
-              />
-            </span>
-          </div>
-        </div>
+          </td>
+          <td>{{ item.name }}</td>
+          <td class="bonus-cell">{{ item.bonus || "" }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="button-row">
+      <div>{{ $t("Encumbrance") }}: {{ gearWeight }}/{{ gearWeightMax }}</div>
+      <div class="">
+        <label for="is-mounted">{{ $t("Mounted") }}</label>
+        <input
+          type="checkbox"
+          v-model="charData.mount.mounted"
+          :disabled="viewOnly"
+        />
       </div>
     </div>
-
-    <div v-if="hasMount">
-      <h4>{{ $t("Carried by mount") }}</h4>
-      <table>
-        <thead>
-          <tr>
-            <th class="bonus-cell"></th>
-            <th>{{ $t("Name") }}</th>
-            <th class="bonus-cell">Bonus</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in inventory" v-bind:key="item.name">
-            <td>
-              <input
-                type="checkbox"
-                v-model="item.selected"
-                :disabled="viewOnly"
-              />
-            </td>
-            <td>{{ item.name }}</td>
-            <td class="bonus-cell">{{ item.bonus || "" }}</td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="button-row">
-        <div>{{ $t("Encumbrance") }}: {{ gearWeight }}/{{ gearWeightMax }}</div>
-        <div class="">
-          <label for="is-mounted">{{ $t("Mounted") }}</label>
-          <input
-            type="checkbox"
-            v-model="charData.mount.mounted"
-            :disabled="viewOnly"
-          />
-        </div>
-      </div>
-      <div v-if="!viewOnly" class="button-row">
-        <FLButton type="danger" :disabled="!selected" @click="dropItems">
-          {{ $t("Drop") }}
-        </FLButton>
-        <FLButton :disabled="!selected" @click="moveItems">
-          {{ $t("Move to backpack") }}
-        </FLButton>
-        <FLButton :disabled="!hasMount" @click="showAddItem = true">
-          {{ $t("Add") }}
-        </FLButton>
-      </div>
+    <div v-if="!viewOnly" class="button-row">
+      <FLButton type="danger" :disabled="!selected" @click="dropItems">
+        {{ $t("Drop") }}
+      </FLButton>
+      <FLButton :disabled="!selected" @click="moveItems">
+        {{ $t("Move to backpack") }}
+      </FLButton>
+      <FLButton :disabled="!hasMount" @click="showAddItem = true">
+        {{ $t("Add") }}
+      </FLButton>
     </div>
 
     <ModalAddItem
       v-if="showAddItem"
+      :title="$t('Add item')"
       @close="showAddItem = false"
       @add-item="addItem"
       :charData="charData"

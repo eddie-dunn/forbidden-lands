@@ -115,6 +115,7 @@ export default class CharacterEditor extends Vue {
         Set inactive
       </FLButton>
     </div>
+
     <div class="detail-form">
       <BaseCard class="row half" :charData="charData" :viewOnly="viewOnly" />
       <PortraitCard

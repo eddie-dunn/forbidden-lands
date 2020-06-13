@@ -416,6 +416,7 @@ export default {
   "male": "male",
   "melee weapons": "melee weapons",
   "mighty": "mighty",
+  "movement rate": "movement rate",
   "name": "name",
   "near": "near",
   "no character": "no character",

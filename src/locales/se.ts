@@ -509,6 +509,7 @@ export default {
   "XP": "ERF",
 
   // Lowercase
+
   "armslength": "armslängd",
   "attribute": "grundegenskap",
   "blunt": "trubbig",
@@ -525,6 +526,7 @@ export default {
   "long": "lång",
   "male": "man",
   "mighty": "mäktig",
+  "movement rate": "förflyttningsvärde",
   "near": "nära",
   "no character": "ingen rollperson",
   "no suitable weapon equipped": "inget lämpligt vapen i hand",

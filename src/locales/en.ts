@@ -421,6 +421,7 @@ export default {
   "melee weapons": "melee weapons",
   "message": "hello i18n !!",
   "mighty": "mighty",
+  "movement rate": "movement rate",
   "name": "name",
   "near": "near",
   "no character": "no character",
