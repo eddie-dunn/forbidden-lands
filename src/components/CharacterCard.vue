@@ -106,7 +106,6 @@ export default Vue.extend({
       v-if="modalConfirmActivate"
       :confirmAction="() => activate()"
       @close="modalConfirmActivate = false"
-      :title="$t('Conform activate')"
       :body="$t('CONFIRM_ACTIVATE_INVALID_CHAR')"
     ></ModalConfirm>
 

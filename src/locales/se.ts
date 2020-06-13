@@ -515,6 +515,7 @@ export default {
   "blunt": "trubbig",
   "character": "karaktär",
   "childhood": "uppväxt",
+  "confirm": "bekräfta",
   "create from template": "skapa från mall",
   "dmg": "skada",
   "edged": "egg",

@@ -22,7 +22,7 @@ export default class ModalConfirm extends Vue {
   get mTitle() {
     if (!this.showTitle) return ""
     if (this.title) return this.title
-    return this.$t("Confirm")
+    return this.$t("confirm")
   }
 
   close() {

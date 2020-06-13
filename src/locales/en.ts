@@ -406,6 +406,7 @@ export default {
   "blunt": "blunt",
   "character": "character",
   "childhood": "childhood",
+  "confirm": "confirm",
   "create from template": "create from template",
   "current": "current",
   "dmg": "dmg",
