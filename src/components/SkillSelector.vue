@@ -203,7 +203,7 @@ export default Vue.extend({
   display: grid;
   grid-template-columns: auto 2fr auto;
   box-shadow: @box-shadow-normal;
-  padding: 3px;
+  padding: 0px 0.5rem;
   min-height: 3rem;
   &.skillrow-edit {
     grid-template-columns: auto 2fr;
