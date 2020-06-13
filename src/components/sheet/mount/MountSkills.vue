@@ -79,6 +79,7 @@ export default class MountSkills extends Vue {
           :options="mountSkillInputRanks"
           :value="skill.rank"
           v-model="charData.mount.skills[index].rank"
+          :disabled="viewOnly"
           class="rank-select"
         />
         <IconButton
@@ -86,6 +87,7 @@ export default class MountSkills extends Vue {
           title="Remove"
           icon="delete"
           color="danger"
+          :disabled="viewOnly"
           @click="removeSkill(skill.id)"
         />
       </div>
@@ -99,7 +101,13 @@ export default class MountSkills extends Vue {
         @adding-done="addSkill"
         @adding-cancel="adding = false"
       />
-      <IconButton v-if="!adding" icon="add" color="main" @click="adding = true">
+      <IconButton
+        v-if="!adding"
+        icon="add"
+        color="main"
+        @click="adding = true"
+        :disabled="viewOnly"
+      >
         {{ $t("Add") }}
       </IconButton>
     </section>
