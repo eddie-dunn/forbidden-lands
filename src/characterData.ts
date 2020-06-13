@@ -8,16 +8,13 @@ import {
   TalentAll,
 } from "@/types"
 import { CLASS as PROFESSION_MAP, getSkillMax } from "@/classes.ts"
-import { SkillMap, getSkills } from "@/skills"
+import { SkillMap, getSkills, SkillObj } from "@/skills"
 import { getAgeType, getAttributePoints, getStartingTalents } from "@/age"
 import { Item } from "@/data/items/itemTypes"
 
 import { AGE } from "@/keys"
 import { KIN as KIN_MAP } from "@/kin"
 import uuid1 from "uuid/v1"
-
-// import { CLASS, KIN } from "@/keys"
-// import { stringify } from "querystring"
 
 export interface CharacterTalent {
   // name is gotten from translations via id
@@ -94,6 +91,7 @@ export interface CharData {
     agility: number
     mounted: boolean
     inventory: Item[]
+    skills: SkillObj[]
   }
   name: string
   notes: string
@@ -176,6 +174,7 @@ export function getNewCharacterData(): CharacterData {
       strength: 0,
       agility: 0,
       inventory: [],
+      skills: [],
     },
 
     notes: "",
