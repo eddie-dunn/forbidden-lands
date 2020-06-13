@@ -17,14 +17,13 @@ export type Optgroup = {
   components: {},
 })
 export class FLSelect extends Vue {
-  @Prop({ required: true }) label!: string
+  @Prop({ default: "" }) label!: string
   @Prop({ default: () => [] }) options!: Option[]
   @Prop({ default: () => [] }) optgroups!: Optgroup[]
   @Prop({ default: false }) disabled!: boolean
   @Prop({ default: "" }) initial!: string
   @Prop({ default: true }) initialDisabled!: boolean
-
-  value: any = null
+  @Prop({ default: null }) value!: string | null
 
   optionExtras(option: Option): string {
     if (!option.extras || !option.extras.length) return ""
@@ -32,8 +31,8 @@ export class FLSelect extends Vue {
   }
 
   onInput(ev: any) {
-    this.value = ev.target.value
-    this.$emit("input", this.value)
+    const newValue = ev.target.value
+    this.$emit("input", newValue)
   }
 }
 
@@ -42,7 +41,7 @@ export default FLSelect
 
 <template>
   <div class="fl-select">
-    <label :for="label" class="label">{{ label }}</label>
+    <label v-if="label" :for="label" class="label">{{ label }}</label>
     <select :id="label" :value="value" @input="onInput" :disabled="disabled">
       <option
         v-if="initial"
