@@ -28,102 +28,102 @@ export interface SkillObj {
   name?: string
 }
 
-export interface SkillMap {
-  [propType: string]: SkillObj
+export type SkillMap = {
+  [key in Skill]: SkillObj
 }
 
 export const SKILLS: SkillMap = {
-  [S.ANIMAL_HANDLING]: {
+  "animal handling": {
     id: S.ANIMAL_HANDLING,
     attribute: "empathy",
     rank: UNSET,
     // name: "animal handling",
   },
-  [S.CRAFTING]: {
+  "crafting": {
     id: S.CRAFTING,
     attribute: "strength",
     rank: UNSET,
     // name: "crafting",
   },
-  [S.ENDURANCE]: {
+  "endurance": {
     id: S.ENDURANCE,
     attribute: "strength",
     rank: UNSET,
     // name: "endurance",
   },
-  [S.HEALING]: {
+  "healing": {
     id: S.HEALING,
     rank: UNSET,
     attribute: "empathy",
     // name: "healing",
   },
-  [S.INSIGHT]: {
+  "insight": {
     id: S.INSIGHT,
     attribute: "wits",
     rank: UNSET,
     // name: "insight",
   },
-  [S.LORE]: {
+  "lore": {
     id: S.LORE,
     attribute: "wits",
     rank: UNSET,
     // name: "lore",
   },
-  [S.MANIPULATION]: {
+  "manipulation": {
     id: S.MANIPULATION,
     attribute: "empathy",
     rank: UNSET,
     // name: "manipulation",
   },
-  [S.MARKSMANSHIP]: {
+  "marksmanship": {
     id: S.MARKSMANSHIP,
     attribute: "agility",
     rank: UNSET,
     // name: "marksmanship",
   },
-  [S.MELEE]: {
+  "melee": {
     id: S.MELEE,
     attribute: "strength",
     rank: UNSET,
     name: "melee",
   },
-  [S.MIGHT]: {
+  "might": {
     id: S.MIGHT,
     attribute: "strength",
     rank: UNSET,
     // name: "might",
   },
-  [S.MOVE]: {
+  "move": {
     id: S.MOVE,
     attribute: "agility",
     rank: UNSET,
     // name: "move",
   },
-  [S.PERFORMANCE]: {
+  "performance": {
     id: S.PERFORMANCE,
     attribute: "empathy",
     rank: UNSET,
     // name: "performance",
   },
-  [S.SCOUTING]: {
+  "scouting": {
     id: S.SCOUTING,
     attribute: "wits",
     rank: UNSET,
     name: "scouting",
   },
-  [S.SLEIGHT_OF_HAND]: {
+  "sleight of hand": {
     id: S.SLEIGHT_OF_HAND,
     attribute: "agility",
     rank: UNSET,
     // name: "sleight of hand",
   },
-  [S.STEALTH]: {
+  "stealth": {
     id: S.STEALTH,
     attribute: "agility",
     rank: UNSET,
     // name: "stealth",
   },
-  [S.SURIVAL]: {
+  "survival": {
     id: S.SURIVAL,
     attribute: "wits",
     rank: UNSET,
