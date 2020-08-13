@@ -5,28 +5,21 @@ import { Component, Prop, Watch } from "vue-property-decorator"
 import FLButton from "@/components/base/FLButton.vue"
 import FLSelect, { Option } from "@/components/base/FLSelect.vue"
 import IconButton from "@/components/base/IconButton.vue"
+import ModalConfirm from "@/components/ModalConfirm.vue"
 
 import { CharacterData } from "@/characterData"
 import { SKILLS, SkillObj } from "@/skills.ts"
-
-import MountSkillInput, { mountSkillInputRanks } from "./MountSkillInput.vue"
 import { Skill } from "@/types.ts"
 
-/**
-Component for managing mount skills
+import MountSkillInput, { mountSkillInputRanks } from "./MountSkillInput.vue"
 
-To implement
-- Add skill
-- Remove skill
-- Dice roll for skill
-
-*/
-
+/** Component for managing mount skills */
 @Component({
   components: {
     FLButton,
     FLSelect,
     IconButton,
+    ModalConfirm,
     MountSkillInput,
   },
 })
@@ -37,6 +30,8 @@ export default class MountSkills extends Vue {
   adding = false
   editing: Skill | null = null
   mountSkillInputRanks = mountSkillInputRanks
+  showConfirmDelete = false
+  skillToRemove = ""
 
   addSkill({ skillId, rank }: { skillId: Skill; rank: number }) {
     this.adding = false
@@ -53,10 +48,16 @@ export default class MountSkills extends Vue {
     }
   }
 
+  askRemoveSkill(id: string) {
+    this.skillToRemove = id
+    this.showConfirmDelete = true
+  }
+
   removeSkill(id: string) {
     this.charData.mount.skills = this.charData.mount.skills.filter(
       (skill) => skill.id !== id
     )
+    this.showConfirmDelete = false
   }
 }
 </script>
@@ -88,7 +89,7 @@ export default class MountSkills extends Vue {
           icon="delete"
           color="danger"
           :disabled="viewOnly"
-          @click="removeSkill(skill.id)"
+          @click="askRemoveSkill(skill.id)"
         />
       </div>
     </div>
@@ -112,6 +113,13 @@ export default class MountSkills extends Vue {
       </IconButton>
     </section>
 
+    <ModalConfirm
+      v-if="showConfirmDelete"
+      :showTitle="false"
+      :body="$t('Delete') + ' ' + $t(skillToRemove) + '?'"
+      :confirmAction="() => removeSkill(skillToRemove)"
+      @close="showConfirmDelete = false"
+    />
     <!-- spacer -->
   </div>
 </template>
@@ -133,9 +141,9 @@ h4 {
   &-row {
     display: contents;
   }
-  &-delete-row {
-    margin-left: 2rem;
-  }
+  // &-delete-row {
+  //   margin-left: 0.25rem;
+  // }
 }
 
 .rank-select {
