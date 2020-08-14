@@ -142,6 +142,7 @@ export function runPatches(
   patches: CharDataPatch[] = charDataPatches
 ): CharData {
   console.log(">>> Patching", c.name)
+  const oldVersion = c.metadata.dataVersion
   let char
   try {
     char = _apply(c, patches)
@@ -150,6 +151,11 @@ export function runPatches(
     console.log("Attempting to rerun all patches")
     char = _apply(c, patches, true)
   }
-  console.log("<<< Patching done", char.name, "\n\n")
+  const newVersion = char.metadata.dataVersion
+  console.log(
+    "<<< Patching done",
+    `${c.name} ${oldVersion} -> ${newVersion}`,
+    "\n\n"
+  )
   return char
 }
