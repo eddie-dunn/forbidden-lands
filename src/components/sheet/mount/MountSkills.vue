@@ -93,7 +93,6 @@ export default class MountSkills extends Vue {
         />
       </div>
     </div>
-    <!-- TODO: Add Edit button for existing skills -->
 
     <section class="add-section">
       <MountSkillInput
@@ -141,9 +140,8 @@ h4 {
   &-row {
     display: contents;
   }
-  // &-delete-row {
-  //   margin-left: 0.25rem;
-  // }
+  border-bottom: 1px #0002 solid;
+  padding-bottom: 0.5rem;
 }
 
 .rank-select {
@@ -151,6 +149,6 @@ h4 {
 }
 
 .add-section {
-  margin-top: 1rem;
+  margin-top: 0.25rem;
 }
 </style>
