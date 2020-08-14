@@ -14,7 +14,7 @@ import FLNumberInput from "@/components/FLNumberInput.vue"
 export default class MountStats extends Vue {
   @Prop({ required: true }) charData!: CharacterData
   @Prop({ default: false }) viewOnly!: boolean
-  tempMovementRate = 0
+  tempMovementRate = 0 // FIXME: store on chardata
 }
 </script>
 

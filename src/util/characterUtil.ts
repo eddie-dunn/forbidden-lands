@@ -53,7 +53,6 @@ export function kinTransform(kinId: ExtendedKinName): KinName {
   return kinId as KinName
 }
 
-// FIXME: Add tests
 export function getCharDataFromQuery(query: CharDataQueryObj): CharacterData {
   const {
     kinId,

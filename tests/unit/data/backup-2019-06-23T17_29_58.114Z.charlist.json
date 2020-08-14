@@ -1,0 +1,753 @@
+{
+  "cfac0da1-7417-11e9-8c16-eb434e98fa06": {
+    "name": "Gargamel",
+    "age": 35,
+    "ageType": "adult",
+    "sex": null,
+    "kin": "human",
+    "attributes": { "strength": 5, "agility": 3, "wits": 2, "empathy": 4 },
+    "class": "druid",
+    "skills": {
+      "animal handling": {
+        "id": "animal handling",
+        "attribute": "empathy",
+        "rank": 1
+      },
+      "crafting": { "id": "crafting", "attribute": "strength", "rank": 1 },
+      "endurance": { "id": "endurance", "attribute": "strength", "rank": 3 },
+      "healing": { "id": "healing", "rank": 1, "attribute": "empathy" },
+      "insight": { "id": "insight", "attribute": "wits", "rank": 0 },
+      "lore": { "id": "lore", "attribute": "wits", "rank": 2 },
+      "manipulation": {
+        "id": "manipulation",
+        "attribute": "empathy",
+        "rank": 1
+      },
+      "marksmanship": {
+        "id": "marksmanship",
+        "attribute": "agility",
+        "rank": 1
+      },
+      "melee": {
+        "id": "melee",
+        "attribute": "strength",
+        "rank": 3,
+        "name": "melee"
+      },
+      "might": { "id": "might", "attribute": "strength", "rank": 1 },
+      "move": { "id": "move", "attribute": "agility", "rank": null },
+      "performance": { "id": "performance", "attribute": "empathy", "rank": 0 },
+      "scouting": {
+        "id": "scouting",
+        "attribute": "wits",
+        "rank": null,
+        "name": "scouting"
+      },
+      "sleight of hand": {
+        "id": "sleight of hand",
+        "attribute": "agility",
+        "rank": 3
+      },
+      "stealth": { "id": "stealth", "attribute": "agility", "rank": null },
+      "survival": { "id": "survival", "attribute": "wits", "rank": 5 }
+    },
+    "talents": [
+      { "id": "Adaptive", "rank": 1 },
+      { "id": "Path of the Blade", "rank": 1 },
+      { "id": "Ambidextrous", "rank": 1 },
+      { "id": "Bowyer", "rank": 1 },
+      { "id": "Master of the Hunt", "rank": 2 }
+    ],
+    "description": "",
+    "reputation": 0,
+    "portrait": "/img/player_handbook_png-851.d1365c7a.png",
+    "experience": 20,
+    "willpower": 0,
+    "metadata": {
+      "id": "cfac0da1-7417-11e9-8c16-eb434e98fa06",
+      "active": false,
+      "hasBeenActivated": false,
+      "status": "active",
+      "dataVersion": 0
+    },
+    "darkSecret": "Angry",
+    "appearance": "Shaggy",
+    "pride": "Not scared of anything.",
+    "relationships": "Hates everyone.",
+    "profession": "fighter",
+    "attributeDmg": { "agility": 0, "empathy": 0, "strength": 0, "wits": 0 },
+    "gear": {
+      "equipped": [],
+      "inventory": [],
+      "money": { "copper": 0, "silver": 0, "gold": 0 },
+      "consumables": { "torches": 0, "food": 0, "water": 0, "arrows": 0 }
+    },
+    "mount": {
+      "name": "",
+      "mounted": false,
+      "strength": 0,
+      "agility": 0,
+      "inventory": []
+    }
+  },
+  "2b12f1d0-7423-11e9-9934-a98340bd8084": {
+    "name": "Gaia",
+    "age": 33,
+    "ageType": "adult",
+    "sex": null,
+    "kin": "elf",
+    "attributes": { "strength": 3, "agility": 3, "wits": 4, "empathy": 4 },
+    "class": "sorcerer",
+    "skills": {
+      "animal handling": {
+        "id": "animal handling",
+        "attribute": "empathy",
+        "rank": null,
+        "translation": "djurhantering"
+      },
+      "crafting": {
+        "id": "crafting",
+        "attribute": "strength",
+        "rank": 1,
+        "translation": "hantverk"
+      },
+      "endurance": {
+        "id": "endurance",
+        "attribute": "strength",
+        "rank": null,
+        "translation": "uthållighet"
+      },
+      "healing": {
+        "id": "healing",
+        "rank": null,
+        "attribute": "empathy",
+        "translation": "läkekonst"
+      },
+      "insight": {
+        "id": "insight",
+        "attribute": "wits",
+        "rank": 3,
+        "translation": "genomskåda"
+      },
+      "lore": {
+        "id": "lore",
+        "attribute": "wits",
+        "rank": 1,
+        "translation": "bildning"
+      },
+      "manipulation": {
+        "id": "manipulation",
+        "attribute": "empathy",
+        "rank": 3,
+        "translation": "manipulera"
+      },
+      "marksmanship": {
+        "id": "marksmanship",
+        "attribute": "agility",
+        "rank": 1,
+        "translation": "skytte"
+      },
+      "melee": {
+        "id": "melee",
+        "attribute": "strength",
+        "rank": 1,
+        "name": "melee",
+        "translation": "närkamp"
+      },
+      "might": {
+        "id": "might",
+        "attribute": "strength",
+        "rank": null,
+        "translation": "styrkeprov"
+      },
+      "move": {
+        "id": "move",
+        "attribute": "agility",
+        "rank": null,
+        "translation": "rörlighet"
+      },
+      "performance": {
+        "id": "performance",
+        "attribute": "empathy",
+        "rank": null,
+        "translation": "skaldekonst"
+      },
+      "scouting": {
+        "id": "scouting",
+        "attribute": "wits",
+        "rank": null,
+        "name": "scouting",
+        "translation": "speja"
+      },
+      "sleight of hand": {
+        "id": "sleight of hand",
+        "attribute": "agility",
+        "rank": null,
+        "translation": "fingerfärdighet"
+      },
+      "stealth": {
+        "id": "stealth",
+        "attribute": "agility",
+        "rank": null,
+        "translation": "smyga"
+      },
+      "survival": {
+        "id": "survival",
+        "attribute": "wits",
+        "rank": null,
+        "translation": "överlevnad"
+      }
+    },
+    "talents": [
+      { "id": "Inner Peace", "rank": 1 },
+      { "id": "Path of Gold", "rank": 2 },
+      { "id": "Master of the Hunt", "rank": 1 }
+    ],
+    "description": "",
+    "reputation": 0,
+    "portrait": "http://static.giantbomb.com/uploads/original/11/112064/2522418-dark_elf_mage.jpg",
+    "experience": 0,
+    "willpower": 0,
+    "metadata": {
+      "id": "2b12f1d0-7423-11e9-9934-a98340bd8084",
+      "active": false,
+      "hasBeenActivated": false,
+      "status": "active",
+      "dataVersion": 0
+    },
+    "profession": "peddler",
+    "gear": {
+      "equipped": [],
+      "inventory": [],
+      "money": { "copper": 0, "silver": 0, "gold": 0 },
+      "consumables": { "torches": 0, "food": 0, "water": 0, "arrows": 0 }
+    },
+    "mount": {
+      "name": "",
+      "mounted": false,
+      "strength": 0,
+      "agility": 0,
+      "inventory": []
+    },
+    "attributeDmg": { "agility": 0, "empathy": 0, "strength": 0, "wits": 0 }
+  },
+  "aab42620-7441-11e9-a212-99028d9811d3": {
+    "name": "Garv",
+    "age": 33,
+    "ageType": "adult",
+    "sex": null,
+    "kin": "goblin",
+    "attributes": {
+      "strength": null,
+      "agility": null,
+      "wits": null,
+      "empathy": null
+    },
+    "class": "druid",
+    "skills": {
+      "animal handling": {
+        "id": "animal handling",
+        "attribute": "empathy",
+        "rank": null,
+        "translation": "djurhantering"
+      },
+      "crafting": {
+        "id": "crafting",
+        "attribute": "strength",
+        "rank": null,
+        "translation": "hantverk"
+      },
+      "endurance": {
+        "id": "endurance",
+        "attribute": "strength",
+        "rank": null,
+        "translation": "uthållighet"
+      },
+      "healing": {
+        "id": "healing",
+        "rank": null,
+        "attribute": "empathy",
+        "translation": "läkekonst"
+      },
+      "insight": {
+        "id": "insight",
+        "attribute": "wits",
+        "rank": null,
+        "translation": "genomskåda"
+      },
+      "lore": {
+        "id": "lore",
+        "attribute": "wits",
+        "rank": null,
+        "translation": "bildning"
+      },
+      "manipulation": {
+        "id": "manipulation",
+        "attribute": "empathy",
+        "rank": null,
+        "translation": "manipulera"
+      },
+      "marksmanship": {
+        "id": "marksmanship",
+        "attribute": "agility",
+        "rank": null,
+        "translation": "skytte"
+      },
+      "melee": {
+        "id": "melee",
+        "attribute": "strength",
+        "rank": null,
+        "name": "melee",
+        "translation": "närkamp"
+      },
+      "might": {
+        "id": "might",
+        "attribute": "strength",
+        "rank": null,
+        "translation": "styrkeprov"
+      },
+      "move": {
+        "id": "move",
+        "attribute": "agility",
+        "rank": null,
+        "translation": "rörlighet"
+      },
+      "performance": {
+        "id": "performance",
+        "attribute": "empathy",
+        "rank": null,
+        "translation": "skaldekonst"
+      },
+      "scouting": {
+        "id": "scouting",
+        "attribute": "wits",
+        "rank": null,
+        "name": "scouting",
+        "translation": "speja"
+      },
+      "sleight of hand": {
+        "id": "sleight of hand",
+        "attribute": "agility",
+        "rank": null,
+        "translation": "fingerfärdighet"
+      },
+      "stealth": {
+        "id": "stealth",
+        "attribute": "agility",
+        "rank": null,
+        "translation": "smyga"
+      },
+      "survival": {
+        "id": "survival",
+        "attribute": "wits",
+        "rank": null,
+        "translation": "överlevnad"
+      }
+    },
+    "talents": [
+      { "id": "Sneaky", "rank": 1 },
+      { "id": "Path of the Forest", "rank": 1 },
+      { "id": "Berserker", "rank": 2 }
+    ],
+    "description": "",
+    "reputation": 1,
+    "portrait": "/img/player_handbook_png-210.6295229e.png",
+    "experience": 0,
+    "willpower": 0,
+    "metadata": {
+      "id": "aab42620-7441-11e9-a212-99028d9811d3",
+      "active": false,
+      "hasBeenActivated": false,
+      "status": "new",
+      "dataVersion": 0
+    },
+    "profession": "hunter",
+    "gear": {
+      "equipped": [],
+      "inventory": [],
+      "money": { "copper": 0, "silver": 0, "gold": 0 },
+      "consumables": { "torches": 0, "food": 8, "water": 8, "arrows": 10 }
+    },
+    "mount": {
+      "name": "",
+      "mounted": false,
+      "strength": 0,
+      "agility": 0,
+      "inventory": []
+    },
+    "attributeDmg": { "agility": 0, "empathy": 0, "strength": 0, "wits": 0 }
+  },
+  "9adf2691-7442-11e9-b462-cd6e2bc2de1d": {
+    "name": "fd",
+    "age": 33,
+    "ageType": "adult",
+    "sex": null,
+    "kin": "human",
+    "attributes": {
+      "strength": null,
+      "agility": null,
+      "wits": null,
+      "empathy": null
+    },
+    "class": "druid",
+    "skills": {
+      "animal handling": {
+        "id": "animal handling",
+        "attribute": "empathy",
+        "rank": null
+      },
+      "crafting": { "id": "crafting", "attribute": "strength", "rank": null },
+      "endurance": { "id": "endurance", "attribute": "strength", "rank": null },
+      "healing": { "id": "healing", "rank": null, "attribute": "empathy" },
+      "insight": { "id": "insight", "attribute": "wits", "rank": null },
+      "lore": { "id": "lore", "attribute": "wits", "rank": null },
+      "manipulation": {
+        "id": "manipulation",
+        "attribute": "empathy",
+        "rank": null
+      },
+      "marksmanship": {
+        "id": "marksmanship",
+        "attribute": "agility",
+        "rank": null
+      },
+      "melee": {
+        "id": "melee",
+        "attribute": "strength",
+        "rank": null,
+        "name": "melee"
+      },
+      "might": { "id": "might", "attribute": "strength", "rank": null },
+      "move": { "id": "move", "attribute": "agility", "rank": null },
+      "performance": {
+        "id": "performance",
+        "attribute": "empathy",
+        "rank": null
+      },
+      "scouting": {
+        "id": "scouting",
+        "attribute": "wits",
+        "rank": null,
+        "name": "scouting"
+      },
+      "sleight of hand": {
+        "id": "sleight of hand",
+        "attribute": "agility",
+        "rank": null
+      },
+      "stealth": { "id": "stealth", "attribute": "agility", "rank": null },
+      "survival": { "id": "survival", "attribute": "wits", "rank": null }
+    },
+    "talents": [{ "id": "Adaptive", "rank": 1 }],
+    "description": "",
+    "reputation": 0,
+    "portrait": "/img/player_handbook_png-467.753c0c43.png",
+    "experience": 0,
+    "willpower": 0,
+    "metadata": {
+      "id": "9adf2691-7442-11e9-b462-cd6e2bc2de1d",
+      "active": false,
+      "hasBeenActivated": false,
+      "status": "new",
+      "dataVersion": 0
+    },
+    "profession": "druid",
+    "gear": {
+      "equipped": [],
+      "inventory": [],
+      "money": { "copper": 0, "silver": 0, "gold": 0 },
+      "consumables": { "torches": 0, "food": 0, "water": 0, "arrows": 0 }
+    },
+    "mount": {
+      "name": "",
+      "mounted": false,
+      "strength": 0,
+      "agility": 0,
+      "inventory": []
+    }
+  },
+  "88730dc0-767a-11e9-8916-0dce51274db2": {
+    "name": "Alia",
+    "age": 22,
+    "ageType": "adult",
+    "sex": null,
+    "kin": "elf",
+    "attributes": { "strength": 2, "agility": 3, "wits": 5, "empathy": 4 },
+    "profession": "sorcerer",
+    "skills": {
+      "animal handling": {
+        "id": "animal handling",
+        "attribute": "empathy",
+        "rank": null,
+        "translation": "djurhantering"
+      },
+      "crafting": {
+        "id": "crafting",
+        "attribute": "strength",
+        "rank": null,
+        "translation": "hantverk"
+      },
+      "endurance": {
+        "id": "endurance",
+        "attribute": "strength",
+        "rank": null,
+        "translation": "uthållighet"
+      },
+      "healing": {
+        "id": "healing",
+        "rank": null,
+        "attribute": "empathy",
+        "translation": "läkekonst"
+      },
+      "insight": {
+        "id": "insight",
+        "attribute": "wits",
+        "rank": 1,
+        "translation": "genomskåda"
+      },
+      "lore": {
+        "id": "lore",
+        "attribute": "wits",
+        "rank": null,
+        "translation": "bildning"
+      },
+      "manipulation": {
+        "id": "manipulation",
+        "attribute": "empathy",
+        "rank": 3,
+        "translation": "manipulera"
+      },
+      "marksmanship": {
+        "id": "marksmanship",
+        "attribute": "agility",
+        "rank": 1,
+        "translation": "skytte"
+      },
+      "melee": {
+        "id": "melee",
+        "attribute": "strength",
+        "rank": 1,
+        "name": "melee",
+        "translation": "närkamp"
+      },
+      "might": {
+        "id": "might",
+        "attribute": "strength",
+        "rank": null,
+        "translation": "styrkeprov"
+      },
+      "move": {
+        "id": "move",
+        "attribute": "agility",
+        "rank": 1,
+        "translation": "rörlighet"
+      },
+      "performance": {
+        "id": "performance",
+        "attribute": "empathy",
+        "rank": null,
+        "translation": "skaldekonst"
+      },
+      "scouting": {
+        "id": "scouting",
+        "attribute": "wits",
+        "rank": 1,
+        "name": "scouting",
+        "translation": "speja"
+      },
+      "sleight of hand": {
+        "id": "sleight of hand",
+        "attribute": "agility",
+        "rank": 1,
+        "translation": "fingerfärdighet"
+      },
+      "stealth": {
+        "id": "stealth",
+        "attribute": "agility",
+        "rank": 1,
+        "translation": "smyga"
+      },
+      "survival": {
+        "id": "survival",
+        "attribute": "wits",
+        "rank": null,
+        "translation": "överlevnad"
+      }
+    },
+    "talents": [
+      { "id": "Inner Peace", "rank": 1 },
+      { "id": "Path of Death", "rank": 2 },
+      { "id": "Fast Footwork", "rank": 1 }
+    ],
+    "description": "",
+    "reputation": 0,
+    "portrait": "https://i.pinimg.com/736x/b3/6f/56/b36f56d6618c985647804ce17d87fe36.jpg",
+    "experience": 0,
+    "willpower": 0,
+    "metadata": {
+      "id": "88730dc0-767a-11e9-8916-0dce51274db2",
+      "active": false,
+      "hasBeenActivated": false,
+      "status": "active",
+      "dataVersion": 0
+    },
+    "gear": {
+      "equipped": [],
+      "inventory": [],
+      "money": { "copper": 0, "silver": 0, "gold": 0 },
+      "consumables": { "torches": 0, "food": 0, "water": 0, "arrows": 0 }
+    },
+    "mount": {
+      "name": "",
+      "mounted": false,
+      "strength": 0,
+      "agility": 0,
+      "inventory": []
+    },
+    "attributeDmg": { "agility": 0, "empathy": 0, "strength": 0, "wits": 0 }
+  },
+  "859c18a0-767d-11e9-8916-0dce51274db2": {
+    "name": "Aaaagh",
+    "age": 33,
+    "ageType": "adult",
+    "sex": null,
+    "kin": "orc",
+    "attributes": { "strength": 6, "agility": 2, "wits": 2, "empathy": 4 },
+    "profession": "fighter",
+    "skills": {
+      "animal handling": {
+        "id": "animal handling",
+        "attribute": "empathy",
+        "rank": null,
+        "translation": "djurhantering"
+      },
+      "crafting": {
+        "id": "crafting",
+        "attribute": "strength",
+        "rank": null,
+        "translation": "hantverk"
+      },
+      "endurance": {
+        "id": "endurance",
+        "attribute": "strength",
+        "rank": 3,
+        "translation": "uthållighet"
+      },
+      "healing": {
+        "id": "healing",
+        "rank": null,
+        "attribute": "empathy",
+        "translation": "läkekonst"
+      },
+      "insight": {
+        "id": "insight",
+        "attribute": "wits",
+        "rank": null,
+        "translation": "genomskåda"
+      },
+      "lore": {
+        "id": "lore",
+        "attribute": "wits",
+        "rank": null,
+        "translation": "bildning"
+      },
+      "manipulation": {
+        "id": "manipulation",
+        "attribute": "empathy",
+        "rank": null,
+        "translation": "manipulera"
+      },
+      "marksmanship": {
+        "id": "marksmanship",
+        "attribute": "agility",
+        "rank": null,
+        "translation": "skytte"
+      },
+      "melee": {
+        "id": "melee",
+        "attribute": "strength",
+        "rank": 3,
+        "name": "melee",
+        "translation": "närkamp"
+      },
+      "might": {
+        "id": "might",
+        "attribute": "strength",
+        "rank": 3,
+        "translation": "styrkeprov"
+      },
+      "move": {
+        "id": "move",
+        "attribute": "agility",
+        "rank": null,
+        "translation": "rörlighet"
+      },
+      "performance": {
+        "id": "performance",
+        "attribute": "empathy",
+        "rank": 1,
+        "translation": "skaldekonst"
+      },
+      "scouting": {
+        "id": "scouting",
+        "attribute": "wits",
+        "rank": null,
+        "name": "scouting",
+        "translation": "speja"
+      },
+      "sleight of hand": {
+        "id": "sleight of hand",
+        "attribute": "agility",
+        "rank": null,
+        "translation": "fingerfärdighet"
+      },
+      "stealth": {
+        "id": "stealth",
+        "attribute": "agility",
+        "rank": null,
+        "translation": "smyga"
+      },
+      "survival": {
+        "id": "survival",
+        "attribute": "wits",
+        "rank": null,
+        "translation": "överlevnad"
+      }
+    },
+    "talents": [
+      { "id": "Unbreakable", "rank": 1 },
+      { "id": "Path of the Blade", "rank": 2 },
+      { "id": "Cold Blooded", "rank": 1 }
+    ],
+    "description": "",
+    "reputation": 1,
+    "portrait": "/img/player_handbook_png-926.e32f5389.png",
+    "experience": 0,
+    "willpower": 0,
+    "metadata": {
+      "id": "859c18a0-767d-11e9-8916-0dce51274db2",
+      "active": false,
+      "hasBeenActivated": false,
+      "status": "active",
+      "dataVersion": 0
+    },
+    "appearance": "Ful",
+    "pride": "Stolt",
+    "darkSecret": "Gillar blommor",
+    "relationships": "Hatar alla",
+    "gear": {
+      "equipped": [],
+      "inventory": [],
+      "money": { "copper": 0, "silver": 0, "gold": 0 },
+      "consumables": { "torches": 0, "food": 0, "water": 0, "arrows": 0 }
+    },
+    "mount": {
+      "name": "",
+      "mounted": false,
+      "strength": 0,
+      "agility": 0,
+      "inventory": []
+    },
+    "attributeDmg": { "agility": 0, "empathy": 0, "strength": 0, "wits": 0 }
+  }
+}
