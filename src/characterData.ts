@@ -89,6 +89,7 @@ export interface CharData {
     name: string
     strength: number
     agility: number
+    movementRate: number
     mounted: boolean
     inventory: Item[]
     skills: SkillObj[]
@@ -173,6 +174,7 @@ export function getNewCharacterData(): CharacterData {
       mounted: false,
       strength: 0,
       agility: 0,
+      movementRate: 0,
       inventory: [],
       skills: [],
     },

@@ -104,6 +104,10 @@ const charDataPatches: CharDataPatch[] = [
     }
     return character
   },
+  function addMountMovement(character: CharData): CharData {
+    character.mount.movementRate = character.mount.movementRate || 0
+    return character
+  },
   // Permanent patches
   // function permanentPatchExample(character: CharData): CharData {}
 

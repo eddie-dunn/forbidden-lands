@@ -60,7 +60,7 @@ export default class MountStats extends Vue {
         <FLNumberInput
           id="movement-rate"
           fontSize="1.7rem"
-          v-model.number="tempMovementRate"
+          v-model.number="charData.mount.movementRate"
           :disabled="viewOnly"
         />
       </div>

@@ -21,7 +21,7 @@ describe(`patching data from 20190623`, () => {
   const expected_entries: CharData[] = []
 
   // Global updates
-  const dataVersion = 6
+  const dataVersion = 7
   const mountUpdate = {
     skills: [],
     movementRate: 0,
