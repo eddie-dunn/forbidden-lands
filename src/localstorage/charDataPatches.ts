@@ -10,7 +10,6 @@ type StoredCharDataPatch = (charData: CharData) => CharData
 type EphemeralCharDataPatch = (charData: CharData) => null
 type CharDataPatch = StoredCharDataPatch | EphemeralCharDataPatch
 
-// TODO: Move patches here
 const charDataPatches: CharDataPatch[] = [
   function patch0(character: CharData): CharData {
     if (!character.metadata.dataVersion) {
@@ -141,12 +140,16 @@ function _apply(
   return cCopy
 }
 
-export function runPatches(
-  c: CharData,
-  patches: CharDataPatch[] = charDataPatches
-): CharData {
-  console.log(">>> Patching", c.name)
+export const CURRENT_PATCH_VERSION = charDataPatches.length - 1
+
+export function runPatches(c: CharData): CharData {
+  const patches = charDataPatches
   const oldVersion = c.metadata.dataVersion
+  if (oldVersion === CURRENT_PATCH_VERSION) {
+    return c
+  }
+
+  console.log(">>> Patching", c.name)
   let char
   try {
     char = _apply(c, patches)

@@ -1,5 +1,8 @@
 import { CharData, CharacterTalent } from "@/characterData"
-import { runPatches } from "@/localstorage/charDataPatches"
+import {
+  runPatches,
+  CURRENT_PATCH_VERSION,
+} from "@/localstorage/charDataPatches"
 import { SaveData } from "@/localstorage/characterStorage"
 import charData20190623 from "../data/backup-2019-06-23T17_29_58.114Z.charlist.json"
 
@@ -21,14 +24,13 @@ describe(`patching data from 20190623`, () => {
   const expected_entries: CharData[] = []
 
   // Global updates
-  const dataVersion = 7
+  const dataVersion = CURRENT_PATCH_VERSION
   const mountUpdate = {
     skills: [],
     movementRate: 0,
   }
 
   // Char specific data updates
-  const xp = [83, 83, 12, 0, 77, 83]
   const charUpdates: {
     xp: number
     talents: CharacterTalent[]
