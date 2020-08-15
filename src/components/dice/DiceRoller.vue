@@ -110,7 +110,7 @@ export default class DiceRoller extends Vue {
   accumulator = (sum: number, value: number | null) => sum + Number(value)
 
   get totals() {
-    const rolls = this.rollResultLog[0]
+    const rolls = this.rollResultLog.slice(-1).pop()
     if (!rolls) return []
     const t = rolls.map((rolls, diceType) => {
       const success = rolls
@@ -146,7 +146,6 @@ export default class DiceRoller extends Vue {
   }
 
   get rollDisabled() {
-    // return true
     return this.nbrDice.reduce(this.accumulator, 0) < 1
   }
 
@@ -163,7 +162,11 @@ export default class DiceRoller extends Vue {
       })
     })
     this.rollResult = newRolls
-    this.rollResultLog.unshift(this.rollResult)
+    this.rollResultLog.push(this.rollResult)
+    const chatBox = this.$refs.rollResults as any
+    this.$nextTick(() => {
+      chatBox.scrollTop = chatBox.scrollHeight
+    })
   }
 
   rollDice() {
@@ -208,47 +211,43 @@ export default class DiceRoller extends Vue {
 
 <template>
   <div class="dice-view">
-    <ExpandableSection :label="$t('Dice')" :defaultOpen="true" class="content">
-      <div class="dice-inputs">
-        <DiceInput
-          v-for="dice in basicDice"
-          :key="dice.color"
-          :color="dice.color"
-          v-model="nbrDice[dice.type]"
-          :rollCb="rollDice"
-          :pushCb="pushRoll"
-        />
-        <DiceInput
-          v-for="dice in artifactDice"
-          :key="dice.color"
-          :color="dice.color"
-          v-model="nbrDice[dice.type]"
-          :rollCb="rollDice"
-          :pushCb="pushRoll"
-        />
-      </div>
+    <ExpandableSection
+      v-if="false"
+      :label="$t('Dice')"
+      :defaultOpen="true"
+      class="content"
+    >
+      <!-- Don't use for now -->
+    </ExpandableSection>
 
-      <!-- Result summary -->
-      <div v-if="totals.length > 0" class="result-box">
-        <div :class="['result-summary', pushed ? '' : 'transparent']">
-          <pre>{{ totalWhiteSkulls }}</pre>
-          <SvgIcon name="skulls-1-inverted" class="dice-icon" />
-        </div>
-        <div :class="['result-summary', pushed ? '' : 'transparent']">
-          <pre>{{ totalBlackSkulls }}</pre>
-          <SvgIcon name="skulls-1" class="dice-icon dice-black" />
-        </div>
-        <div class="result-summary">
-          <pre>{{ totalSuccess }}</pre>
-          <SvgIcon name="swords-1-inverted" class="dice-icon" />
-        </div>
-      </div>
+    <div class="dice-inputs">
+      <DiceInput
+        v-for="dice in basicDice"
+        :key="dice.color"
+        :color="dice.color"
+        v-model="nbrDice[dice.type]"
+        :rollCb="rollDice"
+        :pushCb="pushRoll"
+      />
+      <DiceInput
+        v-for="dice in artifactDice"
+        :key="dice.color"
+        :color="dice.color"
+        v-model="nbrDice[dice.type]"
+        :rollCb="rollDice"
+        :pushCb="pushRoll"
+      />
+    </div>
 
-      <!-- Roll result -->
+    <!-- Roll result -->
+    <div class="roll-results" ref="rollResults">
       <div
         v-for="(rolls, index) in rollResultLog"
         v-bind:key="index"
-        :class="['roll-result', index !== 0 ? 'transparent' : '']"
+        :class="[
+          'roll-result',
+          index !== rollResultLog.length - 1 ? 'transparent' : '',
+        ]"
       >
         <DiceResult color="white" :rolls="rolls[DiceType.White]" />
         <DiceResult color="red" :rolls="rolls[DiceType.Red]" />
@@ -257,7 +256,23 @@ export default class DiceRoller extends Vue {
         <DiceResult color="blue" :rolls="rolls[DiceType.Blue]" />
         <DiceResult color="orange" :rolls="rolls[DiceType.Orange]" />
       </div>
-    </ExpandableSection>
+    </div>
+
+    <!-- Result summary -->
+    <div v-if="totals.length > 0" class="result-summary">
+      <div :class="['result-summary-item', pushed ? '' : 'transparent']">
+        <pre>{{ totalWhiteSkulls }}</pre>
+        <SvgIcon name="skulls-1-inverted" class="dice-icon" />
+      </div>
+      <div :class="['result-summary-item', pushed ? '' : 'transparent']">
+        <pre>{{ totalBlackSkulls }}</pre>
+        <SvgIcon name="skulls-1" class="dice-icon dice-black" />
+      </div>
+      <div class="result-summary-item">
+        <pre>{{ totalSuccess }}</pre>
+        <SvgIcon name="swords-1-inverted" class="dice-icon" />
+      </div>
+    </div>
 
     <div class="button-bar">
       <FLButton v-if="showReset" type="cancel" @click="resetDice">
@@ -314,7 +329,13 @@ export default class DiceRoller extends Vue {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 2rem;
+  margin-top: 1rem;
+}
+
+.roll-results {
+  height: 250px;
+  overflow-y: auto;
+  flex-grow: 1;
 }
 
 .transparent {
@@ -323,14 +344,14 @@ export default class DiceRoller extends Vue {
   }
 }
 
-.result-summary {
+.result-summary-item {
   font-size: 2.5rem;
   display: flex;
   justify-content: baseline;
   align-items: center;
 }
 
-.result-box {
+.result-summary {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
