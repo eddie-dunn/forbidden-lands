@@ -8,8 +8,9 @@ import { KIN as KIN_MAP } from "@/kin"
 import { CharacterData, CharacterMetaDataStatus } from "@/characterData"
 import SvgIcon from "@/components/SvgIcon.vue"
 import NumberInput from "@/components/FLNumberInput.vue"
-import DiceModal, { ArgDice } from "@/components/dice/DiceModal.vue"
+import DiceModal from "@/components/dice/DiceModal.vue"
 import { capitalize } from "@/util/util"
+import { IDiceConfig } from "@/dice/diceTypes"
 
 function getMaxAttribLevel(
   attribute: Attribute,
@@ -102,11 +103,12 @@ export default Vue.extend({
     },
     roll(attributeId: Attribute, value: number) {
       console.log("roll", attributeId, this.remaining(attributeId))
-      this.rollingDice = {
+      const diceConf: IDiceConfig = {
         white: this.remaining(attributeId),
         red: null,
         black: null,
-      } as ArgDice
+      }
+      this.rollingDice = diceConf
       const attributeString = capitalize(String(this.$t(attributeId)))
       this.modalTitle = this.$t("Roll dice") + ": " + attributeString
     },

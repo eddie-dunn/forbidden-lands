@@ -8,6 +8,7 @@ import NumberInput from "@/components/FLNumberInput.vue"
 import DiceInput from "@/components/dice/DiceInput.vue"
 import DiceResult from "@/components/dice/DiceResult.vue"
 import FLButton from "@/components/base/FLButton.vue"
+import { getRandomIntInclusive } from "@/dice/diceUtil"
 
 enum DiceType {
   White,
@@ -28,14 +29,6 @@ function successMap(val: number) {
     return 3
   }
   return 4
-}
-
-function getRandomIntInclusive(min: number, max: number) {
-  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random#Getting_a_random_integer_between_two_values_inclusive
-  min = Math.ceil(min)
-  max = Math.floor(max)
-  //The maximum is inclusive and the minimum is inclusive
-  return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
 function diceResult(sides = 6) {
@@ -60,6 +53,17 @@ function sidesFor(diceType: DiceType): number {
   return (map as any)[diceType] || 6
 }
 
+function getNbrDice(
+  white: number | null,
+  red: number | null,
+  black: number | null,
+  green: number | null,
+  blue: number | null,
+  orange: number | null
+): (number | null)[] {
+  return [white, red, black, green, blue, orange]
+}
+
 @Component({
   components: {
     DiceInput,
@@ -77,20 +81,27 @@ export default class DiceRoller extends Vue {
   @Prop({ default: null }) green!: number
   @Prop({ default: null }) blue!: number
   @Prop({ default: null }) orange!: number
-  @Prop({ default: false }) showReset!: boolean
-  @Prop({ default: false }) openArtifact!: boolean
+  @Prop({ default: true }) showReset!: boolean
 
   DiceType = DiceType
 
-  nbrDice: (number | null)[] = [
-    /* Address by enum number */
+  // nbrDice: (number | null)[] = [
+  //   /* Address by enum number */
+  //   this.white,
+  //   this.red,
+  //   this.black,
+  //   this.green,
+  //   this.blue,
+  //   this.orange,
+  // ]
+  nbrDice = getNbrDice(
     this.white,
     this.red,
     this.black,
     this.green,
     this.blue,
-    this.orange,
-  ]
+    this.orange
+  )
   rollResult: number[][] = [
     /* Address by enum number */
   ]
@@ -165,7 +176,14 @@ export default class DiceRoller extends Vue {
   }
 
   resetDice() {
-    this.$set(this, "nbrDice", [])
+    this.nbrDice = getNbrDice(
+      this.white,
+      this.red,
+      this.black,
+      this.green,
+      this.blue,
+      this.orange
+    )
     this.rollResult = []
     this.rollResultLog = []
   }
