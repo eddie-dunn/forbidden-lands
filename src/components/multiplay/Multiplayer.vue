@@ -10,7 +10,7 @@ import FLInput from "@/components/base/FLInput.vue"
 import FLButton from "@/components/base/FLButton.vue"
 import FLCheckbox from "@/components/base/FLCheckbox.vue"
 import { UserData } from "@/components/multiplay/protocol"
-import { randomName } from "@/util"
+import { randomName } from "@/util/util"
 
 @Component({
   components: {

@@ -21,7 +21,7 @@ import {
   SET_PAGE_SUBTITLE,
 } from "./store-types"
 import { CharacterData } from "@/characterData"
-import { Err, OK, log } from "@/util"
+import { Err, OK, log } from "@/util/util"
 
 import { FLPlayer } from "@/components/multiplay/fl-player"
 import { FLHost } from "@/components/multiplay/fl-host"

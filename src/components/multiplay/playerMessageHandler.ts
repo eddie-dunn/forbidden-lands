@@ -6,7 +6,7 @@ import {
 } from "@/components/multiplay/protocol"
 
 import { NodeSend } from "./fl-node"
-import { errlog } from "@/util"
+import { errlog } from "@/util/util"
 
 export type PlayerReceive = NodeSend | Protocol.Ping
 

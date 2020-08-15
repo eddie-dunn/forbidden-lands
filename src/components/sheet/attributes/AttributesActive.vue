@@ -9,7 +9,7 @@ import { CharacterData, CharacterMetaDataStatus } from "@/characterData"
 import SvgIcon from "@/components/SvgIcon.vue"
 import NumberInput from "@/components/FLNumberInput.vue"
 import DiceModal, { ArgDice } from "@/components/dice/DiceModal.vue"
-import { capitalize } from "@/util"
+import { capitalize } from "@/util/util"
 
 function getMaxAttribLevel(
   attribute: Attribute,

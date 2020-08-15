@@ -12,7 +12,7 @@ import {
   Age,
 } from "@/types.ts"
 
-import { capitalize } from "@/util"
+import { capitalize } from "@/util/util"
 import characterTemplate from "@/data/character_template/character_template"
 import { getAgeType, getAttributePoints } from "@/age"
 

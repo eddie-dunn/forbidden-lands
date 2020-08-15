@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { Err, OK, Result, errlog, log } from "@/util"
+import { Err, OK, Result, errlog, log } from "@/util/util"
 import { Notification, notify } from "@/util/notifications"
 import { PeerId, PeerJSError, UserData } from "@/components/multiplay/protocol"
 

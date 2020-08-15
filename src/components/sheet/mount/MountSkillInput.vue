@@ -4,7 +4,7 @@ import { Component, Prop, Watch } from "vue-property-decorator"
 
 import { Skill } from "@/types"
 import { SKILLS, SkillObj } from "@/skills.ts"
-import { capitalize } from "@/util.ts"
+import { capitalize } from "@/util/util.ts"
 
 import FLButton from "@/components/base/FLButton.vue"
 import IconButton from "@/components/base/IconButton.vue"

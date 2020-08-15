@@ -5,7 +5,7 @@ import {
   UserData,
 } from "@/components/multiplay/protocol"
 import { NodeReceive, NodeSend } from "./fl-node"
-import { errlog, log } from "@/util"
+import { errlog, log } from "@/util/util"
 import {
   filterCharData,
   getGms,

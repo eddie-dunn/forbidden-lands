@@ -1,6 +1,6 @@
 import { AbstractNode, ChatMessage, PlayerNode } from "./fl-node"
 import { BusEvent, EventBus } from "@/util/eventBus"
-import { Err, OK, Result } from "@/util"
+import { Err, OK, Result } from "@/util/util"
 import {
   INodeUser,
   Protocol,

@@ -1,4 +1,4 @@
-import { Err, OK, Result, log } from "@/util"
+import { Err, OK, Result, log } from "@/util/util"
 import {
   INodeUser,
   PeerId,

@@ -6,8 +6,8 @@ import {
   ProtocolTypes,
   UserData,
 } from "@/components/multiplay/protocol"
-import { OK, Result } from "@/util"
-import { errlog, log } from "@/util"
+import { OK, Result } from "@/util/util"
+import { errlog, log } from "@/util/util"
 import {
   getGms,
   getPlayers,

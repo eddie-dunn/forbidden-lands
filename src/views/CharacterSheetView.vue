@@ -13,7 +13,7 @@ import {
   SET_PAGE_SUBTITLE,
 } from "@/store/store-types"
 import { UserData, PeerId } from "@/components/multiplay/protocol"
-import { errlog } from "@/util"
+import { errlog } from "@/util/util"
 
 import CharacterSheet from "@/components/sheet/CharacterSheet.vue"
 

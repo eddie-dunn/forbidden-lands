@@ -4,7 +4,7 @@ import VueI18n from "vue-i18n"
 /* eslint-disable no-console */
 import { AGE, CLASS, KIN } from "@/keys.ts"
 import { Age } from "@/types"
-import { capitalize } from "@/util"
+import { capitalize } from "@/util/util"
 import { getAgeType, getAgeRange, getReputation } from "@/age"
 import { CLASS as PROFESSION } from "@/classes"
 import { CharacterData } from "@/characterData"

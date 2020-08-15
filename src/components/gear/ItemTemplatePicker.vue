@@ -9,7 +9,7 @@ import FLInput from "@/components/base/FLInput.vue"
 import { CharacterData, CharacterTalent } from "@/characterData"
 import { allItems } from "@/data/items/items.ts"
 import { Item } from "@/data/items/itemTypes"
-import { capitalize } from "@/util"
+import { capitalize } from "@/util/util"
 
 @Component({
   components: {

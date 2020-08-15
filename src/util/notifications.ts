@@ -1,6 +1,6 @@
 import { BusEvent, EventBus } from "@/util/eventBus"
 
-import { timeout } from "@/util"
+import { timeout } from "@/util/util"
 import uuid1 from "uuid/v1"
 
 type info = "info"
