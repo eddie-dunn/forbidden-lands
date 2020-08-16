@@ -74,8 +74,9 @@ export default class ExpandableSection extends Vue {
         <SvgIcon :name="icon" :title="icon" />
       </div>
       <div :class="['expander-label']">
-        {{ label }}
-        <slot name="header"></slot>
+        <slot name="header">
+          {{ label }}
+        </slot>
       </div>
       <div
         :class="[
@@ -134,7 +135,7 @@ export default class ExpandableSection extends Vue {
 }
 
 .icon-left {
-  display: inline-block;
+  display: flex;
   @media print {
     display: none;
   }
