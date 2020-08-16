@@ -24,6 +24,7 @@ export class FLSelect extends Vue {
   @Prop({ default: "" }) initial!: string
   @Prop({ default: true }) initialDisabled!: boolean
   @Prop({ default: null }) value!: string | null
+  @Prop({ default: false }) fullWidth!: boolean
 
   optionExtras(option: Option): string {
     if (!option.extras || !option.extras.length) return ""
@@ -42,7 +43,13 @@ export default FLSelect
 <template>
   <div class="fl-select">
     <label v-if="label" :for="label" class="label">{{ label }}</label>
-    <select :id="label" :value="value" @input="onInput" :disabled="disabled">
+    <select
+      :id="label"
+      :value="value"
+      @input="onInput"
+      :disabled="disabled"
+      :class="fullWidth ? 'full-width' : ''"
+    >
       <option
         v-if="initial"
         key="disabled"
@@ -80,5 +87,9 @@ export default FLSelect
 
 .label {
   margin-right: 1rem;
+}
+
+.full-width {
+  width: 100%;
 }
 </style>
