@@ -29,6 +29,7 @@ const DEBUG_KEY = "FLC_DEBUG_MODE"
 const DEBUG_MODE = Boolean(sessionStorage.getItem(DEBUG_KEY))
 Vue.prototype.$debugMode = DEBUG_MODE
 
+// Enable debug mode by adding query string, e.g., http://localhost:3000?debug=on
 router.afterEach((to: Route) => {
   const debugOn = ["1", "on", "true"].includes(
     String(to.query.debug).toLowerCase()

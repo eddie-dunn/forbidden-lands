@@ -8,6 +8,7 @@ export const maxTotal = (conf: IDiceConfig) => {
   const d12 = Number(conf.orange || 0)
   return d6 + 2 * d8 + 3 * d10 + 4 * d12
 }
+export const maxPossible = maxTotal
 
 // TODO: Use chance.js instead in order to be able to set seed?
 // More on seeding: https://stackoverflow.com/questions/521295/seeding-the-random-number-generator-in-javascript

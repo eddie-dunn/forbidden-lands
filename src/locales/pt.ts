@@ -7,6 +7,7 @@ import {
   SkillTranslations,
   TalentTranslations,
 } from "./localetypes"
+import en from "./en"
 
 const age: AgeTranslations = {
   "age": "idade",
@@ -257,6 +258,8 @@ const weapons = {
 }
 
 export default {
+  ...en, // Adding English strings for convenience; comment out to test missing translations
+
   ...age,
   ...attributes,
   ...kin,
@@ -421,9 +424,11 @@ export default {
   "name": "name",
   "near": "near",
   "no character": "no character",
+  "or more": "or more",
   "other": "other",
   "parrying": "parrying",
   "pointed": "pointed",
+  "probability": "probability",
   "properties": "properties",
   "ranged weapons": "ranged weapons",
   "select character": "select character",

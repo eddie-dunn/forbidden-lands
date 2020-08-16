@@ -9,6 +9,10 @@ import DiceInput from "@/components/dice/DiceInput.vue"
 import DiceResult from "@/components/dice/DiceResult.vue"
 import FLButton from "@/components/base/FLButton.vue"
 import { getRandomIntInclusive } from "@/dice/diceUtil"
+import { IDiceConfig } from "@/dice/diceTypes"
+
+import { DiceProbability } from "./DiceProbability.vue"
+import { capitalize } from "@/util/util"
 
 enum DiceType {
   White,
@@ -64,9 +68,21 @@ function getNbrDice(
   return [white, red, black, green, blue, orange]
 }
 
+function diceArrayToConf(dice: (number | null)[]): IDiceConfig {
+  return {
+    white: dice[0],
+    red: dice[1],
+    black: dice[2],
+    green: dice[3],
+    blue: dice[4],
+    orange: dice[5],
+  }
+}
+
 @Component({
   components: {
     DiceInput,
+    DiceProbability,
     DiceResult,
     ExpandableSection,
     FLButton,
@@ -74,7 +90,7 @@ function getNbrDice(
     SvgIcon,
   },
 })
-export default class DiceRoller extends Vue {
+export class DiceRoller extends Vue {
   @Prop({ default: 3 }) white!: number
   @Prop({ default: 2 }) red!: number
   @Prop({ default: 1 }) black!: number
@@ -85,16 +101,7 @@ export default class DiceRoller extends Vue {
 
   DiceType = DiceType
 
-  // nbrDice: (number | null)[] = [
-  //   /* Address by enum number */
-  //   this.white,
-  //   this.red,
-  //   this.black,
-  //   this.green,
-  //   this.blue,
-  //   this.orange,
-  // ]
-  nbrDice = getNbrDice(
+  nbrDice: (number | null)[] = getNbrDice(
     this.white,
     this.red,
     this.black,
@@ -109,8 +116,13 @@ export default class DiceRoller extends Vue {
 
   accumulator = (sum: number, value: number | null) => sum + Number(value)
 
+  get conf(): IDiceConfig {
+    return diceArrayToConf(this.nbrDice)
+  }
+
   get totals() {
-    const rolls = this.rollResultLog.slice(-1).pop()
+    const rolls = this.rollResultLog[0]
+
     if (!rolls) return []
     const t = rolls.map((rolls, diceType) => {
       const success = rolls
@@ -141,8 +153,16 @@ export default class DiceRoller extends Vue {
     return this.rollResultLog.length >= 2
   }
 
-  get pushDisabled() {
-    return this.rollResultLog.length < 1
+  get rolled() {
+    return this.rollResultLog.length >= 1
+  }
+
+  get pushDisabled(): boolean {
+    const dwarf = true // FIXME pass in if dwarf
+    const wp = 1 // FIXME pass in wp
+    return !this.rolled || (!dwarf && this.pushed) || (dwarf && wp < 1)
+    // Show WP
+    // Then for every additional push decrement WP
   }
 
   get rollDisabled() {
@@ -162,10 +182,10 @@ export default class DiceRoller extends Vue {
       })
     })
     this.rollResult = newRolls
-    this.rollResultLog.push(this.rollResult)
-    const chatBox = this.$refs.rollResults as any
+    this.rollResultLog.unshift(this.rollResult)
+    const refRollResult = this.$refs.rollResults as any
     this.$nextTick(() => {
-      chatBox.scrollTop = chatBox.scrollHeight
+      refRollResult.scrollTop = refRollResult.scrollHeight
     })
   }
 
@@ -206,11 +226,17 @@ export default class DiceRoller extends Vue {
       { color: "orange", type: DiceType.Orange },
     ]
   }
+
+  get probabilityStr() {
+    return capitalize(this.$t("probability") as string)
+  }
 }
+
+export default DiceRoller
 </script>
 
 <template>
-  <div class="dice-view">
+  <div class="dice-roller-view">
     <ExpandableSection
       v-if="false"
       :label="$t('Dice')"
@@ -225,7 +251,7 @@ export default class DiceRoller extends Vue {
         v-for="dice in basicDice"
         :key="dice.color"
         :color="dice.color"
-        v-model="nbrDice[dice.type]"
+        v-model.number="nbrDice[dice.type]"
         :rollCb="rollDice"
         :pushCb="pushRoll"
       />
@@ -233,30 +259,17 @@ export default class DiceRoller extends Vue {
         v-for="dice in artifactDice"
         :key="dice.color"
         :color="dice.color"
-        v-model="nbrDice[dice.type]"
+        v-model.number="nbrDice[dice.type]"
         :rollCb="rollDice"
         :pushCb="pushRoll"
       />
     </div>
 
-    <!-- Roll result -->
-    <div class="roll-results" ref="rollResults">
-      <div
-        v-for="(rolls, index) in rollResultLog"
-        v-bind:key="index"
-        :class="[
-          'roll-result',
-          index !== rollResultLog.length - 1 ? 'transparent' : '',
-        ]"
-      >
-        <DiceResult color="white" :rolls="rolls[DiceType.White]" />
-        <DiceResult color="red" :rolls="rolls[DiceType.Red]" />
-        <DiceResult color="black" :rolls="rolls[DiceType.Black]" />
-        <DiceResult color="green" :rolls="rolls[DiceType.Green]" />
-        <DiceResult color="blue" :rolls="rolls[DiceType.Blue]" />
-        <DiceResult color="orange" :rolls="rolls[DiceType.Orange]" />
-      </div>
-    </div>
+    <ExpandableSection :defaultOpen="false" saveStateId="probability-calc">
+      <!-- Don't use for now -->
+      <div slot="header" style="font-size: 1rem;">{{ probabilityStr }}</div>
+      <DiceProbability :conf="conf" />
+    </ExpandableSection>
 
     <!-- Result summary -->
     <div v-if="totals.length > 0" class="result-summary">
@@ -271,6 +284,22 @@ export default class DiceRoller extends Vue {
       <div class="result-summary-item">
         <pre>{{ totalSuccess }}</pre>
         <SvgIcon name="swords-1-inverted" class="dice-icon" />
+      </div>
+    </div>
+
+    <!-- Roll result -->
+    <div class="roll-results" ref="rollResults">
+      <div
+        v-for="(rolls, index) in rollResultLog"
+        v-bind:key="index"
+        :class="['roll-result', index !== 0 ? 'transparent' : '']"
+      >
+        <DiceResult color="white" :rolls="rolls[DiceType.White]" />
+        <DiceResult color="red" :rolls="rolls[DiceType.Red]" />
+        <DiceResult color="black" :rolls="rolls[DiceType.Black]" />
+        <DiceResult color="green" :rolls="rolls[DiceType.Green]" />
+        <DiceResult color="blue" :rolls="rolls[DiceType.Blue]" />
+        <DiceResult color="orange" :rolls="rolls[DiceType.Orange]" />
       </div>
     </div>
 
@@ -297,18 +326,12 @@ export default class DiceRoller extends Vue {
   width: 3rem;
 }
 
-.dice-view {
+.dice-roller-view {
   text-align: center;
   overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-
-  .content {
-    flex-grow: 1;
-    overflow-y: auto;
-    overflow-x: hidden; // due to weird bug adding scrollbar to button-bar
-  }
 
   .button-bar {
     flex-shrink: 0;
@@ -326,6 +349,7 @@ export default class DiceRoller extends Vue {
 }
 
 .roll-result {
+  text-align: left;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -333,9 +357,9 @@ export default class DiceRoller extends Vue {
 }
 
 .roll-results {
-  height: 250px;
   overflow-y: auto;
   flex-grow: 1;
+  margin: 0.5rem;
 }
 
 .transparent {
@@ -364,6 +388,6 @@ export default class DiceRoller extends Vue {
   grid-auto-flow: column;
   grid-row-gap: 0.5rem;
   grid-column-gap: 2rem;
-  margin: 0.5rem;
+  margin: auto;
 }
 </style>

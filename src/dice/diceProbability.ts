@@ -3,7 +3,7 @@ Links
 https://math.stackexchange.com/a/3745300/802368
 */
 import { IDiceConfig } from "./diceTypes"
-import { maxTotal as maxPossible } from "./diceUtil"
+import { maxPossible } from "./diceUtil"
 
 const count = (s: 6 | 8 | 10 | 12, c: IDiceConfig): number =>
   ({
@@ -80,4 +80,16 @@ export function prob(c: IDiceConfig, minNbrSuccess: number): number {
 
   const p = compute(d6, d8, d10, d12)
   return probgt(p, minNbrSuccess)
+}
+
+export function probZeroSuccess(c: IDiceConfig) {
+  return 1 - prob(c, 1)
+}
+
+export function probBlackSkull(c: IDiceConfig, minNbr: number): number {
+  return prob({ black: c.black }, minNbr)
+}
+
+export function probWhiteSkull(c: IDiceConfig, minNbr: number): number {
+  return prob({ white: c.white }, minNbr)
 }

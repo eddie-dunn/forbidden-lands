@@ -20,7 +20,7 @@ export default class DiceResult extends Vue {
 </script>
 
 <template>
-  <div class="rollResult">
+  <div class="diceResult">
     <Dice
       v-for="(result, index) in rolls"
       v-bind:key="'result-' + color + index"
