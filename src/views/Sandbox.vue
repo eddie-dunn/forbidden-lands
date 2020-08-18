@@ -81,7 +81,7 @@
         <FLButton type="ghost" :disabled="true">Ghost button disabled</FLButton>
         <h4>IconButton</h4>
         <IconButton icon="check" color="main"></IconButton>
-        <IconButton icon="delete" color="danger"></IconButton>
+        <IconButton icon="delete" color="danger" @click="click"></IconButton>
         <IconButton icon="add" :disabled="true"></IconButton>
         <IconButton icon="chat_bubble">With text</IconButton>
       </div>
@@ -141,6 +141,9 @@ export default class Home extends Vue {
       displayTime: 4000,
     }
     notify(msg)
+  }
+  click() {
+    console.log("CLICK!")
   }
 
   get longWarningText() {

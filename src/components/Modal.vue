@@ -1,12 +1,10 @@
 <script lang="ts">
-/* eslint-disable no-console */
 import { Component, Prop, Vue } from "vue-property-decorator"
-import SvgIcon from "@/components/SvgIcon.vue"
-// https://github.com/vuejs/vue-class-component/blob/master/example/src/App.vue
+import IconButton from "@/components/base/IconButton.vue"
 
 @Component({
   components: {
-    SvgIcon,
+    IconButton,
   },
 })
 export default class Modal extends Vue {
@@ -53,9 +51,14 @@ export default class Modal extends Vue {
             <h2 class="capitalize-first" v-if="title">{{ title }}</h2>
             <slot name="header"></slot>
           </div>
-          <button class="close-button" @click="close()">
-            <SvgIcon name="close" title="Close" class="close-button-img" />
-          </button>
+          <IconButton
+            icon="close"
+            class="close-button"
+            color="danger"
+            @click="close"
+            width="2rem"
+            height="2rem"
+          />
         </div>
 
         <div class="__modal-body">
@@ -81,37 +84,10 @@ h2 {
   margin: 0.5rem;
 }
 
-.close-button-img {
-  width: 2rem;
-  height: 2rem;
-  cursor: pointer;
-  fill: @pastel-red;
-  &:hover {
-    fill: @pastel-red;
-  }
-}
-
 .close-button {
-  width: 2rem;
-  height: 2rem;
-  margin-top: 3px;
-  margin-right: 3px;
-
-  // Disable button appearance
-  background: transparent;
-  border: none;
-  padding: 0;
-  outline: none;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  &:hover {
-    transform: scale(1.1);
-  }
-  &:active {
-    transform: translateY(2px);
-  }
+  margin-top: 2px;
+  margin-right: 2px;
+  align-self: start;
 }
 
 .modal-mask {
