@@ -7,6 +7,7 @@ import {
   SkillTranslations,
   TalentTranslations,
 } from "./localetypes"
+import en from "./en"
 
 const age: AgeTranslations = {
   "age": "ålder",
@@ -363,6 +364,8 @@ const templateGear = {
 }
 
 export default {
+  ...en, // Adding English strings for convenience; comment out to test missing translations
+
   ...age,
   ...attributes,
   ...kin,
@@ -429,6 +432,7 @@ export default {
   "Face": "Ansikte",
   "Features": "Egenskaper",
   "Female": "Kvinna",
+  "Filter": "Filter",
   "Food": "Mat",
   "Forbidden Lands Companion": "Forbidden Lands Companion",
   "Gallery": "Galleri",
@@ -510,6 +514,7 @@ export default {
 
   // Lowercase
 
+  "armor": "rustning",
   "armslength": "armslängd",
   "attribute": "grundegenskap",
   "blunt": "trubbig",
@@ -522,10 +527,12 @@ export default {
   "epic": "episk",
   "female": "kvinna",
   "formative event": "livshändelse",
+  "helmets": "hjälmar",
   "hook": "krok",
   "legendary": "legendarisk",
   "long": "lång",
   "male": "man",
+  "melee weapons": "närstridsvapen",
   "mighty": "mäktig",
   "movement rate": "förflyttningsvärde",
   "near": "nära",
@@ -537,11 +544,14 @@ export default {
   "pointed": "spets",
   "probability": "sannolikhet",
   "properties": "egenskaper",
+  "ranged weapons": "avståndsvapen",
   "select character": "välj rollperson",
   "sex": "kön",
+  "shields": "sköldar",
   "short": "kort",
   "slow_loading": "långsam",
   "talents": "talanger",
+  "other": "övrigt",
 
   // Param
   "PHB_ref": "Sida {page} i Spelarhandboken",
