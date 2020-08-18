@@ -13,9 +13,9 @@ import { IDiceConfig } from "@/dice/diceTypes"
 
 function defaultDice(): IDiceConfig {
   return {
-    white: null,
-    red: null,
-    black: null,
+    white: 3,
+    red: 2,
+    black: 1,
     green: null,
     blue: null,
     orange: null,
