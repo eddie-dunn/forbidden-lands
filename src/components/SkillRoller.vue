@@ -10,6 +10,7 @@ import { CharData } from "@/characterData"
 import { SkillObj } from "@/skills"
 import { Option, Optgroup, FLSelect } from "@/components/base/FLSelect.vue"
 import { ItemWeapon } from "../data/items/itemTypes"
+import { fists } from "@/data/items/items"
 
 /**
  * TODOs
@@ -102,10 +103,13 @@ export default class SkillRoller extends Vue {
     return this.weapons.filter((weapon) => weapon.range > 1)
   }
   get meleeWeapons() {
-    return this.weapons.filter((weapon: any) => weapon.range <= 1)
+    return [fists, ...this.weapons.filter((weapon: any) => weapon.range <= 1)]
   }
 
   get selectedWeaponData() {
+    if (this.selectedItem === fists.id) {
+      return fists
+    }
     const data = this.weapons.find((weapon) => weapon.id === this.selectedItem)
     return data || null
   }

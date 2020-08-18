@@ -6,6 +6,22 @@ import {
   ItemShield,
 } from "./itemTypes"
 
+export const fists: ItemWeapon = {
+  name: "Fists",
+  grip: 1,
+  bonus: 0,
+  damage: 1,
+  range: Range.armslength,
+  cost: 0,
+  weight: 0,
+  features: {},
+  equipped: false,
+  bonusType: "black",
+  type: "weapon",
+  id: "fists",
+  skill: "melee",
+}
+
 export namespace meleeWeapons {
   // Start weapons
 
