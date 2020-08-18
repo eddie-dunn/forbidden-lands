@@ -162,6 +162,7 @@ export default class SkillRoller extends Vue {
         :orange="orange"
         :key="black"
         :willpower="charData.willpower"
+        :isDwarf="charData.kin === 'dwarf'"
         @close="close"
         @wp-update="handleWillpower"
       />

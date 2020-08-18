@@ -101,6 +101,7 @@ export class DiceRoller extends Vue {
   @Prop({ default: null }) orange!: number
   @Prop({ default: true }) showReset!: boolean
   @Prop({ default: undefined }) willpower!: number | undefined
+  @Prop({ default: false }) isDwarf!: boolean
 
   DiceType = DiceType
 
@@ -161,11 +162,16 @@ export class DiceRoller extends Vue {
   }
 
   get pushDisabled(): boolean {
-    const dwarf = true // FIXME pass in if dwarf
-    const wp = 1 // FIXME pass in wp
-    return !this.rolled || (!dwarf && this.pushed) || (dwarf && wp < 1)
-    // Show WP
-    // Then for every additional push decrement WP
+    if (this.rolled && !this.pushed) {
+      return false // can always push at least once after a roll
+    }
+    if (this.rolled && this.willpower === undefined) {
+      return false // undefined WP will allow indefinite pushes after a roll
+    }
+    if (this.rolled && this.isDwarf && this.willpower) {
+      return false // a dwarf with willpower kan keep pushing
+    }
+    return true
   }
 
   get rollDisabled() {
@@ -173,6 +179,10 @@ export class DiceRoller extends Vue {
   }
 
   pushRoll() {
+    if (this.pushed && this.isDwarf && this.willpower) {
+      this.handleWillpower(this.willpower - 1)
+    }
+
     const newRolls = this.rollResult.map((results, index) => {
       return results.map((result) => {
         if (
