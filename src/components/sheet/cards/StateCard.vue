@@ -83,7 +83,7 @@ export default class BaseCard extends Vue {
           min="0"
           max="10"
           :disabled="viewOnly"
-          v-model="charData.willpower"
+          v-model.number="charData.willpower"
         />
       </div>
     </div>
