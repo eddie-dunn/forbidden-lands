@@ -10,6 +10,7 @@ import DiceResult from "@/components/dice/DiceResult.vue"
 import FLButton from "@/components/base/FLButton.vue"
 import { getRandomIntInclusive } from "@/dice/diceUtil"
 import { IDiceConfig } from "@/dice/diceTypes"
+import { FLNumberInput } from "@/components/FLNumberInput.vue"
 
 import { DiceProbability } from "./DiceProbability.vue"
 import { capitalize } from "@/util/util"
@@ -86,6 +87,7 @@ function diceArrayToConf(dice: (number | null)[]): IDiceConfig {
     DiceResult,
     ExpandableSection,
     FLButton,
+    FLNumberInput,
     NumberInput,
     SvgIcon,
   },
@@ -98,6 +100,7 @@ export class DiceRoller extends Vue {
   @Prop({ default: null }) blue!: number
   @Prop({ default: null }) orange!: number
   @Prop({ default: true }) showReset!: boolean
+  @Prop({ default: undefined }) willpower!: number | undefined
 
   DiceType = DiceType
 
@@ -211,6 +214,10 @@ export class DiceRoller extends Vue {
     this.rollResultLog = []
   }
 
+  handleWillpower(value: any) {
+    this.$emit("wp-update", value)
+  }
+
   get basicDice() {
     return [
       { color: "white", type: DiceType.White },
@@ -303,6 +310,18 @@ export default DiceRoller
       </div>
     </div>
 
+    <div v-if="willpower >= 0" class="wp-input">
+      <label for="willpower">{{ $t("WP") }}</label>
+      <FLNumberInput
+        id="willpower"
+        fontSize="1.7rem"
+        min="0"
+        max="10"
+        :value="willpower"
+        @input="handleWillpower"
+      />
+    </div>
+
     <div class="button-bar">
       <FLButton v-if="showReset" type="cancel" @click="resetDice">
         {{ $t("Reset") }}
@@ -388,6 +407,15 @@ export default DiceRoller
   grid-auto-flow: column;
   grid-row-gap: 0.5rem;
   grid-column-gap: 2rem;
-  margin: auto;
+  margin: 1rem auto;
+}
+
+.wp-input {
+  margin: 1rem auto;
+  display: inline-flex;
+  label {
+    font-size: 1.5rem;
+    margin-right: 10px;
+  }
 }
 </style>

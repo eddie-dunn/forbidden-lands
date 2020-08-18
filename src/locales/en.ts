@@ -396,6 +396,7 @@ export default {
   "Weapons": "Weapons",
   "Weight": "Weight",
   "Willpower": "Willpower",
+  "WP": "WP",
   "XP": "XP",
 
   // lowercase

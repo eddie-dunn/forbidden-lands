@@ -510,6 +510,7 @@ export default {
   "Weapons": "Vapen",
   "Weight": "Vikt",
   "Willpower": "Kraftpoäng",
+  "WP": "KP",
   "XP": "ERF",
 
   // Lowercase
