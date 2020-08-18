@@ -83,6 +83,10 @@ export default class SkillRoller extends Vue {
     this.$emit("close")
   }
 
+  handleWillpower(value: number) {
+    this.charData.willpower = value
+  }
+
   /* Item stuff */
   selectedItem = null
   get items() {
@@ -157,7 +161,9 @@ export default class SkillRoller extends Vue {
         :blue="blue"
         :orange="orange"
         :key="black"
+        :willpower="charData.willpower"
         @close="close"
+        @wp-update="handleWillpower"
       />
     </div>
   </Modal>
