@@ -3,7 +3,7 @@ import Vue from "vue"
 import { Component, Prop } from "vue-property-decorator"
 
 @Component
-export default class ExpandableSection extends Vue {
+export class FLNumberInput extends Vue {
   @Prop({ default: "" }) width!: string
   // @Prop({ default: "" }) height!: string
   @Prop({ default: "" }) fontSize!: string
@@ -60,6 +60,8 @@ export default class ExpandableSection extends Vue {
     return Number(this.value) <= Number(this.min)
   }
 }
+
+export default FLNumberInput
 </script>
 
 <template>
