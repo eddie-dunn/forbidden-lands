@@ -11,8 +11,8 @@ export default class DiceActions extends Vue {
   @Prop({ required: true }) canPush!: boolean
   @Prop({ required: true }) canRoll!: boolean
 
-  @Prop({ default: true }) showClose!: boolean
-  @Prop({ default: false }) showReset!: boolean
+  @Prop({ default: false }) showClose!: boolean
+  @Prop({ default: true }) showReset!: boolean
 
   close(ev: any) {
     this.$emit("close")

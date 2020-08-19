@@ -17,7 +17,12 @@ export default class DiceView extends Vue {
 </script>
 
 <template>
-  <DiceRoller class="dice-view" :showReset="true" />
+  <DiceRoller
+    class="dice-view"
+    :showReset="true"
+    :infinityPush="true"
+    :showButtonBar="true"
+  />
 </template>
 
 <style scoped lang="less">

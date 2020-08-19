@@ -1,4 +1,10 @@
-import { IDiceConfig, IDiceResult, TDiceSides } from "./diceTypes"
+import {
+  IDiceConfig,
+  IDiceResult,
+  TDiceSides,
+  Dice,
+  TDiceColor,
+} from "./diceTypes"
 import { getRandomIntInclusive } from "./diceUtil"
 
 /** Return random number in range [1, diceSides] */
@@ -68,4 +74,50 @@ export function rollDice(config: IDiceConfig): IDiceResult {
       orange: orangeResult.rollResult,
     },
   }
+}
+
+type TColorSidesMap = {
+  [key in TDiceColor]: TDiceSides
+}
+const colorToSidesMap: TColorSidesMap = {
+  [Dice.white]: 6,
+  [Dice.black]: 6,
+  [Dice.red]: 6,
+  [Dice.green]: 8,
+  [Dice.blue]: 10,
+  [Dice.orange]: 12,
+}
+
+function pushResult(result: number[], color: TDiceColor) {
+  return result.map((diceRoll) => {
+    if (
+      diceRoll >= 6 ||
+      (diceRoll === 1 && ["white", "black"].includes(color))
+    ) {
+      return diceRoll
+    }
+    return rollDiceType(colorToSidesMap[color])
+  })
+}
+export function pushDice(result: IDiceResult): IDiceResult {
+  // FIXME: Implement
+  // Re-roll all rerollable dice
+  // const pushWhite = pushResult(result.rollLog.white, "white")
+  // const pushRed = pushResult(result.rollLog.white, "red")
+  // const pushBlack = pushResult(result.rollLog.white, "black")
+  // const pushGreen = pushResult(result.rollLog.green, "green")
+  // const failWhite = pushWhite.fails
+  // const failBlack = blackResult.fails
+  // const successes =
+  //   whiteResult.successes +
+  //   redResult.successes +
+  //   blackResult.successes +
+  //   greenResult.successes +
+  //   blueResult.successes +
+  //   orangeResult.successes
+  // Append to log
+  // Add successes
+  // add failWhite
+  // add failBlack
+  return result
 }

@@ -1,6 +1,5 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator"
-import HelloWorld from "@/components/HelloWorld.vue"
 import ExpandableSection from "@/components/ExpandableSection.vue"
 import FLButton from "@/components/base/FLButton.vue"
 import Modal from "@/components/Modal.vue"
@@ -9,8 +8,9 @@ import DiceRoller from "@/components/dice/DiceRoller.vue"
 import { CharData } from "@/characterData"
 import { SkillObj } from "@/skills"
 import { Option, Optgroup, FLSelect } from "@/components/base/FLSelect.vue"
-import { ItemWeapon } from "../data/items/itemTypes"
+import { ItemWeapon } from "@/data/items/itemTypes"
 import { fists } from "@/data/items/items"
+import { DiceModal } from "@/components/dice/DiceModal.vue"
 
 /**
  * TODOs
@@ -26,7 +26,7 @@ import { fists } from "@/data/items/items"
 @Component({
   components: {
     DiceRoller,
-    HelloWorld,
+    DiceModal,
     ExpandableSection,
     FLButton,
     Modal,
@@ -79,6 +79,15 @@ export default class SkillRoller extends Vue {
     return null
   }
 
+  get diceConfig() {
+    const conf = {
+      white: this.white,
+      red: this.red,
+      black: this.black,
+    }
+    return conf
+  }
+
   close(ev: any) {
     this.$emit("close")
   }
@@ -126,7 +135,36 @@ export default class SkillRoller extends Vue {
 </script>
 
 <template>
-  <Modal @close="close" :title="title">
+  <DiceModal @close="close" v-if="true" :dice="diceConfig" :charData="charData">
+    <div slot="top">
+      <div v-if="isMelee || isMarksmanship" class="weapon-box">
+        <h4 v-if="!weapons.length" class="capitalize-first">
+          {{ $t("no suitable weapon equipped") }}
+        </h4>
+        <FLSelect
+          v-else
+          :label="$t('Weapon')"
+          :options="isMelee ? meleeWeapons : rangedWeapons"
+          :initial="$t('None selected')"
+          v-model="selectedItem"
+        />
+        <div v-if="selectedWeaponData">
+          {{ $t("Damage") + ": " + selectedWeaponData.damage }}
+        </div>
+      </div>
+      <div v-else>
+        <FLSelect
+          :label="$t('Use gear') + '?'"
+          :options="items"
+          :initial="$t('None selected')"
+          :initialDisabled="false"
+          v-model="selectedItem"
+        />
+      </div>
+    </div>
+  </DiceModal>
+
+  <Modal v-else @close="close" :title="title">
     <div slot="body" class="skillroller-body">
       <div v-if="isMelee || isMarksmanship" class="weapon-box">
         <h4 v-if="!weapons.length" class="capitalize-first">
@@ -177,12 +215,12 @@ export default class SkillRoller extends Vue {
   align-items: center;
 }
 
-.skillroller-body {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-.skillroller-dice {
-  flex-grow: 1;
-}
+// .skillroller-body {
+//   height: 100%;
+//   display: flex;
+//   flex-direction: column;
+// }
+// .skillroller-dice {
+//   flex-grow: 1;
+// }
 </style>

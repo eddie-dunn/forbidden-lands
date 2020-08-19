@@ -199,6 +199,7 @@ export default Vue.extend({
     <DiceModal
       v-if="rollingDice.white"
       :title="modalTitle"
+      :charData="charData"
       @close="resetRoll"
       :dice="rollingDice"
     />

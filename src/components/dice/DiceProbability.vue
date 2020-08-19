@@ -47,7 +47,7 @@ export class DiceProbability extends Vue {
     const opts: FLOption[] = []
     opts.push({ id: String(0), name: `${0}` })
     for (let i = 1; i <= maxPossible(this.conf); i++) {
-      opts.push({ id: String(i), name: `${i} ${this.$t("or more")}` })
+      opts.push({ id: String(i), name: `${i}` })
     }
     return opts
   }
@@ -56,7 +56,7 @@ export class DiceProbability extends Vue {
     const opts: FLOption[] = []
     opts.push({ id: String(0), name: `${0}` })
     for (let i = 1; i <= maxPossible({ black: this.conf.black }); i++) {
-      opts.push({ id: String(i), name: `${i} ${this.$t("or more")}` })
+      opts.push({ id: String(i), name: `${i}` })
     }
     return opts
   }
@@ -65,7 +65,7 @@ export class DiceProbability extends Vue {
     const opts: FLOption[] = []
     opts.push({ id: String(0), name: `${0}` })
     for (let i = 1; i <= maxPossible({ white: this.conf.white }); i++) {
-      opts.push({ id: String(i), name: `${i} ${this.$t("or more")}` })
+      opts.push({ id: String(i), name: `${i}` })
     }
     return opts
   }
@@ -163,6 +163,7 @@ export default DiceProbability
         :fullWidth="true"
       />
       <div class="align-center">
+        <span>{{ $t("or more") }}</span>
         <Dice color="black" :value="1" class="dice-icon" />
         {{ sign }}
         {{ failBlackProb(minBlackSkull) }}
@@ -172,7 +173,6 @@ export default DiceProbability
       <div class="align-center">
         <Dice color="black" :value="1" class="dice-icon" />
         {{ sign }}
-        <!-- {{ failBlackProb(0) }} -->
         {{ getProb(probType.blackSkull, 0) }}
       </div>
     </div>
@@ -185,6 +185,7 @@ export default DiceProbability
         class="prob-select"
       />
       <div class="align-center">
+        <span>{{ $t("or more") }}</span>
         <Dice color="white" :value="1" class="dice-icon" />
         {{ sign }}
         {{ failWhiteProb }}
@@ -205,6 +206,7 @@ export default DiceProbability
         class="prob-select"
       />
       <div class="align-center">
+        <span>{{ $t("or more") }}</span>
         <Dice color="white" :value="6" class="dice-icon" />
         {{ sign }}
         {{ successProb }}
@@ -226,6 +228,7 @@ export default DiceProbability
 .align-center {
   display: flex;
   align-items: center;
+  white-space: nowrap;
 }
 
 .dice-probability {
@@ -255,6 +258,8 @@ export default DiceProbability
   justify-content: flex-end;
   font-family: monospace;
   font-size: 20px;
-  margin-left: 1rem;
+  margin-left: 0.25rem;
+  padding-left: 0.45rem;
+  border-left: 1px solid #33333333;
 }
 </style>

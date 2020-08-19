@@ -5,7 +5,7 @@ import {
   DiceTypes as TDice,
 } from "@/types"
 
-type DiceColor = "white" | "red" | "black" | "green" | "blue" | "orange"
+export type TDiceColor = "white" | "red" | "black" | "green" | "blue" | "orange"
 
 export type TDiceSides = 0 | 6 | 8 | 10 | 12 | 66 | 666 // 0 is no dice
 

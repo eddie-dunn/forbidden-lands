@@ -1,10 +1,9 @@
 <script lang="ts">
 // TODO: Split this up into smaller components
 import Vue from "vue"
-import { Component, Prop } from "vue-property-decorator"
+import { Component, Prop, Watch } from "vue-property-decorator"
 import SvgIcon from "@/components/SvgIcon.vue"
 import ExpandableSection from "@/components/ExpandableSection.vue"
-import NumberInput from "@/components/FLNumberInput.vue"
 import DiceInput from "@/components/dice/DiceInput.vue"
 import DiceResult from "@/components/dice/DiceResult.vue"
 import FLButton from "@/components/base/FLButton.vue"
@@ -88,11 +87,11 @@ function diceArrayToConf(dice: (number | null)[]): IDiceConfig {
     ExpandableSection,
     FLButton,
     FLNumberInput,
-    NumberInput,
     SvgIcon,
   },
 })
 export class DiceRoller extends Vue {
+  // FIXME: Take an IDiceConfig instead of individual values
   @Prop({ default: 3 }) white!: number
   @Prop({ default: 2 }) red!: number
   @Prop({ default: 1 }) black!: number
@@ -100,8 +99,22 @@ export class DiceRoller extends Vue {
   @Prop({ default: null }) blue!: number
   @Prop({ default: null }) orange!: number
   @Prop({ default: true }) showReset!: boolean
-  @Prop({ default: undefined }) willpower!: number | undefined
+  @Prop({ default: undefined }) willpower!: number | undefined | null
   @Prop({ default: false }) isDwarf!: boolean
+  @Prop({ default: false }) infinityPush!: boolean
+  @Prop({ default: false }) showButtonBar!: boolean // remove?
+
+  @Watch("black", { immediate: true })
+  setBlack() {
+    this.nbrDice = [
+      this.white,
+      this.red,
+      this.black,
+      this.green,
+      this.blue,
+      this.orange,
+    ]
+  }
 
   DiceType = DiceType
 
@@ -113,12 +126,24 @@ export class DiceRoller extends Vue {
     this.blue,
     this.orange
   )
+
   rollResult: number[][] = [
     /* Address by enum number */
   ]
   rollResultLog: number[][][] = []
 
   accumulator = (sum: number, value: number | null) => sum + Number(value)
+
+  created() {
+    this.$emit("rollCb", this.rollDice)
+    this.$emit("pushCb", this.pushRoll)
+    this.$emit("resetCb", this.resetDice)
+    this.$emit("pushDisabled", this.pushDisabled)
+  }
+
+  get showWillpower() {
+    return this.willpower !== null && Number(this.willpower) >= 2
+  }
 
   get conf(): IDiceConfig {
     return diceArrayToConf(this.nbrDice)
@@ -165,6 +190,9 @@ export class DiceRoller extends Vue {
     if (this.rolled && !this.pushed) {
       return false // can always push at least once after a roll
     }
+    if (this.rolled && this.infinityPush) {
+      return false // for dice roller not coupled with character
+    }
     if (this.rolled && this.willpower === undefined) {
       return false // undefined WP will allow indefinite pushes after a roll
     }
@@ -200,6 +228,7 @@ export class DiceRoller extends Vue {
     this.$nextTick(() => {
       refRollResult.scrollTop = refRollResult.scrollHeight
     })
+    this.$emit("pushDisabled", this.pushDisabled)
   }
 
   rollDice() {
@@ -209,6 +238,7 @@ export class DiceRoller extends Vue {
       return diceResults(nbrDice, sidesFor(diceType))
     })
     this.rollResultLog.push(this.rollResult)
+    this.$emit("pushDisabled", this.pushDisabled)
   }
 
   resetDice() {
@@ -222,6 +252,7 @@ export class DiceRoller extends Vue {
     )
     this.rollResult = []
     this.rollResultLog = []
+    this.$emit("pushDisabled", this.pushDisabled)
   }
 
   handleWillpower(value: any) {
@@ -320,7 +351,8 @@ export default DiceRoller
       </div>
     </div>
 
-    <div v-if="willpower >= 0" class="wp-input">
+    <!-- FIXME: Remove this section, let modal handle -->
+    <div v-if="showWillpower && false" class="wp-input">
       <label for="willpower">{{ $t("WP") }}</label>
       <FLNumberInput
         id="willpower"
@@ -332,7 +364,7 @@ export default DiceRoller
       />
     </div>
 
-    <div class="button-bar">
+    <div v-if="showButtonBar" class="button-bar">
       <FLButton v-if="showReset" type="cancel" @click="resetDice">
         {{ $t("Reset") }}
       </FLButton>
@@ -361,6 +393,7 @@ export default DiceRoller
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  height: 100%;
 
   .button-bar {
     flex-shrink: 0;
@@ -386,7 +419,7 @@ export default DiceRoller
 }
 
 .roll-results {
-  overflow-y: auto;
+  // overflow-y: auto;
   flex-grow: 1;
   margin: 0.5rem;
 }
@@ -421,8 +454,16 @@ export default DiceRoller
 }
 
 .wp-input {
-  margin: 1rem auto;
-  display: inline-flex;
+  // margin: 1rem auto;
+  // display: inline-flex;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+  position: sticky;
+  bottom: 0px;
+  border-top: 1px solid #33333333;
+  background: white;
   label {
     font-size: 1.5rem;
     margin-right: 10px;
