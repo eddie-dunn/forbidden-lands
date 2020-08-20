@@ -84,6 +84,7 @@ export class DiceModal extends Vue {
         this.resetCb = fn
         break
       default:
+        /* eslint-disable-next-line no-console */
         console.error(`Got invalid cb type ${type}`)
         break
     }

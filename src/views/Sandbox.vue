@@ -143,6 +143,7 @@ export default class Home extends Vue {
     notify(msg)
   }
   click() {
+    /* eslint-disable-next-line no-console */
     console.log("CLICK!")
   }
 

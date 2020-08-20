@@ -102,7 +102,6 @@ export default Vue.extend({
       )
     },
     roll(attributeId: Attribute, value: number) {
-      console.log("roll", attributeId, this.remaining(attributeId))
       const diceConf: IDiceConfig = {
         white: this.remaining(attributeId),
         red: null,
