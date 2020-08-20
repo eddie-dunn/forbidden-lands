@@ -208,14 +208,20 @@ export default class AddItem extends Vue {
         </select>
 
         <label for="gear-bonus">Bonus</label>
-        <FLNumberInput v-model="tmpGear.bonus" max="9" fontSize="1.7rem" />
+        <FLNumberInput
+          v-model.number="tmpGear.bonus"
+          min="0"
+          max="99"
+          fontSize="1.7rem"
+        />
 
         <label v-if="isWeapon" for="gear-damage">{{ $t("Damage") }}</label>
         <FLNumberInput
           v-if="isWeapon"
-          v-model="tmpGear.damage"
+          v-model.number="tmpGear.damage"
           fontSize="1.7rem"
-          max="9"
+          min="0"
+          max="99"
         />
 
         <label v-if="isWeapon" for="gear-range">{{ $t("Range") }}</label>
