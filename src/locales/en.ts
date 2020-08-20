@@ -440,6 +440,7 @@ export default {
   "short": "short",
   "slow_loading": "slow loading",
   "talents": "talents",
+  "unarmed": "unarmed",
 
   // Param
   "PHB_ref": "Page {page} in the Player's Handbook",

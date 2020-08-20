@@ -8,9 +8,25 @@ import DiceRoller from "@/components/dice/DiceRoller.vue"
 import { CharData } from "@/characterData"
 import { SkillObj } from "@/skills"
 import { Option, Optgroup, FLSelect } from "@/components/base/FLSelect.vue"
-import { ItemWeapon } from "@/data/items/itemTypes"
-import { fists } from "@/data/items/items"
+import { ItemWeapon, Range } from "@/data/items/itemTypes"
 import { DiceModal } from "@/components/dice/DiceModal.vue"
+import { capitalize } from "@/util/util"
+
+const fists: ItemWeapon = {
+  name: "Unarmed",
+  grip: 1,
+  bonus: 0,
+  damage: 1,
+  range: Range.armslength,
+  cost: 0,
+  weight: 0,
+  features: {},
+  equipped: false,
+  bonusType: "black",
+  type: "weapon",
+  id: "fists",
+  skill: "melee",
+}
 
 /**
  * TODOs
@@ -97,14 +113,15 @@ export default class SkillRoller extends Vue {
   }
 
   /* Item stuff */
-  selectedItem = null
+  selectedItem = this.isMelee ? fists.id : null
   get items() {
     return this.charData.gear.inventory
   }
 
   /* Weapon stuff */
-  // selectedWeapon = null
-  isMelee = this.skill.id === "melee"
+  get isMelee() {
+    return this.skill.id === "melee"
+  }
   isMarksmanship = this.skill.id === "marksmanship"
 
   get weapons(): ItemWeapon[] {
@@ -116,7 +133,9 @@ export default class SkillRoller extends Vue {
     return this.weapons.filter((weapon) => weapon.range > 1)
   }
   get meleeWeapons() {
-    return [fists, ...this.weapons.filter((weapon: any) => weapon.range <= 1)]
+    const name = capitalize(this.$t(fists.name.toLowerCase()) as string)
+    const mFists = { ...fists, name }
+    return [mFists, ...this.weapons.filter((weapon: any) => weapon.range <= 1)]
   }
 
   get selectedWeaponData() {
@@ -129,6 +148,9 @@ export default class SkillRoller extends Vue {
 
   get selectedItemData() {
     const data = this.items.find((item) => item.id === this.selectedItem)
+    if (this.isMelee) {
+      return data || fists
+    }
     return data || null
   }
 }
@@ -146,6 +168,7 @@ export default class SkillRoller extends Vue {
           :label="$t('Weapon')"
           :options="isMelee ? meleeWeapons : rangedWeapons"
           :initial="$t('None selected')"
+          :initialDisabled="false"
           v-model="selectedItem"
         />
         <div v-if="selectedWeaponData">
@@ -163,49 +186,6 @@ export default class SkillRoller extends Vue {
       </div>
     </div>
   </DiceModal>
-
-  <Modal v-else @close="close" :title="title">
-    <div slot="body" class="skillroller-body">
-      <div v-if="isMelee || isMarksmanship" class="weapon-box">
-        <h4 v-if="!weapons.length" class="capitalize-first">
-          {{ $t("no suitable weapon equipped") }}
-        </h4>
-        <FLSelect
-          v-else
-          :label="$t('Weapon')"
-          :options="isMelee ? meleeWeapons : rangedWeapons"
-          :initial="$t('None selected')"
-          v-model="selectedItem"
-        />
-        <div v-if="selectedWeaponData">
-          {{ $t("Damage") + ": " + selectedWeaponData.damage }}
-        </div>
-      </div>
-      <div v-else>
-        <FLSelect
-          :label="$t('Use gear') + '?'"
-          :options="items"
-          :initial="$t('None selected')"
-          :initialDisabled="false"
-          v-model="selectedItem"
-        />
-      </div>
-      <DiceRoller
-        class="skillroller-dice"
-        :white="white"
-        :red="red"
-        :black="black"
-        :green="green"
-        :blue="blue"
-        :orange="orange"
-        :key="black"
-        :willpower="charData.willpower"
-        :isDwarf="charData.kin === 'dwarf'"
-        @close="close"
-        @wp-update="handleWillpower"
-      />
-    </div>
-  </Modal>
 </template>
 
 <style lang="less" scoped>

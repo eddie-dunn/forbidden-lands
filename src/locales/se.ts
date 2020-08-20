@@ -541,6 +541,7 @@ export default {
   "no suitable weapon equipped": "inget lämpligt vapen i hand",
   "options": "inställningar",
   "or more": "eller fler",
+  "other": "övrigt",
   "parrying": "parera",
   "pointed": "spets",
   "probability": "sannolikhet",
@@ -552,7 +553,7 @@ export default {
   "short": "kort",
   "slow_loading": "långsam",
   "talents": "talanger",
-  "other": "övrigt",
+  "unarmed": "obeväpnad",
 
   // Param
   "PHB_ref": "Sida {page} i Spelarhandboken",
