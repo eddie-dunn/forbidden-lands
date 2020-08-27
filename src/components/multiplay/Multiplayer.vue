@@ -12,6 +12,8 @@ import FLCheckbox from "@/components/base/FLCheckbox.vue"
 import { UserData } from "@/components/multiplay/protocol"
 import { randomName } from "@/util/util"
 
+const REGEX_ROOM_NAME = /[^a-zA-Z -]/g
+
 @Component({
   components: {
     ChatWindow,
@@ -46,8 +48,18 @@ export default class Multiplayer extends Vue {
   }
   get canJoin(): boolean {
     return (
-      this.roomName && this.userName && this.mpChars && this.mpChars.length > 0
+      this.validRoomName &&
+      this.userName &&
+      this.mpChars &&
+      this.mpChars.length > 0
     )
+  }
+  get validRoomName(): boolean {
+    if (!this.roomName) return false
+    return !this.wrongChar
+  }
+  get wrongChar(): string {
+    return [...(this.roomName.match(REGEX_ROOM_NAME) || [])].join("") || ""
   }
 
   async onClickConnect() {
@@ -97,6 +109,9 @@ export default class Multiplayer extends Vue {
           :enterCb="onClickConnect"
           v-model="roomName"
         />
+        <small v-if="wrongChar">
+          Room name cannot contain '{{ wrongChar }}'
+        </small>
         <FLCheckbox
           class="flexy-item flexy-full-row"
           label="Host game"
