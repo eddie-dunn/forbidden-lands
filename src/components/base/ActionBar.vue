@@ -44,7 +44,7 @@ export default class InfoBox extends Vue {}
 }
 
 .action-bar {
-  padding: 0.25rem 1.5rem;
+  padding: 0.25rem;
   margin: 0.25rem;
   pointer-events: all;
   flex: 0 1 auto;

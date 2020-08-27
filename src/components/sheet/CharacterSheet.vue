@@ -78,6 +78,10 @@ export default class CharacterEditor extends Vue {
     return this.$t("Close")
   }
 
+  get saveDisabled(): boolean {
+    return !this.charData.name
+  }
+
   closeClicked() {
     if (
       this.charDataUpdated &&
@@ -88,8 +92,13 @@ export default class CharacterEditor extends Vue {
     this.$router.back()
   }
 
-  saveClicked(event: any) {
-    if (!event || !this.charData.name) return
+  closeSaveClicked() {
+    this.saveClicked()
+    this.$router.push("/")
+  }
+
+  saveClicked() {
+    if (this.saveDisabled) return
     this.$store.commit(MP_SAVE_CHAR, this.charData)
     this.$characterStore.addCharacter(this.charData)
     this.charDataCopyStr = stringChar(this.charData)
@@ -158,10 +167,29 @@ export default class CharacterEditor extends Vue {
           {{ closeText }}
         </FLButton>
       </template>
-      <template v-slot:right>
+      <template v-slot:center>
         <FLButton
-          v-if="!viewOnly"
+          v-if="isTemplateData"
           :type="!charDataUpdated ? 'cancel' : ''"
+          :disabled="saveDisabled"
+          @click="saveClicked"
+        >
+          {{ $t("Save") }}
+        </FLButton>
+      </template>
+      <template v-if="!viewOnly" v-slot:right>
+        <FLButton
+          v-if="isTemplateData"
+          :type="!charDataUpdated ? 'cancel' : ''"
+          :disabled="saveDisabled"
+          @click="closeSaveClicked"
+        >
+          {{ $t("Save & Close") }}
+        </FLButton>
+        <FLButton
+          v-else
+          :type="!charDataUpdated ? 'cancel' : ''"
+          :disabled="saveDisabled"
           @click="saveClicked"
         >
           {{ $t("Save") }}

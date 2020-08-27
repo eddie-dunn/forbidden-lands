@@ -374,6 +374,7 @@ export default {
   "Reset": "Reset",
   "Roll dice": "Roll dice",
   "Save": "Save",
+  "Save & Close": "Save & Close",
   "Select import file": "Select import file",
   "Select picture": "Select picture",
   "Select talent": "Select talent",
