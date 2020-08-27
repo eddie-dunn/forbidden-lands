@@ -17,7 +17,7 @@ import FLButton from "@/components/base/FLButton.vue"
     ModalSpendXP,
   },
 })
-export default class SessionCard extends Vue {
+export class SessionCard extends Vue {
   @Prop({ required: true }) charData!: CharData
   @Prop({ default: false }) viewOnly!: boolean
 
@@ -27,15 +27,20 @@ export default class SessionCard extends Vue {
   get status() {
     return this.charData.metadata.status
   }
+  get saveStateId() {
+    if (this.charData.metadata.status !== "active") return ""
+    return "card_session"
+  }
 
   handleNewCharData(charData: CharData) {
     this.$emit("updated-chardata", charData)
   }
 }
+export default SessionCard
 </script>
 
 <template>
-  <Card :title="$t('Post session')" :noSign="true">
+  <Card :title="$t('Post session')" :noSign="true" :saveStateId="saveStateId">
     <div class="flex-row-wrap">
       <FLButton class="spacing" @click="showXPModal = true">
         {{ $t("Add XP/Reputation") }}

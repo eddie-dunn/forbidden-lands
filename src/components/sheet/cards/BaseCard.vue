@@ -2,37 +2,20 @@
 import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 
-import AttributesCreate from "@/components/sheet/attributes/AttributesCreate.vue"
-import AttributesActive from "@/components/sheet/attributes/AttributesActive.vue"
 import BaseSelector from "@/components/BaseSelector.vue"
-import Conditions from "@/components/Conditions.vue"
 import Card from "@/components/Card.vue"
 import FlavorSelector from "@/components/FlavorSelector.vue"
 
-import {
-  getNewCharacterData,
-  CharacterData,
-  CharacterTalent,
-  validateBase,
-  validateAttributes,
-  validateTalents,
-  validateSkills,
-  CharacterMetaDataStatus,
-  CharacterMetaData,
-  calcCharacterXP,
-} from "@/characterData"
+import { CharacterData, validateBase } from "@/characterData"
 
 @Component({
   components: {
-    AttributesActive,
-    AttributesCreate,
     BaseSelector,
     Card,
-    Conditions,
     FlavorSelector,
   },
 })
-export default class BaseCard extends Vue {
+export class BaseCard extends Vue {
   @Prop({ required: true }) charData!: CharacterData
   @Prop({ default: false }) viewOnly!: boolean
 
@@ -42,11 +25,13 @@ export default class BaseCard extends Vue {
   get valid() {
     return validateBase(this.charData)
   }
-  // Attributes
-  get attributesEdit(): boolean {
-    return ["new", undefined, "freeEdit"].includes(this.status)
+  get saveStateId() {
+    if (this.charData.metadata.status !== "active") return ""
+    return "card_base"
   }
 }
+
+export default BaseCard
 </script>
 
 <template>
@@ -54,6 +39,7 @@ export default class BaseCard extends Vue {
     :title="$t('character')"
     :valid="valid"
     :noSign="viewOnly || (valid && status !== 'new')"
+    :saveStateId="saveStateId"
   >
     <BaseSelector :data="charData" :viewOnly="viewOnly" />
     <FlavorSelector

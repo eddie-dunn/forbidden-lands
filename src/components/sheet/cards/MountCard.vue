@@ -13,14 +13,26 @@ import Card from "@/components/Card.vue"
     Card,
   },
 })
-export default class MountCard extends Vue {
+export class MountCard extends Vue {
   @Prop({ required: true }) charData!: CharacterData
   @Prop({ default: true }) viewOnly!: boolean
+
+  get saveStateId() {
+    if (this.charData.metadata.status !== "active") return ""
+    return "card_mount"
+  }
 }
+
+export default MountCard
 </script>
 
 <template>
-  <Card class="row-full" :title="$t('Mount')" :noSign="true">
+  <Card
+    class="row-full"
+    :title="$t('Mount')"
+    :noSign="true"
+    :saveStateId="saveStateId"
+  >
     <Mount :charData="charData" :viewOnly="viewOnly" />
   </Card>
 </template>

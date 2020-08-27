@@ -12,18 +12,30 @@ import Card from "@/components/Card.vue"
     Card,
   },
 })
-export default class PortraitCard extends Vue {
+export class PortraitCard extends Vue {
   @Prop({ required: true }) charData!: CharacterData
   @Prop({ default: false }) viewOnly!: boolean
 
   setImgSource(img: any) {
     this.charData.portrait = img
   }
+
+  get saveStateId() {
+    if (this.charData.metadata.status !== "active") return ""
+    return "card_portrait"
+  }
 }
+
+export default PortraitCard
 </script>
 
 <template>
-  <Card class="row-half" :title="$t('Portrait')" :noSign="true">
+  <Card
+    class="row-half"
+    :title="$t('Portrait')"
+    :noSign="true"
+    :saveStateId="saveStateId"
+  >
     <PicturePicker
       :portrait="charData.portrait"
       :viewOnly="viewOnly"

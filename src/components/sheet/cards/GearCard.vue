@@ -13,14 +13,26 @@ import Card from "@/components/Card.vue"
     Card,
   },
 })
-export default class GearCard extends Vue {
+export class GearCard extends Vue {
   @Prop({ required: true }) charData!: CharacterData
   @Prop({ default: false }) viewOnly!: boolean
+
+  get saveStateId() {
+    if (this.charData.metadata.status !== "active") return ""
+    return "card_gear"
+  }
 }
+
+export default GearCard
 </script>
 
 <template>
-  <Card class="row-full" :title="$t('Gear')" :noSign="true">
+  <Card
+    class="row-full"
+    :title="$t('Gear')"
+    :noSign="true"
+    :saveStateId="saveStateId"
+  >
     <GearPicker :characterData="charData" :viewOnly="viewOnly" />
   </Card>
 </template>

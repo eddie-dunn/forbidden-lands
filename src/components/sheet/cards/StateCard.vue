@@ -31,7 +31,7 @@ import FLNumberInput from "@/components/FLNumberInput.vue"
     FLNumberInput,
   },
 })
-export default class BaseCard extends Vue {
+export class PropertiesCard extends Vue {
   @Prop({ required: true }) charData!: CharacterData
   @Prop({ default: false }) viewOnly!: boolean
 
@@ -41,11 +41,17 @@ export default class BaseCard extends Vue {
   get valid() {
     return validateAttributes(this.charData)
   }
+  get saveStateId() {
+    if (this.charData.metadata.status !== "active") return ""
+    return "card_properties"
+  }
   // Attributes
   get attributesEdit(): boolean {
     return ["new", undefined, "freeEdit"].includes(this.status)
   }
 }
+
+export default PropertiesCard
 </script>
 
 <template>
@@ -53,6 +59,7 @@ export default class BaseCard extends Vue {
     :title="$t('properties')"
     :valid="valid"
     :noSign="viewOnly || (valid && status !== 'new')"
+    :saveStateId="saveStateId"
   >
     <div class="state-contents">
       <div>

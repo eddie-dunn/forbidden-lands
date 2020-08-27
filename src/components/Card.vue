@@ -14,6 +14,7 @@ export default Vue.extend({
   props: {
     title: String,
     subtitle: String,
+    saveStateId: String,
     fullWidth: Boolean,
     footer: String,
     valid: {
@@ -44,6 +45,7 @@ export default Vue.extend({
     :defaultOpen="defaultOpen"
     :iconRight="sign"
     :iconRightOK="valid"
+    :saveStateId="saveStateId"
   >
     <template v-slot:header>
       <slot name="header">

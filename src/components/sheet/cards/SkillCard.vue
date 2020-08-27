@@ -12,7 +12,7 @@ import Card from "@/components/Card.vue"
 @Component({
   components: { SkillSelector, Card },
 })
-export default class SkillCard extends Vue {
+export class SkillCard extends Vue {
   @Prop({ required: true }) charData!: CharacterData
   @Prop({ default: true }) viewOnly!: boolean
 
@@ -25,7 +25,13 @@ export default class SkillCard extends Vue {
   get skillsValid(): boolean {
     return validateSkills(this.charData)
   }
+  get saveStateId() {
+    if (this.charData.metadata.status !== "active") return ""
+    return "card_skills"
+  }
 }
+
+export default SkillCard
 </script>
 
 <template>
@@ -34,6 +40,7 @@ export default class SkillCard extends Vue {
     :title="$t('skills')"
     :valid="skillsValid"
     :noSign="!isNew"
+    :saveStateId="saveStateId"
   >
     <SkillSelector
       :profession="charData.profession"

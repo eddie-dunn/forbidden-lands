@@ -19,7 +19,7 @@ import TalentSelector from "@/components/TalentSelector.vue"
     TalentSelector,
   },
 })
-export default class TalentCard extends Vue {
+export class TalentCard extends Vue {
   @Prop({ required: true }) charData!: CharacterData
   @Prop({ default: true }) viewOnly!: boolean
 
@@ -37,12 +37,18 @@ export default class TalentCard extends Vue {
       .map((talent) => talent.rank || 0)
       .reduce(sum, 0)
   }
+  get saveStateId() {
+    if (this.charData.metadata.status !== "active") return ""
+    return "card_talent"
+  }
 
   updateTalents(talents: CharacterTalent[]) {
     // this.$emit("talents-updated", talents)
     this.$set(this.charData, "talents", talents)
   }
 }
+
+export default TalentCard
 </script>
 
 <template>
@@ -51,6 +57,7 @@ export default class TalentCard extends Vue {
     :title="$t('talents')"
     :valid="talentsValid"
     :noSign="!isNewChar"
+    :saveStateId="saveStateId"
   >
     <TalentSelector
       :key="talentSum"

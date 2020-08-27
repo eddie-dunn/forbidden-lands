@@ -13,7 +13,7 @@ const BASE_STORE_KEY = "__fl_expandable_section"
 export default class ExpandableSection extends Vue {
   @Prop({ default: "" }) label!: string
   @Prop({ default: false }) defaultOpen!: boolean
-  @Prop({ default: "" }) saveStateId!: string
+  @Prop({ default: null }) saveStateId!: string | null
   @Prop({ required: false, default: null }) iconRight!: string
   @Prop({ default: false }) iconRightOK!: boolean
 
@@ -32,7 +32,7 @@ export default class ExpandableSection extends Vue {
     const state = localStorage.getItem(key)
     // console.log("loading state", this.key, "state", state)
     if (state === null) return this.defaultOpen
-    return !!state
+    return state === "open" ? true : false
   }
 
   expandToggle(ev: any) {
@@ -43,7 +43,7 @@ export default class ExpandableSection extends Vue {
 
     if (this.saveStateId) {
       // save toggled state if id is supplied
-      localStorage.setItem(this.key, this.isExpanded ? "open" : "")
+      localStorage.setItem(this.key, this.isExpanded ? "open" : "closed")
     }
   }
 
