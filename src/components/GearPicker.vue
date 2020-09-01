@@ -5,7 +5,7 @@
 import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 import { PROFESSION } from "@/classes"
-import { CharacterData, Gear } from "@/characterData"
+import { CharData, Gear } from "@/characterData"
 import { Item, ItemWeapon, Range } from "@/data/items/itemTypes"
 
 import FLNumberInput from "@/components/FLNumberInput.vue"
@@ -23,8 +23,8 @@ import ModalConfirm from "@/components/ModalConfirm.vue"
     SvgIcon,
   },
 })
-export default class ExpandableSection extends Vue {
-  @Prop({ required: true }) characterData!: CharacterData
+export default class GearPicker extends Vue {
+  @Prop({ required: true }) charData!: CharData
   @Prop({ default: false }) viewOnly!: boolean
 
   showAddItem = false
@@ -36,7 +36,7 @@ export default class ExpandableSection extends Vue {
   selected: boolean[] = []
 
   get inventory() {
-    return this.characterData.gear.inventory
+    return this.charData.gear.inventory
   }
 
   get itemsSelected() {
@@ -48,8 +48,8 @@ export default class ExpandableSection extends Vue {
   }
 
   get arrows() {
-    if (this.characterData.profession) {
-      return PROFESSION[this.characterData.profession].starting_resources.arrows
+    if (this.charData.profession) {
+      return PROFESSION[this.charData.profession].starting_resources.arrows
     }
     return 0
   }
@@ -59,16 +59,14 @@ export default class ExpandableSection extends Vue {
   }
 
   startingConsumable(consumable: string) {
-    if (!this.characterData.profession) return 0
+    if (!this.charData.profession) return 0
     return (
-      PROFESSION[this.characterData.profession].starting_resources[
-        consumable
-      ] || 0
+      PROFESSION[this.charData.profession].starting_resources[consumable] || 0
     )
   }
 
   get status() {
-    return this.characterData.metadata.status
+    return this.charData.metadata.status
   }
 
   get equippedWeapons() {
@@ -97,22 +95,22 @@ export default class ExpandableSection extends Vue {
 
   get gearWeight() {
     return (
-      this.characterData.gear.inventory
+      this.charData.gear.inventory
         .map((item) => Number(item.weight))
         .reduce((val, sum) => val + sum, 0) +
-      Object.values(this.characterData.gear.money)
+      Object.values(this.charData.gear.money)
         .map((moneyAmount) => Math.floor(moneyAmount / 100))
         .reduce((val, sum) => val + sum, 0)
     )
   }
 
   get hasMount(): boolean {
-    return !!this.characterData.mount.strength
+    return !!this.charData.mount.strength
   }
 
   get gearWeightMax() {
     const packRatRank =
-      this.characterData.talents
+      this.charData.talents
         .map((talent) => {
           if (talent.id === "pack rat") return talent.rank
         })
@@ -123,40 +121,36 @@ export default class ExpandableSection extends Vue {
       2: 5,
       3: 10,
     }[packRatRank]
-    const charStrength = this.characterData.attributes.strength || 0
+    const charStrength = this.charData.attributes.strength || 0
     return charStrength * 2 + bonus
   }
 
-  @Watch("characterData.profession", { immediate: true })
+  @Watch("charData.profession", { immediate: true })
   setConsumables() {
-    if (!this.characterData.profession || this.status !== "new") return
-    this.characterData.gear.consumables.food = this.startingConsumable("food")
-    this.characterData.gear.consumables.water = this.startingConsumable("water")
-    this.characterData.gear.consumables.arrows = this.startingConsumable(
-      "arrows"
-    )
-    this.characterData.gear.consumables.torches = this.startingConsumable(
-      "torches"
-    )
+    if (!this.charData.profession || this.status !== "new") return
+    this.charData.gear.consumables.food = this.startingConsumable("food")
+    this.charData.gear.consumables.water = this.startingConsumable("water")
+    this.charData.gear.consumables.arrows = this.startingConsumable("arrows")
+    this.charData.gear.consumables.torches = this.startingConsumable("torches")
   }
 
   moveItems() {
     const newInventory = this.inventory
       .map((item) => {
         if (item.selected) {
-          this.characterData.mount.inventory.push(item)
+          this.charData.mount.inventory.push(item)
           return null
         } else {
           return item
         }
       })
       .filter((item) => !!item)
-    this.characterData.gear.inventory = newInventory as Item[]
+    this.charData.gear.inventory = newInventory as Item[]
   }
 
   dropItems() {
     const newInventory = this.inventory.filter((item) => !item.selected)
-    this.characterData.gear.inventory = newInventory as Item[]
+    this.charData.gear.inventory = newInventory as Item[]
     this.showConfirmDeleteItem = false
   }
 
@@ -187,11 +181,11 @@ export default class ExpandableSection extends Vue {
   }
 
   addItem(item: Item) {
-    this.characterData.gear.inventory.push(item)
+    this.charData.gear.inventory.push(item)
   }
 
   updateItem(item: Item) {
-    this.characterData.gear.inventory = this.inventory.map((mitem) => {
+    this.charData.gear.inventory = this.inventory.map((mitem) => {
       if (mitem.id !== item.id) return mitem
       return item
     })
@@ -216,31 +210,56 @@ export default class ExpandableSection extends Vue {
   getRange(weapon: ItemWeapon) {
     return this.$t(Range[weapon.range])
   }
+
+  // FIXME: Abstract away the dice config settings to dice engine that can
+  // handle character talents, status etc
+  armorClicked() {
+    if (!this.equippedArmor && !this.equippedHelmet) return
+    const black =
+      (this.equippedHelmet || { bonus: 0 }).bonus +
+      (this.equippedArmor || { bonus: 0 }).bonus
+    this.$root.$emit("open-dice-modal", {
+      title: "armor",
+      dice: { black },
+    })
+  }
+  shieldClicked() {
+    if (!this.equippedShield) return
+    const black = this.equippedShield.bonus
+    const white =
+      Number(this.charData.attributes.strength) -
+      Number(this.charData.attributeDmg.strength)
+    const red = this.charData.skills.melee.rank
+    this.$root.$emit("open-dice-modal", {
+      title: "shield",
+      dice: { white, black, red },
+    })
+  }
 }
 </script>
 
 <template>
-  <div v-if="characterData.profession" class="gear-picker">
+  <div v-if="charData.profession" class="gear-picker">
     <!-- start -->
 
-    <div v-if="characterData.metadata.status === 'new'">
+    <div v-if="charData.metadata.status === 'new'">
       <h4>{{ $t("Starting gear") }}</h4>
-      <div v-if="characterData.metadata.startingItems">
+      <div v-if="charData.metadata.startingItems">
         <p
-          v-for="item in characterData.metadata.startingItems.split('\n')"
+          v-for="item in charData.metadata.startingItems.split('\n')"
           v-bind:key="item"
         >
           ✣ {{ item }}
         </p>
       </div>
       <div v-else>
-        {{ $t(PROFESSION[characterData.profession].gear_description) }}
+        {{ $t(PROFESSION[charData.profession].gear_description) }}
       </div>
       <p>
         Silver:
         {{
           $t("D") +
-            PROFESSION[characterData.profession].starting_resources.silver +
+            PROFESSION[charData.profession].starting_resources.silver +
             " (" +
             $t("Roll dice before session starts") +
             ")"
@@ -346,8 +365,10 @@ export default class ExpandableSection extends Vue {
           </thead>
           <tbody>
             <tr>
-              <td>
-                <SvgIcon name="barbute" />
+              <td @click="armorClicked">
+                <div :class="equippedHelmet ? 'clickable' : ''">
+                  <SvgIcon name="barbute" />
+                </div>
               </td>
               <td
                 @click="editItem(equippedHelmet)"
@@ -358,8 +379,10 @@ export default class ExpandableSection extends Vue {
               <td>{{ equippedHelmet ? equippedHelmet.bonus : "" }}</td>
             </tr>
             <tr>
-              <td>
-                <SvgIcon name="shield" />
+              <td @click="shieldClicked">
+                <div :class="equippedShield ? 'clickable' : ''">
+                  <SvgIcon name="shield" />
+                </div>
               </td>
               <td
                 @click="editItem(equippedShield)"
@@ -370,8 +393,10 @@ export default class ExpandableSection extends Vue {
               <td>{{ equippedShield ? equippedShield.bonus : "" }}</td>
             </tr>
             <tr>
-              <td>
-                <SvgIcon name="leather-armor" />
+              <td @click="armorClicked">
+                <div :class="equippedArmor ? 'clickable' : ''">
+                  <SvgIcon name="leather-armor" />
+                </div>
               </td>
               <td
                 @click="editItem(equippedArmor)"
@@ -418,13 +443,13 @@ export default class ExpandableSection extends Vue {
     </div>
 
     <h4>{{ $t("Consumables") }}</h4>
-    <div class="consumables" v-if="characterData.profession">
+    <div class="consumables" v-if="charData.profession">
       <!-- spacer -->
 
       <div class="consumable-item">
         <label for="food">{{ $t("Food") }}</label>
         <select
-          v-model="characterData.gear.consumables.food"
+          v-model="charData.gear.consumables.food"
           :disabled="status === 'new' || viewOnly"
         >
           <option
@@ -440,7 +465,7 @@ export default class ExpandableSection extends Vue {
       <div class="consumable-item">
         <label for="water">{{ $t("Water") }}</label>
         <select
-          v-model.number="characterData.gear.consumables.water"
+          v-model.number="charData.gear.consumables.water"
           :disabled="status === 'new' || viewOnly"
         >
           <option
@@ -456,7 +481,7 @@ export default class ExpandableSection extends Vue {
       <div class="consumable-item">
         <label for="arrows">{{ $t("Arrows") }}</label>
         <select
-          v-model.number="characterData.gear.consumables.arrows"
+          v-model.number="charData.gear.consumables.arrows"
           :disabled="status === 'new' || viewOnly"
         >
           <option
@@ -472,7 +497,7 @@ export default class ExpandableSection extends Vue {
       <div class="consumable-item">
         <label for="torches">{{ $t("Torches") }}</label>
         <select
-          v-model.number="characterData.gear.consumables.torches"
+          v-model.number="charData.gear.consumables.torches"
           :disabled="status === 'new' || viewOnly"
         >
           <option
@@ -499,7 +524,7 @@ export default class ExpandableSection extends Vue {
           fontSize="1.7rem"
           min="0"
           max="300"
-          v-model="characterData.gear.money.copper"
+          v-model="charData.gear.money.copper"
           :disabled="viewOnly"
         />
       </div>
@@ -512,7 +537,7 @@ export default class ExpandableSection extends Vue {
           fontSize="1.7rem"
           min="0"
           max="300"
-          v-model="characterData.gear.money.silver"
+          v-model="charData.gear.money.silver"
           :disabled="viewOnly"
         />
       </div>
@@ -525,7 +550,7 @@ export default class ExpandableSection extends Vue {
           fontSize="1.7rem"
           min="0"
           max="300"
-          v-model="characterData.gear.money.gold"
+          v-model="charData.gear.money.gold"
           :disabled="viewOnly"
         />
       </div>
@@ -562,6 +587,13 @@ table {
 
 label {
   margin-right: 0.5rem;
+}
+
+.clickable {
+  cursor: pointer;
+  box-shadow: @box-shadow-normal;
+  padding: 3px;
+  margin: 3px;
 }
 
 .bonus-cell {

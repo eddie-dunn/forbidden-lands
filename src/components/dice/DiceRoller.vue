@@ -92,9 +92,9 @@ function diceArrayToConf(dice: (number | null)[]): IDiceConfig {
 })
 export class DiceRoller extends Vue {
   // FIXME: Take an IDiceConfig instead of individual values
-  @Prop({ default: 3 }) white!: number
-  @Prop({ default: 2 }) red!: number
-  @Prop({ default: 1 }) black!: number
+  @Prop({ default: null }) white!: number
+  @Prop({ default: null }) red!: number
+  @Prop({ default: null }) black!: number
   @Prop({ default: null }) green!: number
   @Prop({ default: null }) blue!: number
   @Prop({ default: null }) orange!: number

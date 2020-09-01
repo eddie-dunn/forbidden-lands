@@ -12,7 +12,7 @@ import ExpandableSection from "@/components/ExpandableSection.vue"
 import { IDiceConfig } from "@/dice/diceTypes"
 import { FLNumberInput } from "@/components/FLNumberInput.vue"
 
-function defaultDice(): IDiceConfig {
+export function defaultDice(): IDiceConfig {
   return {
     white: 3,
     red: 2,

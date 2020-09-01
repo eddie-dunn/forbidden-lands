@@ -7,7 +7,7 @@ import SvgIcon from "@/components/SvgIcon.vue"
 import Backup from "@/components/Backup.vue"
 import IconButton from "@/components/base/IconButton.vue"
 import FLButton from "@/components/base/FLButton.vue"
-import DiceModal from "@/components/dice/DiceModal.vue"
+import DiceModal, { defaultDice } from "@/components/dice/DiceModal.vue"
 
 import {
   GET_PAGE_TITLE,
@@ -33,6 +33,11 @@ export default Vue.extend({
       updateExists: false,
       showNav: false,
       showDiceModal: false,
+      diceModalConfig: {
+        title: "",
+        dice: defaultDice(),
+        charData: null,
+      },
     }
   },
   methods: {
@@ -46,6 +51,23 @@ export default Vue.extend({
         return
       }
       this.registration.waiting.postMessage("skipWaiting")
+    },
+    onOpenDiceModal(args: any) {
+      // FIXME: Abstract away the keys for settings this up into separate module
+      // FIXME: Enable handling of willpower
+      const { title, dice } = args
+      this.diceModalConfig = { ...this.diceModalConfig, title, dice }
+      this.showDiceModal = true
+    },
+    onCloseDiceModal() {
+      this.diceModalConfig = { title: "", dice: defaultDice(), charData: null }
+      this.showDiceModal = false
+    },
+    addEventListener(name: string) {
+      this.$root.$on(name, this.onOpenDiceModal)
+    },
+    removeEventListener(name: string) {
+      this.$root.$off(name)
     },
   },
   computed: {
@@ -78,6 +100,10 @@ export default Vue.extend({
       this.refreshing = true
       window.location.reload()
     })
+    this.addEventListener("open-dice-modal")
+  },
+  beforeDestroy() {
+    this.removeEventListener("open-dice-modal")
   },
 })
 </script>
@@ -145,7 +171,12 @@ export default Vue.extend({
       </section>
     </NavDrawer>
 
-    <DiceModal v-if="showDiceModal" @close="showDiceModal = false" />
+    <DiceModal
+      v-if="showDiceModal"
+      @close="onCloseDiceModal"
+      :title="diceModalConfig.title"
+      :dice="diceModalConfig.dice"
+    />
     <Notify />
   </div>
 </template>

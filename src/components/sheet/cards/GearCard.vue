@@ -2,7 +2,7 @@
 import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 
-import { CharacterData } from "@/characterData"
+import { CharData } from "@/characterData"
 
 import GearPicker from "@/components/GearPicker.vue"
 import Card from "@/components/Card.vue"
@@ -14,7 +14,7 @@ import Card from "@/components/Card.vue"
   },
 })
 export class GearCard extends Vue {
-  @Prop({ required: true }) charData!: CharacterData
+  @Prop({ required: true }) charData!: CharData
   @Prop({ default: false }) viewOnly!: boolean
 
   get saveStateId() {
@@ -33,7 +33,7 @@ export default GearCard
     :noSign="true"
     :saveStateId="saveStateId"
   >
-    <GearPicker :characterData="charData" :viewOnly="viewOnly" />
+    <GearPicker :charData="charData" :viewOnly="viewOnly" />
   </Card>
 </template>
 

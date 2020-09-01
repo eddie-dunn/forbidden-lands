@@ -35,6 +35,7 @@ export default class DiceInput extends Vue {
       :value="value"
       @input="emit"
       min="0"
+      max="99"
       :enterCb="rollCb"
       :ctrlEnterCb="pushCb"
     />
