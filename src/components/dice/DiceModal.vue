@@ -41,11 +41,7 @@ export class DiceModal extends Vue {
   // FIXME: Get charData via Vuex instead
 
   get showWillpower() {
-    return (
-      this.charData &&
-      this.charData.willpower !== null &&
-      Number(this.charData.willpower) >= 2
-    )
+    return this.charData && this.charData.willpower !== null
   }
 
   close(ev: any) {
