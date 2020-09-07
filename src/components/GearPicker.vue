@@ -221,6 +221,7 @@ export default class GearPicker extends Vue {
     this.$root.$emit("open-dice-modal", {
       title: "armor",
       dice: { black },
+      disablePush: true,
     })
   }
   shieldClicked() {
@@ -233,6 +234,7 @@ export default class GearPicker extends Vue {
     this.$root.$emit("open-dice-modal", {
       title: "shield",
       dice: { white, black, red },
+      disablePush: true,
     })
   }
 }

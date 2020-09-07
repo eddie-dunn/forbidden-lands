@@ -15,6 +15,13 @@ import {
   GET_MP_ACTIVE,
 } from "@/store/store-types"
 
+const DEFAULT_DICE_MODAL_CONF = {
+  title: "",
+  dice: defaultDice(),
+  charData: null,
+  disablePush: false,
+}
+
 export default Vue.extend({
   components: {
     Backup,
@@ -33,11 +40,7 @@ export default Vue.extend({
       updateExists: false,
       showNav: false,
       showDiceModal: false,
-      diceModalConfig: {
-        title: "",
-        dice: defaultDice(),
-        charData: null,
-      },
+      diceModalConfig: DEFAULT_DICE_MODAL_CONF,
     }
   },
   methods: {
@@ -55,12 +58,18 @@ export default Vue.extend({
     onOpenDiceModal(args: any) {
       // FIXME: Abstract away the keys for settings this up into separate module
       // FIXME: Enable handling of willpower
-      const { title, dice } = args
-      this.diceModalConfig = { ...this.diceModalConfig, title, dice }
+      const { title, dice, disablePush, charData = null } = args
+      this.diceModalConfig = {
+        ...this.diceModalConfig,
+        title,
+        dice,
+        disablePush,
+        charData,
+      }
       this.showDiceModal = true
     },
     onCloseDiceModal() {
-      this.diceModalConfig = { title: "", dice: defaultDice(), charData: null }
+      this.diceModalConfig = DEFAULT_DICE_MODAL_CONF
       this.showDiceModal = false
     },
     addEventListener(name: string) {
@@ -176,6 +185,7 @@ export default Vue.extend({
       @close="onCloseDiceModal"
       :title="diceModalConfig.title"
       :dice="diceModalConfig.dice"
+      :disablePush="diceModalConfig.disablePush"
     />
     <Notify />
   </div>
