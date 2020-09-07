@@ -60,7 +60,7 @@ const talents: TalentTranslations = {
   "Hard to Catch": "Hard to catch", // halfling
   "Adaptive": "Adaptive", // human
   "Unbreakable": "Unbreakable", // orc
-  "Hunting Instincts": "Hunting insticts", // wolfkin
+  "Hunting Instincts": "Hunting instincts", // wolfkin
 
   "ambidextrous": "ambidextrous",
   "axe fighter": "axe fighter",
