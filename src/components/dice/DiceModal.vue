@@ -38,6 +38,7 @@ export class DiceModal extends Vue {
   @Prop({ default: "" }) title!: string
   @Prop({ default: () => defaultDice() }) dice!: IDiceConfig
   @Prop({ default: null }) charData!: CharData
+  @Prop({ default: false }) disablePush!: boolean
   // FIXME: Get charData via Vuex instead
 
   get showWillpower() {
@@ -61,7 +62,7 @@ export class DiceModal extends Vue {
     this.charData.willpower = value
   }
 
-  canPush = false
+  canPush = this.disablePush
   canRoll = true
 
   pushCb = () => {}
@@ -88,6 +89,10 @@ export class DiceModal extends Vue {
 
   updateCanPush(pushDisabled: boolean) {
     // FIXME: Move willpower & dwarf push logic here instead
+    if (this.disablePush) {
+      this.canPush = false
+      return
+    }
     this.canPush = !pushDisabled
   }
 }
