@@ -97,7 +97,7 @@ export default class ItemTemplatePicker extends Vue {
         type="ghost"
         v-for="item in section.items"
         :key="item.id"
-        class="template-item capitalize-first"
+        class="template-item-button capitalize-first"
         @click="selectTemplateItem(item.id)"
       >
         {{ $t(item.name) }}
@@ -125,9 +125,10 @@ h4 {
   grid-column-end: -1;
 }
 
-.template-item {
-  cursor: pointer;
+.template-item-button {
   font-size: 1rem;
+  hyphens: auto;
+  text-align: left;
 }
 
 .inventory-modal {
