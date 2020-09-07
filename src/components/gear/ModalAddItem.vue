@@ -39,7 +39,7 @@ function defaultItem(): Item {
   },
 })
 export default class AddItem extends Vue {
-  @Prop({}) editItem!: Item | null
+  @Prop() editItem!: Item | null
   @Prop({ default: "" }) title!: string
 
   tmpGear: Item = JSON.parse(JSON.stringify(this.editItem || defaultItem()))

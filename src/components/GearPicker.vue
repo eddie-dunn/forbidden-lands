@@ -279,6 +279,7 @@ export default class GearPicker extends Vue {
       v-if="showAddItem"
       @close="showAddItem = false"
       @add-item="addItem"
+      :editItem="null"
       :title="$t('Add item')"
     />
 
@@ -416,10 +417,18 @@ export default class GearPicker extends Vue {
           <thead>
             <tr>
               <th>{{ $t("Name") }}</th>
-              <th class="bonus-cell">Bonus</th>
-              <th class="bonus-cell capitalize">{{ $t("dmg") }}</th>
-              <th>{{ $t("Range") }}</th>
-              <th>{{ $t("Features") }}</th>
+              <th class="bonus-cell">
+                <div>Bonus</div>
+                <div class="capitalize for-medium-down">{{ $t("dmg") }}</div>
+              </th>
+              <th class="bonus-cell capitalize for-medium-up">
+                {{ $t("dmg") }}
+              </th>
+              <th>
+                <div>{{ $t("Range") }}</div>
+                <div class="for-medium-down">{{ $t("Features") }}</div>
+              </th>
+              <th class="for-medium-up">{{ $t("Features") }}</th>
             </tr>
           </thead>
           <tbody v-if="equippedWeapons.length > 0">
@@ -427,12 +436,24 @@ export default class GearPicker extends Vue {
               <td @click="editItem(weapon)" class="clickable-cell">
                 {{ weapon.name }}
               </td>
-              <td>{{ weapon.bonus }}</td>
-              <td>{{ weapon.damage }}</td>
-              <td class="capitalize">
-                {{ getRange(weapon) }}
+              <td>
+                <div>
+                  {{ weapon.bonus }}
+                </div>
+                <div class="for-medium-down">
+                  {{ weapon.damage }}
+                </div>
               </td>
-              <td>{{ getFeatures(weapon) }}</td>
+              <td class="for-medium-up">{{ weapon.damage }}</td>
+              <td class="capitalize">
+                <div>{{ getRange(weapon) }}</div>
+                <div class="for-medium-down">
+                  {{ getFeatures(weapon) }}
+                </div>
+              </td>
+              <td class="capitalize for-medium-up">
+                {{ getFeatures(weapon) }}
+              </td>
             </tr>
           </tbody>
         </table>
@@ -582,6 +603,9 @@ table {
     border: 1px solid @pastel-green-transparent;
     height: 1.8em;
     text-align: center;
+    > div:not(:first-child) {
+      border-top: 1px solid @pastel-green-transparent;
+    }
   }
 }
 
@@ -669,5 +693,17 @@ label {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.for-medium-up {
+  @media (max-width: 600px) {
+    display: none;
+  }
+}
+
+.for-medium-down {
+  @media (min-width: 600px) {
+    display: none;
+  }
 }
 </style>
