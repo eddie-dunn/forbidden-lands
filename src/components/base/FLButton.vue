@@ -13,11 +13,21 @@ export default class FLButton extends Vue {
   @Prop({ default: "button" }) formButtonType!: string
   @Prop({ default: "main" }) type!: "" | "danger" | "cancel" | "ghost" | "main"
   @Prop({ default: "white" }) color!: "main" | "danger" | "white" | "inherit"
+  @Prop({ default: "" }) href!: string
 }
 </script>
 
 <template>
+  <a
+    v-if="href"
+    v-bind="$attrs"
+    :class="['button', 'button-' + type, 'color-' + color]"
+    :href="href"
+  >
+    <slot></slot>
+  </a>
   <button
+    v-else
     v-bind="$attrs"
     :type="formButtonType"
     @click="$emit('click', $event)"
