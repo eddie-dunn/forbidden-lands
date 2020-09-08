@@ -4,9 +4,16 @@ import Component from "vue-class-component"
 
 import UrlStorage from "@/localStorage"
 
+import { CharData } from "@/characterData"
+
 import IconButton from "@/components/base/IconButton.vue"
 import FLButton from "@/components/base/FLButton.vue"
 import Modal from "@/components/Modal.vue"
+
+function validate(url: any) {
+  const regex = /^.*(\.jpg|\.jpeg|\.png|\.svg)\??/
+  return url.match(regex)
+}
 
 function importAll(r: any) {
   return r.keys().map(r)
@@ -26,6 +33,10 @@ const AppProps = Vue.extend({
     },
     viewOnly: {
       type: Boolean,
+    },
+    charData: {
+      default: null,
+      type: Object,
     },
   },
   watch: {
@@ -80,7 +91,6 @@ export default class PicturePicker extends AppProps {
     this.urlStore.remove(index)
   }
   getPlaceHolder() {
-    // TODO: Have it change depending on class/gender/kin
     return this.pictures[~~(Math.random() * this.pictures.length)]
   }
   galleryClicked() {
@@ -90,6 +100,20 @@ export default class PicturePicker extends AppProps {
   getUrlClicked() {
     this.showGallery = false
     this.showGetUrl = true
+  }
+
+  get searchHref() {
+    if (!this.charData) {
+      return ""
+    }
+    const q = `${this.charData.kin}+${this.charData.profession}`
+    return `https://duckduckgo.com/?q=${q}&ia=images&iax=images&atb=v119-1`
+  }
+  get warning(): string {
+    if (this.imgUrl && !validate(this.imgUrl)) {
+      return "Url should have filetype 'jpg', 'png' or 'svg'; it might not work otherwise."
+    }
+    return ""
   }
 }
 </script>
@@ -121,6 +145,9 @@ export default class PicturePicker extends AppProps {
       <div class="modal-body" slot="body">
         <div class="gallery-view">
           <div class="url-view" v-if="showGetUrl">
+            <FLButton v-if="searchHref" :href="searchHref" target="_blank">
+              Search images online
+            </FLButton>
             <form class="url-view-form" v-on:submit.prevent="urlButtonClicked">
               <input
                 :placeholder="$t('Enter external URL') + '...'"
@@ -130,6 +157,7 @@ export default class PicturePicker extends AppProps {
               <FLButton @click="urlButtonClicked">
                 {{ $t("Get") }}
               </FLButton>
+              <div v-if="warning" class="url-view-form-warn">{{ warning }}</div>
             </form>
             <div class="picture-grid">
               <div
@@ -247,6 +275,10 @@ export default class PicturePicker extends AppProps {
       margin-right: 1rem;
       display: inline-block;
       flex-grow: 1;
+    }
+    .url-view-form-warn {
+      flex: 1 0 100%;
+      color: @pastel-red;
     }
   }
 }

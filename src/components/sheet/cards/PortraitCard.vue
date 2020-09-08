@@ -39,6 +39,7 @@ export default PortraitCard
     <PicturePicker
       :portrait="charData.portrait"
       :viewOnly="viewOnly"
+      :charData="charData"
       @pickedPicture="setImgSource"
     />
   </Card>
