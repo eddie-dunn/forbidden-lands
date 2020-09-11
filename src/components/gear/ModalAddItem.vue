@@ -117,7 +117,11 @@ export default class AddItem extends Vue {
     const item = allItems
       .filter((item) => item.id === id)
       .map((item) => {
-        return { ...item, name: capitalize(this.$t(item.name) as string) }
+        return {
+          ...item,
+          id: uuid1(),
+          name: capitalize(this.$t(item.name) as string),
+        }
       })
       .pop()
     if (item) {
