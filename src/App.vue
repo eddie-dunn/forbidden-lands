@@ -2,10 +2,9 @@
 import Vue from "vue"
 import LocaleChanger from "@/components/LocaleChanger.vue"
 import Notify from "@/components/base/Notify.vue"
+import NavBar from "@/components/base/NavBar.vue"
 import NavDrawer from "@/components/base/NavDrawer.vue"
-import SvgIcon from "@/components/SvgIcon.vue"
 import Backup from "@/components/Backup.vue"
-import IconButton from "@/components/base/IconButton.vue"
 import FLButton from "@/components/base/FLButton.vue"
 import DiceModal, { defaultDice } from "@/components/dice/DiceModal.vue"
 
@@ -27,11 +26,10 @@ export default Vue.extend({
     Backup,
     DiceModal,
     FLButton,
-    IconButton,
     LocaleChanger,
     NavDrawer,
+    NavBar,
     Notify,
-    SvgIcon,
   },
   data() {
     return {
@@ -119,35 +117,14 @@ export default Vue.extend({
 
 <template>
   <div id="app">
-    <!-- TODO: Create separate component for navbar -->
-    <div class="navbar navbar-top">
-      <div class="navbar-left ">
-        <router-link class="nav-icon" to="/" exact>
-          <SvgIcon name="home" title="Home" />
-        </router-link>
-        <div v-if="showMp" class="nav-icon">
-          <router-link class="nav-icon-highlight" to="/multiplayer" exact>
-            <SvgIcon name="chat_bubble" title="Multiplayer" />
-          </router-link>
-        </div>
-      </div>
-      <div class="navbar-center">
-        <h1 class="page-title capitalize">
-          {{ $t(pageTitle) }}{{ pageSubtitle }}
-        </h1>
-      </div>
-      <div class="navbar-right">
-        <IconButton
-          style="margin-right: .5rem;"
-          height="32px"
-          width="32px"
-          icon="rolling-dices"
-          @click="showDiceModal = !showDiceModal"
-        ></IconButton>
-
-        <IconButton icon="menu_open" @click="showNav = !showNav"></IconButton>
-      </div>
-    </div>
+    <NavBar
+      :showNav="showNav"
+      :showMp="showMp"
+      :pageTitle="pageTitle"
+      :pageSubtitle="pageSubtitle"
+      @click-menu="showNav = !showNav"
+      @click-dice="showDiceModal = !showDiceModal"
+    />
     <FLButton
       v-if="updateExists"
       type="danger"
@@ -239,77 +216,6 @@ body {
   max-width: 1024px;
   margin: 0 auto;
   min-height: 100vh;
-}
-
-.no-scrollbar {
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-.navbar-left {
-  flex: 0 0 auto;
-  min-width: 0;
-  display: flex;
-}
-
-.navbar-center {
-  flex: 1 1 auto;
-  min-width: 0;
-  display: inline-block;
-  margin: 0;
-  overflow: auto;
-  .no-scrollbar();
-}
-
-.navbar-right {
-  flex: 0 0 auto;
-  display: flex;
-}
-
-.nav-icon {
-  text-decoration: none;
-  color: @color-text;
-  margin: 5px;
-}
-
-.nav-icon-highlight {
-  color: @color-background;
-  &.router-link-active {
-    color: @color-text;
-  }
-}
-
-.navbar {
-  @media only screen and (min-height: 600px) {
-    position: sticky;
-    top: 0;
-  }
-  @media print {
-    display: none;
-  }
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 100%;
-
-  background: @color-background;
-  box-shadow: @box-shadow-normal;
-  padding: 3px;
-
-  z-index: @z-navbar;
-
-  &-top {
-    top: 0px;
-    background: @color-main;
-  }
-
-  &-bottom {
-    position: sticky;
-    bottom: 0px;
-  }
 }
 
 .capitalize {
