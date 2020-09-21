@@ -402,6 +402,7 @@ export default {
 
   // lowercase
 
+  "animal companion": "animal companion",
   "armor": "armor",
   "armslength": "arm's length",
   "attribute": "attribute",
@@ -411,6 +412,7 @@ export default {
   "confirm": "confirm",
   "create from template": "create from template",
   "current": "current",
+  "description": "description",
   "dmg": "dmg",
   "edged": "edged",
   "epic": "epic",

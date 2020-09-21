@@ -94,6 +94,14 @@ export interface CharData {
     inventory: Item[]
     skills: SkillObj[]
   }
+  animalCompanion: {
+    name: string
+    strength: number
+    agility: number
+    movementRate: number
+    skills: SkillObj[]
+    description: string
+  }
   name: string
   notes: string
   portrait: string | null
@@ -177,6 +185,14 @@ export function getNewCharacterData(): CharacterData {
       movementRate: 0,
       inventory: [],
       skills: [],
+    },
+    animalCompanion: {
+      name: "",
+      strength: 0,
+      agility: 0,
+      movementRate: 0,
+      skills: [],
+      description: "",
     },
 
     notes: "",

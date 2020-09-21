@@ -515,6 +515,7 @@ export default {
 
   // Lowercase
 
+  "animal companion": "djurkompanjon",
   "armor": "rustning",
   "armslength": "armslängd",
   "attribute": "grundegenskap",
@@ -523,6 +524,7 @@ export default {
   "childhood": "uppväxt",
   "confirm": "bekräfta",
   "create from template": "skapa från mall",
+  "description": "beskrivning",
   "dmg": "skada",
   "edged": "egg",
   "epic": "episk",

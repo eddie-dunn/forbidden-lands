@@ -107,6 +107,19 @@ const charDataPatches: CharDataPatch[] = [
     character.mount.movementRate = character.mount.movementRate || 0
     return character
   },
+  function addAnimalCompanion(character: CharData): CharData {
+    const newCompanion = {
+      name: "",
+      strength: 0,
+      agility: 0,
+      movementRate: 0,
+      skills: [],
+      description: "",
+    }
+    const companion = { ...newCompanion, ...character.animalCompanion }
+    character.animalCompanion = companion
+    return character
+  },
   // Permanent patches
   // function permanentPatchExample(character: CharData): CharData {}
 

@@ -65,8 +65,6 @@ export default class Mount extends Vue {
   //   border: 1px solid black; // TODO: Remove
   // }
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  grid-column-gap: 2rem;
   grid-row-gap: 1rem;
 }
 </style>

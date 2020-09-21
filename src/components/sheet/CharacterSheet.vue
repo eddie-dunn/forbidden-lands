@@ -17,6 +17,7 @@ import GearCard from "@/components/sheet/cards/GearCard.vue"
 import MountCard from "@/components/sheet/cards/MountCard.vue"
 import NoteCard from "@/components/sheet/cards/NoteCard.vue"
 import StateCard from "@/components/sheet/cards/StateCard.vue"
+import AnimalCompanionCard from "@/components/sheet/cards/AnimalCompanionCard.vue"
 
 function stringChar(characterData: CharData) {
   return JSON.stringify(characterData)
@@ -25,6 +26,7 @@ function stringChar(characterData: CharData) {
 @Component({
   components: {
     ActionBar,
+    AnimalCompanionCard,
     BaseCard,
     FLButton,
     GearCard,
@@ -145,6 +147,11 @@ export default class CharacterEditor extends Vue {
       />
       <GearCard class="row full" :charData="charData" :viewOnly="viewOnly" />
       <MountCard class="row half" :charData="charData" :viewOnly="viewOnly" />
+      <AnimalCompanionCard
+        class="row half"
+        :charData="charData"
+        :viewOnly="viewOnly"
+      />
       <SessionCard
         v-if="status === 'active' && !viewOnly"
         class="row full print-hide"

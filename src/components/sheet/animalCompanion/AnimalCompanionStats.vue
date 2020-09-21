@@ -11,44 +11,45 @@ import FLNumberInput from "@/components/FLNumberInput.vue"
     FLNumberInput,
   },
 })
-export default class MountStats extends Vue {
+export class AnimalCompanionStats extends Vue {
   @Prop({ required: true }) charData!: CharacterData
   @Prop({ default: false }) viewOnly!: boolean
 }
+export default AnimalCompanionStats
 </script>
 
 <template>
   <div>
-    <div class="mount-name">
-      <label for="mount-name" class="block"> {{ $t("Name") }}</label>
+    <div class="name">
+      <label for="animal-companion-name" class="block"> {{ $t("Name") }}</label>
       <input
-        id="mount-name"
+        id="animal-companion-name"
         type="text"
-        v-model="charData.mount.name"
+        v-model="charData.animalCompanion.name"
         :disabled="viewOnly"
       />
     </div>
 
-    <div class="mount-attrib-row">
+    <div class="attrib-row">
       <div>
-        <label for="mount-strength" class="capitalize block">
+        <label for="companion-strength" class="capitalize block">
           {{ $t("strength") }}
         </label>
         <FLNumberInput
-          id="mount-strength"
+          id="companion-strength"
           fontSize="1.7rem"
-          v-model.number="charData.mount.strength"
+          v-model.number="charData.animalCompanion.strength"
           :disabled="viewOnly"
         />
       </div>
       <div>
-        <label for="mount-agility" class="capitalize block">
+        <label for="animal-companion-agility" class="capitalize block">
           {{ $t("agility") }}
         </label>
         <FLNumberInput
-          id="mount-agility"
+          id="animal-companion-agility"
           fontSize="1.7rem"
-          v-model.number="charData.mount.agility"
+          v-model.number="charData.animalCompanion.agility"
           :disabled="viewOnly"
         />
       </div>
@@ -59,7 +60,7 @@ export default class MountStats extends Vue {
         <FLNumberInput
           id="movement-rate"
           fontSize="1.7rem"
-          v-model.number="charData.mount.movementRate"
+          v-model.number="charData.animalCompanion.movementRate"
           :disabled="viewOnly"
         />
       </div>
@@ -72,17 +73,14 @@ export default class MountStats extends Vue {
 <style lang="less" scoped>
 @import "~Style/colors.less";
 
-.mount-name {
+.name {
   & > input {
     width: 100%;
   }
   margin-bottom: 1rem;
 }
 
-.mount-attrib-row {
-  // display: inline-grid;
-  // grid-template-columns: auto auto auto;
-  // grid-gap: 1rem;
+.attrib-row {
   & > div {
     display: inline-block;
     margin-right: 1rem;
