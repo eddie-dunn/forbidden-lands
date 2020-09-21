@@ -10,8 +10,13 @@ import IconButton from "@/components/base/IconButton.vue"
 import FLButton from "@/components/base/FLButton.vue"
 import Modal from "@/components/Modal.vue"
 
-function validate(url: any) {
+function validate(url: string) {
   const regex = /^.*(\.jpg|\.jpeg|\.png|\.svg)\??/
+  return url.match(regex)
+}
+
+function isHttps(url: string) {
+  const regex = /^https:\/\//
   return url.match(regex)
 }
 
@@ -110,10 +115,20 @@ export default class PicturePicker extends AppProps {
     return `https://duckduckgo.com/?q=${q}&ia=images&iax=images&atb=v119-1`
   }
   get warning(): string {
-    if (this.imgUrl && !validate(this.imgUrl)) {
-      return "Url should have filetype 'jpg', 'png' or 'svg'; it might not work otherwise."
+    const warnings: string[] = []
+    if (!this.imgUrl) return ""
+    if (!validate(this.imgUrl)) {
+      warnings.push(
+        "Url should have filetype 'jpg', 'png' or 'svg'; it might not work otherwise."
+      )
     }
-    return ""
+    if (!this.imgIsHttps) {
+      warnings.push("Please only use secure links, beginning with 'https://'")
+    }
+    return warnings.join("\n")
+  }
+  get imgIsHttps(): boolean {
+    return !!isHttps(this.imgUrl)
   }
 }
 </script>
@@ -154,7 +169,7 @@ export default class PicturePicker extends AppProps {
                 id="external url"
                 v-model="imgUrl"
               />
-              <FLButton @click="urlButtonClicked">
+              <FLButton @click="urlButtonClicked" :disabled="!imgIsHttps">
                 {{ $t("Get") }}
               </FLButton>
               <div v-if="warning" class="url-view-form-warn">{{ warning }}</div>
