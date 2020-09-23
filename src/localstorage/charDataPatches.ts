@@ -149,7 +149,7 @@ function _apply(
   // Exec
   patches.map((patch, patchVersion) => {
     if (cCopy.metadata.dataVersion < patchVersion) {
-      console.log(`Running patch ${patchVersion}: '${patch.name}'`)
+      console.log(`Running patch ${patchVersion}`, `${patch.name}`)
       const tempPatch = !patch(cCopy)
       if (tempPatch) {
         temporaryPatchApplied = true
