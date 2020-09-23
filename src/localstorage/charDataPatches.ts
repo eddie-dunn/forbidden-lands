@@ -120,6 +120,15 @@ const charDataPatches: CharDataPatch[] = [
     character.animalCompanion = companion
     return character
   },
+  function fixHttpPortrait(c: CharData): CharData {
+    const match = !!(c.portrait || "").match(/http:\/\//)
+    if (c.portrait && match) {
+      const httpsPortrait = c.portrait.replace("http://", "https://")
+      console.log("Fixing portrait http -> https", c.portrait, httpsPortrait)
+      c.portrait = httpsPortrait
+    }
+    return c
+  },
   // Permanent patches
   // function permanentPatchExample(character: CharData): CharData {}
 
