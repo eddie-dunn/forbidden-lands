@@ -13,42 +13,11 @@ Then to download and install all project dependencies run
 yarn install
 ```
 
-### Compiles and hot-reloads for development
+To run the app locally run
 
 ```bash
-yarn run serve
+yarn start
 ```
 
-### Compiles and minifies for production
-
-```bash
-yarn run build
-```
-
-### Run your tests
-
-```bash
-yarn run test
-```
-
-### Lints and fixes files
-
-```bash
-yarn run lint
-```
-
-### Run your end-to-end tests
-
-```bash
-yarn run test:e2e
-```
-
-### Run your unit tests
-
-```bash
-yarn run test:unit
-```
-
-### Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).
+and then go to `http://localhost:3000/`. The app will be automatically
+reloaded to reflect any changes you might make to the source code.
