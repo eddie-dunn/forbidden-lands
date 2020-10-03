@@ -49,7 +49,7 @@ describe(`patching data from 20190623`, () => {
     },
     {
       xp: 83,
-      portrait: `http://static.giantbomb.com/uploads/original/11/112064/2522418-dark_elf_mage.jpg`,
+      portrait: `https://static.giantbomb.com/uploads/original/11/112064/2522418-dark_elf_mage.jpg`,
       talents: [
         { id: "Inner Peace", rank: 1 },
         { id: "Path of Gold", rank: 2 },
@@ -105,6 +105,14 @@ describe(`patching data from 20190623`, () => {
         },
         portrait: charUpdates[i].portrait,
         talents: charUpdates[i].talents,
+        animalCompanion: {
+          agility: 0,
+          description: "",
+          movementRate: 0,
+          name: "",
+          skills: [],
+          strength: 0,
+        },
       }
       const result0 = runPatches(entries[i])
       expect(result0).toStrictEqual(expected_entries[i])
