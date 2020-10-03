@@ -136,6 +136,20 @@ const charDataPatches: CharDataPatch[] = [
   // function ephemeralPatchExample(character: CharData): null {}
 ]
 
+const tempPatches = [
+  /** This patch will enable moving imports between different public paths */
+  function updateLocalPortraitUrl2(character: CharData): null {
+    const matcher = /\/img\/player_handbook_png-\d*\.png$/
+    const found = (character.portrait || "").match(matcher)
+    if (found && found[0]) {
+      const newPath = __webpack_public_path__ + found[0].slice(1)
+      // console.log("OLD", character.portrait, "NEW", newPath)
+      character.portrait = newPath
+    }
+    return null
+  },
+]
+
 function _apply(
   charData: CharData,
   patches: CharDataPatch[],
@@ -149,7 +163,7 @@ function _apply(
   // Exec
   patches.map((patch, patchVersion) => {
     if (cCopy.metadata.dataVersion < patchVersion) {
-      console.log(`Running patch ${patchVersion}`, `${patch.name}`)
+      console.log(`Running patch ${patchVersion} ${patch.name}`)
       const tempPatch = !patch(cCopy)
       if (tempPatch) {
         temporaryPatchApplied = true
@@ -162,11 +176,18 @@ function _apply(
   return cCopy
 }
 
+function runTempPatches(c: CharData) {
+  tempPatches.map((patch, patchVersion) => {
+    patch(c)
+  })
+}
+
 export const CURRENT_PATCH_VERSION = charDataPatches.length - 1
 
 export function runPatches(c: CharData): CharData {
   const patches = charDataPatches
   const oldVersion = c.metadata.dataVersion
+  runTempPatches(c)
   if (oldVersion === CURRENT_PATCH_VERSION) {
     return c
   }
