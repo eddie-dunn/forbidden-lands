@@ -48,7 +48,7 @@ function talentsSortedByTranslation(
 })
 export default class Talentelect extends Vue {
   @Prop() label!: string
-  @Prop({ required: true }) talentOptions!: CharacterTalent[]
+  @Prop({ default: () => [] }) talentOptions!: CharacterTalent[]
   @Prop({ required: true }) charStatus!: CharacterMetaDataStatus
   @Prop({ required: true }) charData!: CharacterData
   @Prop({ default: 3 }) maxTalentRank!: number
@@ -69,7 +69,7 @@ export default class Talentelect extends Vue {
   copiedTalent = this.value
   copiedRank = this.talentRank
 
-  get translatedTalents() {
+  get generalTalents() {
     return talentsSortedByTranslation(this, this.talentOptions)
   }
 
@@ -153,9 +153,9 @@ export default class Talentelect extends Vue {
       <option key="select" :disabled="true" :value="null">
         {{ $t("Select talent") }}
       </option>
-      <optgroup :label="$t('General talents')">
+      <optgroup v-if="generalTalents.length > 0" :label="$t('General talents')">
         <option
-          v-for="talent in translatedTalents"
+          v-for="talent in generalTalents"
           :key="talent.id"
           v-bind:value="talent.id"
         >

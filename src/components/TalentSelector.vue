@@ -247,7 +247,7 @@ export default TalentSelector
         :charStatus="characterStatus"
         :charData="charData"
         :maxTalentRank="maxTalentRank"
-        :talentOptions="classTalents(1)"
+        :classTalentOptions="classTalents(1)"
         :talentRank="talentRanks[1]"
         :removeOk="false"
         @rank-changed="(value) => rankChanged(1, value)"
