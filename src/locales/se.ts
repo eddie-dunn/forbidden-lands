@@ -361,6 +361,7 @@ const templateGear = {
   "long spear": "långspjut",
   "halberd": "hillebard",
   "trident": "treudd",
+  "pike": "pik",
 }
 
 export default {

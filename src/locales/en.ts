@@ -233,6 +233,7 @@ const weapons = {
   "mace": "mace",
   "morningstar": "morningstar",
   "open helmet": "open helmet",
+  "pike": "pike",
   "plate armor": "plate armor",
   "rock": "rock",
   "scimitar": "scimitar",
@@ -253,7 +254,6 @@ const weapons = {
   "two handed sword": "two handed sword",
   "warhammer": "warhammer",
   "wodden club": "wooden club",
-  "wooden club": "wooden club",
 }
 
 export default {

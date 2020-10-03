@@ -494,6 +494,7 @@ export namespace meleeWeapons {
     shortspear,
     longspear,
     halberd,
+    pike,
     trident,
   ]
   // End weapons
