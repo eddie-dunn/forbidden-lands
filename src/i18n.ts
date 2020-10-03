@@ -3,6 +3,7 @@ import VueI18n from "vue-i18n"
 import en from "@/locales/en"
 import se from "@/locales/se"
 import pt from "@/locales/pt"
+import de from "@/locales/de"
 
 Vue.use(VueI18n)
 
@@ -21,6 +22,7 @@ const i18n = new VueI18n({
     en,
     pt,
     se,
+    de,
   },
 })
 

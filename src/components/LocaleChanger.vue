@@ -12,6 +12,7 @@ export default {
         { name: "Brazilian", key: "pt" },
         { name: "English", key: "en" },
         { name: "Swedish", key: "se" },
+        { name: "German", key: "de" },
       ],
     }
   },
