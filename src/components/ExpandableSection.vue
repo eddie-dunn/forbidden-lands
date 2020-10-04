@@ -60,7 +60,7 @@ export default class ExpandableSection extends Vue {
 </script>
 
 <template>
-  <div :class="['expander-wrapper', isExpanded ? '' : 'max-content']">
+  <section :class="['expander-wrapper', isExpanded ? '' : 'max-content']">
     <div
       :class="['expander']"
       ref="expander"
@@ -94,7 +94,7 @@ export default class ExpandableSection extends Vue {
     > -->
       <slot></slot>
     </div>
-  </div>
+  </section>
 </template>
 
 <style lang="less" scoped>

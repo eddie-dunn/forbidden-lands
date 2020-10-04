@@ -127,7 +127,7 @@ export default class CharacterEditor extends Vue {
       </FLButton>
     </div>
 
-    <div class="detail-form">
+    <article class="detail-form">
       <PortraitCard
         class="row half"
         :charData="charData"
@@ -163,7 +163,7 @@ export default class CharacterEditor extends Vue {
         class="row full break-before break-avoid"
         :charData="charData"
       />
-    </div>
+    </article>
 
     <ActionBar>
       <template v-slot:left>
