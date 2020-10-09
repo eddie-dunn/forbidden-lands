@@ -22,6 +22,9 @@ export default class DiceView extends Vue {
     :showReset="true"
     :infinityPush="true"
     :showButtonBar="true"
+    :white="3"
+    :red="2"
+    :black="1"
   />
 </template>
 

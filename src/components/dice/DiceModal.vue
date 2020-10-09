@@ -14,9 +14,9 @@ import { FLNumberInput } from "@/components/FLNumberInput.vue"
 
 export function defaultDice(): IDiceConfig {
   return {
-    white: 3,
-    red: 2,
-    black: 1,
+    white: null,
+    red: null,
+    black: null,
     green: null,
     blue: null,
     orange: null,
