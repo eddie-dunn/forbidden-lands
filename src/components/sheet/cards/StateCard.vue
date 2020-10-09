@@ -19,7 +19,7 @@ import {
   CharacterMetaData,
   calcCharacterXP,
 } from "@/data/character/characterData"
-import FLNumberInput from "@/components/FLNumberInput.vue"
+import FLNumberInput from "@/components/base/FLNumberInput.vue"
 
 @Component({
   components: {

@@ -10,7 +10,7 @@ import FLButton from "@/components/base/FLButton.vue"
 import DiceActions from "./DiceActions.vue"
 import ExpandableSection from "@/components/ExpandableSection.vue"
 import { IDiceConfig } from "@/dice/diceTypes"
-import { FLNumberInput } from "@/components/FLNumberInput.vue"
+import { FLNumberInput } from "@/components/base/FLNumberInput.vue"
 
 export function defaultDice(): IDiceConfig {
   return {

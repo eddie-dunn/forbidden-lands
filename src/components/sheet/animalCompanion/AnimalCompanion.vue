@@ -6,7 +6,7 @@ import { CharacterData, CharacterTalent } from "@/data/character/characterData"
 import { Item } from "@/data/items/itemTypes"
 
 import ModalAddItem from "@/components/gear/ModalAddItem.vue"
-import FLNumberInput from "@/components/FLNumberInput.vue"
+import FLNumberInput from "@/components/base/FLNumberInput.vue"
 import FLButton from "@/components/base/FLButton.vue"
 
 import { AnimalCompanionSkills } from "./AnimalCompanionSkills.vue"

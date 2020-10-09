@@ -8,7 +8,7 @@ import {
   validateTalents,
 } from "@/data/character/characterData"
 
-import FLNumberInput from "@/components/FLNumberInput.vue"
+import FLNumberInput from "@/components/base/FLNumberInput.vue"
 import Card from "@/components/Card.vue"
 import TalentSelector from "@/components/TalentSelector.vue"
 

@@ -7,7 +7,7 @@ import {
   Conditions,
 } from "@/data/character/characterData"
 
-import FLNumberInput from "@/components/FLNumberInput.vue"
+import FLNumberInput from "@/components/base/FLNumberInput.vue"
 import SvgIcon from "@/components/SvgIcon.vue"
 import { DiceColor } from "@/components/dice/diceTypes"
 

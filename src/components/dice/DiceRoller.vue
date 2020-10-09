@@ -9,7 +9,7 @@ import DiceResult from "@/components/dice/DiceResult.vue"
 import FLButton from "@/components/base/FLButton.vue"
 import { getRandomIntInclusive } from "@/dice/diceUtil"
 import { IDiceConfig } from "@/dice/diceTypes"
-import { FLNumberInput } from "@/components/FLNumberInput.vue"
+import { FLNumberInput } from "@/components/base/FLNumberInput.vue"
 
 import { DiceProbability } from "./DiceProbability.vue"
 import { capitalize } from "@/util/util"

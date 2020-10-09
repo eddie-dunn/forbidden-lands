@@ -4,7 +4,7 @@ import { Component, Prop, Watch } from "vue-property-decorator"
 import { CharacterData, CharacterTalent } from "@/data/character/characterData"
 import { Item } from "@/data/items/itemTypes"
 
-import FLNumberInput from "@/components/FLNumberInput.vue"
+import FLNumberInput from "@/components/base/FLNumberInput.vue"
 
 @Component({
   components: {

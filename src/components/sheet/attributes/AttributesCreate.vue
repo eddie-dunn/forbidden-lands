@@ -10,7 +10,7 @@ import {
   CharacterMetaDataStatus,
 } from "@/data/character/characterData"
 import SvgIcon from "@/components/SvgIcon.vue"
-import NumberInput from "@/components/FLNumberInput.vue"
+import NumberInput from "@/components/base/FLNumberInput.vue"
 
 function getMaxAttribLevel(
   attribute: Attribute,

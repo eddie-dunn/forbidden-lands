@@ -8,7 +8,7 @@ import { PROFESSION } from "@/classes"
 import { CharData, Gear } from "@/data/character/characterData"
 import { Item, ItemWeapon, Range } from "@/data/items/itemTypes"
 
-import FLNumberInput from "@/components/FLNumberInput.vue"
+import FLNumberInput from "@/components/base/FLNumberInput.vue"
 import FLButton from "@/components/base/FLButton.vue"
 import SvgIcon from "@/components/SvgIcon.vue"
 import ModalAddItem from "@/components/gear/ModalAddItem.vue"

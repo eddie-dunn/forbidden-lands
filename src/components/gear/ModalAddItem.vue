@@ -12,7 +12,7 @@ import { allItems } from "@/data/items/items.ts"
 import { Item } from "@/data/items/itemTypes"
 import { capitalize } from "@/util/util"
 import ItemTemplatePicker from "@/components/gear/ItemTemplatePicker.vue"
-import FLNumberInput from "@/components/FLNumberInput.vue"
+import FLNumberInput from "@/components/base/FLNumberInput.vue"
 import TabBar from "@/components/base/TabBar.vue"
 
 function defaultItem(): Item {
