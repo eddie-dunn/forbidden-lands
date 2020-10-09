@@ -62,13 +62,17 @@ export default Vue.extend({
   },
   computed: {
     ageType(): VueI18n.TranslateResult {
-      return this.$t(getAgeType(this.mdata.age, this.mdata.kin))
+      if (!this.mdata.age) return ""
+      return `(${this.$t(getAgeType(this.mdata.age, this.mdata.kin))})`
     },
     reputation(): number {
       return this.mdata.reputation || this.calcRep()
     },
     disabled(): boolean {
       return this.data.metadata.status === "active" || this.viewOnly
+    },
+    freeEdit(): boolean {
+      return this.data.metadata.status === "freeEdit"
     },
   },
   watch: {
@@ -133,22 +137,16 @@ export default Vue.extend({
         :placeholder="nameSuggestion()"
         :label="$t('Name')"
         :disabled="viewOnly"
+        :validate="() => String(this.mdata.name)"
         id="character-name"
         class="grid-full-width"
         required
       />
-      <FLInput
-        v-model="mdata.age"
-        type="number"
-        min="10"
-        max="999"
-        :placeholder="ageRange()"
-        :disabled="disabled"
-        :label="capitalize($t('age'))"
-      />
 
       <div class="input-layout">
-        <label for="character-kin" class="base-label">{{ $t("kin") }}</label>
+        <label for="character-kin" class="base-label font-small">
+          {{ $t("kin") }}
+        </label>
         <select id="character-kin" v-model="mdata.kin" :disabled="disabled">
           <option v-for="kin in kin_select" :key="kin.id" v-bind:value="kin.id">
             {{ capitalize($t(kin.id)) }}
@@ -157,7 +155,7 @@ export default Vue.extend({
       </div>
 
       <div class="input-layout">
-        <label for="character-class" class="base-label">
+        <label for="character-class" class="base-label font-small">
           {{ $t("Profession") }}
         </label>
         <select
@@ -170,15 +168,45 @@ export default Vue.extend({
           </option>
         </select>
       </div>
-      <span v-if="this.mdata.age" class="capitalize">
-        {{ this.ageType }}
-      </span>
-      <span v-if="this.mdata.age" class="capitalize">
-        {{ $t("Reputation") }}: {{ this.reputation }}
-      </span>
-      <span class="capitalize">
-        {{ $t("XP") }}: {{ this.mdata.experience }}
-      </span>
+
+      <FLInput
+        v-model="mdata.age"
+        type="number"
+        min="10"
+        max="999"
+        :placeholder="ageRange()"
+        :disabled="disabled"
+        :label="`${capitalize($t('age'))} ${this.ageType}`"
+      />
+
+      <div v-if="freeEdit && true" class="display-contents">
+        <FLInput
+          v-model.number="mdata.experience"
+          type="number"
+          min="0"
+          max="99"
+          :placeholder="0"
+          :disabled="disabled"
+          :label="capitalize($t('XP'))"
+        />
+        <FLInput
+          v-model.number="mdata.reputation"
+          type="number"
+          min="0"
+          max="99"
+          :placeholder="0"
+          :disabled="disabled"
+          :label="capitalize($t('Reputation'))"
+        />
+      </div>
+      <div v-else class="display-contents">
+        <span class="capitalize">
+          {{ $t("Reputation") }}: {{ this.reputation }}
+        </span>
+        <span class="capitalize">
+          {{ $t("XP") }}: {{ this.mdata.experience }}
+        </span>
+      </div>
     </div>
 
     <!-- spacer -->
@@ -217,6 +245,10 @@ label,
 .contentgroup {
   display: flex;
   flex-wrap: wrap;
+}
+
+.display-contents {
+  display: contents;
 }
 
 .cell {
