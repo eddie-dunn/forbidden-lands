@@ -127,6 +127,8 @@ export default FLNumberInput
   @media print {
     display: none;
   }
+  margin: 0;
+  outline-width: 0;
   border: solid 1px @pastel-green;
   background: @pastel-green;
   color: white;
