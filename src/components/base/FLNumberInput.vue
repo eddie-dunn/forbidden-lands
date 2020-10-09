@@ -13,7 +13,7 @@ export class FLNumberInput extends Vue {
   @Prop({ default: false }) disabled!: boolean
   @Prop({ default: () => () => {} }) enterCb!: Function
   @Prop({ default: () => () => {} }) ctrlEnterCb!: Function
-  @Prop({ default: "" }) value!: string
+  @Prop({ default: null }) value!: number | null
 
   @Prop({ default: true }) canIncrement!: boolean
   @Prop({ default: true }) canDecrement!: boolean
@@ -31,7 +31,7 @@ export class FLNumberInput extends Vue {
   }
 
   inputEvent($event: any) {
-    this.$emit("input", $event.target.value)
+    this.$emit("input", Number($event.target.value))
   }
 
   increment() {
