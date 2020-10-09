@@ -1,5 +1,9 @@
 /* eslint-disable no-console */
-import { CharData, calcCharacterXP, getNewGear } from "@/characterData"
+import {
+  CharData,
+  calcCharacterXP,
+  getNewGear,
+} from "@/data/character/characterData"
 import { TalentAll, TalentGeneral } from "@/types"
 import { Item } from "@/data/items/itemTypes"
 

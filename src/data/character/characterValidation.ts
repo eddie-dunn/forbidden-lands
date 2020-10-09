@@ -1,5 +1,5 @@
 // TODO: Move character validation here
-import { CharacterData } from "@/characterData"
+import { CharacterData } from "@/data/character/characterData"
 
 export function validateBaseNew(characterData: CharacterData): boolean {
   const valid =

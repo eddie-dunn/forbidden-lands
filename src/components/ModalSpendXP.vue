@@ -8,7 +8,7 @@ import {
   CharacterData,
   CharacterTalent,
   calcCharacterXP,
-} from "@/characterData"
+} from "@/data/character/characterData"
 
 import SkillSelector from "@/components/SkillSelector.vue"
 import TalentSelector from "@/components/TalentSelector.vue"

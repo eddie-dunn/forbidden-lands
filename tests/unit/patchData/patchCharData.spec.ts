@@ -1,4 +1,4 @@
-import { CharData, CharacterTalent } from "@/characterData"
+import { CharData, CharacterTalent } from "@/data/character/characterData"
 import {
   runPatches,
   CURRENT_PATCH_VERSION,

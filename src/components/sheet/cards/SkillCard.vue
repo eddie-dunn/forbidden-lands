@@ -2,7 +2,7 @@
 import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 
-import { CharacterData, validateSkills } from "@/characterData"
+import { CharacterData, validateSkills } from "@/data/character/characterData"
 import { getAgeType } from "@/age.ts"
 import { Age } from "@/types.ts"
 

@@ -5,7 +5,7 @@
 import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 import { PROFESSION } from "@/classes"
-import { CharData, Gear } from "@/characterData"
+import { CharData, Gear } from "@/data/character/characterData"
 import { Item, ItemWeapon, Range } from "@/data/items/itemTypes"
 
 import FLNumberInput from "@/components/FLNumberInput.vue"

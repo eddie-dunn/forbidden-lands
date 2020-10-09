@@ -9,7 +9,7 @@ import {
   CharacterData,
   CharacterTalent,
   CharacterMetaDataStatus,
-} from "@/characterData"
+} from "@/data/character/characterData"
 
 interface TranslatedTalent {
   translation: string

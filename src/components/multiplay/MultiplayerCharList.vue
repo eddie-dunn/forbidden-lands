@@ -10,7 +10,7 @@ import {
 import CharacterCard, {
   EV_CARD_CLICKED,
 } from "@/components/base/CharacterCard.vue"
-import { CharacterData } from "@/characterData.ts"
+import { CharacterData } from "@/data/character/characterData"
 import { UserData } from "@/components/multiplay/protocol.ts"
 
 export const EMIT_SELECTED_CHARS = "mpcharlist selected chars"

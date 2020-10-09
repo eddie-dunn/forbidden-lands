@@ -1,7 +1,11 @@
 <script lang="ts">
 import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
-import { CharacterData, CharacterTalent, Conditions } from "@/characterData"
+import {
+  CharacterData,
+  CharacterTalent,
+  Conditions,
+} from "@/data/character/characterData"
 
 import { DiceColor } from "@/components/dice/diceTypes"
 import SvgIcon from "@/components/SvgIcon.vue"

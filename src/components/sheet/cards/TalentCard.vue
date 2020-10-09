@@ -6,7 +6,7 @@ import {
   CharacterData,
   CharacterTalent,
   validateTalents,
-} from "@/characterData"
+} from "@/data/character/characterData"
 
 import FLNumberInput from "@/components/FLNumberInput.vue"
 import Card from "@/components/Card.vue"

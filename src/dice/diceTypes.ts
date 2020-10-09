@@ -1,4 +1,4 @@
-import { CharacterData } from "@/characterData"
+import { CharacterData } from "@/data/character/characterData"
 import {
   Attribute as TAttribute,
   Skill as TSkill,

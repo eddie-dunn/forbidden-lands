@@ -4,7 +4,7 @@ import { Component, Prop, Watch } from "vue-property-decorator"
 
 import { BusEvent, EventBus } from "@/util/eventBus"
 import { Protocol, ProtocolTypes } from "@/components/multiplay/protocol"
-import { getNewCharacterData, CharData } from "@/characterData"
+import { getNewCharacterData, CharData } from "@/data/character/characterData"
 import { getCharDataFromQuery, CharDataQueryObj } from "@/util/characterUtil"
 import {
   GET_MP_PLAYER,

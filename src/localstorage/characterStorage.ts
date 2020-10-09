@@ -6,7 +6,7 @@ import {
   getNewCharacterData,
   parseCharacterData,
   calcCharacterXP,
-} from "@/characterData"
+} from "@/data/character/characterData"
 import { runPatches } from "@/localstorage/charDataPatches"
 
 export const CHAR_STORE_KEY: string = "savedCharacters"

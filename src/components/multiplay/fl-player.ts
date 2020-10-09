@@ -9,7 +9,7 @@ import {
 } from "@/components/multiplay/protocol"
 import { PlayerMessageHandler, PlayerReceive } from "./playerMessageHandler"
 
-import { CharacterData } from "@/characterData"
+import { CharacterData } from "@/data/character/characterData"
 
 function emitCharUpdate(update: PlayerReceive) {
   EventBus.$emit(BusEvent.characterUpdate, update)

@@ -1,6 +1,6 @@
 import Peer, { DataConnection } from "peerjs"
 
-import { CharacterData } from "@/characterData.ts"
+import { CharacterData } from "@/data/character/characterData"
 
 // Event types & values
 type user_connect = "user connects"

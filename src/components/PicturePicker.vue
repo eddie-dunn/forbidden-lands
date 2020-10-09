@@ -4,7 +4,7 @@ import Component from "vue-class-component"
 
 import UrlStorage from "@/localStorage"
 
-import { CharData } from "@/characterData"
+import { CharData } from "@/data/character/characterData"
 
 import IconButton from "@/components/base/IconButton.vue"
 import FLButton from "@/components/base/FLButton.vue"

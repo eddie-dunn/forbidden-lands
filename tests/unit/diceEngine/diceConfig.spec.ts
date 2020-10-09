@@ -6,7 +6,10 @@ import {
 } from "@/dice/diceTypes"
 import * as T from "@/dice/translationKeys"
 import { SKILLS } from "@/skills.ts"
-import { CharacterData, getNewCharacterData } from "@/characterData"
+import {
+  CharacterData,
+  getNewCharacterData,
+} from "@/data/character/characterData"
 
 describe(`${getDice.name} generic`, () => {
   it("returns a blank config", () => {

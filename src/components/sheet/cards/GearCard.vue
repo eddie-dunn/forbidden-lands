@@ -2,7 +2,7 @@
 import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 
-import { CharData } from "@/characterData"
+import { CharData } from "@/data/character/characterData"
 
 import GearPicker from "@/components/GearPicker.vue"
 import Card from "@/components/Card.vue"

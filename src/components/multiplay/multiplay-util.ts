@@ -1,6 +1,6 @@
 import { INodeUser, UserData } from "@/components/multiplay/protocol"
 
-import { CharacterData } from "@/characterData.ts"
+import { CharacterData } from "@/data/character/characterData"
 
 /** Return a list of all GMs/Admins */
 export function getGms(users: INodeUser[]): INodeUser[] {

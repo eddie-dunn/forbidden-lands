@@ -3,7 +3,10 @@ import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 
 import { MP_SAVE_CHAR, SET_PAGE_SUBTITLE } from "@/store/store-types"
-import { CharData, CharacterMetaDataStatus } from "@/characterData"
+import {
+  CharData,
+  CharacterMetaDataStatus,
+} from "@/data/character/characterData"
 
 import SvgIcon from "@/components/SvgIcon.vue"
 import FLButton from "@/components/base/FLButton.vue"

@@ -2,7 +2,7 @@
 import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 
-import { CharData } from "@/characterData"
+import { CharData } from "@/data/character/characterData"
 
 import XPModal from "@/components/XPModal.vue"
 import ModalSpendXP from "@/components/ModalSpendXP.vue"

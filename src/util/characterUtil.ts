@@ -2,7 +2,7 @@ import {
   CharacterData,
   getNewCharacterData,
   AttributeData,
-} from "@/characterData"
+} from "@/data/character/characterData"
 import {
   ExtendedKinName,
   KinName,

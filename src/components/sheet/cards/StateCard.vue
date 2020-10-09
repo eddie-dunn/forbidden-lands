@@ -18,7 +18,7 @@ import {
   CharacterMetaDataStatus,
   CharacterMetaData,
   calcCharacterXP,
-} from "@/characterData"
+} from "@/data/character/characterData"
 import FLNumberInput from "@/components/FLNumberInput.vue"
 
 @Component({

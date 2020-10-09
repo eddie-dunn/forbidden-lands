@@ -6,7 +6,7 @@ import BaseSelector from "@/components/BaseSelector.vue"
 import Card from "@/components/Card.vue"
 import FlavorSelector from "@/components/FlavorSelector.vue"
 
-import { CharacterData, validateBase } from "@/characterData"
+import { CharacterData, validateBase } from "@/data/character/characterData"
 
 @Component({
   components: {

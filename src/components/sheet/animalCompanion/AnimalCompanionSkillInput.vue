@@ -9,7 +9,7 @@ import { capitalize } from "@/util/util.ts"
 import FLButton from "@/components/base/FLButton.vue"
 import IconButton from "@/components/base/IconButton.vue"
 
-import { CharacterData } from "@/characterData"
+import { CharacterData } from "@/data/character/characterData"
 import FLSelect, { Option } from "@/components/base/FLSelect.vue"
 
 /**

@@ -7,7 +7,7 @@ import FLSelect, { Option } from "@/components/base/FLSelect.vue"
 import IconButton from "@/components/base/IconButton.vue"
 import ModalConfirm from "@/components/ModalConfirm.vue"
 
-import { CharacterData } from "@/characterData"
+import { CharacterData } from "@/data/character/characterData"
 import { SKILLS, SkillObj } from "@/skills.ts"
 import { Skill } from "@/types.ts"
 

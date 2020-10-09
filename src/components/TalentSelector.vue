@@ -22,7 +22,7 @@ import {
   CharacterData,
   CharacterTalent,
   CharacterMetaDataStatus,
-} from "@/characterData"
+} from "@/data/character/characterData"
 import Vue from "vue"
 import { TranslateResult } from "vue-i18n"
 import FLButton from "@/components/base/FLButton.vue"

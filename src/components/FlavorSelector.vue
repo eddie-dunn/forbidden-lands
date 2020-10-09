@@ -5,7 +5,7 @@ import { capitalize } from "@/util/util"
 import { getAgeType, getAgeRange, getReputation } from "@/age"
 import { CLASS as PROFESSION } from "@/classes"
 import Vue from "vue"
-import { CharacterData } from "@/characterData"
+import { CharacterData } from "@/data/character/characterData"
 import VueI18n from "vue-i18n"
 
 export default Vue.extend({

@@ -2,7 +2,7 @@
 import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 
-import { CharacterData } from "@/characterData"
+import { CharacterData } from "@/data/character/characterData"
 
 import Mount from "@/components/sheet/mount/Mount.vue"
 import Card from "@/components/Card.vue"

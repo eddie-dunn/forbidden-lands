@@ -7,7 +7,7 @@ import { Age } from "@/types"
 import { capitalize } from "@/util/util"
 import { getAgeType, getAgeRange, getReputation } from "@/age"
 import { CLASS as PROFESSION } from "@/classes"
-import { CharacterData } from "@/characterData"
+import { CharacterData } from "@/data/character/characterData"
 
 import FLInput from "@/components/base/FLInput.vue"
 

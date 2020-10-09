@@ -5,7 +5,10 @@ import { getAttributePoints, getAgeType } from "@/age"
 import { Attribute, KinName, Profession, Age } from "@/types"
 import { CLASS as PROFESSION_MAP } from "@/classes"
 import { KIN as KIN_MAP } from "@/kin"
-import { CharacterData, CharacterMetaDataStatus } from "@/characterData"
+import {
+  CharacterData,
+  CharacterMetaDataStatus,
+} from "@/data/character/characterData"
 import SvgIcon from "@/components/SvgIcon.vue"
 import NumberInput from "@/components/FLNumberInput.vue"
 

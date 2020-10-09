@@ -1,6 +1,6 @@
 import Vue from "vue"
 import { Protocol, ProtocolTypes } from "@/components/multiplay/protocol"
-import { CharData } from "@/characterData"
+import { CharData } from "@/data/character/characterData"
 
 export const EventBus = new Vue()
 

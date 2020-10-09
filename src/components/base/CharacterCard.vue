@@ -1,6 +1,9 @@
 <script lang="ts">
 import Vue from "vue"
-import { CharacterData, validateNewCharacter } from "@/characterData"
+import {
+  CharacterData,
+  validateNewCharacter,
+} from "@/data/character/characterData"
 import Modal from "@/components/Modal.vue"
 
 const VALID = "✓"

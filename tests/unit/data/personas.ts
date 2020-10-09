@@ -1,4 +1,7 @@
-import { CharacterData, getNewCharacterData } from "@/characterData"
+import {
+  CharacterData,
+  getNewCharacterData,
+} from "@/data/character/characterData"
 const UNSET = null
 
 const newPersona = getNewCharacterData()
