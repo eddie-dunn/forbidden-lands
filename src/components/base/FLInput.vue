@@ -47,7 +47,7 @@ export default class FLInput extends Vue {
 
 <template>
   <div class="fl-input">
-    <label :for="_id">
+    <label :for="_id" class="font-small">
       <SvgIcon v-if="iconName" class="" :name="iconName" />
       <span>{{ label }}</span>
       <span v-if="required" class="required-sign">*</span>

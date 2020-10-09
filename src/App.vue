@@ -244,6 +244,8 @@ input[type="text"] {
   background-color: @background-color;
   color: @slate-black;
   height: auto;
+  height: 2.5rem;
+  font-size: 1rem;
   min-height: 1rem;
   border: 2px solid @pastel-green-transparent;
   padding: 0.3rem;
@@ -261,7 +263,10 @@ select {
   background-color: @background-color;
   color: @slate-black;
   height: auto;
+  height: 2.5rem;
+  font-size: 1rem;
   border: 2px solid @pastel-green-transparent;
+  border-radius: 0;
   appearance: none;
   background-image: url(~./assets/logo.png);
   background-size: 0.7rem;
@@ -341,5 +346,9 @@ select {
   &-orange {
     color: orange;
   }
+}
+
+.font-small {
+  font-size: 0.875rem;
 }
 </style>

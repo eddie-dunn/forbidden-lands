@@ -42,7 +42,9 @@ export default FLSelect
 
 <template>
   <div class="fl-select">
-    <label v-if="label" :for="label" class="label">{{ label }}</label>
+    <label v-if="label" :for="label" class="label font-small">
+      {{ label }}
+    </label>
     <select
       :id="label"
       :value="value"
