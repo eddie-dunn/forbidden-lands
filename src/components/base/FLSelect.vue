@@ -25,6 +25,7 @@ export class FLSelect extends Vue {
   @Prop({ default: true }) initialDisabled!: boolean
   @Prop({ default: null }) value!: string | null
   @Prop({ default: false }) fullWidth!: boolean
+  @Prop({ default: false }) inGrid!: boolean
   @Prop({ default: "row" }) direction!: "row" | "column"
 
   optionExtras(option: Option): string {
@@ -49,8 +50,18 @@ export default FLSelect
 </script>
 
 <template>
-  <div :class="['fl-select', direction === 'column' && 'fl-select-column']">
-    <label v-if="label" :for="label" class="label font-small">
+  <div
+    :class="[
+      'fl-select',
+      direction === 'column' && 'fl-select-column',
+      inGrid && 'in-grid',
+    ]"
+  >
+    <label
+      v-if="label"
+      :for="label"
+      :class="[!inGrid && 'label', 'font-small']"
+    >
       {{ label }}
     </label>
     <select
@@ -106,5 +117,9 @@ export default FLSelect
 
 .full-width {
   width: 100%;
+}
+
+.in-grid {
+  display: contents;
 }
 </style>
