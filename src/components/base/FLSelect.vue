@@ -4,7 +4,7 @@ import { Component, Prop } from "vue-property-decorator"
 
 export type Option = {
   id: string
-  name: string
+  name?: string
   extras?: string[]
 }
 
@@ -25,10 +25,18 @@ export class FLSelect extends Vue {
   @Prop({ default: true }) initialDisabled!: boolean
   @Prop({ default: null }) value!: string | null
   @Prop({ default: false }) fullWidth!: boolean
+  @Prop({ default: "row" }) direction!: "row" | "column"
 
   optionExtras(option: Option): string {
     if (!option.extras || !option.extras.length) return ""
     return " " + option.extras.join(" ")
+  }
+
+  renderOption(option: Option): string {
+    if (option.name) {
+      return option.name + this.optionExtras(option)
+    }
+    return option.id + this.optionExtras(option) // FIXME: Translate
   }
 
   onInput(ev: any) {
@@ -41,7 +49,7 @@ export default FLSelect
 </script>
 
 <template>
-  <div class="fl-select">
+  <div :class="['fl-select', direction === 'column' && 'fl-select-column']">
     <label v-if="label" :for="label" class="label font-small">
       {{ label }}
     </label>
@@ -62,7 +70,7 @@ export default FLSelect
       </option>
 
       <option v-for="option in options" :key="option.id" :value="option.id">
-        {{ option.name + optionExtras(option) }}
+        {{ renderOption(option) }}
       </option>
 
       <optgroup
@@ -85,6 +93,11 @@ export default FLSelect
 <style lang="less" scoped>
 .fl-select {
   margin: 1rem;
+}
+
+.fl-select-column {
+  display: inline-flex;
+  flex-direction: column;
 }
 
 .label {
