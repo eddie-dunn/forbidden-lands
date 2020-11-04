@@ -1,4 +1,5 @@
 <script lang="ts">
+/* eslint-disable no-console */
 import Vue from "vue"
 import LocaleChanger from "@/components/LocaleChanger.vue"
 import Notify from "@/components/base/Notify.vue"
@@ -47,10 +48,16 @@ export default Vue.extend({
       this.updateExists = true
     },
     refreshApp() {
+      console.log("App update clicked")
       this.updateExists = false
       if (!this.registration || !this.registration.waiting) {
+        console.log("early return", {
+          registration_waiting: (this.registration || {}).waiting,
+          registration: this.registration,
+        })
         return
       }
+      console.log("Service workier postMessage: skipWaiting")
       this.registration.waiting.postMessage("skipWaiting")
     },
     onOpenDiceModal(args: any) {
@@ -95,14 +102,10 @@ export default Vue.extend({
     // Service worker update from:
     // https://medium.com/@dougallrich/give-users-control-over-app-updates-in-vue-cli-3-pwas-20453aedc1f2
     document.addEventListener("swUpdated", this.showRefreshUI, { once: true })
+    if (!navigator.serviceWorker) {
+      return
+    }
     navigator.serviceWorker.addEventListener("controllerchange", () => {
-      if (!sessionStorage.getItem("__hasPreviousSW")) {
-        /* eslint-disable no-console */
-        console.warn("SETTING SW")
-        /* eslint-enable no-console */
-        sessionStorage.setItem("__hasPreviousSW", "true")
-        return
-      }
       if (this.refreshing) return
       this.refreshing = true
       window.location.reload()
