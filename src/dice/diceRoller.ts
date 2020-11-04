@@ -32,26 +32,33 @@ const sucesssMap: { [key: number]: number } = {
   12: 4,
 }
 
-function roll(nbrDice: number, sides: TDiceSides) {
+function roll(nbrDice: number | null | undefined, sides: TDiceSides) {
   let successes = 0
   let fails = 0
   const rollResult: number[] = []
-  for (let i = 1; i <= nbrDice; i++) {
+  if (!nbrDice) {
+    return { successes, fails, rollResult }
+  }
+  const lim = Math.abs(nbrDice)
+  for (let i = 1; i <= lim; i++) {
     const result = rollDiceType(sides)
     successes += sucesssMap[result] || 0
     fails += failMap[result] || 0
     rollResult.push(result)
   }
+  if (nbrDice < 0) {
+    successes = -successes // negative nbr of dice inverts successes
+  }
   return { successes, fails, rollResult }
 }
 
 export function rollDice(config: IDiceConfig): IDiceResult {
-  const whiteResult = roll(config.white || 0, 6)
-  const redResult = roll(config.red || 0, 6)
-  const blackResult = roll(config.black || 0, 6)
-  const greenResult = roll(config.green || 0, 8)
-  const blueResult = roll(config.blue || 0, 10)
-  const orangeResult = roll(config.orange || 0, 12)
+  const whiteResult = roll(config.white, 6)
+  const redResult = roll(config.red, 6)
+  const blackResult = roll(config.black, 6)
+  const greenResult = roll(config.green, 8)
+  const blueResult = roll(config.blue, 10)
+  const orangeResult = roll(config.orange, 12)
   const failWhite = whiteResult.fails
   const failBlack = blackResult.fails
   const successes =
