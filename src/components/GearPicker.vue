@@ -471,10 +471,7 @@ export default class GearPicker extends Vue {
 
       <div class="consumable-item">
         <label for="food">{{ $t("Food") }}</label>
-        <select
-          v-model="charData.gear.consumables.food"
-          :disabled="status === 'new' || viewOnly"
-        >
+        <select v-model="charData.gear.consumables.food" :disabled="viewOnly">
           <option
             v-for="val in [0, 6, 8, 10, 12]"
             v-bind:key="val"
@@ -489,7 +486,7 @@ export default class GearPicker extends Vue {
         <label for="water">{{ $t("Water") }}</label>
         <select
           v-model.number="charData.gear.consumables.water"
-          :disabled="status === 'new' || viewOnly"
+          :disabled="viewOnly"
         >
           <option
             v-for="val in [0, 6, 8, 10, 12]"
@@ -505,7 +502,7 @@ export default class GearPicker extends Vue {
         <label for="arrows">{{ $t("Arrows") }}</label>
         <select
           v-model.number="charData.gear.consumables.arrows"
-          :disabled="status === 'new' || viewOnly"
+          :disabled="viewOnly"
         >
           <option
             v-for="val in [0, 6, 8, 10, 12]"
@@ -521,7 +518,7 @@ export default class GearPicker extends Vue {
         <label for="torches">{{ $t("Torches") }}</label>
         <select
           v-model.number="charData.gear.consumables.torches"
-          :disabled="status === 'new' || viewOnly"
+          :disabled="viewOnly"
         >
           <option
             v-for="val in [0, 6, 8, 10, 12]"
