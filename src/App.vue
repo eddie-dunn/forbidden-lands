@@ -45,7 +45,7 @@ export default Vue.extend({
   methods: {
     showRefreshUI(e: any) {
       this.registration = e.detail
-      this.updateExists = true
+      // this.updateExists = true
     },
     refreshApp() {
       console.log("App update clicked")
