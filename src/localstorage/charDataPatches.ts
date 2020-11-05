@@ -160,7 +160,7 @@ function _apply(
   applyAllPatches?: boolean
 ): CharData {
   // Init
-  let cCopy: CharData = JSON.parse(JSON.stringify(charData))
+  const cCopy: CharData = JSON.parse(JSON.stringify(charData))
   let temporaryPatchApplied = false
   if (applyAllPatches) cCopy.metadata.dataVersion = -1
 

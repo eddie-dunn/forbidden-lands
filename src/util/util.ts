@@ -63,7 +63,7 @@ const NAMES = [
 
 export function randomName(words = 1, nameList: string[] = NAMES): string {
   const getName = () => nameList[Math.floor(Math.random() * nameList.length)]
-  let names = []
+  const names = []
   for (let i = 0; i < words; i++) {
     names.push(getName())
   }

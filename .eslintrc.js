@@ -7,6 +7,8 @@ module.exports = {
   rules: {
     "no-console": process.env.NODE_ENV === "production" ? "error" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
+    "vue/no-mutating-props": "off", // FIXME: Remove this and fix all errors
+    "vue/custom-event-name-casing": "off", // FIXME: Remove this and fix all errors
   },
   parserOptions: {
     parser: "@typescript-eslint/parser",

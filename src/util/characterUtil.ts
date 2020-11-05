@@ -91,7 +91,7 @@ export function getCharDataFromQuery(query: CharDataQueryObj): CharacterData {
       .join(", ")
   }
 
-  let formativeEventNotes = fevents.map(
+  const formativeEventNotes = fevents.map(
     ({ name, story, skills, talent, items }) => {
       return `
 ## ${capitalize(name)}

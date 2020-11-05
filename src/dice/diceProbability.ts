@@ -18,12 +18,12 @@ function conv(p1: number[], p2: number[]): number[] {
   const n1 = p1.length
   const n2 = p2.length
   const resLength = n1 + n2 - 1
-  let res = []
+  const res = []
   for (let i = 0; i <= resLength; i++) {
     let ac = 0
     res[i] = 0
     for (let j1 = 0; j1 <= p1.length; j1++) {
-      let j2 = i - j1
+      const j2 = i - j1
       if (j2 >= 0 && j2 < p2.length) {
         ac += (p2[j2] || 0) * (p1[j1] || 0)
       }
