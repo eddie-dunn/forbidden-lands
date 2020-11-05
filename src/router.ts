@@ -112,5 +112,10 @@ export default new Router({
       name: "translations",
       component: () => import("./views/Translations.vue"),
     },
+    {
+      path: "/options",
+      name: "options",
+      component: () => import("./views/Options.vue"),
+    },
   ],
 })

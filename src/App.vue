@@ -95,6 +95,9 @@ export default Vue.extend({
           <router-link v-if="$betaMode || true" to="/multiplayer" exact>
             {{ $t("Multiplay") + " (beta)" }}
           </router-link>
+          <router-link to="/options" v-if="$BETA">
+            Options
+          </router-link>
           <router-link to="/sandbox" exact v-if="$debugMode">
             Sandbox
           </router-link>

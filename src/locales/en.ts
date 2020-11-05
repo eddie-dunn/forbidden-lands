@@ -448,6 +448,7 @@ const mixedCase = {
   "Next": "Next",
   "None selected": "None selected",
   "Notes": "Notes",
+  "Options": "Options",
   "Other": "Other",
   "Personality": "Personality",
   "Please select the following in": "Please select the following in",

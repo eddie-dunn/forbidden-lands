@@ -448,6 +448,8 @@ const mixedCase = {
   "Next": "Nästa",
   "None selected": "Ingen vald",
   "Notes": "Anteckningar",
+  "Open": "Öppna",
+  "Options": "Alternativ",
   "Other": "Annat",
   "Personality": "Personlighet",
   "Please select the following in": "Vänligen välj följande i",

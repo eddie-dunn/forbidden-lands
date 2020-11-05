@@ -76,36 +76,44 @@ export default class Backup extends Vue {
 
 <template>
   <div class="import-export text-left">
-    <h3>Export</h3>
-    <FLButton v-if="!exportBlob" @click="generateBlob" :disabled="!!exportBlob">
-      {{ $t("GENERATE_DOWNLOAD_LINK") }}
-    </FLButton>
-    <div class="" v-if="exportBlob">
-      <a
-        class="download-link wide"
-        :href="exportBlob"
-        :download="exportFilename"
-        @click="downloadClicked"
+    <div>
+      <h3>Export</h3>
+      <FLButton
+        v-if="!exportBlob"
+        @click="generateBlob"
+        :disabled="!!exportBlob"
       >
-        {{ $t("Download data") }}
-      </a>
-    </div>
-    <h3>Import</h3>
-    <FileReader
-      :label="$t('Select import file')"
-      @load="importDataLoaded"
-      accept=".flcdata"
-      :key="importKey"
-    >
-      <div v-if="importData">
-        <FLButton type="danger" @click="importBackup">
-          {{ $t("Import backup") }}
-        </FLButton>
-        <p>
-          {{ $t("IMPORT_WARNING") }}
-        </p>
+        {{ $t("GENERATE_DOWNLOAD_LINK") }}
+      </FLButton>
+      <div class="" v-if="exportBlob">
+        <a
+          class="download-link wide"
+          :href="exportBlob"
+          :download="exportFilename"
+          @click="downloadClicked"
+        >
+          {{ $t("Download data") }}
+        </a>
       </div>
-    </FileReader>
+    </div>
+    <div>
+      <h3>Import</h3>
+      <FileReader
+        :label="$t('Select import file')"
+        @load="importDataLoaded"
+        accept=".flcdata"
+        :key="importKey"
+      >
+        <div v-if="importData">
+          <FLButton type="danger" @click="importBackup">
+            {{ $t("Import backup") }}
+          </FLButton>
+          <p>
+            {{ $t("IMPORT_WARNING") }}
+          </p>
+        </div>
+      </FileReader>
+    </div>
   </div>
 </template>
 
@@ -115,6 +123,11 @@ export default class Backup extends Vue {
 .import-export {
   padding: 0 0.5rem;
   font-size: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  :not(:last-child) {
+    margin-right: 1rem;
+  }
 }
 
 .download-link {
