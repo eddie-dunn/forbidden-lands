@@ -6,8 +6,8 @@ import Notify from "@/components/base/Notify.vue"
 import NavBar from "@/components/base/NavBar.vue"
 import NavDrawer from "@/components/base/NavDrawer.vue"
 import Backup from "@/components/Backup.vue"
-import FLButton from "@/components/base/FLButton.vue"
 import DiceModal, { defaultDice } from "@/components/dice/DiceModal.vue"
+import { Updater } from "@/components/base/Updater.vue"
 
 import {
   GET_PAGE_TITLE,
@@ -26,40 +26,20 @@ export default Vue.extend({
   components: {
     Backup,
     DiceModal,
-    FLButton,
     LocaleChanger,
     NavDrawer,
     NavBar,
     Notify,
+    Updater,
   },
   data() {
     return {
-      refreshing: false,
-      registration: null as any,
-      updateExists: false,
       showNav: false,
       showDiceModal: false,
       diceModalConfig: DEFAULT_DICE_MODAL_CONF,
     }
   },
   methods: {
-    showRefreshUI(e: any) {
-      this.registration = e.detail
-      // this.updateExists = true
-    },
-    refreshApp() {
-      console.log("App update clicked")
-      this.updateExists = false
-      if (!this.registration || !this.registration.waiting) {
-        console.log("early return", {
-          registration_waiting: (this.registration || {}).waiting,
-          registration: this.registration,
-        })
-        return
-      }
-      console.log("Service workier postMessage: skipWaiting")
-      this.registration.waiting.postMessage("skipWaiting")
-    },
     onOpenDiceModal(args: any) {
       // FIXME: Abstract away the keys for settings this up into separate module
       // FIXME: Enable handling of willpower
@@ -99,17 +79,6 @@ export default Vue.extend({
     },
   },
   created() {
-    // Service worker update from:
-    // https://medium.com/@dougallrich/give-users-control-over-app-updates-in-vue-cli-3-pwas-20453aedc1f2
-    document.addEventListener("swUpdated", this.showRefreshUI, { once: true })
-    if (!navigator.serviceWorker) {
-      return
-    }
-    navigator.serviceWorker.addEventListener("controllerchange", () => {
-      if (this.refreshing) return
-      this.refreshing = true
-      window.location.reload()
-    })
     this.addEventListener("open-dice-modal")
   },
   beforeDestroy() {
@@ -128,14 +97,9 @@ export default Vue.extend({
       @click-menu="showNav = !showNav"
       @click-dice="showDiceModal = !showDiceModal"
     />
-    <FLButton
-      v-if="updateExists"
-      type="danger"
-      style="margin: 1rem"
-      @click="refreshApp"
-    >
-      New version available! Click to update
-    </FLButton>
+
+    <Updater />
+
     <router-view />
 
     <NavDrawer :visible="showNav" @close="showNav = false" class="nav-body">
