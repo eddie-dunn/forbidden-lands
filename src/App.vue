@@ -1,6 +1,7 @@
 <script lang="ts">
 /* eslint-disable no-console */
 import Vue from "vue"
+
 import LocaleChanger from "@/components/LocaleChanger.vue"
 import Notify from "@/components/base/Notify.vue"
 import NavBar from "@/components/base/NavBar.vue"
@@ -14,6 +15,8 @@ import {
   GET_PAGE_SUBTITLE,
   GET_MP_ACTIVE,
 } from "@/store/store-types"
+
+const CONSTANTS = require("@/util/const.js")
 
 const DEFAULT_DICE_MODAL_CONF = {
   title: "",
@@ -37,6 +40,7 @@ export default Vue.extend({
       showNav: false,
       showDiceModal: false,
       diceModalConfig: DEFAULT_DICE_MODAL_CONF,
+      buildVersion: CONSTANTS.APP_VERSION,
     }
   },
   methods: {
@@ -122,6 +126,9 @@ export default Vue.extend({
         <div>{{ $t("Language") }} <LocaleChanger /></div>
         <Backup />
       </section>
+      <section class="nav-section-footer">
+        {{ buildVersion }}
+      </section>
     </NavDrawer>
 
     <DiceModal
@@ -152,6 +159,12 @@ body {
 }
 
 .nav-body {
+  .body {
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+  }
+
   a {
     font-weight: bold;
     color: @color-text;
@@ -161,8 +174,15 @@ body {
     }
   }
 }
+
 .nav-section {
   padding: 0 0.4rem;
+}
+
+.nav-section-footer {
+  font-size: 0.75rem;
+  align-self: end;
+  justify-self: center;
 }
 
 .route-links {
