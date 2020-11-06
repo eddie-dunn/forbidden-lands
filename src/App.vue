@@ -119,7 +119,7 @@ export default Vue.extend({
 </script>
 
 <template>
-  <div id="app">
+  <div id="app" style="margin: 0 auto;">
     <NavBar
       :showNav="showNav"
       :showMp="showMp"
@@ -217,7 +217,6 @@ body {
   display: flex;
   flex-direction: column;
   max-width: 1024px;
-  margin: 0 auto;
   min-height: 100vh;
 }
 
