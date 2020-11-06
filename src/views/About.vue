@@ -1,15 +1,34 @@
 <script>
 import { SET_PAGE_TITLE } from "@/store/store-types"
+import { DEBUG_KEY } from "@/util/const"
 
 export default {
   name: "about_page",
   data() {
     return {
+      debugClicks: 0,
       buildVersion: __APP_VERSION__,
     }
   },
   mounted() {
     this.$store.commit(SET_PAGE_TITLE, "About FLC")
+  },
+
+  methods: {
+    debugClick() {
+      this.debugClicks++
+      console.log(6 - this.debugClicks) // eslint-disable-line no-console
+      if (this.debugClicks > 5) {
+        const debugOn = window.sessionStorage.getItem(DEBUG_KEY)
+        if (debugOn) {
+          window.sessionStorage.removeItem(DEBUG_KEY)
+        } else {
+          window.sessionStorage.setItem(DEBUG_KEY, "on")
+        }
+        // window.location.replace("/")
+        window.location.reload()
+      }
+    },
   },
 }
 </script>
@@ -140,7 +159,9 @@ export default {
 
       <!-- spacer -->
     </div>
-    <div class="version-footer">{{ buildVersion }}</div>
+    <button class="version-footer" @click="debugClick">
+      {{ buildVersion }}{{ $debugMode ? "_DEBUG" : "" }}
+    </button>
   </div>
 </template>
 
@@ -158,7 +179,17 @@ li {
 }
 
 .version-footer {
+  //unstyle button
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: vertical-text;
+  outline: inherit;
+
   margin-top: 5vh;
+  margin-bottom: 2rem;
   font-size: 0.8rem;
 }
 </style>

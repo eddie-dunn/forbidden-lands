@@ -10,6 +10,8 @@ import Vue from "vue"
 import i18n from "./i18n"
 import router from "./router"
 import { store } from "@/store/store.ts"
+// @ts-ignore
+import { DEBUG_KEY } from "@/util/const"
 
 Vue.config.productionTip = false
 
@@ -25,7 +27,6 @@ Vue.prototype.$characterStore = new CharacterStore()
 Vue.prototype.$notify = notify
 
 // $debugMode is used to toggle stuff that is not ready for production yet
-const DEBUG_KEY = "FLC_DEBUG_MODE"
 const DEBUG_MODE = Boolean(sessionStorage.getItem(DEBUG_KEY))
 Vue.prototype.$debugMode = DEBUG_MODE
 
