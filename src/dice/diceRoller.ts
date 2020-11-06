@@ -35,9 +35,9 @@ const sucesssMap: { [key: number]: number } = {
 function roll(nbrDice: number, sides: TDiceSides) {
   let successes = 0
   let fails = 0
-  let rollResult: number[] = []
+  const rollResult: number[] = []
   for (let i = 1; i <= nbrDice; i++) {
-    let result = rollDiceType(sides)
+    const result = rollDiceType(sides)
     successes += sucesssMap[result] || 0
     fails += failMap[result] || 0
     rollResult.push(result)

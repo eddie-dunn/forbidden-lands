@@ -11,7 +11,7 @@ import {
 import * as T from "./translationKeys"
 
 function pruneConfig(config: any): IDiceConfigWithLog {
-  let newObj: any = {}
+  const newObj: any = {}
   Object.keys(config).forEach((prop: any) => {
     if (config[prop]) {
       newObj[prop] = config[prop]

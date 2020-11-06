@@ -21,7 +21,7 @@ export function diceSimSuccesses(
 
   let successes = 0
   for (let i = 0; i <= loops; i++) {
-    let result = rollDice(config)
+    const result = rollDice(config)
     successes += result.successes >= leastExpectedNbrSucceses ? 1 : 0
   }
   return successes / loops

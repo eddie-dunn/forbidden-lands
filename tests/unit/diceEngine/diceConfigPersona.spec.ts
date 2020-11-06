@@ -9,7 +9,7 @@ import { Bertil } from "../data/personas"
 import { Attribute as TAttribute, Skill as TSkill } from "@/types"
 
 describe(`${Bertil.name} the ${Bertil.profession}`, () => {
-  let skill: TSkill = "sleight of hand"
+  const skill: TSkill = "sleight of hand"
 
   it(`has correct dice for attribute roll with bonus`, () => {
     const attribute: TAttribute = "empathy"
