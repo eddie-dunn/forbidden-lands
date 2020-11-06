@@ -31,7 +31,7 @@ export default class ConditionInput extends Vue {
 
 <template>
   <div class="conditions">
-    <div>
+    <div class="condition">
       <input
         type="checkbox"
         name="condition-tired"
@@ -43,7 +43,7 @@ export default class ConditionInput extends Vue {
       <label for="condition-tired">{{ $t("Tired") }}</label>
     </div>
 
-    <div>
+    <div class="condition">
       <input
         type="checkbox"
         name="condition-dehydrated"
@@ -55,7 +55,7 @@ export default class ConditionInput extends Vue {
       <label for="condition-dehydrated">{{ $t("Dehydrated") }}</label>
     </div>
 
-    <div>
+    <div class="condition">
       <input
         type="checkbox"
         name="condition-starving"
@@ -67,7 +67,7 @@ export default class ConditionInput extends Vue {
       <label for="condition-starving">{{ $t("Starving") }}</label>
     </div>
 
-    <div>
+    <div class="condition">
       <input
         type="checkbox"
         name="condition-cold"
@@ -91,7 +91,12 @@ h2 {
 
 .conditions {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(12ch, 1fr));
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 0.5rem;
+}
+
+.condition {
+  display: flex;
 }
 
 .modal-body {

@@ -67,6 +67,9 @@ export default Vue.extend({
     },
   },
   methods: {
+    attributeKeys() {
+      return Object.keys(this.charData.attributes)
+    },
     getAttribArray(attribute: Attribute): number[] {
       return [1, 2, 3, 4, 5, 6].slice(0, this.getMax(attribute))
     },
@@ -139,65 +142,57 @@ export default Vue.extend({
 </script>
 
 <template>
-  <div>
-    <table class="attribute-table">
-      <thead>
-        <tr>
-          <th class="capitalize">
-            {{ $t("attribute") }}
-          </th>
-          <th>{{ $t("Damage") }}</th>
-          <th class="capitalize">{{ $t("ATTRIB_REMAINING") }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="attribute in Object.keys(charData.attributes)"
-          :key="attribute"
+  <div class="attributes-grid">
+    <div class="grid-head">
+      <div class="capitalize">{{ $t("attribute") }}</div>
+      <div>{{ $t("Damage") }}</div>
+      <div class="capitalize">{{ $t("ATTRIB_REMAINING") }}</div>
+    </div>
+
+    <div
+      v-for="attribute in attributeKeys()"
+      :key="attribute"
+      style="display: contents;"
+    >
+      <div @click="roll(attribute)" class="clickable">
+        <div class="attribute-item">
+          <SvgIcon
+            :name="iconFor(attribute)"
+            :title="attribute"
+            class="attribute-icon"
+          />
+          <label :for="attribute" class="attribute-item-label">
+            {{ $t(attribute) }}
+          </label>
+          <div class="active-attributes">
+            {{ charData.attributes[attribute] }}
+          </div>
+        </div>
+      </div>
+
+      <NumberInput
+        fontSize="1.7rem"
+        :id="attribute"
+        :name="attribute"
+        :disabled="viewOnly"
+        placeholder=""
+        type="number"
+        min="0"
+        width="1ch"
+        :max="charData.attributes[attribute]"
+        v-model.number="charData.attributeDmg[attribute]"
+      />
+
+      <div @click="roll(attribute)" class="active-attributes clickable center">
+        <span
+          class="remaining-attribute"
+          :class="[remaining(attribute) === 0 ? 'broken' : '']"
         >
-          <td @click="roll(attribute)" class="clickable">
-            <div class="attribute-item">
-              <SvgIcon
-                :name="iconFor(attribute)"
-                :title="attribute"
-                class="attribute-icon"
-              />
-              <label :for="attribute" class="attribute-item-label">
-                {{ $t(attribute) }}
-              </label>
-              <div class="active-attributes">
-                {{ charData.attributes[attribute] }}
-              </div>
-            </div>
-          </td>
-          <td>
-            <NumberInput
-              fontSize="1.7rem"
-              :id="attribute"
-              :name="attribute"
-              :disabled="viewOnly"
-              placeholder=""
-              type="number"
-              min="0"
-              width="1ch"
-              :max="charData.attributes[attribute]"
-              v-model.number="charData.attributeDmg[attribute]"
-            />
-          </td>
-          <td
-            @click="roll(attribute)"
-            class="active-attributes clickable center"
-          >
-            <span
-              class="remaining-attribute"
-              :class="[remaining(attribute) === 0 ? 'broken' : '']"
-            >
-              {{ remaining(attribute) }}
-            </span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          {{ remaining(attribute) }}
+        </span>
+      </div>
+    </div>
+
     <DiceModal
       v-if="rollingDice.white"
       :title="modalTitle"
@@ -212,9 +207,19 @@ export default Vue.extend({
 <style lang="less" scoped>
 @import "~Style/colors.less";
 
-.attribute-table {
-  margin: 1rem 0;
-  border-spacing: 0.5rem;
+.attributes-grid {
+  display: inline-grid;
+  grid-template-columns: auto auto auto;
+  grid-column-gap: 1rem;
+  grid-row-gap: 1.5rem;
+  margin: 1rem auto;
+}
+.grid-head {
+  display: contents;
+  > div {
+    font-weight: bold;
+    margin-bottom: -1rem;
+  }
 }
 
 .clickable {

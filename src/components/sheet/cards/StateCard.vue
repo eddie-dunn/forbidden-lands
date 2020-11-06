@@ -62,22 +62,19 @@ export default PropertiesCard
     :saveStateId="saveStateId"
   >
     <div class="state-contents">
-      <div>
-        <AttributesCreate
-          v-if="attributesEdit"
-          :charData="charData"
-          :viewOnly="viewOnly"
-        />
-        <AttributesActive v-else :charData="charData" :viewOnly="viewOnly" />
-      </div>
+      <AttributesCreate
+        v-if="attributesEdit"
+        :charData="charData"
+        :viewOnly="viewOnly"
+      />
+      <AttributesActive v-else :charData="charData" :viewOnly="viewOnly" />
 
-      <div v-if="status !== 'new'">
-        <Conditions
-          :conditions="this.charData.conditions || {}"
-          :viewOnly="viewOnly"
-          v-model="charData.conditions"
-        />
-      </div>
+      <Conditions
+        v-if="status !== 'new'"
+        :conditions="this.charData.conditions || {}"
+        :viewOnly="viewOnly"
+        v-model="charData.conditions"
+      />
 
       <div v-if="status !== 'new'" class="willpower">
         <label for="willpower">
@@ -99,15 +96,16 @@ export default PropertiesCard
 
 <style lang="less" scoped>
 .state-contents {
-  // display: flex;
-  // flex-direction: column;
-  // // justify-content: center;
-  display: grid;
-  grid-gap: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  > * {
+    margin: 0 1rem 1rem 1rem;
+  }
 }
 
 .willpower {
-  margin: 1rem auto;
   display: flex;
   flex-direction: column;
   &-input {
