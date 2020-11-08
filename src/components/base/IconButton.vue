@@ -44,10 +44,8 @@ export default class CloseButton extends Vue {
 
 .icon-button {
   box-shadow: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   padding: 0;
+  white-space: nowrap;
 }
 
 .color-inherit {
