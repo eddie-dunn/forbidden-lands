@@ -111,7 +111,7 @@ export default Vue.extend({
         <h2>Navigation</h2>
         <div class="route-links" @click="showNav = false">
           <router-link to="/" exact>{{ $t("Characters") }}</router-link>
-          <router-link to="/multiplayer" exact>
+          <router-link v-if="$betaMode || true" to="/multiplayer" exact>
             {{ $t("Multiplay") + " (beta)" }}
           </router-link>
           <router-link to="/sandbox" exact v-if="$debugMode">

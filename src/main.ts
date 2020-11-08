@@ -11,7 +11,7 @@ import i18n from "./i18n"
 import router from "./router"
 import { store } from "@/store/store.ts"
 // @ts-ignore
-import { DEBUG_KEY } from "@/util/const"
+import { DEBUG_KEY, BETA_KEY } from "@/util/const"
 
 Vue.config.productionTip = false
 
@@ -29,9 +29,11 @@ Vue.prototype.$notify = notify
 // $debugMode is used to toggle stuff that is not ready for production yet
 const DEBUG_MODE = Boolean(sessionStorage.getItem(DEBUG_KEY))
 Vue.prototype.$debugMode = DEBUG_MODE
+const BETA_MODE = Boolean(sessionStorage.getItem(BETA_KEY))
+Vue.prototype.$betaMode = BETA_MODE
 
 // Enable debug mode by adding query string, e.g., http://localhost:3000?debug=on
-router.afterEach((to: Route) => {
+function checkDebugMode(to: Route) {
   const debugOn = ["1", "on", "true"].includes(
     String(to.query.debug).toLowerCase()
   )
@@ -41,6 +43,29 @@ router.afterEach((to: Route) => {
   if (debugOn || debugOff) {
     if (debugOn) sessionStorage.setItem(DEBUG_KEY, "ON")
     if (debugOff) sessionStorage.removeItem(DEBUG_KEY)
+  }
+  return debugOn || debugOff
+}
+
+// Enable beta mode by adding query string, e.g., http://localhost:3000?beta=on
+function checkBetaMode(to: Route) {
+  const betaOn = ["1", "on", "true"].includes(
+    String(to.query.beta).toLowerCase()
+  )
+  const betaOff = ["0", "off", "false", ""].includes(
+    String(to.query.debug).toLowerCase()
+  )
+  if (betaOn || betaOff) {
+    if (betaOn) sessionStorage.setItem(BETA_KEY, "ON")
+    if (betaOff) sessionStorage.removeItem(BETA_KEY)
+  }
+  return betaOn || betaOff
+}
+
+router.afterEach((to: Route) => {
+  const debugModeChange = checkDebugMode(to)
+  const betaModeChange = checkBetaMode(to)
+  if (debugModeChange || betaModeChange) {
     window.location.replace(window.location.pathname)
   }
 })

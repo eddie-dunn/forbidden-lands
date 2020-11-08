@@ -1,6 +1,6 @@
 <script>
 import { SET_PAGE_TITLE } from "@/store/store-types"
-import { DEBUG_KEY } from "@/util/const"
+import { DEBUG_KEY, BETA_KEY } from "@/util/const"
 
 export default {
   name: "about_page",
@@ -20,12 +20,16 @@ export default {
       console.log(6 - this.debugClicks) // eslint-disable-line no-console
       if (this.debugClicks > 5) {
         const debugOn = window.sessionStorage.getItem(DEBUG_KEY)
-        if (debugOn) {
-          window.sessionStorage.removeItem(DEBUG_KEY)
-        } else {
-          window.sessionStorage.setItem(DEBUG_KEY, "on")
-        }
-        // window.location.replace("/")
+        debugOn
+          ? window.sessionStorage.removeItem(DEBUG_KEY)
+          : window.sessionStorage.setItem(DEBUG_KEY, "on")
+
+        // Let beta depend on debug toggling for now; remove this once we have
+        // an options page where users can opt in to beta
+        const betaOn = debugOn // window.sessionStorage.getItem(BETA_KEY)
+        betaOn
+          ? window.sessionStorage.removeItem(BETA_KEY)
+          : window.sessionStorage.setItem(BETA_KEY, "on")
         window.location.reload()
       }
     },
