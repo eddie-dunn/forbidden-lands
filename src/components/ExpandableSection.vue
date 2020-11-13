@@ -21,10 +21,6 @@ export default class ExpandableSection extends Vue {
   isExpanded = this.load(this.key)
   focused = false
 
-  get icon() {
-    return this.isExpanded ? "chevron_down" : "chevron_right"
-  }
-
   load(key: string) {
     // don't load state if no unique id:
     if (!this.saveStateId) return this.defaultOpen
@@ -70,8 +66,8 @@ export default class ExpandableSection extends Vue {
       @blur="blur"
       v-on:keyup="expandToggle"
     >
-      <div class="icon-left">
-        <SvgIcon :name="icon" :title="icon" />
+      <div :class="['icon-left', isExpanded && 'rotate']">
+        <SvgIcon name="chevron_right" />
       </div>
       <div :class="['expander-label']">
         <slot name="header">
@@ -139,12 +135,17 @@ export default class ExpandableSection extends Vue {
   @media print {
     display: none;
   }
+  transition: transform 0.15s ease-in;
   margin: 0 0.5rem;
   & > svg {
     width: 2rem;
     height: 2rem;
     vertical-align: middle;
   }
+}
+
+.rotate {
+  transform: rotate(90deg);
 }
 
 .expander-label {
