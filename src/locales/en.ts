@@ -93,7 +93,7 @@ const talents: TalentTranslations = {
   "pathfinder": "pathfinder",
   "poisoner": "poisoner",
   "quartermaster": "quartermaster",
-  "quickdraw": "snabbdrag",
+  "quickdraw": "quick draw",
   "sailor": "sailor",
   "sharpshooter": "sharpshooter",
   "sharp tongue": "sharp tongue",
