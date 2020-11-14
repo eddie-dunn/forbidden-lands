@@ -5,21 +5,28 @@ import SvgIcon from "@/components/SvgIcon.vue"
 
 const BASE_STORE_KEY = "__fl_expandable_section"
 
+export enum EXPANDER_SLOT {
+  header_center = "header",
+  header_right = "icon-right",
+}
+
 @Component({
   components: {
     SvgIcon,
   },
 })
-export default class ExpandableSection extends Vue {
+export class ExpandableSection extends Vue {
   @Prop({ default: "" }) label!: string
   @Prop({ default: false }) defaultOpen!: boolean
   @Prop({ default: null }) saveStateId!: string | null
   @Prop({ required: false, default: null }) iconRight!: string
   @Prop({ default: false }) iconRightOK!: boolean
+  @Prop({ default: false }) border!: boolean
 
   key = `${BASE_STORE_KEY}-${this.saveStateId}`
   isExpanded = this.load(this.key)
   focused = false
+  SLOT = EXPANDER_SLOT
 
   load(key: string) {
     // don't load state if no unique id:
@@ -53,10 +60,12 @@ export default class ExpandableSection extends Vue {
     this.focused = false
   }
 }
+
+export default ExpandableSection
 </script>
 
 <template>
-  <section :class="['expander-wrapper', isExpanded ? '' : 'max-content']">
+  <section :class="[border && 'border', isExpanded ? '' : 'max-content']">
     <div
       :class="['expander']"
       ref="expander"
@@ -70,7 +79,7 @@ export default class ExpandableSection extends Vue {
         <SvgIcon name="chevron_right" />
       </div>
       <div :class="['expander-label']">
-        <slot name="header">
+        <slot :name="SLOT.header_center">
           {{ label }}
         </slot>
       </div>
@@ -81,7 +90,7 @@ export default class ExpandableSection extends Vue {
         ]"
       >
         {{ iconRight }}
-        <slot name="icon-right"></slot>
+        <slot :name="SLOT.header_right"></slot>
       </div>
     </div>
     <div class="expander-content" v-if="isExpanded">
@@ -123,6 +132,10 @@ export default class ExpandableSection extends Vue {
   outline-color: ~"@{pastel-green}55";
   display: flex;
   align-items: center;
+}
+
+.border {
+  border: 1px solid ~"@{slate-black}15";
 }
 
 .expander-content {
