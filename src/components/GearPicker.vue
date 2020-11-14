@@ -536,9 +536,7 @@ export default class GearPicker extends Vue {
     <h4>{{ $t("Coins") }}</h4>
     <div class="money">
       <div class="money-item">
-        <label for="copper">
-          <SvgIcon class="coin copper" name="two-coins" title="copper" />
-        </label>
+        <SvgIcon class="coin copper" name="two-coins" title="copper" />
         <FLNumberInput
           id="copper"
           fontSize="1.7rem"
@@ -549,9 +547,7 @@ export default class GearPicker extends Vue {
         />
       </div>
       <div class="money-item">
-        <label for="silver">
-          <SvgIcon class="coin silver" name="two-coins" title="silver" />
-        </label>
+        <SvgIcon class="coin silver" name="two-coins" title="silver" />
         <FLNumberInput
           id="silver"
           fontSize="1.7rem"
@@ -562,9 +558,7 @@ export default class GearPicker extends Vue {
         />
       </div>
       <div class="money-item">
-        <label for="gold">
-          <SvgIcon class="coin gold" name="two-coins" title="gold" />
-        </label>
+        <SvgIcon class="coin gold" name="two-coins" title="gold" />
         <FLNumberInput
           id="gold"
           fontSize="1.7rem"
@@ -682,14 +676,17 @@ label {
 }
 
 .money {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15ch, 1fr));
-  grid-gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 auto;
+  max-width: 500px;
 }
 
 .money-item {
-  flex: 1 0 30%;
-  display: flex;
+  flex: 0 0 30%;
+  display: inline-flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
