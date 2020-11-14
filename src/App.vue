@@ -208,8 +208,11 @@ body {
   text-transform: capitalize;
 }
 
-.capitalize-first::first-letter {
-  text-transform: capitalize;
+.capitalize-first {
+  display: inline-block;
+  &::first-letter {
+    text-transform: capitalize;
+  }
 }
 
 .small-caps {
