@@ -14,6 +14,7 @@ export class FLNumberInput extends Vue {
   @Prop({ default: () => () => {} }) enterCb!: Function
   @Prop({ default: () => () => {} }) ctrlEnterCb!: Function
   @Prop({ default: null }) value!: number | null
+  @Prop({ default: "" }) label!: string
 
   @Prop({ default: true }) canIncrement!: boolean
   @Prop({ default: true }) canDecrement!: boolean
@@ -65,48 +66,66 @@ export default FLNumberInput
 </script>
 
 <template>
-  <div class="fl-number-row">
-    <button
-      class="fl-number-button shared"
-      type="button"
-      :disabled="decrementDisabled"
-      @click="decrement"
-      tabindex="-1"
-      :style="cssProps"
+  <div class="fl-number">
+    <label
+      v-if="label"
+      :for="label"
+      class="fl-number-row-label capitalize-first"
     >
-      -
-    </button>
-    <input
-      v-bind="$attrs"
-      class="fl-number-input shared"
-      :disabled="disabled || fieldDisabled"
-      :value="value"
-      :style="cssProps"
-      type="number"
-      :placeholder="placeholder"
-      :max="max"
-      :min="min"
-      @input="inputEvent"
-      v-on:keyup.ctrl.enter.exact="ctrlEnterCb"
-      v-on:keyup.enter.exact="enterCb"
-    />
-    <button
-      class="fl-number-button shared"
-      type="button"
-      :disabled="incrementDisabled"
-      @click="increment"
-      tabindex="-1"
-      :style="cssProps"
-    >
-      +
-    </button>
+      {{ label }}
+    </label>
+    <div class="fl-number-row">
+      <button
+        class="fl-number-button shared"
+        type="button"
+        :disabled="decrementDisabled"
+        @click="decrement"
+        tabindex="-1"
+        :style="cssProps"
+      >
+        -
+      </button>
+      <input
+        :id="label"
+        v-bind="$attrs"
+        class="fl-number-input shared"
+        :disabled="disabled || fieldDisabled"
+        :value="value"
+        :style="cssProps"
+        type="number"
+        :placeholder="placeholder"
+        :max="max"
+        :min="min"
+        @input="inputEvent"
+        v-on:keyup.ctrl.enter.exact="ctrlEnterCb"
+        v-on:keyup.enter.exact="enterCb"
+      />
+      <button
+        class="fl-number-button shared"
+        type="button"
+        :disabled="incrementDisabled"
+        @click="increment"
+        tabindex="-1"
+        :style="cssProps"
+      >
+        +
+      </button>
+    </div>
   </div>
 </template>
 
 <style lang="less" scoped>
 @import "~Style/colors.less";
+
+.fl-number {
+  text-align: left;
+}
+
 .fl-number-row {
   display: flex;
+}
+
+.fl-number-row-label {
 }
 
 .fl-number-input {
