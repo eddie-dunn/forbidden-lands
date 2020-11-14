@@ -21,7 +21,7 @@ export class ExpandableSection extends Vue {
   @Prop({ default: null }) saveStateId!: string | null
   @Prop({ required: false, default: null }) iconRight!: string
   @Prop({ default: false }) iconRightOK!: boolean
-  @Prop({ default: false }) border!: boolean
+  @Prop({ default: true }) border!: boolean
 
   key = `${BASE_STORE_KEY}-${this.saveStateId}`
   isExpanded = this.load(this.key)
