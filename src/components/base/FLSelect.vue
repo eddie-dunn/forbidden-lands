@@ -2,6 +2,8 @@
 import Vue from "vue"
 import { Component, Prop } from "vue-property-decorator"
 
+import { capitalize } from "@/util/util"
+
 export type Option = {
   id: string
   name?: string
@@ -27,17 +29,22 @@ export class FLSelect extends Vue {
   @Prop({ default: false }) fullWidth!: boolean
   @Prop({ default: false }) inGrid!: boolean
   @Prop({ default: "row" }) direction!: "row" | "column"
+  @Prop({ default: false }) translateOptions!: boolean
 
   optionExtras(option: Option): string {
     if (!option.extras || !option.extras.length) return ""
     return " " + option.extras.join(" ")
   }
 
+  capitalize = (s: string) =>
+    capitalize(String(this.translateOptions ? this.$t(s) : s))
+
   renderOption(option: Option): string {
     if (option.name) {
+      // If caller provides options with names, we assume they are pre-formatted
       return option.name + this.optionExtras(option)
     }
-    return option.id + this.optionExtras(option) // FIXME: Translate
+    return this.capitalize(option.id) + this.optionExtras(option)
   }
 
   onInput(ev: any) {
@@ -62,7 +69,7 @@ export default FLSelect
       :for="label"
       :class="[!inGrid && 'label', 'font-small']"
     >
-      {{ label }}
+      <div class="capitalize-first">{{ label }}</div>
     </label>
     <select
       :id="label"
@@ -102,9 +109,9 @@ export default FLSelect
 </template>
 
 <style lang="less" scoped>
-.fl-select {
-  margin: 1rem;
-}
+// .fl-select {
+//   margin: 1rem;
+// }
 
 .fl-select-column {
   display: inline-flex;
