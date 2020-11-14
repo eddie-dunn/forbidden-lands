@@ -9,12 +9,14 @@ import SvgIcon from "@/components/SvgIcon.vue"
     SvgIcon,
   },
 })
-export default class FLButton extends Vue {
+export class FLButton extends Vue {
   @Prop({ default: "button" }) formButtonType!: string
   @Prop({ default: "main" }) type!: "" | "danger" | "cancel" | "ghost" | "main"
   @Prop({ default: "white" }) color!: "main" | "danger" | "white" | "inherit"
   @Prop({ default: "" }) href!: string
 }
+
+export default FLButton
 </script>
 
 <template>
