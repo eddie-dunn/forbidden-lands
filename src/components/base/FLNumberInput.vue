@@ -15,6 +15,7 @@ export class FLNumberInput extends Vue {
   @Prop({ default: () => () => {} }) ctrlEnterCb!: Function
   @Prop({ default: null }) value!: number | null
   @Prop({ default: "" }) label!: string
+  @Prop({ default: false }) inGrid!: boolean
 
   @Prop({ default: true }) canIncrement!: boolean
   @Prop({ default: true }) canDecrement!: boolean
@@ -66,11 +67,15 @@ export default FLNumberInput
 </script>
 
 <template>
-  <div class="fl-number">
+  <div :class="['fl-number', inGrid && 'display-contents']">
     <label
       v-if="label"
       :for="label"
-      class="fl-number-row-label capitalize-first"
+      :class="[
+        'fl-number-row-label',
+        'capitalize-first',
+        inGrid && 'font-small',
+      ]"
     >
       {{ label }}
     </label>
@@ -117,15 +122,16 @@ export default FLNumberInput
 <style lang="less" scoped>
 @import "~Style/colors.less";
 
+.display-contents {
+  display: contents;
+}
+
 .fl-number {
   text-align: left;
 }
 
 .fl-number-row {
   display: flex;
-}
-
-.fl-number-row-label {
 }
 
 .fl-number-input {
