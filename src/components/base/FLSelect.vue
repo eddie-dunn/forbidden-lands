@@ -31,20 +31,22 @@ export class FLSelect extends Vue {
   @Prop({ default: "row" }) direction!: "row" | "column"
   @Prop({ default: false }) translateOptions!: boolean
 
+  capitalize = capitalize
+
   optionExtras(option: Option): string {
     if (!option.extras || !option.extras.length) return ""
     return " " + option.extras.join(" ")
   }
-
-  capitalize = (s: string) =>
-    capitalize(String(this.translateOptions ? this.$t(s) : s))
 
   renderOption(option: Option): string {
     if (option.name) {
       // If caller provides options with names, we assume they are pre-formatted
       return option.name + this.optionExtras(option)
     }
-    return this.capitalize(option.id) + this.optionExtras(option)
+    if (this.translateOptions) {
+      return capitalize(String(this.$t(option.id))) + this.optionExtras(option)
+    }
+    return capitalize(option.id) + this.optionExtras(option)
   }
 
   onInput(ev: any) {
@@ -94,14 +96,14 @@ export default FLSelect
       <optgroup
         v-for="(group, index) in optgroups"
         :key="`${group.label}-${index}`"
-        :label="group.label"
+        :label="capitalize(translateOptions ? $t(group.label) : group.label)"
       >
         <option
           v-for="option in group.options"
           :key="option.id"
           :value="option.id"
         >
-          {{ option.name + optionExtras(option) }}
+          {{ renderOption(option) }}
         </option>
       </optgroup>
     </select>
