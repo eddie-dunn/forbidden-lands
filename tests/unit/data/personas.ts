@@ -2,6 +2,8 @@ import {
   CharacterData,
   getNewCharacterData,
 } from "@/data/character/characterData"
+import { allShields, meleeWeapons } from "@/data/items/items"
+
 const UNSET = null
 
 const newPersona = getNewCharacterData()
@@ -140,5 +142,41 @@ export const Bertil: CharacterData = {
     ...basePersona.skills,
     "sleight of hand": { ...basePersona.skills["sleight of hand"], rank: 3 },
     "scouting": { ...basePersona.skills.scouting, rank: 2 },
+  },
+}
+
+export const Caesar: CharacterData = {
+  ...basePersona,
+  name: "Caesar",
+  profession: "fighter",
+  metadata: {
+    ...basePersona.metadata,
+    status: "active",
+  },
+  talents: [
+    //
+    { id: "sword fighter", rank: 3 },
+    { id: "axe fighter", rank: 3 },
+    { id: "spear fighter", rank: 3 },
+    { id: "hammer fighter", rank: 3 },
+    { id: "shield fighter", rank: 3 },
+  ],
+  skills: {
+    ...basePersona.skills,
+    melee: { ...basePersona.skills.melee, rank: 3 },
+    marksmanship: { ...basePersona.skills.marksmanship, rank: 2 },
+  },
+  gear: {
+    consumables: { arrows: 12, torches: 0, food: 6, water: 6 },
+    equipped: [],
+    inventory: [
+      //
+      { ...meleeWeapons.trident, equipped: true },
+      { ...meleeWeapons.falchion, equipped: false },
+      { ...meleeWeapons.halberd, equipped: false },
+      { ...meleeWeapons.heavywarhammer, equipped: true },
+      { ...allShields[1], equipped: true },
+    ],
+    money: { copper: 0, silver: 0, gold: 0 },
   },
 }
