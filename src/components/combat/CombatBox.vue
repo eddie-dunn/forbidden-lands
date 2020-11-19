@@ -141,7 +141,7 @@ export class Combat extends Vue {
       (this.equippedHelmet || { bonus: 0 }).bonus +
       (this.equippedArmor || { bonus: 0 }).bonus
     this.$root.$emit("open-dice-modal", {
-      title: "armor",
+      title: this.$t("armor"),
       dice: { black },
       disablePush: true,
     })

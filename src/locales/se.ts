@@ -495,6 +495,7 @@ export default {
   "options": "inställningar",
   "or more": "eller fler",
   "other": "övrigt",
+  "parry": "parera",
   "parrying": "parera",
   "pointed": "spets",
   "polearm": "stångvapen",

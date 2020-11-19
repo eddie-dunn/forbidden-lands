@@ -219,7 +219,7 @@ export default class GearPicker extends Vue {
       (this.equippedHelmet || { bonus: 0 }).bonus +
       (this.equippedArmor || { bonus: 0 }).bonus
     this.$root.$emit("open-dice-modal", {
-      title: "armor",
+      title: this.$t("armor"),
       dice: { black },
       disablePush: true,
     })
@@ -232,7 +232,7 @@ export default class GearPicker extends Vue {
       Number(this.charData.attributeDmg.strength)
     const red = this.charData.skills.melee.rank
     this.$root.$emit("open-dice-modal", {
-      title: "shield",
+      title: this.$t("parry"),
       dice: { white, black, red },
       disablePush: true,
     })

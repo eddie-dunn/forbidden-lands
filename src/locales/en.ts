@@ -489,6 +489,7 @@ export default {
   "opponent": "target",
   "or more": "or more",
   "other": "other",
+  "parry": "parry",
   "parrying": "parrying",
   "pointed": "pointed",
   "polearm": "spear",
