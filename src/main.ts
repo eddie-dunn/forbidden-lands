@@ -29,8 +29,10 @@ Vue.prototype.$notify = notify
 // $debugMode is used to toggle stuff that is not ready for production yet
 const DEBUG_MODE = Boolean(sessionStorage.getItem(DEBUG_KEY))
 Vue.prototype.$debugMode = DEBUG_MODE
+Vue.prototype.$DEBUG = DEBUG_MODE
 const BETA_MODE = Boolean(sessionStorage.getItem(BETA_KEY))
 Vue.prototype.$betaMode = BETA_MODE
+Vue.prototype.$BETA = BETA_MODE
 
 // Enable debug mode by adding query string, e.g., http://localhost:3000?debug=on
 function checkDebugMode(to: Route) {

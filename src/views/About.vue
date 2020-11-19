@@ -8,6 +8,7 @@ export default {
     return {
       debugClicks: 0,
       buildVersion: __APP_VERSION__,
+      configInput: "",
     }
   },
   mounted() {
@@ -15,21 +16,31 @@ export default {
   },
 
   methods: {
+    toggleDebug() {
+      const debugOn = window.sessionStorage.getItem(DEBUG_KEY)
+      debugOn
+        ? window.sessionStorage.removeItem(DEBUG_KEY)
+        : window.sessionStorage.setItem(DEBUG_KEY, "on")
+      window.location.reload()
+    },
     debugClick() {
       this.debugClicks++
       console.log(6 - this.debugClicks) // eslint-disable-line no-console
       if (this.debugClicks > 5) {
-        const debugOn = window.sessionStorage.getItem(DEBUG_KEY)
-        debugOn
-          ? window.sessionStorage.removeItem(DEBUG_KEY)
-          : window.sessionStorage.setItem(DEBUG_KEY, "on")
-
-        // Let beta depend on debug toggling for now; remove this once we have
-        // an options page where users can opt in to beta
-        const betaOn = debugOn // window.sessionStorage.getItem(BETA_KEY)
+        this.toggleDebug()
+      }
+    },
+    submit() {
+      const input = this.configInput.toLowerCase()
+      if (input === "beta") {
+        const betaOn = window.sessionStorage.getItem(BETA_KEY)
         betaOn
           ? window.sessionStorage.removeItem(BETA_KEY)
           : window.sessionStorage.setItem(BETA_KEY, "on")
+        window.location.reload()
+      }
+      if (input === "debug") {
+        this.toggleDebug()
         window.location.reload()
       }
     },
@@ -163,9 +174,21 @@ export default {
 
       <!-- spacer -->
     </div>
-    <button class="version-footer" @click="debugClick">
-      {{ buildVersion }}{{ $debugMode ? "_DEBUG" : "" }}
-    </button>
+
+    <div style="display: flex; flex-direction: column;">
+      <button class="version-footer" @click="debugClick">
+        {{ buildVersion }}
+      </button>
+      <div>
+        <span>
+          {{ $BETA ? "✓ BETA" : "" }}
+        </span>
+        <span>
+          {{ $debugMode ? "✓ DEBUG" : "" }}
+        </span>
+      </div>
+      <input v-model="configInput" v-on:keyup.enter.exact="submit" />
+    </div>
   </div>
 </template>
 
