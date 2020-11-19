@@ -1,3 +1,4 @@
+import { CharData } from "@/data/character/characterData"
 import {
   IDiceConfigWithLog,
   IDiceConfigLogEntry,
@@ -6,9 +7,19 @@ import {
   IConfigSkill,
   IConfigAttribute,
   IConfigCombat,
+  IDiceConfig,
+  TDiceConfigLog,
 } from "./diceTypes"
 
+import { ItemShield, ItemWeapon, WEAPON_CATEGORY } from "@/data/items/itemTypes"
+// import {
+//   Attribute as TAttribute,
+//   Skill as TSkill,
+//   DiceTypes as TDice,
+// } from "@/types"
+
 import * as T from "./translationKeys"
+import { ACTION_FAST, ACTION_SLOW, ACTION_ALL } from "@/data/combat/typesCombat"
 
 function pruneConfig(config: any): IDiceConfigWithLog {
   const newObj: any = {}
@@ -20,6 +31,7 @@ function pruneConfig(config: any): IDiceConfigWithLog {
   return newObj
 }
 
+/** Add the number of dice and logs of several dice configurations */
 function addConfigs(...configs: IDiceConfigWithLog[]): IDiceConfigWithLog {
   const sumTwoConfigs = (c1: IDiceConfigWithLog, c2: IDiceConfigWithLog) => ({
     white: (c1.white || 0) + (c2.white || 0),
@@ -42,6 +54,8 @@ function getConfigBonus(config: IConfigBase): IDiceConfigWithLog {
           dice: "red",
           modifier: red,
           reason: T.DICE_CONF_BONUS_APPLIED,
+          id: "bonus",
+          rank: red,
         },
       ]
     : []
@@ -54,7 +68,13 @@ function getConfigAttribute(config: IConfigAttribute): IDiceConfigWithLog {
   const attrDmg = Number(charData.attributeDmg[attributeType])
   const white = Math.max(attrMax - attrDmg, 0)
   const log: IDiceConfigLogEntry[] = [
-    { dice: "white", modifier: white, reason: T.DICE_CONF_BASE_ATTRIBUTE },
+    {
+      dice: "white",
+      modifier: white,
+      reason: T.DICE_CONF_BASE_ATTRIBUTE,
+      id: attributeType,
+      rank: white,
+    },
   ]
   return { white, log }
 }
@@ -70,7 +90,13 @@ function getConfigSkill(config: IConfigSkill): IDiceConfigWithLog {
   })
   const red = Number(skill.rank) || 0
   const log: IDiceConfigLogEntry[] = [
-    { dice: "red", modifier: red, reason: T.DICE_CONF_FROM_SKILL },
+    {
+      dice: "red",
+      modifier: red,
+      reason: T.DICE_CONF_FROM_SKILL,
+      id: skill.id,
+      rank: red,
+    },
   ]
   // TODO: Apply bonus for items with applicable skill mods
   // const f = charData.gear.equipped.map((item) =>
@@ -136,28 +162,160 @@ export function getDice(config: IDiceAction): IDiceConfigWithLog {
 }
 export default getDice
 
-/*
-Brainstorm
+function diceLogArmor(c: CharData): IDiceConfigLogEntry[] {
+  const log: IDiceConfigLogEntry[] = []
+  const armor = c.gear.inventory.find((i) => i.equipped && i.type === "armor")
+  if (armor?.bonus) {
+    log.push({
+      dice: "black",
+      modifier: armor.bonus,
+      id: "armor",
+      name: armor.name,
+    })
+  }
 
-- Show dice stats; 
-  - 1|2|..|nbr Dice success % (dropdown)
-  - 1|2|..|nbr Dice white bane % (dropdown)
-  - 1|2|..|nbr Dice black bane % (dropdown)
+  const helmet = c.gear.inventory.find((i) => i.equipped && i.type === "helmet")
+  if (helmet?.bonus) {
+    log.push({
+      dice: "black",
+      modifier: helmet.bonus,
+      id: "helmet",
+      name: helmet.name,
+    })
+  }
 
-- Roll/push dice with buttons in expander
+  return log
+}
 
-- Push disabled if 
-  - roll-log length < 1
-  - pushed and not dwarf
-  - pushed and wp < 1
+export function diceLogCombat(
+  c: CharData,
+  action: ACTION_ALL,
+  item: ItemWeapon | ItemShield,
+  monster?: boolean
+) {
+  const log: IDiceConfigLogEntry[] = []
 
-- Add ability to roll D66 && D666
+  function fighterBonus(id: string, rank: number): IDiceConfigLogEntry[] {
+    const _log: IDiceConfigLogEntry[] = []
+    if (rank >= 1) {
+      _log.push({
+        dice: "red",
+        modifier: 1,
+        id,
+        rank: rank > 1 ? ">1" : rank,
+      })
+    }
+    if (rank === 3) {
+      _log.push({ dice: "green", modifier: 1, id, rank })
+    }
+    return _log
+  }
 
-- Add talent bonus die
-  - Go through all weapons and add weapon class (blunt, polearm, sword,
-  knife, axe, bow, xbow)
-  - foo
-  - add logic to match weapon class to talent
+  if (
+    (action === ACTION_SLOW.slash || action === ACTION_SLOW.stab) &&
+    item.type === "weapon" &&
+    item.category
+  ) {
+    c.talents.forEach((talent) => {
+      const { id, rank = 0 } = talent
 
+      if (
+        (id === "axe fighter" && item.category === WEAPON_CATEGORY.axe) ||
+        (id === "sword fighter" && item.category === WEAPON_CATEGORY.sword) ||
+        (id === "hammer fighter" && item.category === WEAPON_CATEGORY.blunt) ||
+        (id === "knife fighter" && item.category === WEAPON_CATEGORY.knife) ||
+        (id === "spear fighter" && item.category === WEAPON_CATEGORY.polearm)
+      ) {
+        if (rank >= 1) {
+          log.push({
+            dice: "red",
+            modifier: 1,
+            id,
+            rank: rank > 1 ? ">1" : rank,
+          })
+        }
+        if (talent.rank === 3) {
+          log.push({ dice: "green", modifier: 1, id, rank })
+        }
+      }
+    })
+  }
 
-*/
+  if (action === ACTION_SLOW.shoot && item.type === "weapon" && item.category) {
+    c.talents.forEach((talent) => {
+      const { id, rank = 0 } = talent
+
+      if (
+        item.category &&
+        id === "sharpshooter" &&
+        [WEAPON_CATEGORY.bow, WEAPON_CATEGORY.crossbow].includes(item.category)
+      ) {
+        if (rank >= 1) {
+          log.push({
+            dice: "red",
+            modifier: 1,
+            id,
+            rank: rank > 1 ? ">1" : rank,
+          })
+        }
+        if (talent.rank === 3) {
+          log.push({ dice: "green", modifier: 1, id, rank })
+        }
+      }
+    })
+  }
+
+  if (action === ACTION_FAST.parry) {
+    c.talents.forEach((talent) => {
+      const { id, rank = 0 } = talent
+      if (
+        id === "defender" &&
+        (item.type === "shield" ||
+          (item.type === "weapon" && item.features.parrying))
+      ) {
+        log.push({ dice: "red", modifier: 1, id, rank })
+      }
+      if (id === "shield fighter" && item.type === "shield") {
+        log.push(...fighterBonus(id, rank))
+      }
+    })
+  }
+
+  return log
+}
+
+// /** Merge multiple dice config logs */
+// function mergeLogs(logs: TDiceConfigLog[]): TDiceConfigLog {
+//   // return logs.reduce((l1: TDiceConfigLog, l2: TDiceConfigLog) => {
+//   //   return [...l1, ...l2]
+//   // }, [])
+//   return logs.flat()
+// }
+
+// /** Calculate number of dice to roll based on an array of dice config logs */
+// export function convertLogsToConfig(logs: TDiceConfigLog[]): IDiceConfig {
+//   // return convertLogToConfig(mergeLogs(logs))
+//   return convertLogToConfig(logs.flat())
+// }
+
+/** Calculate the number of dice to roll based on a dice config log.
+ *
+ * PROTIP: If you have multiple separate logs, use Array.flat() to flatten logs
+ * before sending in as a param:
+ *   const log = [log1, log2].flat()
+ *   const diceConfig = convertLogToConfig(log)
+ */
+export function convertLogToConfig(log: IDiceConfigLogEntry[]): IDiceConfig {
+  const conf: IDiceConfig = {
+    white: 0,
+    red: 0,
+    black: 0,
+    green: 0,
+    blue: 0,
+    orange: 0,
+  }
+  log.forEach((log) => {
+    conf[log.dice] = (conf[log.dice] || 0) + log.modifier
+  })
+  return conf
+}

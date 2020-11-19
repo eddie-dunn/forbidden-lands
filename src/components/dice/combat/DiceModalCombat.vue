@@ -1,18 +1,23 @@
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator"
-import Modal from "@/components/Modal.vue"
-import { Notification, notify } from "@/util/notifications"
-import DiceRoller from "@/components/dice/DiceRoller.vue"
-import { CharData } from "@/data/character/characterData"
-import { SkillObj } from "@/skills"
+import DiceActions from "@/components/dice/DiceActions.vue"
 import DiceRollerConfig from "@/components/dice/DiceRollerConfig.vue"
-import FLButton from "@/components/base/FLButton.vue"
-import DiceActions from "./DiceActions.vue"
 import ExpandableSection from "@/components/ExpandableSection.vue"
-import { IDiceConfig } from "@/dice/diceTypes"
-import { FLNumberInput } from "@/components/base/FLNumberInput.vue"
+import FLButton from "@/components/base/FLButton.vue"
+import Modal from "@/components/Modal.vue"
 
-export function defaultDice(): IDiceConfig {
+import { CharData } from "@/data/character/characterData"
+import { Component, Prop, Vue } from "vue-property-decorator"
+import { DiceCombat } from "@/components/dice/combat/DiceCombat.vue"
+import { DiceRollerCombat } from "@/components/dice/combat/DiceRollerCombat.vue"
+import { FLNumberInput } from "@/components/base/FLNumberInput.vue"
+import { IDiceConfig } from "@/dice/diceTypes"
+import { Notification, notify } from "@/util/notifications"
+import { SkillObj } from "@/skills"
+import { ACTION_ALL } from "@/data/combat/typesCombat"
+import { TSkillId } from "@/types"
+import { Item } from "@/data/items/itemTypes"
+
+function defaultDice(): IDiceConfig {
   return {
     white: null,
     red: null,
@@ -26,7 +31,8 @@ export function defaultDice(): IDiceConfig {
 @Component({
   components: {
     DiceActions,
-    DiceRoller,
+    DiceCombat,
+    DiceRollerCombat,
     DiceRollerConfig,
     Modal,
     FLButton,
@@ -39,7 +45,14 @@ export class DiceModal extends Vue {
   @Prop({ default: () => defaultDice() }) dice!: IDiceConfig
   @Prop({ default: null }) charData!: CharData
   @Prop({ default: false }) disablePush!: boolean
-  // FIXME: Get charData via Vuex instead
+  @Prop({ default: "" }) actionId!: ACTION_ALL | ""
+  @Prop({ default: "" }) skillId!: TSkillId | ""
+  @Prop({ default: "" }) itemId!: ""
+
+  canPush = this.disablePush
+  canRoll = true
+  mDice = { ...this.dice }
+  mDiceKey = "0"
 
   get showWillpower() {
     return this.charData && this.charData.willpower !== null
@@ -61,9 +74,6 @@ export class DiceModal extends Vue {
   onWillpower(value: number) {
     this.charData.willpower = value
   }
-
-  canPush = this.disablePush
-  canRoll = true
 
   pushCb = () => {}
   rollCb = () => {}
@@ -95,6 +105,11 @@ export class DiceModal extends Vue {
     }
     this.canPush = !pushDisabled
   }
+
+  handleConfigUpdate(newConf: IDiceConfig) {
+    this.mDice = newConf
+    this.mDiceKey = JSON.stringify(newConf)
+  }
 }
 
 export default DiceModal
@@ -103,14 +118,22 @@ export default DiceModal
 <template>
   <Modal @close="close" :title="title || $t('Roll dice')">
     <div slot="body" class="dicemodal-body">
-      <slot name="top"></slot>
-      <DiceRoller
-        :white="dice.white"
-        :red="dice.red"
-        :black="dice.black"
-        :green="dice.green"
-        :blue="dice.blue"
-        :orange="dice.orange"
+      <DiceCombat
+        :charData="charData"
+        :skillId="skillId"
+        :actionId="actionId"
+        :itemId="itemId"
+        @dice-config="handleConfigUpdate"
+      />
+      <!-- FIXME: Integrate DiceRollerCombat with DiceCombat -->
+      <DiceRollerCombat
+        :key="mDiceKey"
+        :white="mDice.white"
+        :red="mDice.red"
+        :black="mDice.black"
+        :green="mDice.green"
+        :blue="mDice.blue"
+        :orange="mDice.orange"
         :showButtonBar="false"
         :isDwarf="charData && charData.kin === 'dwarf'"
         :willpower="charData && charData.willpower"
@@ -142,6 +165,8 @@ export default DiceModal
         @close="close"
         :canRoll="canRoll"
         :canPush="canPush"
+        :showClose="true"
+        :showReset="false"
       />
     </div>
   </Modal>
@@ -152,6 +177,7 @@ export default DiceModal
   display: flex;
   flex-direction: column;
   height: 100%;
+  padding-bottom: 30vh;
 }
 
 .wp-input {

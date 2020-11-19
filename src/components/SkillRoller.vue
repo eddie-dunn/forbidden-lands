@@ -8,12 +8,13 @@ import DiceRoller from "@/components/dice/DiceRoller.vue"
 import { CharData } from "@/data/character/characterData"
 import { SkillObj } from "@/skills"
 import { Option, Optgroup, FLSelect } from "@/components/base/FLSelect.vue"
-import { ItemWeapon, Range } from "@/data/items/itemTypes"
+import { ItemWeapon, Range, WEAPON_CATEGORY } from "@/data/items/itemTypes"
 import { DiceModal } from "@/components/dice/DiceModal.vue"
 import { capitalize } from "@/util/util"
 
 const fists: ItemWeapon = {
   name: "Unarmed",
+  category: WEAPON_CATEGORY.unarmed,
   grip: 1,
   bonus: 0,
   damage: 1,

@@ -1,8 +1,11 @@
 <template>
-  <div class="home">
-    <ExpandableSection label="Vue app info" class="text-center">
-      <img alt="Vue logo" src="../assets/logo.png" />
-      <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+  <div class="sandbox">
+    <ExpandableSection label="Combat View" saveStateId="combat-test">
+      <Combat :charData="caesar" />
+    </ExpandableSection>
+
+    <ExpandableSection label="DiceRoller Combat" saveStateId="dice-combat">
+      <DiceCombat />
     </ExpandableSection>
 
     <ExpandableSection label="Notify" saveStateId="notify-test">
@@ -86,12 +89,19 @@
         <IconButton icon="chat_bubble">With text</IconButton>
       </div>
     </ExpandableSection>
+
+    <ExpandableSection label="Vue app info" class="text-center">
+      <img alt="Vue logo" src="../assets/logo.png" />
+      <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+    </ExpandableSection>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator"
 import { SET_PAGE_TITLE } from "@/store/store-types"
+
+import { DiceCombat } from "@/components/dice/combat/DiceCombat.vue"
 import HelloWorld from "@/components/HelloWorld.vue"
 import ExpandableSection from "@/components/ExpandableSection.vue"
 import FLButton from "@/components/base/FLButton.vue"
@@ -101,23 +111,29 @@ import { Notification, notify } from "@/util/notifications"
 import DiceRoller from "@/components/dice/DiceRoller.vue"
 import SvgIcon from "@/components/SvgIcon.vue"
 import IconButton from "@/components/base/IconButton.vue"
+import { Combat } from "@/components/combat/CombatBox.vue"
+import { Caesar } from "Tests/unit/data/personas"
 
 @Component({
   components: {
-    IconButton,
+    Combat,
+    DiceCombat,
     DiceRoller,
-    HelloWorld,
     ExpandableSection,
     FLButton,
+    HelloWorld,
+    IconButton,
     Modal,
     NavDrawer,
     SvgIcon,
   },
 })
-export default class Home extends Vue {
+export class Sandbox extends Vue {
   modalOpen = false
   diceModalOpen = false
   navOpen = false
+
+  caesar = Caesar
 
   mounted() {
     this.$store.commit(SET_PAGE_TITLE, "Sandbox")
@@ -157,21 +173,19 @@ export default class Home extends Vue {
     mollit anim id est laborum.`
   }
 }
+
+export default Sandbox
 </script>
 
 <style lang="less" scoped>
 @import "~Style/colors.less";
 
+.sandbox {
+  margin: 1rem 1rem 20vh 1rem;
+}
+
 .sandbox-content {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
   margin: 1rem;
-  * > {
-    margin-right: 1rem;
-    margin-bottom: 1rem;
-    width: max-content;
-  }
 }
 
 .sandbox-modal-footer {

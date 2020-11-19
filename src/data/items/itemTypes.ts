@@ -5,9 +5,18 @@ type ItemType = "armor" | "helmet" | "shield" | "weapon" | "other" | ""
 
 type Weight = 0 | 0.5 | 1 | 2 | 10 /* -> can't be carried normally */
 
+// TODO: Use this instead
+export enum ITEM_WEIGHT {
+  tiny = 0,
+  light = 0.5,
+  normal = 1,
+  heavy = 2,
+  massive = 10, // can't be carried normally
+}
+
 type SkillMod = { id: Skill; mod: number }
 
-export type BaseItem = {
+type BaseItem = {
   // Required
   bonus: number
   bonusType: BonusType // rename to dice type?
@@ -23,7 +32,6 @@ export type BaseItem = {
   // Optional
   comment?: string
   cost?: number
-  features?: {}
 
   // Modifiers
   skillMods?: SkillMod[]
@@ -38,10 +46,29 @@ export enum Range {
   "long",
 }
 
+export interface ItemOther extends BaseItem {
+  type: "other" | ""
+}
+
+export enum WEAPON_CATEGORY {
+  axe = "axe",
+  blunt = "blunt",
+  knife = "knife",
+  polearm = "polearm",
+  sword = "sword",
+  unarmed = "unarmed",
+
+  bow = "bow",
+  crossbow = "crossbow",
+  thrown = "thrown",
+}
+
 export interface ItemWeapon extends BaseItem {
+  type: "weapon"
+  // category?: WEAPON_CATEGORY
+  category: WEAPON_CATEGORY
   damage: number
   range: Range
-  type: "weapon"
   features: {
     blunt?: boolean
     pointed?: boolean
@@ -69,4 +96,4 @@ export interface ItemHelmet extends BaseItem {
   bonusType: "black"
 }
 
-export type Item = BaseItem | ItemWeapon | ItemArmor | ItemShield | ItemHelmet
+export type Item = ItemOther | ItemWeapon | ItemArmor | ItemShield | ItemHelmet

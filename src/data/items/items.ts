@@ -4,10 +4,12 @@ import {
   ItemArmor,
   ItemHelmet,
   ItemShield,
+  WEAPON_CATEGORY,
 } from "./itemTypes"
 
 export const fists: ItemWeapon = {
   name: "Fists",
+  category: WEAPON_CATEGORY.unarmed,
   grip: 1,
   bonus: 0,
   damage: 1,
@@ -25,8 +27,9 @@ export const fists: ItemWeapon = {
 export namespace meleeWeapons {
   // Start weapons
 
-  const knife: ItemWeapon = {
-    name: "knife",
+  export const knife: ItemWeapon = {
+    name: "Knife",
+    category: WEAPON_CATEGORY.knife,
     grip: 1,
     bonus: 1,
     damage: 1,
@@ -39,12 +42,13 @@ export namespace meleeWeapons {
     equipped: false,
     bonusType: "black",
     type: "weapon",
-    id: "base knife",
+    id: "knife",
     skill: "melee",
   }
 
-  const dagger: ItemWeapon = {
-    name: "dagger",
+  export const dagger: ItemWeapon = {
+    name: "Dagger",
+    category: WEAPON_CATEGORY.knife,
     grip: 1,
     bonus: 1,
     damage: 1,
@@ -58,13 +62,14 @@ export namespace meleeWeapons {
     equipped: false,
     bonusType: "black",
     type: "weapon",
-    id: "base dagger",
+    id: "dagger",
     skill: "melee",
   }
 
-  const falchion: ItemWeapon = {
-    id: "base falchion",
-    name: "falchion",
+  export const falchion: ItemWeapon = {
+    id: "falchion",
+    name: "Falchion",
+    category: WEAPON_CATEGORY.sword,
     grip: 1,
     bonus: 1,
     damage: 2,
@@ -81,9 +86,10 @@ export namespace meleeWeapons {
     skill: "melee",
   }
 
-  const shortsword: ItemWeapon = {
-    id: "base shortsword",
+  export const shortsword: ItemWeapon = {
+    id: "shortsword",
     name: "shortsword",
+    category: WEAPON_CATEGORY.sword,
     grip: 1,
     bonus: 2,
     damage: 1,
@@ -101,9 +107,10 @@ export namespace meleeWeapons {
     skill: "melee",
   }
 
-  const broadsword: ItemWeapon = {
-    id: "base broadsword",
+  export const broadsword: ItemWeapon = {
+    id: "broadsword",
     name: "broadsword",
+    category: WEAPON_CATEGORY.sword,
     grip: 1,
     bonus: 2,
     damage: 2,
@@ -121,9 +128,10 @@ export namespace meleeWeapons {
     skill: "melee",
   }
 
-  const longsword: ItemWeapon = {
+  export const longsword: ItemWeapon = {
     id: "longsword",
     name: "longsword",
+    category: WEAPON_CATEGORY.sword,
     grip: 1,
     bonus: 2,
     damage: 2,
@@ -141,9 +149,10 @@ export namespace meleeWeapons {
     skill: "melee",
   }
 
-  const twohandedsword: ItemWeapon = {
+  export const twohandedsword: ItemWeapon = {
     id: "two handed sword",
     name: "two handed sword",
+    category: WEAPON_CATEGORY.sword,
     grip: 2,
     bonus: 2,
     damage: 3,
@@ -161,9 +170,10 @@ export namespace meleeWeapons {
     skill: "melee",
   }
 
-  const scimitar: ItemWeapon = {
+  export const scimitar: ItemWeapon = {
     id: "scimitar",
     name: "scimitar",
+    category: WEAPON_CATEGORY.sword,
     grip: 1,
     bonus: 1,
     damage: 2,
@@ -182,9 +192,10 @@ export namespace meleeWeapons {
     skill: "melee",
   }
 
-  const handaxe: ItemWeapon = {
+  export const handaxe: ItemWeapon = {
     id: "handaxe",
     name: "handaxe",
+    category: WEAPON_CATEGORY.axe,
     grip: 1,
     bonus: 2,
     damage: 2,
@@ -201,9 +212,10 @@ export namespace meleeWeapons {
     skill: "melee",
   }
 
-  const battleaxe: ItemWeapon = {
+  export const battleaxe: ItemWeapon = {
     id: "battleaxe",
     name: "battleaxe",
+    category: WEAPON_CATEGORY.axe,
     grip: 1,
     bonus: 2,
     damage: 2,
@@ -220,9 +232,10 @@ export namespace meleeWeapons {
     skill: "melee",
   }
 
-  const twohandedaxe: ItemWeapon = {
+  export const twohandedaxe: ItemWeapon = {
     id: "two handed axe",
     name: "two handed axe",
+    category: WEAPON_CATEGORY.axe,
     grip: 2,
     bonus: 2,
     damage: 3,
@@ -239,9 +252,10 @@ export namespace meleeWeapons {
     skill: "melee",
   }
 
-  const mace: ItemWeapon = {
+  export const mace: ItemWeapon = {
     id: "mace",
     name: "mace",
+    category: WEAPON_CATEGORY.blunt,
     grip: 1,
     bonus: 2,
     damage: 1,
@@ -257,9 +271,10 @@ export namespace meleeWeapons {
     skill: "melee",
   }
 
-  const morningstar: ItemWeapon = {
+  export const morningstar: ItemWeapon = {
     id: "morningstar",
     name: "morningstar",
+    category: WEAPON_CATEGORY.blunt,
     grip: 1,
     bonus: 2,
     damage: 2,
@@ -274,9 +289,10 @@ export namespace meleeWeapons {
     skill: "melee",
   }
 
-  const warhammer: ItemWeapon = {
+  export const warhammer: ItemWeapon = {
     id: "warhammer",
     name: "warhammer",
+    category: WEAPON_CATEGORY.blunt,
     grip: 1,
     bonus: 2,
     damage: 2,
@@ -292,9 +308,10 @@ export namespace meleeWeapons {
     skill: "melee",
   }
 
-  const flail: ItemWeapon = {
+  export const flail: ItemWeapon = {
     id: "flail",
     name: "flail",
+    category: WEAPON_CATEGORY.blunt,
     grip: 1,
     bonus: 1,
     damage: 2,
@@ -309,9 +326,10 @@ export namespace meleeWeapons {
     skill: "melee",
   }
 
-  const woodenclub: ItemWeapon = {
+  export const woodenclub: ItemWeapon = {
     id: "wooden club",
     name: "wooden club",
+    category: WEAPON_CATEGORY.blunt,
     grip: 1,
     bonus: 1,
     damage: 1,
@@ -325,9 +343,10 @@ export namespace meleeWeapons {
     type: "weapon",
     skill: "melee",
   }
-  const largewoodenclub: ItemWeapon = {
+  export const largewoodenclub: ItemWeapon = {
     id: "large wooden club",
     name: "large wooden club",
+    category: WEAPON_CATEGORY.blunt,
     grip: 2,
     bonus: 1,
     damage: 2,
@@ -342,9 +361,10 @@ export namespace meleeWeapons {
     skill: "melee",
   }
 
-  const heavywarhammer: ItemWeapon = {
+  export const heavywarhammer: ItemWeapon = {
     id: "heavy warhammer",
-    name: "heavy warhammer",
+    name: "Heavy Warhammer",
+    category: WEAPON_CATEGORY.blunt,
     grip: 2,
     bonus: 2,
     damage: 3,
@@ -360,9 +380,10 @@ export namespace meleeWeapons {
     skill: "melee",
   }
 
-  const staff: ItemWeapon = {
+  export const staff: ItemWeapon = {
     id: "staff",
     name: "staff",
+    category: WEAPON_CATEGORY.polearm,
     grip: 2,
     bonus: 1,
     damage: 1,
@@ -379,9 +400,10 @@ export namespace meleeWeapons {
     skill: "melee",
   }
 
-  const shortspear: ItemWeapon = {
+  export const shortspear: ItemWeapon = {
     id: "short spear",
     name: "short spear",
+    category: WEAPON_CATEGORY.polearm,
     grip: 1,
     bonus: 1,
     damage: 1,
@@ -396,9 +418,10 @@ export namespace meleeWeapons {
     skill: "melee",
   }
 
-  const longspear: ItemWeapon = {
+  export const longspear: ItemWeapon = {
     id: "long spear",
     name: "long spear",
+    category: WEAPON_CATEGORY.polearm,
     grip: 2,
     bonus: 2,
     damage: 1,
@@ -413,9 +436,10 @@ export namespace meleeWeapons {
     skill: "melee",
   }
 
-  const pike: ItemWeapon = {
+  export const pike: ItemWeapon = {
     id: "pike",
     name: "pike",
+    category: WEAPON_CATEGORY.polearm,
     grip: 2,
     bonus: 2,
     damage: 2,
@@ -430,9 +454,10 @@ export namespace meleeWeapons {
     skill: "melee",
   }
 
-  const halberd: ItemWeapon = {
+  export const halberd: ItemWeapon = {
     id: "halberd",
     name: "halberd",
+    category: WEAPON_CATEGORY.polearm,
     grip: 2,
     bonus: 2,
     damage: 2,
@@ -449,9 +474,10 @@ export namespace meleeWeapons {
     skill: "melee",
   }
 
-  const trident: ItemWeapon = {
+  export const trident: ItemWeapon = {
     id: "trident",
-    name: "trident",
+    name: "Trident",
+    category: WEAPON_CATEGORY.polearm,
     grip: 2,
     bonus: 1,
     damage: 2,
@@ -505,6 +531,7 @@ export namespace rangedWeapons {
     {
       id: "rock",
       name: "rock",
+      category: WEAPON_CATEGORY.thrown,
       grip: 1,
       bonus: 0,
       damage: 1,
@@ -520,6 +547,7 @@ export namespace rangedWeapons {
     {
       id: "throwing knife",
       name: "throwing knife",
+      category: WEAPON_CATEGORY.thrown,
       grip: 1,
       bonus: 1,
       damage: 1,
@@ -535,6 +563,7 @@ export namespace rangedWeapons {
     {
       id: "throwing axe",
       name: "throwing axe",
+      category: WEAPON_CATEGORY.thrown,
       grip: 1,
       bonus: 1,
       damage: 2,
@@ -550,6 +579,7 @@ export namespace rangedWeapons {
     {
       id: "throwing spear",
       name: "throwing spear",
+      category: WEAPON_CATEGORY.thrown,
       grip: 1,
       bonus: 2,
       damage: 1,
@@ -565,6 +595,7 @@ export namespace rangedWeapons {
     {
       id: "sling",
       name: "sling",
+      category: WEAPON_CATEGORY.thrown,
       grip: 1,
       bonus: 1,
       damage: 1,
@@ -580,6 +611,7 @@ export namespace rangedWeapons {
     {
       id: "short bow",
       name: "short bow",
+      category: WEAPON_CATEGORY.bow,
       grip: 2,
       bonus: 2,
       damage: 1,
@@ -595,6 +627,7 @@ export namespace rangedWeapons {
     {
       id: "longbow",
       name: "longbow",
+      category: WEAPON_CATEGORY.bow,
       grip: 2,
       bonus: 2,
       damage: 1,
@@ -610,6 +643,7 @@ export namespace rangedWeapons {
     {
       id: "light crossbow",
       name: "light crossbow",
+      category: WEAPON_CATEGORY.crossbow,
       grip: 2,
       bonus: 1,
       damage: 2,
@@ -627,6 +661,7 @@ export namespace rangedWeapons {
     {
       id: "heavy crossbow",
       name: "heavy crossbow",
+      category: WEAPON_CATEGORY.crossbow,
       grip: 2,
       bonus: 1,
       damage: 3,
@@ -686,7 +721,7 @@ export const allArmor: ItemArmor[] = [
   },
 ]
 
-const allHelmets: ItemHelmet[] = [
+export const allHelmets: ItemHelmet[] = [
   {
     id: "studded leather cap",
     name: "studded leather cap",
@@ -727,10 +762,10 @@ const allHelmets: ItemHelmet[] = [
   },
 ]
 
-const allShields: ItemShield[] = [
+export const allShields: ItemShield[] = [
   {
     id: "small shield",
-    name: "small shield",
+    name: "Small shield",
     bonus: 1,
     cost: 6,
     weight: 0.5,
@@ -739,7 +774,7 @@ const allShields: ItemShield[] = [
   },
   {
     id: "large shield",
-    name: "large shield",
+    name: "Large shield",
     bonus: 2,
     cost: 15,
     weight: 1,

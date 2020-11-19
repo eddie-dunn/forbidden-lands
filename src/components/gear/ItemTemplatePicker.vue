@@ -23,9 +23,7 @@ export default class ItemTemplatePicker extends Vue {
   get filteredItems() {
     return allItems.filter(
       (item) =>
-        (this.$t(item.name) as string).indexOf(
-          this.activeFilter.toLowerCase()
-        ) >= 0
+        String(this.$t(item.id)).indexOf(this.activeFilter.toLowerCase()) >= 0
     )
   }
   get rangedWeapons() {
@@ -68,7 +66,7 @@ export default class ItemTemplatePicker extends Vue {
     const item = allItems
       .filter((item) => item.id === id)
       .map((item) => {
-        return { ...item, name: capitalize(this.$t(item.name) as string) }
+        return { ...item, name: capitalize(this.$t(item.id) as string) }
       })
       .pop()
     if (item) {
@@ -100,7 +98,7 @@ export default class ItemTemplatePicker extends Vue {
         class="template-item-button capitalize-first"
         @click="selectTemplateItem(item.id)"
       >
-        {{ $t(item.name) }}
+        {{ $t(item.id) }}
       </FLButton>
     </section>
   </div>
@@ -115,6 +113,7 @@ h4 {
 .template-items {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(15ch, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(15ch, auto));
   grid-gap: 10px;
 }
 

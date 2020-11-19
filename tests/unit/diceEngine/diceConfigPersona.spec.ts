@@ -19,12 +19,25 @@ describe(`${Bertil.name} the ${Bertil.profession}`, () => {
       charData: Bertil,
       bonus: 3,
     }
+    const attributeRank = Bertil.attributes[attribute]
     const expected: IDiceConfig = {
       red: 3,
-      white: Bertil.attributes[attribute],
+      white: attributeRank,
       log: [
-        { dice: "white", modifier: 2, reason: T.DICE_CONF_BASE_ATTRIBUTE },
-        { dice: "red", modifier: 3, reason: T.DICE_CONF_BONUS_APPLIED },
+        {
+          dice: "white",
+          modifier: 2,
+          reason: T.DICE_CONF_BASE_ATTRIBUTE,
+          id: "empathy",
+          rank: attributeRank || 0,
+        },
+        {
+          dice: "red",
+          modifier: 3,
+          reason: T.DICE_CONF_BONUS_APPLIED,
+          id: "bonus",
+          rank: 3,
+        },
       ],
     }
     expect(getDice(conf)).toStrictEqual(expected)
@@ -32,12 +45,25 @@ describe(`${Bertil.name} the ${Bertil.profession}`, () => {
 
   it(`has correct dice for skill roll '${skill}'`, () => {
     const conf: IConfigSkill = { type: "skill", skill, charData: Bertil }
+    const attributeRank = Bertil.attributes["agility"] || 0
     const expected: IDiceConfig = {
       red: 3,
       white: 4,
       log: [
-        { dice: "white", modifier: 4, reason: T.DICE_CONF_BASE_ATTRIBUTE },
-        { dice: "red", modifier: 3, reason: T.DICE_CONF_FROM_SKILL },
+        {
+          dice: "white",
+          modifier: 4,
+          reason: T.DICE_CONF_BASE_ATTRIBUTE,
+          id: "agility",
+          rank: attributeRank,
+        },
+        {
+          dice: "red",
+          modifier: 3,
+          reason: T.DICE_CONF_FROM_SKILL,
+          id: skill,
+          rank: 3,
+        },
       ],
     }
     expect(getDice(conf)).toStrictEqual(expected)
@@ -55,8 +81,20 @@ describe(`${Bertil.name} the ${Bertil.profession}`, () => {
       red: 3,
       white: 1,
       log: [
-        { dice: "white", modifier: 1, reason: T.DICE_CONF_BASE_ATTRIBUTE },
-        { dice: "red", modifier: 3, reason: T.DICE_CONF_FROM_SKILL },
+        {
+          dice: "white",
+          modifier: 1,
+          reason: T.DICE_CONF_BASE_ATTRIBUTE,
+          rank: 1,
+          id: "agility",
+        },
+        {
+          dice: "red",
+          modifier: 3,
+          reason: T.DICE_CONF_FROM_SKILL,
+          id: skill,
+          rank: 3,
+        },
       ],
     }
     expect(

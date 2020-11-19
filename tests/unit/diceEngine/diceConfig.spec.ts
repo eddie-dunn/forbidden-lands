@@ -29,7 +29,15 @@ describe(`${getDice.name} attribute`, () => {
     }
     const expected: IDiceConfig = {
       white: 2,
-      log: [{ dice: "white", modifier: 2, reason: T.DICE_CONF_BASE_ATTRIBUTE }],
+      log: [
+        {
+          id: conf.attributeType,
+          dice: "white",
+          modifier: 2,
+          rank: 2,
+          reason: T.DICE_CONF_BASE_ATTRIBUTE,
+        },
+      ],
     }
     expect(getDice(conf)).toStrictEqual(expected)
   })
@@ -44,7 +52,15 @@ describe(`${getDice.name} attribute`, () => {
       charData: char,
     }
     const expected: IDiceConfig = {
-      log: [{ dice: "white", modifier: 0, reason: T.DICE_CONF_BASE_ATTRIBUTE }],
+      log: [
+        {
+          id: conf.attributeType,
+          dice: "white",
+          modifier: 0,
+          rank: 0,
+          reason: T.DICE_CONF_BASE_ATTRIBUTE,
+        },
+      ],
     }
     expect(getDice(conf)).toStrictEqual(expected)
   })
@@ -59,7 +75,15 @@ describe(`${getDice.name} attribute`, () => {
     }
     const expected: IDiceConfig = {
       white: 5,
-      log: [{ dice: "white", modifier: 5, reason: T.DICE_CONF_BASE_ATTRIBUTE }],
+      log: [
+        {
+          id: conf.attributeType,
+          dice: "white",
+          modifier: 5,
+          rank: 5,
+          reason: T.DICE_CONF_BASE_ATTRIBUTE,
+        },
+      ],
     }
     expect(getDice(conf)).toStrictEqual(expected)
   })
@@ -74,7 +98,15 @@ describe(`${getDice.name} attribute`, () => {
     }
     const expected: IDiceConfig = {
       white: 1,
-      log: [{ dice: "white", modifier: 1, reason: T.DICE_CONF_BASE_ATTRIBUTE }],
+      log: [
+        {
+          id: conf.attributeType,
+          dice: "white",
+          modifier: 1,
+          rank: 1,
+          reason: T.DICE_CONF_BASE_ATTRIBUTE,
+        },
+      ],
     }
     expect(getDice(conf)).toStrictEqual(expected)
   })
@@ -96,8 +128,20 @@ describe(`${getDice.name} skill`, () => {
     const expected: IDiceConfig = {
       white: agi,
       log: [
-        { dice: "white", modifier: agi, reason: T.DICE_CONF_BASE_ATTRIBUTE },
-        { dice: "red", modifier: 0, reason: "DICE_CONF_FROM_SKILL" },
+        {
+          id: "agility",
+          dice: "white",
+          modifier: agi,
+          reason: T.DICE_CONF_BASE_ATTRIBUTE,
+          rank: 4,
+        },
+        {
+          id: "move",
+          dice: "red",
+          modifier: 0,
+          reason: "DICE_CONF_FROM_SKILL",
+          rank: 0,
+        },
       ],
     }
     expect(getDice(config)).toStrictEqual(expected)
@@ -111,8 +155,20 @@ describe(`${getDice.name} skill`, () => {
       white: str,
       red: skillRank,
       log: [
-        { dice: "white", modifier: str, reason: T.DICE_CONF_BASE_ATTRIBUTE },
-        { dice: "red", modifier: skillRank, reason: "DICE_CONF_FROM_SKILL" },
+        {
+          dice: "white",
+          modifier: str,
+          reason: T.DICE_CONF_BASE_ATTRIBUTE,
+          rank: str,
+          id: "strength",
+        },
+        {
+          dice: "red",
+          modifier: skillRank,
+          reason: "DICE_CONF_FROM_SKILL",
+          id: "melee",
+          rank: skillRank,
+        },
       ],
     })
   })
@@ -129,9 +185,27 @@ describe(`${getDice.name} skill`, () => {
       white: wit,
       red: bonus,
       log: [
-        { dice: "white", modifier: wit, reason: T.DICE_CONF_BASE_ATTRIBUTE },
-        { dice: "red", modifier: 0, reason: T.DICE_CONF_FROM_SKILL },
-        { dice: "red", modifier: bonus, reason: T.DICE_CONF_BONUS_APPLIED },
+        {
+          dice: "white",
+          modifier: wit,
+          reason: T.DICE_CONF_BASE_ATTRIBUTE,
+          id: "wits",
+          rank: wit,
+        },
+        {
+          dice: "red",
+          modifier: 0,
+          reason: T.DICE_CONF_FROM_SKILL,
+          id: "insight",
+          rank: 0,
+        },
+        {
+          dice: "red",
+          modifier: bonus,
+          reason: T.DICE_CONF_BONUS_APPLIED,
+          id: "bonus",
+          rank: bonus,
+        },
       ],
     })
   })
@@ -146,9 +220,27 @@ describe(`${getDice.name} skill`, () => {
       white: emp,
       red: skillRank + bonus,
       log: [
-        { dice: "white", modifier: emp, reason: T.DICE_CONF_BASE_ATTRIBUTE },
-        { dice: "red", modifier: skillRank, reason: T.DICE_CONF_FROM_SKILL },
-        { dice: "red", modifier: bonus, reason: T.DICE_CONF_BONUS_APPLIED },
+        {
+          id: "empathy",
+          dice: "white",
+          modifier: emp,
+          rank: emp,
+          reason: T.DICE_CONF_BASE_ATTRIBUTE,
+        },
+        {
+          id: skill,
+          dice: "red",
+          modifier: skillRank,
+          rank: skillRank,
+          reason: T.DICE_CONF_FROM_SKILL,
+        },
+        {
+          id: "bonus",
+          dice: "red",
+          modifier: bonus,
+          rank: bonus,
+          reason: T.DICE_CONF_BONUS_APPLIED,
+        },
       ],
     }
     expect(getDice(skillConfig)).toStrictEqual(expected)

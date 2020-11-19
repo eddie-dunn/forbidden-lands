@@ -48,6 +48,7 @@ export type Skill =
   | "sleight of hand"
   | "stealth"
   | "survival"
+export type TSkillId = Skill
 
 export type Sex = "male" | "female" | "unset"
 

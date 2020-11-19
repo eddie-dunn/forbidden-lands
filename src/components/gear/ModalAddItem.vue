@@ -7,9 +7,10 @@ import uuid1 from "uuid/v1"
 import Modal from "@/components/Modal.vue"
 import FLButton from "@/components/base/FLButton.vue"
 import FLInput from "@/components/base/FLInput.vue"
+import { FLSelect, Option, Optgroup } from "@/components/base/FLSelect.vue"
 import { CharacterData, CharacterTalent } from "@/data/character/characterData"
 import { allItems } from "@/data/items/items.ts"
-import { Item } from "@/data/items/itemTypes"
+import { Item, WEAPON_CATEGORY } from "@/data/items/itemTypes"
 import { capitalize } from "@/util/util"
 import ItemTemplatePicker from "@/components/gear/ItemTemplatePicker.vue"
 import FLNumberInput from "@/components/base/FLNumberInput.vue"
@@ -24,7 +25,6 @@ function defaultItem(): Item {
     weight: 1,
     type: "",
     id: uuid1(),
-    features: {},
   }
 }
 
@@ -33,6 +33,7 @@ function defaultItem(): Item {
     FLButton,
     FLInput,
     FLNumberInput,
+    FLSelect,
     ItemTemplatePicker,
     Modal,
     TabBar,
@@ -47,6 +48,17 @@ export default class AddItem extends Vue {
   get isWeapon(): boolean {
     return this.tmpGear.type === "weapon"
   }
+
+  weaponCategories: (Option & { id: WEAPON_CATEGORY })[] = [
+    { id: WEAPON_CATEGORY.axe },
+    { id: WEAPON_CATEGORY.blunt },
+    { id: WEAPON_CATEGORY.knife },
+    { id: WEAPON_CATEGORY.polearm },
+    { id: WEAPON_CATEGORY.sword },
+    { id: WEAPON_CATEGORY.bow },
+    { id: WEAPON_CATEGORY.crossbow },
+    { id: WEAPON_CATEGORY.thrown },
+  ]
 
   pageFor(itemType: string) {
     const loc = this.$i18n.locale
@@ -202,6 +214,18 @@ export default class AddItem extends Vue {
           <option value="other">{{ $t("Other") }}</option>
         </select>
 
+        <div v-if="isWeapon" class="contents">
+          <label for="gear-type" class="capitalize-first">
+            {{ $t("category") }}
+          </label>
+          <FLSelect
+            v-model="tmpGear.category"
+            :options="weaponCategories"
+            :translateOptions="true"
+            :fullWidth="true"
+          />
+        </div>
+
         <label for="gear-weight">{{ $t("Weight") }}</label>
         <select v-model.number="tmpGear.weight">
           <option disabled value="">{{ $t("Choose") }}</option>
@@ -242,9 +266,6 @@ export default class AddItem extends Vue {
           <option class="capitalize" value="2">{{ $t("Short") }}</option>
           <option class="capitalize" value="3">{{ $t("Long") }}</option>
         </select>
-
-        <label for="gear-comment">{{ $t("Comment") }}</label>
-        <input type="text" v-model="tmpGear.comment" />
 
         <label v-if="isWeapon" for="weapon-features">
           {{ $t("Features") }}
@@ -310,6 +331,9 @@ export default class AddItem extends Vue {
           </div>
         </div>
 
+        <label for="gear-comment">{{ $t("Comment") }}</label>
+        <input type="text" v-model="tmpGear.comment" />
+
         <div v-if="tmpGear.type" class="grid-row-full">
           <h4>Info</h4>
           <div>
@@ -325,7 +349,7 @@ export default class AddItem extends Vue {
       <FLButton @click="close" type="cancel">
         {{ $t("Cancel") }}
       </FLButton>
-      <FLButton @click="save">OK</FLButton>
+      <FLButton :disabled="!newActive" @click="save">OK</FLButton>
     </div>
 
     <!-- spacer -->
@@ -339,8 +363,15 @@ export default class AddItem extends Vue {
 }
 
 .grid-features {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(13ch, 1fr));
+  // display: grid;
+  // grid-template-columns: repeat(auto-fill, minmax(13ch, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  > div {
+    flex: 1 0 26%;
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
 }
 .grid-row-full {
   grid-column-start: 1;
@@ -358,6 +389,11 @@ export default class AddItem extends Vue {
 .new-item-form {
   display: grid;
   grid-template-columns: auto 1fr;
+  // grid-template-columns: 100px 1fr auto 1fr;
+  // grid-template-columns: repeat(
+  //   auto-fill,
+  //   minmax(80px, 100px) minmax(200px, 2fr)
+  // );
   grid-gap: 1rem;
   align-items: center;
 }
@@ -372,5 +408,9 @@ export default class AddItem extends Vue {
 
 .inventory-modal {
   margin: 0 auto;
+}
+
+.contents {
+  display: contents;
 }
 </style>

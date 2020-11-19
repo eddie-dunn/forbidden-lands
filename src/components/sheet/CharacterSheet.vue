@@ -20,6 +20,7 @@ import GearCard from "@/components/sheet/cards/GearCard.vue"
 import MountCard from "@/components/sheet/cards/MountCard.vue"
 import NoteCard from "@/components/sheet/cards/NoteCard.vue"
 import StateCard from "@/components/sheet/cards/StateCard.vue"
+import { CardCombat } from "@/components/sheet/cards/CombatCard.vue"
 import AnimalCompanionCard from "@/components/sheet/cards/AnimalCompanionCard.vue"
 
 function stringChar(characterData: CharData) {
@@ -31,6 +32,7 @@ function stringChar(characterData: CharData) {
     ActionBar,
     AnimalCompanionCard,
     BaseCard,
+    CardCombat,
     FLButton,
     GearCard,
     MountCard,
@@ -148,6 +150,14 @@ export default class CharacterEditor extends Vue {
         :charData="charData"
         :viewOnly="viewOnly"
       />
+
+      <CardCombat
+        v-if="this.$BETA && !viewOnly && status === 'active'"
+        class="row full print-hide"
+        :charData="charData"
+        v-on:updated-chardata="handleCharDataUpdate"
+      />
+
       <GearCard class="row full" :charData="charData" :viewOnly="viewOnly" />
       <MountCard class="row half" :charData="charData" :viewOnly="viewOnly" />
       <AnimalCompanionCard
@@ -254,6 +264,6 @@ export default class CharacterEditor extends Vue {
 
 .half {
   flex-grow: 1;
-  flex-basis: 49%;
+  flex-basis: 360px;
 }
 </style>

@@ -1,9 +1,11 @@
+import { CharData } from "@/data/character/characterData"
 import {
   IDiceConfig,
   IDiceResult,
   TDiceSides,
-  Dice,
+  DICE_TYPE,
   TDiceColor,
+  DICE_SIDES,
 } from "./diceTypes"
 import { getRandomIntInclusive } from "./diceUtil"
 
@@ -87,12 +89,12 @@ type TColorSidesMap = {
   [key in TDiceColor]: TDiceSides
 }
 const colorToSidesMap: TColorSidesMap = {
-  [Dice.white]: 6,
-  [Dice.black]: 6,
-  [Dice.red]: 6,
-  [Dice.green]: 8,
-  [Dice.blue]: 10,
-  [Dice.orange]: 12,
+  [DICE_TYPE.white]: 6,
+  [DICE_TYPE.black]: 6,
+  [DICE_TYPE.red]: 6,
+  [DICE_TYPE.green]: 8,
+  [DICE_TYPE.blue]: 10,
+  [DICE_TYPE.orange]: 12,
 }
 
 function pushResult(result: number[], color: TDiceColor) {
@@ -127,4 +129,65 @@ export function pushDice(result: IDiceResult): IDiceResult {
   // add failWhite
   // add failBlack
   return result
+}
+
+function nbrSwords(n?: number[]) {
+  return n?.reduce((a, b) => a + sucesssMap[b] || 0, 0) || 0
+}
+function nbrSkulls(n?: number[]) {
+  return n?.reduce((a, b) => a + (b === 1 ? 1 : 0), 0) || 0
+}
+function totalSwords(r: IRollResult) {
+  return Object.values(r).reduce((a, b) => a + nbrSwords(b), 0)
+}
+
+interface IRollResult {
+  white?: number[]
+  red?: number[]
+  black?: number[]
+  green?: number[]
+  blue?: number[]
+  orange?: number[]
+  [key: string]: number[] | undefined
+}
+
+/** Get dice rolls for a set number of dice */
+function getDiceRolls(
+  nbrDice: number | null | undefined,
+  sides: TDiceSides
+): number[] {
+  const rollResult: number[] = []
+  if (!nbrDice) {
+    return rollResult
+  }
+  const lim = Math.abs(nbrDice)
+  for (let i = 1; i <= lim; i++) {
+    const result = rollDiceType(sides)
+    rollResult.push(result)
+  }
+  return rollResult
+}
+
+export function getRollResult(conf: IDiceConfig): IRollResult {
+  return {
+    white: getDiceRolls(conf.white, DICE_SIDES.white),
+    red: getDiceRolls(conf.red, DICE_SIDES.red),
+    black: getDiceRolls(conf.black, DICE_SIDES.black),
+    green: getDiceRolls(conf.green, DICE_SIDES.green),
+    blue: getDiceRolls(conf.blue, DICE_SIDES.blue),
+    orange: getDiceRolls(conf.orange, DICE_SIDES.orange),
+  }
+}
+
+export function canPush(
+  char: CharData,
+  log: IDiceResult[],
+  reactiveRoll?: boolean
+): boolean {
+  if (!!reactiveRoll) return false
+
+  if (log.length === 1) return true
+  if (char.kin === "dwarf" && char.willpower > 0) return true
+
+  return false
 }
