@@ -148,6 +148,7 @@ export default Vue.extend({
 body {
   margin: 0;
   color: @color-text;
+  background-color: @color-background;
 }
 
 .page-title {
