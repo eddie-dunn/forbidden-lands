@@ -76,6 +76,10 @@ export default class FLInput extends Vue {
   display: inline-flex;
   flex-direction: column;
   align-items: flex-start;
+  :focus {
+    // -webkit-focus-ring-color: auto 1px;
+    outline: solid @color-main-transparent 1px;
+  }
 }
 
 .error-text {
