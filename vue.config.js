@@ -21,6 +21,7 @@ module.exports = {
     },
     resolve: {
       alias: {
+        Tests: path.resolve(__dirname, "tests"),
         Style: path.resolve(__dirname, "src/assets/style/"),
       },
     },
