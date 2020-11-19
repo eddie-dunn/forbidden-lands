@@ -7,6 +7,11 @@ import {
   SkillTranslations,
   TalentTranslations,
 } from "./localetypes"
+import {
+  ICombatAction,
+  ACTION_FAST,
+  ACTION_SLOW,
+} from "@/data/combat/typesCombat"
 
 const age: AgeTranslations = {
   "age": "age",
@@ -253,7 +258,40 @@ const weapons = {
   "two handed axe": "two handed axe",
   "two handed sword": "two handed sword",
   "warhammer": "warhammer",
-  "wodden club": "wooden club",
+  "wooden club": "wooden club",
+}
+
+const combatActionsSlow: { [value in ACTION_SLOW]: string } = {
+  "action-break_free": "break free",
+  "action-cast": "cast spell",
+  "action-charge": "charge",
+  "action-crawl": "crawl",
+  "action-flee": "flee",
+  "action-grapple": "grapple",
+  "action-persuade": "persuade",
+  "action-shoot": "shoot",
+  "action-slash": "slash",
+  "action-stab": "stab",
+  "action-taunt": "taunt",
+  "action-unarmed_attack": "unarmed attack",
+}
+
+const combatActionsFast: { [value in ACTION_FAST]: string } = {
+  "action-aim": "aim",
+  "action-disarm": "disarm",
+  "action-dodge": "dodge",
+  "action-draw_weapon": "draw weapon",
+  "action-feint": "feint",
+  "action-get_up": "get up",
+  "action-grapple_attack": "grapple attack",
+  "action-parry": "parry",
+  "action-power_word": "power word",
+  "action-ready_weapon": "ready weapon",
+  "action-retreat": "retreat",
+  "action-run": "run",
+  "action-shove": "shove",
+  "action-swing_weapon": "swing weapon",
+  "action-use_item": "use item",
 }
 
 export default {
@@ -265,6 +303,8 @@ export default {
   ...talents,
   ...GearDescriptions,
   ...weapons,
+  ...combatActionsFast,
+  ...combatActionsSlow,
 
   // Keys
   "ATTRIB_REMAINING": "Current",
@@ -373,6 +413,7 @@ export default {
   "Reputation": "Reputation",
   "Reset": "Reset",
   "Roll dice": "Roll dice",
+  "Sandbox": "Sandbox",
   "Save": "Save",
   "Save & Close": "Save & Close",
   "Select import file": "Select import file",
@@ -402,15 +443,24 @@ export default {
 
   // lowercase
 
+  "action": "action",
   "animal companion": "animal companion",
   "armor": "armor",
   "armslength": "arm's length",
   "attribute": "attribute",
+  "axe": "axe",
   "blunt": "blunt",
+  "bonus": "bonus",
+  "bow": "bow",
+  "category": "category",
   "character": "character",
   "childhood": "childhood",
+  "combat": "combat",
+  "combat-action-fast": "fast",
+  "combat-action-slow": "slow",
   "confirm": "confirm",
   "create from template": "create from template",
+  "crossbow": "crossbow",
   "current": "current",
   "description": "description",
   "dmg": "dmg",
@@ -420,19 +470,28 @@ export default {
   "formative event": "formative event",
   "helmets": "helmets",
   "hook": "hook",
+  "humanoid": "humanoid",
+  "initiative": "initiative",
+  "item": "item",
+  "knife": "knife",
   "legendary": "legendary",
   "long": "long",
   "male": "male",
   "melee weapons": "melee weapons",
   "mighty": "mighty",
+  "monster": "monster",
   "movement rate": "movement rate",
   "name": "name",
   "near": "near",
+  "next round": "next round",
   "no character": "no character",
+  "none": "none",
+  "opponent": "target",
   "or more": "or more",
   "other": "other",
   "parrying": "parrying",
   "pointed": "pointed",
+  "polearm": "spear",
   "probability": "probability",
   "properties": "properties",
   "ranged weapons": "ranged weapons",
@@ -440,8 +499,11 @@ export default {
   "sex": "sex",
   "shields": "shields",
   "short": "short",
+  "skill": "skill",
   "slow_loading": "slow loading",
+  "sword": "sword",
   "talents": "talents",
+  "thrown": "thrown",
   "unarmed": "unarmed",
 
   // Param

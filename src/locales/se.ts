@@ -8,6 +8,7 @@ import {
   TalentTranslations,
 } from "./localetypes"
 import en from "./en"
+import { ACTION_FAST, ACTION_SLOW } from "@/data/combat/typesCombat"
 
 const age: AgeTranslations = {
   "age": "ålder",
@@ -72,7 +73,7 @@ const skills: SkillTranslations = {
   "survival": "överlevnad",
 }
 
-const talents2: TalentTranslations = {
+const talents: TalentTranslations = {
   // Kin
   "True Grit": "Bita ihop", // dwarf
   "Inner Peace": "Inre frid", // elf
@@ -173,107 +174,6 @@ const talents2: TalentTranslations = {
   "Path of Stone": "Stenens Väg",
 }
 
-const talents = {
-  // Kin
-  TRUE_GRIT: "Bita ihop", // dwarf
-  INNER_PEACE: "Inre frid", // elf
-  SNEAKY: "Lömsk", // goblin
-  PSYCHIC_POWER: "Psykisk kraft", // half-elf
-  HARD_TO_CATCH: "Kvickfotad", // halfling
-  ADAPTIVE: "Adaptiv", // human
-  UNBREAKABLE: "Stryktålig", // orc
-  HUNTING_INSTINCTS: "Jaktsinne", // wolfkin
-
-  // General
-  AMBIDEXTROUS: "Dubbelhänt",
-  AXE_FIGHTER: "Yxkämpe",
-  BERSERKER: "Bärsärk",
-  BOWYER: "Bågmakare",
-  BRAWLER: "Slagskämpe",
-  BUILDER: "Byggare",
-  CHEF: "Kock",
-  COLD_BLOODED: "Kallblodig",
-  DEFENDER: "Defensiv",
-  DRAGONSLAYER: "Drakdräpare",
-  EXECUTIONER: "Bödel",
-  FAST_FOOTWORK: "Hal som en ål",
-  FAST_SHOOTER: "Snabbskytt",
-  FEARLESS: "Orädd",
-  FIRM_GRIP: "Järngrepp",
-  FISHER: "Fiskare",
-  HAMMER_FIGHTER: "Hammarkämpe",
-  HERBALIST: "Örtakännare",
-  HORSEBACK_FIGHTER: "Ryttarkämpe",
-  INCORRUPTIBLE: "Omutlig",
-  KNIFE_FIGHTER: "Knivkämpe",
-  LIGHTNING_FAST: "Blixtsnabb",
-  LOCKPICKER: "Låsdyrkare",
-  LUCKY: "Tursam",
-  MASTER_OF_THE_HUNT: "Jaktmästare",
-  MELEE_CHARGE: "Stormare",
-  PACK_RAT: "Packåsna",
-  PAIN_RESISTANT: "Smärttålig",
-  PATHFINDER: "Stigfinnare",
-  POISONER: "Giftkokare",
-  QUARTERMASTER: "Kvartermästare",
-  QUICKDRAW: "Snabbdrag",
-  SAILOR: "Skeppare",
-  SHARPSHOOTER: "Prickskytt",
-  SHARP_TONGUE: "Vass tunga",
-  SHIELD_FIGHTER: "Sköldkämpe",
-  SIXTH_SENSE: "Ögon i nacken",
-  SMITH: "Smed",
-  SPEAR_FIGHTER: "Spjutkämpe",
-  STEADY_FEET: "Stadig på foten",
-  SWORD_FIGHTER: "Svärdskämpe",
-  TAILOR: "Skräddare",
-  TANNER: "Garvare",
-  THREATENING: "Hotfull",
-  THROWING_ARM: "Kastarm",
-  WANDERER: "Vandrare",
-
-  // Druid
-  PATH_OF_HEALING: "Helandets Väg",
-  PATH_OF_SHIFTING_SHAPES: "Hamnskiftets Väg",
-  PATH_OF_SIGHT: "Synens Väg",
-
-  // Fighter
-  PATH_OF_THE_BLADE: "Klingans Väg",
-  PATH_OF_THE_ENEMY: "Fiendens Väg",
-  PATH_OF_THE_SHIELD: "Sköldens Väg",
-
-  // HUNTER
-  PATH_OF_THE_ARROW: "Pilens Väg",
-  PATH_OF_THE_BEAST: "Djurets Väg",
-  PATH_OF_THE_FOREST: "Skogens Väg",
-
-  // MINSTREL
-  PATH_OF_THE_HYMN: "Hymnens Väg",
-  PATH_OF_THE_SONG: "Stämmans Väg",
-  PATH_OF_THE_WARCRY: "Stridsropets Väg",
-
-  // Peddler
-  PATH_OF_GOLD: "Guldets Väg",
-  PATH_OF_LIES: "Lögnens Väg",
-  PATH_OF_MANY_THINGS: "Kappsäckens Väg",
-
-  // Rider
-  PATH_OF_THE_COMPANION: "Följeslagarens Väg",
-  PATH_OF_THE_KNIGHT: "Riddarens Väg",
-  PATH_OF_THE_PLAINS: "Viddernas Väg",
-
-  // Rogue
-  PATH_OF_THE_FACE: "Ansiktets Väg",
-  PATH_OF_THE_KILLER: "Mördarens Väg",
-  PATH_OF_POISON: "Giftets Väg",
-
-  // Sorcerer
-  PATH_OF_BLOOD: "Blodets Väg",
-  PATH_OF_DEATH: "Dödens Väg",
-  PATH_OF_SIGNS: "Tecknets Väg",
-  PATH_OF_STONE: "Stenens Väg",
-}
-
 const GearDescriptions: GearDescriptionTranslations = {
   gear_druid: `
     Stav eller kniv, ett valfritt föremål ur listan över bruksföremål
@@ -364,6 +264,39 @@ const templateGear = {
   "pike": "pik",
 }
 
+const combatActionsSlow: { [value in ACTION_SLOW]: string } = {
+  "action-break_free": "bryta grepp",
+  "action-cast": "besvärja",
+  "action-charge": "storma",
+  "action-crawl": "krypa",
+  "action-flee": "fly",
+  "action-grapple": "grepp",
+  "action-persuade": "övertala",
+  "action-shoot": "avlossa",
+  "action-slash": "hugg",
+  "action-stab": "stöt",
+  "action-taunt": "håna",
+  "action-unarmed_attack": "slag/spark/bett",
+}
+
+const combatActionsFast: { [value in ACTION_FAST]: string } = {
+  "action-aim": "sikta",
+  "action-disarm": "avväpna",
+  "action-dodge": "ducka",
+  "action-draw_weapon": "drag vapen",
+  "action-feint": "finta",
+  "action-get_up": "resa sig",
+  "action-grapple_attack": "tjuvnup",
+  "action-parry": "parera",
+  "action-power_word": "kraftord",
+  "action-ready_weapon": "lägga an",
+  "action-retreat": "retirera",
+  "action-run": "springa",
+  "action-shove": "knuffa",
+  "action-swing_weapon": "tag sats",
+  "action-use_item": "använda föremål",
+}
+
 export default {
   ...en, // Adding English strings for convenience; comment out to test missing translations
 
@@ -373,9 +306,10 @@ export default {
   ...professions,
   ...skills,
   ...talents,
-  ...talents2,
   ...GearDescriptions,
   ...templateGear,
+  ...combatActionsFast,
+  ...combatActionsSlow,
 
   "CONFIRM_DELETE_CHAR": "Vill du verkligen radera din rollperson?",
   "ATTRIB_REMAINING": "Kvar",
@@ -516,15 +450,23 @@ export default {
 
   // Lowercase
 
+  "action": "handling",
   "animal companion": "djurkompanjon",
   "armor": "rustning",
   "armslength": "armslängd",
   "attribute": "grundegenskap",
+  "axe": "yxa",
   "blunt": "trubbig",
+  "bow": "pilbåge",
+  "category": "kategori",
   "character": "karaktär",
   "childhood": "uppväxt",
+  "combat": "strid",
+  "combat-action-fast": "kort",
+  "combat-action-slow": "lång",
   "confirm": "bekräfta",
   "create from template": "skapa från mall",
+  "crossbow": "armborst",
   "description": "beskrivning",
   "dmg": "skada",
   "edged": "egg",
@@ -533,20 +475,29 @@ export default {
   "formative event": "livshändelse",
   "helmets": "hjälmar",
   "hook": "krok",
+  "humanoid": "humanoid",
+  "initiative": "initiativ",
+  "item": "föremål",
+  "knife": "kniv",
   "legendary": "legendarisk",
   "long": "lång",
   "male": "man",
   "melee weapons": "närstridsvapen",
   "mighty": "mäktig",
+  "monster": "monster",
   "movement rate": "förflyttningsvärde",
   "near": "nära",
+  "next round": "ny runda",
   "no character": "ingen rollperson",
   "no suitable weapon equipped": "inget lämpligt vapen i hand",
+  "none": "ingen",
+  "opponent": "motståndare",
   "options": "inställningar",
   "or more": "eller fler",
   "other": "övrigt",
   "parrying": "parera",
   "pointed": "spets",
+  "polearm": "stångvapen",
   "probability": "sannolikhet",
   "properties": "egenskaper",
   "ranged weapons": "avståndsvapen",
@@ -554,8 +505,11 @@ export default {
   "sex": "kön",
   "shields": "sköldar",
   "short": "kort",
+  "skill": "färdighet",
   "slow_loading": "långsam",
+  "sword": "svärd",
   "talents": "talanger",
+  "thrown": "kastvapen",
   "unarmed": "obeväpnad",
 
   // Param
