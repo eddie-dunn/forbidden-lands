@@ -184,10 +184,10 @@ export default class GearPicker extends Vue {
     this.charData.gear.inventory.push(item)
   }
 
-  updateItem(item: Item) {
+  updateItem(updatedItem: Item) {
     this.charData.gear.inventory = this.inventory.map((mitem) => {
-      if (mitem.id !== item.id) return mitem
-      return item
+      if (mitem.id !== updatedItem.id) return mitem
+      return updatedItem
     })
     this.addItemEdit = null
   }

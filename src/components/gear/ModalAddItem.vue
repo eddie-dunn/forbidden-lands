@@ -125,25 +125,9 @@ export default class AddItem extends Vue {
   get armorTemplates() {
     return this.filteredItems.filter((item) => item.type === "armor")
   }
-  selectTemplateItem(id: string) {
-    const item = allItems
-      .filter((item) => item.id === id)
-      .map((item) => {
-        return {
-          ...item,
-          id: uuid1(),
-          name: capitalize(this.$t(item.name) as string),
-        }
-      })
-      .pop()
-    if (item) {
-      this.tmpGear = item
-      this.showNew()
-    }
-  }
 
-  onTemplatePicked(item: any) {
-    this.tmpGear = item
+  onTemplatePicked(item: Item) {
+    this.tmpGear = { ...item, id: uuid1() }
     this.showNew()
     this.tabIndex = 1
   }

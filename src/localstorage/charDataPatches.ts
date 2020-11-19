@@ -9,6 +9,7 @@ import { Item } from "@/data/items/itemTypes"
 
 import { GENERAL_TALENTS } from "@/talents"
 import uuid1 from "uuid/v1"
+import uuid from "uuid"
 
 type StoredCharDataPatch = (charData: CharData) => CharData
 type EphemeralCharDataPatch = (charData: CharData) => null
@@ -131,6 +132,18 @@ const charDataPatches: CharDataPatch[] = [
       console.log("Fixing portrait http -> https", c.portrait, httpsPortrait)
       c.portrait = httpsPortrait
     }
+    return c
+  },
+  function fixItemIds(c: CharData): CharData {
+    const newInv = c.gear.inventory.map((i) => {
+      if (i.id.length !== 36) {
+        const id = uuid1()
+        console.log(`Replacing id ${i.id} with ${id}`)
+        return { ...i, id: uuid1() }
+      }
+      return i
+    })
+    c.gear.inventory = newInv
     return c
   },
   // Permanent patches
