@@ -14,8 +14,11 @@ import SvgIcon from "@/components/SvgIcon.vue"
 import ModalAddItem from "@/components/gear/ModalAddItem.vue"
 import ModalConfirm from "@/components/ModalConfirm.vue"
 
+import { GearStarting } from "./GearStarting.vue"
+
 @Component({
   components: {
+    GearStarting,
     FLButton,
     FLNumberInput,
     ModalAddItem,
@@ -243,31 +246,7 @@ export default class GearPicker extends Vue {
 <template>
   <div v-if="charData.profession" class="gear-picker">
     <!-- start -->
-
-    <div v-if="charData.metadata.status === 'new'">
-      <h4>{{ $t("Starting gear") }}</h4>
-      <div v-if="charData.metadata.startingItems">
-        <p
-          v-for="item in charData.metadata.startingItems.split('\n')"
-          v-bind:key="item"
-        >
-          ✣ {{ item }}
-        </p>
-      </div>
-      <div v-else>
-        {{ $t(PROFESSION[charData.profession].gear_description) }}
-      </div>
-      <p>
-        Silver:
-        {{
-          $t("D") +
-            PROFESSION[charData.profession].starting_resources.silver +
-            " (" +
-            $t("Roll dice before session starts") +
-            ")"
-        }}
-      </p>
-    </div>
+    <GearStarting :charData="charData" />
 
     <ModalAddItem
       v-if="showEditItem"

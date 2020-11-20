@@ -10,7 +10,7 @@ import {
 import { FLSelect, Option } from "@/components/base/FLSelect.vue"
 import { FLNumberInput } from "@/components/base/FLNumberInput.vue"
 import { IconButton } from "@/components/base/IconButton.vue"
-import { CombatConfig } from "@/components/dice/combat/CombatConfig.vue"
+import { DiceCombatConfig } from "@/components/dice/combat/DiceCombatConfig.vue"
 import { ACTION_FAST, ACTION_ALL } from "@/data/combat/typesCombat"
 import { TSkillId } from "@/types"
 
@@ -27,7 +27,7 @@ import { Item } from "@/data/items/itemTypes"
 
 @Component({
   components: {
-    CombatConfig,
+    DiceCombatConfig,
     ExpandableSection,
     FLSelect,
     FLNumberInput,
@@ -122,7 +122,7 @@ export default DiceCombat
           </div>
         </div>
       </template>
-      <CombatConfig
+      <DiceCombatConfig
         :charData="charData"
         :actionId="actionId"
         :skillId="skillId"

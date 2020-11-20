@@ -4,7 +4,7 @@ import { Component, Prop, Watch } from "vue-property-decorator"
 
 import { CharData } from "@/data/character/characterData"
 
-import GearPicker from "@/components/GearPicker.vue"
+import GearPicker from "@/components/gear/GearPicker.vue"
 import Card from "@/components/Card.vue"
 
 @Component({

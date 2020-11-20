@@ -31,7 +31,7 @@ const skills: Option[] = Object.values(SKILLS).map(({ id }) => ({ id }))
     IconButton,
   },
 })
-export class CombatConfig extends Vue {
+export class DiceCombatConfig extends Vue {
   @Prop({ default: null }) charData!: CharData
   @Prop({ default: "" }) actionId!: ACTION_ALL | ""
   @Prop({ default: "" }) skillId!: TSkillId | ""
@@ -152,7 +152,7 @@ export class CombatConfig extends Vue {
   }
 }
 
-export default CombatConfig
+export default DiceCombatConfig
 </script>
 
 <template>
