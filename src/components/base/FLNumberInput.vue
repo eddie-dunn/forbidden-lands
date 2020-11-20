@@ -149,9 +149,11 @@ export default FLNumberInput
 }
 
 .fl-number-button {
+  display: inline-block;
   @media print {
     display: none;
   }
+  touch-action: manipulation;
   margin: 0;
   outline-width: 0;
   border: solid 1px @pastel-green;

@@ -53,6 +53,7 @@ export default FLButton
   text-decoration: none;
   padding: 0.5rem 1rem;
   display: inline-block;
+  touch-action: manipulation;
   color: #fff;
   background-color: @pastel-green;
   transition: all 0.15s ease;
