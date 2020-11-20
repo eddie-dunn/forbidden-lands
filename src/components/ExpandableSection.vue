@@ -65,16 +65,14 @@ export default ExpandableSection
 </script>
 
 <template>
-  <section :class="[border && 'border', isExpanded ? '' : 'max-content']">
-    <div
-      :class="['expander']"
-      ref="expander"
-      tabindex="0"
-      @click="expandToggle"
-      @focus="focus"
-      @blur="blur"
-      v-on:keyup="expandToggle"
-    >
+  <section
+    :class="[border && 'border', isExpanded ? '' : 'max-content', 'focus']"
+    tabindex="0"
+    @focus="focus"
+    @blur="blur"
+    v-on:keyup="expandToggle"
+  >
+    <div :class="['expander']" ref="expander" @click="expandToggle">
       <div :class="['icon-left', isExpanded && 'rotate']">
         <SvgIcon name="chevron_right" />
       </div>
@@ -105,6 +103,17 @@ export default ExpandableSection
 <style lang="less" scoped>
 @import "~Style/colors.less";
 
+.focus {
+  outline-color: ~"@{pastel-green}55";
+  &:focus {
+    outline: none; // disable outline for click
+  }
+  &:focus-visible {
+    outline: 2px solid ~"@{pastel-green}55"; // enable focus for keyboard
+    outline-style: solid;
+  }
+}
+
 .max-content {
   height: max-content;
   min-height: 1rem;
@@ -129,7 +138,6 @@ export default ExpandableSection
   cursor: pointer;
   margin: 0.5rem 0.2rem;
   font-size: 2rem;
-  outline-color: ~"@{pastel-green}55";
   display: flex;
   align-items: center;
 }
