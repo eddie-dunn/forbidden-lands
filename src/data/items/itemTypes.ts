@@ -1,7 +1,14 @@
 import { Attribute, Skill, DiceTypes, CombatAction, DiceSides } from "@/types"
 type BonusType = Attribute | Skill | DiceTypes | CombatAction | null
 
-type ItemType = "armor" | "helmet" | "shield" | "weapon" | "other" | ""
+// export type ITEM_TYPE = "armor" | "helmet" | "shield" | "weapon" | "other" | ""
+export enum ITEM_TYPE {
+  "armor" = "armor",
+  "helmet" = "helmet",
+  "shield" = "shield",
+  "weapon" = "weapon",
+  "other" = "other",
+}
 
 type Weight = 0 | 0.5 | 1 | 2 | 10 /* -> can't be carried normally */
 
@@ -22,7 +29,6 @@ type BaseItem = {
   bonusType: BonusType // rename to dice type?
   id: string
   name: string
-  type: ItemType
   weight: Weight
 
   // Inventory management
@@ -34,7 +40,11 @@ type BaseItem = {
   cost?: number
 
   // Modifiers
-  artifactDice?: DiceSides[]
+  artifactDice?: {
+    sides: DiceSides
+    color: DiceTypes
+    nbrDice: number
+  }[]
   skillMods?: SkillMod[]
   attributeMods?: { id: Attribute; mod: number }
   actionMods?: { id: CombatAction; mod: number }

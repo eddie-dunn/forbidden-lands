@@ -5,7 +5,7 @@ import { Component, Prop } from "vue-property-decorator"
 import { capitalize } from "@/util/util"
 
 export type Option = {
-  id: string
+  id: string | number
   name?: string
   extras?: string[]
 }
@@ -44,9 +44,12 @@ export class FLSelect extends Vue {
       return option.name + this.optionExtras(option)
     }
     if (this.translateOptions) {
-      return capitalize(String(this.$t(option.id))) + this.optionExtras(option)
+      return (
+        capitalize(String(this.$t(String(option.id)))) +
+        this.optionExtras(option)
+      )
     }
-    return capitalize(option.id) + this.optionExtras(option)
+    return capitalize(String(option.id)) + this.optionExtras(option)
   }
 
   onInput(ev: any) {

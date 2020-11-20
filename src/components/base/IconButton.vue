@@ -11,7 +11,7 @@ import SvgIcon from "@/components/SvgIcon.vue"
   },
 })
 export class IconButton extends Vue {
-  @Prop({ required: true }) icon!: string
+  @Prop({ required: false }) icon!: string
   @Prop({ default: "inherit" }) color!: "main" | "danger" | "inherit"
   @Prop({ default: "24px" }) width!: string
   @Prop({ default: "24px" }) height!: string

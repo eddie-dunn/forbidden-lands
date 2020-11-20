@@ -12,7 +12,7 @@ import Modal from "@/components/Modal.vue"
     Modal,
   },
 })
-export default class ModalConfirm extends Vue {
+export class ModalConfirm extends Vue {
   @Prop({ required: true }) confirmAction!: CallableFunction
   @Prop({ default: "" }) title!: string
   @Prop({ default: "" }) body!: string
@@ -29,12 +29,15 @@ export default class ModalConfirm extends Vue {
     this.$emit("close")
   }
 }
+
+export default ModalConfirm
 </script>
 
 <template>
   <Modal @close="close" :maximized="false" :title="mTitle">
     <div slot="body" class="body">
       {{ body }}
+      <slot></slot>
     </div>
     <div class="modal-button-row" slot="footer">
       <FLButton type="cancel" @click="close">

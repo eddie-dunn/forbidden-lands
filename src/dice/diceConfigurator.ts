@@ -1,10 +1,10 @@
 import { CharData } from "@/data/character/characterData"
 import { IDiceConfigLogEntry, IDiceConfig, TDiceConfigLog } from "./diceTypes"
 
-import { Item, WEAPON_CATEGORY } from "@/data/items/itemTypes"
+import { Item, ItemWeapon, WEAPON_CATEGORY } from "@/data/items/itemTypes"
 
 import { ACTION_FAST, ACTION_SLOW, ACTION_ALL } from "@/data/combat/typesCombat"
-import { TSkillId } from "@/types"
+import { DiceTypes, TSkillId } from "@/types"
 import { talentBonusLookup } from "./talentBonus"
 
 // =============================================================================
@@ -71,10 +71,27 @@ export function diceLogSkill(c: CharData, skillId?: TSkillId): TDiceConfigLog {
 
 export function diceLogItem(item?: Item): TDiceConfigLog {
   if (!item) return []
+  const log: TDiceConfigLog = []
+  // Black dice
   const modifier = item.bonus
   const id = item.type
   const name = item.name
-  return [{ dice: "black", modifier, id, name }]
+  const black: IDiceConfigLogEntry = { dice: "black", modifier, id, name }
+  log.push(black)
+
+  // Artifact dice
+  const artifactDice = item.artifactDice?.[0]
+  if (artifactDice) {
+    const artifact: IDiceConfigLogEntry = {
+      dice: artifactDice.color,
+      modifier: artifactDice.nbrDice,
+      id: item.type,
+      name: item.name,
+    }
+    log.push(artifact)
+  }
+
+  return log
 }
 
 export function diceLogCombat(
@@ -97,6 +114,16 @@ export function diceLogCombat(
 
   return log
 }
+
+export function isRangedWeapon(weapon: ItemWeapon): boolean {
+  return Boolean(
+    weapon.category === WEAPON_CATEGORY.bow ||
+      weapon.category === WEAPON_CATEGORY.crossbow ||
+      weapon.category === WEAPON_CATEGORY.thrown
+  )
+}
+
+export function artifactSidesToColor() {}
 
 /*
 export function diceLogCombat2(

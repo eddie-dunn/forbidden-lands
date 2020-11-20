@@ -20,7 +20,7 @@ import { capitalize } from "@/util/util"
 import ItemTemplatePicker from "@/components/gear/ItemTemplatePicker.vue"
 import FLNumberInput from "@/components/base/FLNumberInput.vue"
 import TabBar from "@/components/base/TabBar.vue"
-import { DiceSides } from "@/types"
+import { DiceSides, DiceTypes } from "@/types"
 
 function defaultItem(): Item {
   return {
@@ -37,7 +37,13 @@ function defaultItem(): Item {
 function makeTempItem(orig: Item | null) {
   const item: Item = JSON.parse(JSON.stringify(orig || defaultItem()))
   if (!item.artifactDice) {
-    item.artifactDice = []
+    item.artifactDice = [
+      {
+        sides: 0,
+        color: "green",
+        nbrDice: 0,
+      },
+    ]
   }
   return item
 }
@@ -75,7 +81,6 @@ export default class AddItem extends Vue {
   ]
 
   changeItemType(t: ITEM_TYPE) {
-    console.log("type", t)
     if (t === ITEM_TYPE.weapon) {
       ;(this.tmpGear as ItemWeapon).features = {}
     }
@@ -176,17 +181,28 @@ export default class AddItem extends Vue {
     ]
   }
 
-  get artifactDice(): Option[] {
+  get artifactDiceOptions(): Option[] {
     return [
-      { id: "0" },
-      { id: "8", name: String(this.$t("D")) + 8 },
-      { id: "10", name: String(this.$t("D")) + 10 },
-      { id: "12", name: String(this.$t("D")) + 12 },
+      { id: 0 },
+      { id: 8, name: String(this.$t("D")) + 8 },
+      { id: 10, name: String(this.$t("D")) + 10 },
+      { id: 12, name: String(this.$t("D")) + 12 },
     ]
   }
 
-  onChangeArtifact(s: DiceSides) {
-    this.tmpGear.artifactDice = [s]
+  get artifactDice(): DiceSides {
+    return this.tmpGear?.artifactDice?.[0]?.sides || 0
+  }
+
+  onChangeArtifact(s: string) {
+    const n = Number(s)
+    if (![12, 10, 8].includes(n)) {
+      this.tmpGear.artifactDice = []
+      return
+    }
+    const sides: DiceSides = n as DiceSides
+    const color: DiceTypes = n === 12 ? "orange" : n === 10 ? "blue" : "green"
+    this.tmpGear.artifactDice = [{ sides, color, nbrDice: 1 }]
   }
 }
 </script>
@@ -280,8 +296,8 @@ export default class AddItem extends Vue {
             {{ $t("artifact") }}
           </label>
           <FLSelect
-            :options="artifactDice"
-            :value="tmpGear.artifactDice[0]"
+            :options="artifactDiceOptions"
+            :value="artifactDice"
             @input="onChangeArtifact"
           />
         </div>

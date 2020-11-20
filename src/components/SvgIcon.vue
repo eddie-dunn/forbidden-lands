@@ -14,7 +14,7 @@ function importAll(r) {
 }
 
 const IMAGES = importAll(
-  require.context("@/assets/icons", false, /\.(png|jpe?g|svg)$/)
+  require.context("@/assets/icons", true, /\.(png|jpe?g|svg)$/)
 )
 
 const arrayToObject = (array) =>
