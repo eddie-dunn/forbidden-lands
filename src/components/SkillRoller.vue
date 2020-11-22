@@ -172,11 +172,11 @@ export default class SkillRoller extends Vue {
           :initialDisabled="false"
           v-model="selectedItem"
         />
-        <div v-if="selectedWeaponData">
+        <div v-if="selectedWeaponData" style="margin-left: 1rem;">
           {{ $t("Damage") + ": " + selectedWeaponData.damage }}
         </div>
       </div>
-      <div v-else>
+      <div v-else class="weapon-box">
         <FLSelect
           :label="$t('Use gear') + '?'"
           :options="items"
@@ -194,6 +194,7 @@ export default class SkillRoller extends Vue {
   display: flex;
   justify-content: left;
   align-items: center;
+  margin: 1rem;
 }
 
 // .skillroller-body {
