@@ -10,11 +10,17 @@ import FLInput from "@/components/base/FLInput.vue"
 import { FLSelect, Option, Optgroup } from "@/components/base/FLSelect.vue"
 import { CharacterData, CharacterTalent } from "@/data/character/characterData"
 import { allItems } from "@/data/items/items.ts"
-import { Item, WEAPON_CATEGORY } from "@/data/items/itemTypes"
+import {
+  Item,
+  ItemWeapon,
+  ITEM_TYPE,
+  WEAPON_CATEGORY,
+} from "@/data/items/itemTypes"
 import { capitalize } from "@/util/util"
 import ItemTemplatePicker from "@/components/gear/ItemTemplatePicker.vue"
 import FLNumberInput from "@/components/base/FLNumberInput.vue"
 import TabBar from "@/components/base/TabBar.vue"
+import { DiceSides } from "@/types"
 
 function defaultItem(): Item {
   return {
@@ -26,6 +32,14 @@ function defaultItem(): Item {
     type: "",
     id: uuid1(),
   }
+}
+
+function makeTempItem(orig: Item | null) {
+  const item: Item = JSON.parse(JSON.stringify(orig || defaultItem()))
+  if (!item.artifactDice) {
+    item.artifactDice = []
+  }
+  return item
 }
 
 @Component({
@@ -43,7 +57,7 @@ export default class AddItem extends Vue {
   @Prop() editItem!: Item | null
   @Prop({ default: "" }) title!: string
 
-  tmpGear: Item = JSON.parse(JSON.stringify(this.editItem || defaultItem()))
+  tmpGear: Item = makeTempItem(this.editItem)
 
   get isWeapon(): boolean {
     return this.tmpGear.type === "weapon"
@@ -135,7 +149,7 @@ export default class AddItem extends Vue {
   }
 
   onTemplatePicked(item: Item) {
-    this.tmpGear = { ...item, id: uuid1() }
+    this.tmpGear = makeTempItem({ ...item, id: uuid1() })
     this.showNew()
     this.tabIndex = 1
   }
@@ -160,6 +174,19 @@ export default class AddItem extends Vue {
         },
       },
     ]
+  }
+
+  get artifactDice(): Option[] {
+    return [
+      { id: "0" },
+      { id: "8", name: String(this.$t("D")) + 8 },
+      { id: "10", name: String(this.$t("D")) + 10 },
+      { id: "12", name: String(this.$t("D")) + 12 },
+    ]
+  }
+
+  onChangeArtifact(s: DiceSides) {
+    this.tmpGear.artifactDice = [s]
   }
 }
 </script>
@@ -247,6 +274,17 @@ export default class AddItem extends Vue {
           min="0"
           max="99"
         />
+
+        <div v-if="isWeapon" class="contents">
+          <label class="capitalize" for="gear-bonus">
+            {{ $t("artifact") }}
+          </label>
+          <FLSelect
+            :options="artifactDice"
+            :value="tmpGear.artifactDice[0]"
+            @input="onChangeArtifact"
+          />
+        </div>
 
         <label v-if="isWeapon" for="gear-range">{{ $t("Range") }}</label>
         <select

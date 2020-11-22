@@ -1,4 +1,4 @@
-import { Attribute, Skill, DiceTypes, CombatAction } from "@/types"
+import { Attribute, Skill, DiceTypes, CombatAction, DiceSides } from "@/types"
 type BonusType = Attribute | Skill | DiceTypes | CombatAction | null
 
 type ItemType = "armor" | "helmet" | "shield" | "weapon" | "other" | ""
@@ -34,6 +34,7 @@ type BaseItem = {
   cost?: number
 
   // Modifiers
+  artifactDice?: DiceSides[]
   skillMods?: SkillMod[]
   attributeMods?: { id: Attribute; mod: number }
   actionMods?: { id: CombatAction; mod: number }

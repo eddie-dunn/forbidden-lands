@@ -447,6 +447,7 @@ export default {
   "animal companion": "animal companion",
   "armor": "armor",
   "armslength": "arm's length",
+  "artifact": "artifact",
   "attribute": "attribute",
   "axe": "axe",
   "blunt": "blunt",

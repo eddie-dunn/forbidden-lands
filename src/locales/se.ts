@@ -454,6 +454,7 @@ export default {
   "animal companion": "djurkompanjon",
   "armor": "rustning",
   "armslength": "armslängd",
+  "artifact": "artefakt",
   "attribute": "grundegenskap",
   "axe": "yxa",
   "blunt": "trubbig",
