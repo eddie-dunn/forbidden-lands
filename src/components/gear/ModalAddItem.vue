@@ -60,6 +60,14 @@ export default class AddItem extends Vue {
     { id: WEAPON_CATEGORY.thrown },
   ]
 
+  changeItemType(t: ITEM_TYPE) {
+    console.log("type", t)
+    if (t === ITEM_TYPE.weapon) {
+      ;(this.tmpGear as ItemWeapon).features = {}
+    }
+    this.tmpGear.type = t
+  }
+
   pageFor(itemType: string) {
     const loc = this.$i18n.locale
     if (itemType === "weapon") {
@@ -189,7 +197,11 @@ export default class AddItem extends Vue {
         />
 
         <label for="gear-type">{{ $t("Type") }}</label>
-        <select id="gear-type" v-model="tmpGear.type">
+        <select
+          id="gear-type"
+          :value="tmpGear.type"
+          @input="(e) => changeItemType(e.target.value)"
+        >
           <option disabled value="">{{ $t("Choose") }}</option>
           <option value="armor">{{ $t("Armor") }}</option>
           <option value="helmet">{{ $t("Helmet") }}</option>
