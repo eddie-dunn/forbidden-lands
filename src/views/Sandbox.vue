@@ -5,7 +5,7 @@
     </ExpandableSection>
 
     <ExpandableSection label="DiceRoller Combat" saveStateId="dice-combat">
-      <DiceCombat />
+      <DiceCombat :charData="caesar" />
     </ExpandableSection>
 
     <ExpandableSection label="Notify" saveStateId="notify-test">
