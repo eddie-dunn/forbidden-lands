@@ -72,7 +72,8 @@
         This is the navdrawer content.
       </NavDrawer>
     </ExpandableSection>
-    <ExpandableSection label="Buttons" saveStateId="__icon-test">
+
+    <ExpandableSection label="Input" saveStateId="__icon-test">
       <div class="sandbox-grid">
         <h4>FLButton</h4>
         <FLButton>Base button</FLButton>
@@ -87,6 +88,43 @@
         <IconButton icon="delete" color="danger" @click="click"></IconButton>
         <IconButton icon="add" :disabled="true"></IconButton>
         <IconButton icon="chat_bubble">With text</IconButton>
+        <h4>Toggle</h4>
+        <FLToggle suffix="Start value false" :value="false" />
+        <FLToggle suffix="Start value true" :value="true" />
+        <FLToggle suffix="Danger off" :dangerOff="true" v-model="toggleState" />
+        <FLToggle suffix="Danger on" :dangerOn="true" v-model="toggleState" />
+        <FLToggle label="With label" v-model="toggleState"></FLToggle>
+        <FLToggle suffix="With suffix" v-model="toggleState"></FLToggle>
+        <FLToggle
+          label="With label"
+          suffix="..and suffix"
+          v-model="toggleState"
+        />
+        <FLToggle icon="add" v-model="toggleState"></FLToggle>
+        <FLToggle label="With icon and text" icon="add" v-model="toggleState" />
+        <FLToggle :column="true" label="Column label" v-model="toggleState" />
+        <FLToggle
+          suffix="Small"
+          style="font-size: 0.75rem"
+          v-model="toggleState"
+        />
+        <FLToggle
+          suffix="Large"
+          style="font-size: 1.5rem"
+          v-model="toggleState"
+        />
+        <FLToggle
+          suffix="Small block"
+          style="font-size: 0.75rem"
+          :block="true"
+          v-model="toggleState"
+        />
+        <FLToggle
+          suffix="Large block"
+          style="font-size: 1.5rem"
+          :block="true"
+          v-model="toggleState"
+        />
       </div>
     </ExpandableSection>
 
@@ -113,6 +151,7 @@ import SvgIcon from "@/components/SvgIcon.vue"
 import IconButton from "@/components/base/IconButton.vue"
 import { Combat } from "@/components/combat/CombatBox.vue"
 import { Caesar } from "Tests/unit/data/personas"
+import { FLToggle } from "@/components/base/FLToggle.vue"
 
 @Component({
   components: {
@@ -126,12 +165,14 @@ import { Caesar } from "Tests/unit/data/personas"
     Modal,
     NavDrawer,
     SvgIcon,
+    FLToggle,
   },
 })
 export class Sandbox extends Vue {
   modalOpen = false
   diceModalOpen = false
   navOpen = false
+  toggleState = true
 
   caesar = Caesar
 
