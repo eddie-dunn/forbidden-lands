@@ -5,6 +5,7 @@ import { Route } from "vue-router/types/router"
 import { Notification, notify } from "@/util/notifications"
 
 import App from "./App.vue"
+import Fallback from "./views/Fallback.vue"
 import { Store as CharacterStore } from "@/localstorage/characterStorage"
 import Vue from "vue"
 import i18n from "./i18n"
@@ -72,9 +73,21 @@ router.afterEach((to: Route) => {
   }
 })
 
-new Vue({
-  router,
-  store,
-  i18n,
-  render: (h) => h(App),
-}).$mount("#app")
+try {
+  new Vue({
+    router,
+    store,
+    i18n,
+    render: (h) => h(App),
+  }).$mount("#app")
+} catch (error) {
+  if (!DEBUG_MODE) {
+    throw error
+  }
+  new Vue({
+    router,
+    store,
+    i18n,
+    render: (h) => h(Fallback, { props: { error } }),
+  }).$mount("#app")
+}
