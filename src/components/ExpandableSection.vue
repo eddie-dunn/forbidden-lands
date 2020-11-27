@@ -152,6 +152,7 @@ export default ExpandableSection
 }
 
 .icon-left {
+  user-select: none;
   display: flex;
   @media print {
     display: none;
