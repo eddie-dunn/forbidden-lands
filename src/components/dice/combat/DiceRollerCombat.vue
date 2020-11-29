@@ -3,7 +3,10 @@
 import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 import SvgIcon from "@/components/SvgIcon.vue"
-import ExpandableSection from "@/components/ExpandableSection.vue"
+import {
+  ExpandableSection,
+  EXPANDER_SLOT,
+} from "@/components/ExpandableSection.vue"
 import DiceInput from "@/components/dice/DiceInput.vue"
 import DiceResult from "@/components/dice/DiceResult.vue"
 import FLButton from "@/components/base/FLButton.vue"
@@ -13,6 +16,7 @@ import { FLNumberInput } from "@/components/base/FLNumberInput.vue"
 
 import { DiceProbability } from "@/components/dice/DiceProbability.vue"
 import { capitalize } from "@/util/util"
+import { DiceConfSummary } from "src/components/diceRoller/DiceConfSummary.vue"
 
 enum DiceType {
   White,
@@ -88,6 +92,7 @@ function diceArrayToConf(dice: (number | null)[]): IDiceConfig {
     FLButton,
     FLNumberInput,
     SvgIcon,
+    DiceConfSummary,
   },
 })
 export class DiceRollerCombat extends Vue {
@@ -103,6 +108,8 @@ export class DiceRollerCombat extends Vue {
   @Prop({ default: false }) isDwarf!: boolean
   @Prop({ default: false }) infinityPush!: boolean
   @Prop({ default: false }) showButtonBar!: boolean // remove?
+
+  EXPANDER_SLOT = EXPANDER_SLOT
 
   @Watch("black", { immediate: true })
   setBlack() {
@@ -284,63 +291,83 @@ export default DiceRollerCombat
 </script>
 
 <template>
-  <div class="dice-roller-view">
-    <div class="dice-inputs">
-      <DiceInput
-        v-for="dice in basicDice"
-        :key="dice.color"
-        :color="dice.color"
-        v-model.number="nbrDice[dice.type]"
-        :rollCb="rollDice"
-        :pushCb="pushRoll"
-      />
-      <DiceInput
-        v-for="dice in artifactDice"
-        :key="dice.color"
-        :color="dice.color"
-        v-model.number="nbrDice[dice.type]"
-        :rollCb="rollDice"
-        :pushCb="pushRoll"
-      />
-    </div>
+  <div class="dice-roller-view" ref="rollResults">
+    <ExpandableSection :defaultOpen="true" saveStateId="dice-input">
+      <div :slot="EXPANDER_SLOT.header_center" style="font-size: 1rem;">
+        Dice
+      </div>
 
-    <ExpandableSection :defaultOpen="false" saveStateId="probability-calc">
-      <!-- Don't use for now -->
-      <div slot="header" style="font-size: 1rem;">{{ probabilityStr }}</div>
-      <DiceProbability :conf="conf" />
+      <div :slot="EXPANDER_SLOT.header_right" style="font-size: 1rem;">
+        <DiceConfSummary :diceConf="conf" />
+      </div>
+      <div class="dice-input-contents">
+        <div class="dice-inputs">
+          <DiceInput
+            v-for="dice in basicDice"
+            :key="dice.color"
+            :color="dice.color"
+            v-model.number="nbrDice[dice.type]"
+            :rollCb="rollDice"
+            :pushCb="pushRoll"
+          />
+          <DiceInput
+            v-for="dice in artifactDice"
+            :key="dice.color"
+            :color="dice.color"
+            v-model.number="nbrDice[dice.type]"
+            :rollCb="rollDice"
+            :pushCb="pushRoll"
+          />
+        </div>
+        <ExpandableSection :defaultOpen="false" saveStateId="probability-calc">
+          <div slot="header" style="font-size: 1rem;">{{ probabilityStr }}</div>
+          <DiceProbability :conf="conf" />
+        </ExpandableSection>
+      </div>
     </ExpandableSection>
 
     <!-- Result summary -->
-    <div v-if="totals.length > 0" class="result-summary">
-      <div :class="['result-summary-item', pushed ? '' : 'transparent']">
-        <pre>{{ totalWhiteSkulls }}</pre>
-        <SvgIcon name="skulls-1-inverted" class="dice-icon" />
+    <ExpandableSection
+      v-if="totals.length"
+      :defaultOpen="true"
+      saveStateId="dice-input"
+    >
+      <div :slot="EXPANDER_SLOT.header_center" style="font-size: 1rem;">
+        Results
       </div>
-      <div :class="['result-summary-item', pushed ? '' : 'transparent']">
-        <pre>{{ totalBlackSkulls }}</pre>
-        <SvgIcon name="skulls-1" class="dice-icon dice-black" />
+      <div :slot="EXPANDER_SLOT.header_right" style="font-size: 1rem;">
+        <div v-if="totals.length > 0" class="result-summary">
+          <div :class="['result-summary-item', pushed ? '' : 'transparent']">
+            <pre>{{ totalWhiteSkulls }}</pre>
+            <SvgIcon name="skulls-1-inverted" class="dice-icon-small" />
+          </div>
+          <div :class="['result-summary-item', pushed ? '' : 'transparent']">
+            <pre>{{ totalBlackSkulls }}</pre>
+            <SvgIcon name="skulls-1" class="dice-icon-small dice-black" />
+          </div>
+          <div class="result-summary-item">
+            <pre>{{ totalSuccess }}</pre>
+            <SvgIcon name="swords-1-inverted" class="dice-icon-small" />
+          </div>
+        </div>
       </div>
-      <div class="result-summary-item">
-        <pre>{{ totalSuccess }}</pre>
-        <SvgIcon name="swords-1-inverted" class="dice-icon" />
-      </div>
-    </div>
 
-    <!-- Roll result -->
-    <div class="roll-results" ref="rollResults">
-      <div
-        v-for="(rolls, index) in rollResultLog"
-        v-bind:key="index"
-        :class="['roll-result', index !== 0 ? 'transparent' : '']"
-      >
-        <DiceResult color="white" :rolls="rolls[DiceType.White]" />
-        <DiceResult color="red" :rolls="rolls[DiceType.Red]" />
-        <DiceResult color="black" :rolls="rolls[DiceType.Black]" />
-        <DiceResult color="green" :rolls="rolls[DiceType.Green]" />
-        <DiceResult color="blue" :rolls="rolls[DiceType.Blue]" />
-        <DiceResult color="orange" :rolls="rolls[DiceType.Orange]" />
+      <!-- Roll result -->
+      <div class="roll-results">
+        <div
+          v-for="(rolls, index) in rollResultLog"
+          v-bind:key="index"
+          :class="['roll-result', index !== 0 ? 'transparent' : '']"
+        >
+          <DiceResult color="white" :rolls="rolls[DiceType.White]" />
+          <DiceResult color="red" :rolls="rolls[DiceType.Red]" />
+          <DiceResult color="black" :rolls="rolls[DiceType.Black]" />
+          <DiceResult color="green" :rolls="rolls[DiceType.Green]" />
+          <DiceResult color="blue" :rolls="rolls[DiceType.Blue]" />
+          <DiceResult color="orange" :rolls="rolls[DiceType.Orange]" />
+        </div>
       </div>
-    </div>
+    </ExpandableSection>
 
     <!-- FIXME: Remove this section, let modal handle -->
     <div v-if="showWillpower && false" class="wp-input">
@@ -373,9 +400,14 @@ export default DiceRollerCombat
 </template>
 
 <style scoped lang="less">
+@import "~Style/colors.less";
 .dice-icon {
   height: 3rem;
   width: 3rem;
+  &-small {
+    height: 2rem;
+    width: 2rem;
+  }
 }
 
 .dice-roller-view {
@@ -401,6 +433,10 @@ export default DiceRollerCombat
   }
 }
 
+// .dice-input-contents {
+//   // padding: 0 1rem;
+// }
+
 .roll-result {
   text-align: left;
   display: flex;
@@ -422,16 +458,21 @@ export default DiceRollerCombat
 }
 
 .result-summary-item {
-  font-size: 2.5rem;
+  font-size: 2rem;
   display: flex;
   justify-content: baseline;
   align-items: center;
 }
 
 .result-summary {
-  display: flex;
+  color: @color-text;
+  display: inline-flex;
   justify-content: space-evenly;
   align-items: center;
+  pre {
+    margin: 0;
+    margin-left: 10px;
+  }
 }
 
 .dice-inputs {

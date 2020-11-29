@@ -11,6 +11,8 @@ import { FLSelect, Option } from "@/components/base/FLSelect.vue"
 import { FLNumberInput } from "@/components/base/FLNumberInput.vue"
 import { IconButton } from "@/components/base/IconButton.vue"
 import { DiceCombatConfig } from "@/components/dice/combat/DiceCombatConfig.vue"
+import { DiceModifier } from "src/components/diceRoller/DiceModifier.vue"
+
 import { ACTION_FAST, ACTION_ALL } from "@/data/combat/typesCombat"
 import { TSkillId } from "@/types"
 
@@ -32,6 +34,8 @@ import { Item } from "@/data/items/itemTypes"
     FLSelect,
     FLNumberInput,
     IconButton,
+
+    DiceModifier,
   },
 })
 export class DiceCombat extends Vue {
@@ -68,11 +72,11 @@ export class DiceCombat extends Vue {
     this.mSkillId = config.skill || ""
 
     const log = [
-      diceLogBonus(config.bonus),
       diceLogAttributes(this.charData, config.skill),
       diceLogSkill(this.charData, config.skill),
       diceLogItem(config.item),
       diceLogCombat(this.charData, config.action, config.item, config.monster),
+      diceLogBonus(config.bonus),
     ].flat()
     const diceConf = convertLogToConfig(log)
     this.diceLog = log
@@ -92,6 +96,14 @@ export class DiceCombat extends Vue {
       bonus: 0,
     })
   }
+
+  get diceLogFiltered() {
+    return (
+      this.diceLog?.filter((l) => {
+        return !!l.modifier
+      }) || []
+    )
+  }
 }
 
 export default DiceCombat
@@ -103,9 +115,6 @@ export default DiceCombat
       <template :slot="SLOT.header_center">
         <!-- <div class="small-fonts">Setup</div> -->
         <div class="small-fonts setup-summary">
-          <div>
-            <span class="small-caps">Bonus {{ mBonus }}</span>
-          </div>
           <div>
             <span class="small-caps">{{ $t(mAction) }}</span>
           </div>
@@ -120,6 +129,11 @@ export default DiceCombat
               {{ mOpponent ? "vs " + $t(mOpponent) : "" }}
             </span>
           </div>
+        </div>
+      </template>
+      <template :slot="SLOT.header_right">
+        <div class="small-fonts setup-summary">
+          <span class="small-caps">Bonus {{ mBonus }}</span>
         </div>
       </template>
       <DiceCombatConfig
@@ -137,7 +151,14 @@ export default DiceCombat
         <div class="small-fonts">Modifiers</div>
       </template>
 
-      <pre>{{ JSON.stringify(diceLog, null, 2) }}</pre>
+      <div class="modifiers">
+        <DiceModifier
+          v-for="(entry, index) in diceLogFiltered"
+          :key="index + entry.id"
+          :entry="entry"
+        />
+      </div>
+      <pre v-if="$DEBUG">{{ JSON.stringify(diceLog, null, 2) }}</pre>
     </ExpandableSection>
 
     <!-- FIXME: Setup missing sections -->
@@ -229,7 +250,7 @@ export default DiceCombat
 }
 
 .padding {
-  margin: 0 2rem;
+  margin: 1rem;
 }
 
 .setup-summary {
@@ -237,8 +258,20 @@ export default DiceCombat
   grid-template-columns: auto auto auto;
   display: flex;
   flex-wrap: wrap;
+  color: @color-text;
   div > {
     margin-right: 0.5em;
+  }
+}
+
+.modifiers {
+  padding: 0 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  * > {
+    flex: 1 0 40%;
+    // flex: 1 0 100%;
+    margin-bottom: 0.5rem;
   }
 }
 </style>
