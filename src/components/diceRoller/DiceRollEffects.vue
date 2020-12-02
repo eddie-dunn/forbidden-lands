@@ -75,7 +75,6 @@ export class DiceRollEffects extends Vue {
   get attributeDamage() {
     const whiteSkulls = this.rollResult.whiteSkulls
     const id = this.skillId ? this.charData.skills[this.skillId].attribute : ""
-    console.log({ whiteSkulls, id, skillId: this.skillId })
     const effect = `-${whiteSkulls}`
     return { value: whiteSkulls, name: "Attribute damage", id, effect }
   }

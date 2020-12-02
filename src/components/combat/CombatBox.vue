@@ -184,7 +184,6 @@ export class Combat extends Vue {
     }
   }
   setInitiative(value: number) {
-    console.log({ value })
     this.initiative = Number(value)
     sessionStorage.setItem("combat-initiative", String(value))
   }
