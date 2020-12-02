@@ -36,12 +36,13 @@ export class DiceCombatConfig extends Vue {
   @Prop({ default: "" }) actionId!: ACTION_ALL | ""
   @Prop({ default: "" }) skillId!: TSkillId | ""
   @Prop({ default: "" }) itemId!: string
+  @Prop({ default: false }) isMonster!: boolean
 
   actionIdLocal = this.actionId
   skillIdLocal = this.skillId
   mItemId = this.itemId
   bonus = 0
-  target: TARGET = TARGET.humanoid
+  target: TARGET = this.isMonster ? TARGET.monster : TARGET.humanoid
 
   fastOptions: TCombatOption[] = actionsFast
     .filter((a) => a.skill)

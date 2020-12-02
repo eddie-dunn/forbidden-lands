@@ -14,7 +14,7 @@ function rollDie(diceSides: number = 6): number {
   return getRandomIntInclusive(1, diceSides)
 }
 
-function rollDiceType(diceType: TDiceSides, seed?: number): number {
+export function rollDiceType(diceType: TDiceSides, seed?: number): number {
   if (diceType === 666) {
     return Number(String(rollDie(6)) + String(rollDie(6)) + String(rollDie(6)))
   } else if (diceType === 66) {

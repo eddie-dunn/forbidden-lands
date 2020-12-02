@@ -5,14 +5,44 @@ import {
   ACTION_FAST,
   ACTION_SLOW,
   ICombatState,
+  ACTION_ALL,
 } from "./typesCombat"
 
 const weaponEquipped = (item: Item): ItemWeapon | null => {
-  if (item.type === "weapon" && item.equipped) {
-    return item as ItemWeapon
+  if (item.type === "weapon" && item.equipped && item.bonus > 0) {
+    return item
   }
   return null
 }
+
+export function isDmgAttack(action: ACTION_ALL) {
+  if (!action) {
+    return false
+  }
+  return [
+    ACTION_FAST.grapple_attack,
+    ACTION_SLOW.charge,
+    ACTION_SLOW.shoot,
+    ACTION_SLOW.slash,
+    ACTION_SLOW.stab,
+    ACTION_SLOW.unarmed_attack,
+  ].includes(action)
+}
+
+export const isMeleeAttack = (actionId?: ACTION_ALL): boolean =>
+  actionId
+    ? [
+        ACTION_SLOW.slash,
+        ACTION_SLOW.stab,
+        ACTION_SLOW.unarmed_attack,
+        ACTION_SLOW.charge,
+        ACTION_FAST.disarm,
+        ACTION_FAST.shove,
+      ].includes(actionId)
+    : false
+
+export const isAttack = (actionId?: ACTION_ALL): boolean =>
+  isMeleeAttack(actionId) || ACTION_SLOW.shoot === actionId
 
 /*
 ACTION            PREREQUISITE                    SKILL
@@ -38,8 +68,8 @@ export const actionsSlow: (ICombatAction & { id: ACTION_SLOW })[] = [
     prerequisite: () => "Edged or blunt weapon",
     prereqOk: (c: CharData) =>
       !!c.gear.inventory.find((item) => {
-        const weaponFeats = weaponEquipped(item)?.features
-        return weaponFeats?.blunt || weaponFeats?.edged
+        const weapon = weaponEquipped(item)
+        return weapon?.features.blunt || weapon?.features.edged
       }),
     skill: "melee",
   },

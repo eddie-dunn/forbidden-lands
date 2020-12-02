@@ -235,6 +235,12 @@ export class DiceRollerCombat extends Vue {
     this.$nextTick(() => {
       refRollResult.scrollTop = refRollResult.scrollHeight
     })
+    const summary = {
+      whiteSkulls: this.totalWhiteSkulls,
+      blackSkulls: this.totalBlackSkulls,
+      success: this.totalSuccess,
+    }
+    this.$emit("result", summary)
     this.$emit("pushDisabled", this.pushDisabled)
   }
 
@@ -245,6 +251,10 @@ export class DiceRollerCombat extends Vue {
       return diceResults(nbrDice, sidesFor(diceType))
     })
     this.rollResultLog.push(this.rollResult)
+    const summary = {
+      success: this.totalSuccess,
+    }
+    this.$emit("result", summary)
     this.$emit("pushDisabled", this.pushDisabled)
   }
 
@@ -288,6 +298,8 @@ export class DiceRollerCombat extends Vue {
 }
 
 export default DiceRollerCombat
+
+// FIXME: Split this up into separate components
 </script>
 
 <template>
@@ -319,11 +331,13 @@ export default DiceRollerCombat
             :pushCb="pushRoll"
           />
         </div>
-        <ExpandableSection :defaultOpen="false" saveStateId="probability-calc">
-          <div slot="header" style="font-size: 1rem;">{{ probabilityStr }}</div>
-          <DiceProbability :conf="conf" />
-        </ExpandableSection>
       </div>
+    </ExpandableSection>
+
+    <!-- Probability -->
+    <ExpandableSection :defaultOpen="false" saveStateId="probability-calc">
+      <div slot="header" style="font-size: 1rem;">{{ probabilityStr }}</div>
+      <DiceProbability :conf="conf" />
     </ExpandableSection>
 
     <!-- Result summary -->
@@ -368,34 +382,6 @@ export default DiceRollerCombat
         </div>
       </div>
     </ExpandableSection>
-
-    <!-- FIXME: Remove this section, let modal handle -->
-    <div v-if="showWillpower && false" class="wp-input">
-      <label for="willpower">{{ $t("WP") }}</label>
-      <FLNumberInput
-        id="willpower"
-        fontSize="1.7rem"
-        min="0"
-        max="10"
-        :value="willpower"
-        @input="handleWillpower"
-      />
-    </div>
-
-    <div v-if="showButtonBar" class="button-bar">
-      <FLButton v-if="showReset" type="cancel" @click="resetDice">
-        {{ $t("Reset") }}
-      </FLButton>
-      <FLButton v-else type="cancel" @click="$emit('close')">
-        {{ $t("Close") }}
-      </FLButton>
-      <FLButton type="danger" @click="pushRoll" :disabled="pushDisabled">
-        {{ $t("Push") }}
-      </FLButton>
-      <FLButton @click="rollDice" :disabled="rollDisabled">
-        {{ $t("Roll dice") }}
-      </FLButton>
-    </div>
   </div>
 </template>
 
@@ -415,8 +401,6 @@ export default DiceRollerCombat
   overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
-  height: 100%;
 
   .button-bar {
     flex-shrink: 0;

@@ -43,16 +43,17 @@ export class DiceCombat extends Vue {
   @Prop({ default: "" }) actionId!: ACTION_ALL | ""
   @Prop({ default: "" }) skillId!: TSkillId | ""
   @Prop({ default: "" }) itemId!: string
+  @Prop({ default: false }) isMonster!: boolean
 
   SLOT = EXPANDER_SLOT
 
   diceLog: TDiceConfigLog | null = null
   diceConfig: IDiceConfig | null = null
   mBonus: number = 0
-  mAction: ACTION_ALL | "" = ""
-  mItemName: string = ""
-  mOpponent: string = ""
-  mSkillId: TSkillId | "" = ""
+  mAction: ACTION_ALL | "" = this.actionId
+  mItemName: string = this.itemId
+  mOpponent: string = this.isMonster ? "monster" : ""
+  mSkillId: TSkillId | "" = this.skillId
 
   onClickPush() {}
   onClickRoll() {}
@@ -91,7 +92,7 @@ export class DiceCombat extends Vue {
     this.onConfigUpdate({
       action: this.actionId,
       item,
-      monster: false,
+      monster: this.isMonster,
       skill: this.skillId || undefined,
       bonus: 0,
     })
@@ -141,11 +142,13 @@ export default DiceCombat
         :actionId="actionId"
         :skillId="skillId"
         :itemId="itemId"
+        :isMonster="isMonster"
         @update="onConfigUpdate"
         class="padding"
       />
     </ExpandableSection>
 
+    <!-- Modifiers -->
     <ExpandableSection saveStateId="dice-log" :defaultOpen="true">
       <template :slot="SLOT.header_center">
         <div class="small-fonts">Modifiers</div>
@@ -187,35 +190,6 @@ export default DiceCombat
       </IconButton>
       <!-- Add summary of dice config in header, buttons for [roll], [push] &
         [reset], and general dice configurator here -->
-
-      <ExpandableSection v-if="$DEBUG">
-        <template :slot="SLOT.header_center">
-          <div class="small-fonts capitalize">{{ $t("probability") }}</div>
-        </template>
-
-        <div>
-          Make font much smaller and add dice probabilities based on dice config
-          here
-        </div>
-      </ExpandableSection>
-    </ExpandableSection>
-
-    <ExpandableSection v-if="$DEBUG">
-      <template v-slot:header>
-        <div class="small-fonts">Result</div>
-      </template>
-
-      <template v-slot:icon-right>
-        3⚀ 2⚀
-      </template>
-
-      <div>
-        Add summary of dice roll result (if dice have been rolled) in header,
-        and details inside here
-      </div>
-      <div>
-        3⚀ 2⚀ 3⚀ 2⚀ 3⚀ 2⚀ 3⚀ 2⚀
-      </div>
     </ExpandableSection>
   </div>
 </template>

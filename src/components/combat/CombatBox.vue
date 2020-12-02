@@ -7,7 +7,7 @@ import DiceRoller from "@/components/dice/DiceRoller.vue"
 import { FLNumberInput } from "@/components/base/FLNumberInput.vue"
 import FLButton from "@/components/base/FLButton.vue"
 import { CharData } from "@/data/character/characterData"
-import { FLSelect } from "@/components/base/FLSelect.vue"
+import { FLSelect, Option } from "@/components/base/FLSelect.vue"
 import { actionsSlow, actionsFast } from "@/data/combat/combat.ts"
 import {
   ICombatAction,
@@ -20,8 +20,16 @@ import SvgIcon from "@/components/SvgIcon.vue"
 import IconButton from "@/components/base/IconButton.vue"
 import { DiceModal } from "@/components/dice/combat/DiceModalCombat.vue"
 import { GearCard } from "@/components/sheet/cards/GearCard.vue"
-import { Item } from "@/data/items/itemTypes"
+import { Item, ItemWeapon, WEAPON_CATEGORY } from "@/data/items/itemTypes"
 import { TSkillId } from "@/types"
+import { isRangedWeapon } from "src/dice/diceConfigurator"
+
+const isSlashing = (i: any | ItemWeapon) =>
+  !!(i?.features?.blunt || i?.features?.edged)
+
+const isStabbing = (i: any | ItemWeapon) => !!i?.features?.pointed
+
+const nullItem = { id: "", name: "-" }
 
 const NoAction: ICombatAction = {
   id: "",
@@ -46,6 +54,7 @@ export class Combat extends Vue {
   @Prop({ required: true }) charData!: CharData
 
   modalOpen = false
+  monsterOpponent = false
 
   get actionsFast() {
     return (
@@ -79,15 +88,81 @@ export class Combat extends Vue {
       ) || NoAction
     )
   }
-  get items(): { id: string; name: string }[] {
+  get items(): Item[] {
     // TODO: filter appropriately, e.g, only equipped weapons when doing
     // attacks, when 'use item', return all
     // if (this.selectedFastActionId === ACTION_FAST.use_item) {
     // return this.charData.gear.inventory
     // }
-    return this.charData.gear.inventory.filter(
-      (i) => i.equipped || i.type === "other"
-    )
+    return [
+      ...this.charData.gear.inventory.filter(
+        (i) => i.equipped || i.type === "other"
+      ),
+    ]
+  }
+  get itemsFast(): Option[] {
+    switch (this.selectedFastActionId) {
+      case ACTION_FAST.parry:
+        return [
+          nullItem,
+          ...this.items.filter(
+            (i) =>
+              i.type === "shield" ||
+              (i.type === "weapon" && i.features.parrying)
+          ),
+        ]
+
+      case ACTION_FAST.disarm:
+        return [
+          nullItem,
+          ...this.items.filter((i) => !!(isStabbing(i) || isSlashing(i))),
+        ]
+
+      case ACTION_FAST.shove:
+        return [
+          nullItem,
+          ...this.items.filter(
+            (i) =>
+              !!(
+                i.type === "shield" ||
+                (i.type === "weapon" && i.features.hook)
+              )
+          ),
+        ]
+
+      case ACTION_FAST.use_item:
+        return this.items
+
+      default:
+        return [nullItem]
+    }
+  }
+
+  get itemsSlow(): Option[] {
+    switch (this.selectedSlowActionId) {
+      case ACTION_SLOW.slash:
+        return [nullItem, ...this.items.filter(isSlashing)]
+
+      case ACTION_SLOW.stab:
+        return [nullItem, ...this.items.filter(isStabbing)]
+
+      case ACTION_SLOW.charge:
+        return [
+          nullItem,
+          ...this.items.filter((i) => !!(isStabbing(i) || isSlashing(i))),
+        ]
+
+      case ACTION_SLOW.shoot:
+        return [
+          nullItem,
+          ...this.items.filter(
+            (i) => i.type === "weapon" && isRangedWeapon(i) && i.bonus
+          ),
+        ]
+
+      default:
+        return [nullItem]
+    }
   }
 
   itemId = ""
@@ -96,11 +171,23 @@ export class Combat extends Vue {
   skillId: TSkillId | "" = ""
   actionId: ACTION_ALL | "" = ""
 
-  initiative = null
+  initiative: null | number = null
   fastActionPerformed = false
   slowActionPerformed = false
   selectedSlowActionId: ACTION_SLOW | "" = ""
   selectedFastActionId: ACTION_FAST | "" = ""
+
+  created() {
+    const storedInitiative = Number(sessionStorage.getItem("combat-initiative"))
+    if (storedInitiative) {
+      this.initiative = storedInitiative
+    }
+  }
+  setInitiative(value: number) {
+    console.log({ value })
+    this.initiative = Number(value)
+    sessionStorage.setItem("combat-initiative", String(value))
+  }
 
   nextRound() {
     this.selectedSlowActionId = ""
@@ -135,6 +222,10 @@ export class Combat extends Vue {
       (i) => i.type === "helmet" && i.equipped
     )
   }
+  get isArmorEquipped(): boolean {
+    return Boolean(this.equippedArmor || this.equippedHelmet)
+  }
+
   armorClicked() {
     if (!this.equippedArmor && !this.equippedHelmet) return
     const black =
@@ -158,7 +249,8 @@ export default Combat
         id="initiative"
         min="1"
         max="10"
-        v-model.number="initiative"
+        :value="initiative"
+        @input="setInitiative"
       />
 
       <label v-if="false" for="initiative">{{ $t("Willpower") }}</label>
@@ -169,10 +261,6 @@ export default Combat
         max="10"
         v-model.number="charData.willpower"
       />
-
-      <IconButton icon="rolling-dices" @click="armorClicked">
-        {{ $t("Armor") }}
-      </IconButton>
 
       <div v-if="false">
         <input
@@ -196,7 +284,7 @@ export default Combat
     </section>
 
     <section class="grid">
-      <div class="grid-head grid-full bold">
+      <div v-if="false" class="grid-head grid-full bold">
         <div class="capitalize">{{ $t("action") }}</div>
         <div class="capitalize">{{ $t("item") }}</div>
         <div>
@@ -211,17 +299,17 @@ export default Combat
 
       <!-- fast action -->
       <FLSelect
-        :label="$t('combat-action-fast')"
+        :label="$t('combat-action-fast') + ' ' + $t('action')"
         :fullWidth="true"
         :disabled="fastActionPerformed"
         :options="actionsFast"
         v-model="selectedFastActionId"
       />
       <FLSelect
-        :label="' '"
+        :label="$t('item')"
         :fullWidth="true"
-        :disabled="!items"
-        :options="items"
+        :disabled="!itemsFast || fastActionPerformed"
+        :options="itemsFast"
         v-model="itemIdFast"
       />
       <div>
@@ -252,17 +340,17 @@ export default Combat
 
       <!-- slow action -->
       <FLSelect
-        :label="$t('combat-action-slow')"
+        :label="$t('combat-action-slow') + ' ' + $t('action')"
         :fullWidth="true"
         :disabled="slowActionPerformed"
         :options="actionsSlow"
         v-model="selectedSlowActionId"
       />
       <FLSelect
-        :label="' '"
+        :label="$t('item')"
         :fullWidth="true"
-        :disabled="!items"
-        :options="items"
+        :disabled="!itemsSlow || slowActionPerformed"
+        :options="itemsSlow"
         v-model="itemIdSlow"
       />
       <div>
@@ -287,7 +375,12 @@ export default Combat
         class="button-margin"
         v-model="slowActionPerformed"
       />
-      <div class="grid-row grid-aside capitalize-first">
+      <div
+        :class="[
+          'grid-row grid-aside capitalize-first',
+          rollDisabled(selectedSlowAction) && 'red',
+        ]"
+      >
         {{ selectedSlowAction.prerequisite() }}
       </div>
 
@@ -297,7 +390,44 @@ export default Combat
     <!-- only enable if shown in separate view -->
     <GearCard v-if="false" :charData="charData" />
 
+    <section class="setup-grid">
+      <label>
+        <input
+          type="checkbox"
+          name="fast-action"
+          id="fast-action"
+          v-model="slowActionPerformed"
+        />
+        <span>Fast action performed</span>
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          name="long-action"
+          id="long-action"
+          v-model="fastActionPerformed"
+        />
+        <span>Slow action performed</span>
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          name="opponent"
+          id="opponent"
+          v-model="monsterOpponent"
+        />
+        <span>Fighting monster</span>
+      </label>
+    </section>
+
     <div class="next-round">
+      <IconButton
+        icon="rolling-dices"
+        @click="armorClicked"
+        :disabled="!isArmorEquipped"
+      >
+        {{ $t("Armor") }}
+      </IconButton>
       <FLButton class="capitalize-first" @click="nextRound">
         {{ $t("next round") }}
       </FLButton>
@@ -311,11 +441,14 @@ export default Combat
       :skillId="skillId"
       :actionId="actionId"
       :itemId="itemId"
+      :isMonster="monsterOpponent"
     />
   </div>
 </template>
 
 <style scoped lang="less">
+@import "~Style/colors.less";
+
 .details-top {
   display: grid;
   grid-template-columns: 1fr 1fr auto;
@@ -328,10 +461,10 @@ export default Combat
   flex-direction: column;
   flex-grow: 1;
   text-align: left;
+  max-width: 500px;
 }
 
 .grid {
-  max-width: 55ch;
   margin: 1rem 0;
   display: grid;
   grid-template-columns: 2fr 2fr auto auto;
@@ -368,7 +501,20 @@ export default Combat
 }
 
 .next-round {
-  margin-left: auto;
   margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.red {
+  color: @color-danger;
+}
+
+.setup-grid {
+  display: inline-grid;
+  grid-template-columns: auto auto;
+  grid-gap: 0.5rem;
+  align-items: center;
 }
 </style>

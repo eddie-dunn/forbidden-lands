@@ -1,7 +1,9 @@
 <script lang="ts">
 import DiceActions from "@/components/dice/DiceActions.vue"
 import DiceRollerConfig from "@/components/dice/DiceRollerConfig.vue"
-import ExpandableSection from "@/components/ExpandableSection.vue"
+import ExpandableSection, {
+  EXPANDER_SLOT,
+} from "@/components/ExpandableSection.vue"
 import FLButton from "@/components/base/FLButton.vue"
 import Modal from "@/components/Modal.vue"
 
@@ -13,9 +15,11 @@ import { FLNumberInput } from "@/components/base/FLNumberInput.vue"
 import { IDiceConfig } from "@/dice/diceTypes"
 import { Notification, notify } from "@/util/notifications"
 import { SkillObj } from "@/skills"
-import { ACTION_ALL } from "@/data/combat/typesCombat"
+import { ACTION_ALL, ACTION_FAST } from "@/data/combat/typesCombat"
 import { TSkillId } from "@/types"
 import { Item } from "@/data/items/itemTypes"
+import { IResultSummary } from "src/components/dice/diceTypes"
+import { DiceRollEffects } from "src/components/diceRoller/DiceRollEffects.vue"
 
 function defaultDice(): IDiceConfig {
   return {
@@ -34,6 +38,7 @@ function defaultDice(): IDiceConfig {
     DiceCombat,
     DiceRollerCombat,
     DiceRollerConfig,
+    DiceRollEffects,
     Modal,
     FLButton,
     FLNumberInput,
@@ -48,11 +53,15 @@ export class DiceModal extends Vue {
   @Prop({ default: "" }) actionId!: ACTION_ALL | ""
   @Prop({ default: "" }) skillId!: TSkillId | ""
   @Prop({ default: "" }) itemId!: ""
+  @Prop({ default: false }) isMonster!: boolean
 
   canPush = this.disablePush
+
   canRoll = true
   mDice = { ...this.dice }
   mDiceKey = "0"
+
+  EXPANDER_SLOT = EXPANDER_SLOT
 
   get showWillpower() {
     return this.charData && this.charData.willpower !== null
@@ -103,15 +112,27 @@ export class DiceModal extends Vue {
       this.canPush = false
       return
     }
+    if (
+      this.actionId === ACTION_FAST.parry ||
+      this.actionId === ACTION_FAST.dodge
+    ) {
+      this.canPush = false
+      return
+    }
     this.canPush = !pushDisabled
   }
 
   handleConfigUpdate(newConf: IDiceConfig) {
     this.mDice = newConf
+    // FIXME: Handle updates more gracefully than this
     this.mDiceKey = JSON.stringify(newConf)
   }
-}
 
+  rollResult: IResultSummary | null = null
+  onResult(result: IResultSummary) {
+    this.rollResult = result
+  }
+}
 export default DiceModal
 </script>
 
@@ -123,6 +144,7 @@ export default DiceModal
         :skillId="skillId"
         :actionId="actionId"
         :itemId="itemId"
+        :isMonster="isMonster"
         @dice-config="handleConfigUpdate"
       />
       <!-- FIXME: Integrate DiceRollerCombat with DiceCombat -->
@@ -144,7 +166,25 @@ export default DiceModal
         @pushCb="(cb) => setCb('push', cb)"
         @pushDisabled="updateCanPush"
         @wp-update="onWillpower"
+        @result="onResult"
       />
+      <ExpandableSection
+        v-if="rollResult"
+        :defaultOpen="true"
+        saveStateId="dice-roll-effects"
+      >
+        <div :slot="EXPANDER_SLOT.header_center" style="font-size: 1rem;">
+          Effects
+        </div>
+        <DiceRollEffects
+          :key="mDiceKey"
+          :rollResult="rollResult"
+          :itemId="itemId"
+          :skillId="skillId"
+          :actionId="actionId"
+          :charData="charData"
+        />
+      </ExpandableSection>
     </div>
     <div slot="footer">
       <div v-if="showWillpower" class="wp-input">

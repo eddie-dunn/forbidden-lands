@@ -1,8 +1,8 @@
 import { ACTION_ALL, ACTION_FAST, ACTION_SLOW } from "@/data/combat/typesCombat"
-import { Item, ITEM_WEIGHT, WEAPON_CATEGORY } from "@/data/items/itemTypes"
-import { IDiceConfigLogEntry, TDiceConfigLog } from "@/dice/diceTypes"
+import { Item, WEAPON_CATEGORY } from "@/data/items/itemTypes"
+import { IDiceConfigLogEntry } from "@/dice/diceTypes"
 import { TalentAll, TalentGeneral } from "@/types"
-import { getEnabledCategories } from "trace_events"
+import { isMeleeAttack, isAttack } from "src/data/combat/combat.ts"
 
 type TalentConfigLog = (IDiceConfigLogEntry & { id: TalentGeneral })[]
 
@@ -45,19 +45,12 @@ function isWeaponCategory(
   )
 }
 
-const isMeleeAttack = (actionId?: string): boolean =>
-  [
-    ACTION_SLOW.slash,
-    ACTION_SLOW.stab,
-    ACTION_SLOW.unarmed_attack,
-    ACTION_SLOW.charge,
-  ].includes(actionId as ACTION_SLOW)
 ////#endregion helpers
 
 //#region talent checkers
 const dragonSlayer: ITalent = {
   id: "dragonslayer",
-  applicable: (o) => !!o?.monster && isMeleeAttack(o.action),
+  applicable: (o) => !!o?.monster && isAttack(o.action),
   bonus: (rank: number) => fighterBonus("dragonslayer", rank),
 }
 
