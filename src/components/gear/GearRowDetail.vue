@@ -61,6 +61,10 @@ export class GearRowDetail extends Vue {
     }
     return 0
   }
+
+  get missingCategory(): boolean {
+    return this.item?.type === "weapon" && !this.item?.category
+  }
 }
 
 export default GearRowDetail
@@ -74,6 +78,9 @@ export default GearRowDetail
         <div :class="['name', underline && 'underlined']">{{ name }}</div>
       </div>
 
+      <div v-if="missingCategory" class="details info-warning">
+        <span>Missing category</span>
+      </div>
       <div v-if="details" class="details capitalize">
         {{ details }}
       </div>
@@ -146,5 +153,11 @@ export default GearRowDetail
 
 .nowrap {
   white-space: nowrap;
+}
+
+.info-warning {
+  color: @color-danger;
+  display: flex;
+  align-items: center;
 }
 </style>
