@@ -107,5 +107,10 @@ export default new Router({
       name: "sandbox",
       component: () => import("./views/Sandbox.vue"),
     },
+    {
+      path: "/translations",
+      name: "translations",
+      component: () => import("./views/Translations.vue"),
+    },
   ],
 })
