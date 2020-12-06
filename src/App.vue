@@ -65,6 +65,10 @@ export default Vue.extend({
   created() {
     this.addEventListener("open-dice-modal")
   },
+  mounted() {
+    const d = document.getElementById("splash-screen")
+    d?.classList.toggle("hidden")
+  },
   beforeDestroy() {
     this.removeEventListener("open-dice-modal")
   },

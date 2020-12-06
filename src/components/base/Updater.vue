@@ -26,7 +26,7 @@ export class Updater extends Vue {
   refreshing = false
   updateExists = false
   registration: null | ServiceWorkerRegistration = null
-  log: string[] = [`Build version ${APP_VERSION}`]
+  logArray: string[] = [`Build version ${APP_VERSION}`]
 
   handleServiceWorkerEvent(e: CustomEventInit<IServiceWorkerMesssage>) {
     const ev = e.detail
@@ -41,7 +41,12 @@ export class Updater extends Vue {
       default:
         break
     }
-    this.log.push(ev.message)
+    this.mLog(ev.message)
+  }
+
+  mLog(msg: string) {
+    this.logArray.push(msg)
+    console.log(msg)
   }
 
   refreshApp(reload: boolean = true) {
@@ -71,10 +76,13 @@ export class Updater extends Vue {
   }
 
   async updateApp() {
-    this.log.push("Update clicked")
+    this.mLog("Update clicked")
     this.refreshing = true
+    const d = document.getElementById("splash-screen")
+    d?.classList.toggle("hidden")
+
     if (!this.registration || !this.registration.waiting) {
-      this.log.push("Error: No registration waiting to update")
+      this.mLog("Error: No registration waiting to update")
       await timeout(2000)
       this.refreshApp()
       return
@@ -85,13 +93,13 @@ export class Updater extends Vue {
     // fallback, we will force a refresh after 10 seconds in order to avoid
     // having the app end up in a half-way state
     await timeout(10000)
-    this.log.push("Error: Update took to long, forcing refresh")
+    this.mLog("Error: Update took to long, forcing refresh")
     await timeout(2000)
     this.refreshApp()
   }
 
   get info() {
-    return this.log.join("\n")
+    return this.logArray.join("\n")
   }
 }
 export default Updater
