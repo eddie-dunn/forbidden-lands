@@ -2,6 +2,12 @@
 
 > A character creator & manager + dice roller
 
+## App
+
+The app is freely available online and can be found here:
+
+[Forbidden Lands Companion App](https://eddie-dunn.gitlab.io/forbidden-lands)
+
 ## Development setup
 
 You need to have `yarn` installed. Follow the instructions
