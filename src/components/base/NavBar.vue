@@ -57,6 +57,7 @@ export default class NavBar extends Vue {
     </div>
     <div class="navbar-right">
       <IconButton
+        aria-label="Roll dice"
         @click="$emit('click-dice', $event)"
         style="margin-right: .5rem;"
         height="32px"
@@ -65,6 +66,7 @@ export default class NavBar extends Vue {
       ></IconButton>
 
       <IconButton
+        aria-label="Toggle menu"
         @click="$emit('click-menu', $event)"
         icon="menu_open"
       ></IconButton>

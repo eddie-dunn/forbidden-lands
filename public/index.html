@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
+    <meta
+      name="Description"
+      content="Forbidden Lands, App, Dice Roller, Free League, PWA, Web App"
+    />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
@@ -27,7 +31,6 @@
       align-items: center;
       justify-content: center;
       z-index: 2000;
-      display: flex;
     }
     .loader-box h1 {
       font-size: 1.2rem;
@@ -39,6 +42,9 @@
       width: 10vmin;
       height: 10vmin;
       animation: spin 1s linear infinite;
+    }
+    .hidden.hidden {
+      display: none;
     }
 
     @keyframes spin {

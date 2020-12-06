@@ -28,11 +28,22 @@ export default {
 </script>
 
 <template>
-  <span class="locale-changer">
-    <select v-model="$i18n.locale">
+  <div class="locale-changer">
+    <label for="language-picker">{{ $t("Language") }}</label>
+    <select id="language-picker" v-model="$i18n.locale">
       <option v-for="(lang, i) in langs" :key="`Lang${i}`" :value="lang.key">
         {{ lang.name }}
       </option>
     </select>
-  </span>
+  </div>
 </template>
+
+<style lang="less" scoped>
+.locale-changer {
+  display: flex;
+  align-items: center;
+  label {
+    margin-right: 1rem;
+  }
+}
+</style>

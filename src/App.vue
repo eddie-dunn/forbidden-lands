@@ -67,7 +67,7 @@ export default Vue.extend({
   },
   mounted() {
     const d = document.getElementById("splash-screen")
-    d?.classList.toggle("hidden")
+    d?.classList.toggle("hidden", true)
   },
   beforeDestroy() {
     this.removeEventListener("open-dice-modal")
@@ -104,7 +104,7 @@ export default Vue.extend({
       </section>
       <section class="nav-section">
         <h2>Options</h2>
-        <div>{{ $t("Language") }} <LocaleChanger /></div>
+        <LocaleChanger />
         <Backup />
       </section>
       <section class="nav-section-footer">

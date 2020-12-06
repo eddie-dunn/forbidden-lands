@@ -114,7 +114,7 @@ export default Vue.extend({
 
     <div v-if="!this.charData" class="stat-card row-full transform">
       <div class="placeholder" @click="edit()">
-        <h3 class="capitalize-first">{{ titleOverride }}</h3>
+        <div class="capitalize-first">{{ titleOverride }}</div>
       </div>
     </div>
 
@@ -239,6 +239,7 @@ h3 {
     background: ~"@{pastel-green}ee";
     color: white;
   }
+  font-weight: bold;
 }
 
 .modal-body {
