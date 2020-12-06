@@ -21,7 +21,7 @@ export default {
       localStorage.setItem(LOCALE_KEY, this.$i18n.locale)
 
       const pageTitle = this.$store.getters[GET_PAGE_TITLE]
-      this.$store.commit(SET_PAGE_TITLE, pageTitle)
+      this.$store.commit(SET_PAGE_TITLE, pageTitle.title, pageTitle.translate)
     },
   },
 }

@@ -23,7 +23,10 @@ export class TranslationsView extends Vue {
   }
 
   mounted() {
-    this.$store.commit(SET_PAGE_TITLE, "Translations")
+    this.$store.commit(SET_PAGE_TITLE, {
+      title: "Translations",
+      translate: false,
+    })
   }
 
   missingSwedish() {

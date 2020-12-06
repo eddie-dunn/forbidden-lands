@@ -2,6 +2,11 @@
 import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 
+import {
+  GET_PAGE_TITLE,
+  GET_PAGE_SUBTITLE,
+  GET_MP_ACTIVE,
+} from "@/store/store-types"
 import SvgIcon from "@/components/SvgIcon.vue"
 import IconButton from "@/components/base/IconButton.vue"
 
@@ -12,10 +17,26 @@ import IconButton from "@/components/base/IconButton.vue"
   },
 })
 export default class NavBar extends Vue {
-  @Prop({ default: "" }) pageTitle!: string
-  @Prop({ default: "" }) pageSubtitle!: string
   @Prop({ default: false }) showNav!: boolean
-  @Prop({ default: false }) showMp!: boolean
+
+  get pageTitle(): string {
+    const { title, translate } = this.$store.getters[GET_PAGE_TITLE]
+    if (translate) {
+      return String(this.$t(title))
+    }
+    return title
+  }
+
+  get pageSubtitle(): string {
+    const sub = this.$store.getters[GET_PAGE_SUBTITLE]
+    if (sub && this.pageTitle) return ": " + sub
+    if (sub && !this.pageTitle) return sub
+    return sub
+  }
+
+  get showMp(): boolean {
+    return this.$store.getters[GET_MP_ACTIVE]
+  }
 }
 </script>
 
@@ -32,9 +53,7 @@ export default class NavBar extends Vue {
       </div>
     </div>
     <div class="navbar-center">
-      <h1 class="page-title capitalize">
-        {{ $t(pageTitle) }}{{ pageSubtitle }}
-      </h1>
+      <h1 class="page-title capitalize">{{ pageTitle }}{{ pageSubtitle }}</h1>
     </div>
     <div class="navbar-right">
       <IconButton

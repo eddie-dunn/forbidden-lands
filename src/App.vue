@@ -10,12 +10,6 @@ import Backup from "@/components/Backup.vue"
 import DiceModal, { defaultDice } from "@/components/dice/DiceModal.vue"
 import { Updater } from "@/components/base/Updater.vue"
 
-import {
-  GET_PAGE_TITLE,
-  GET_PAGE_SUBTITLE,
-  GET_MP_ACTIVE,
-} from "@/store/store-types"
-
 const CONSTANTS = require("@/util/const.js")
 
 const DEFAULT_DICE_MODAL_CONF = {
@@ -68,20 +62,6 @@ export default Vue.extend({
       this.$root.$off(name)
     },
   },
-  computed: {
-    pageTitle(): string {
-      return this.$store.getters[GET_PAGE_TITLE]
-    },
-    pageSubtitle(): string {
-      const sub = this.$store.getters[GET_PAGE_SUBTITLE]
-      if (sub && this.pageTitle) return ": " + sub
-      if (sub && !this.pageTitle) return sub
-      return sub
-    },
-    showMp(): boolean {
-      return this.$store.getters[GET_MP_ACTIVE]
-    },
-  },
   created() {
     this.addEventListener("open-dice-modal")
   },
@@ -95,9 +75,6 @@ export default Vue.extend({
   <div id="app" style="margin: 0 auto;">
     <NavBar
       :showNav="showNav"
-      :showMp="showMp"
-      :pageTitle="pageTitle"
-      :pageSubtitle="pageSubtitle"
       @click-menu="showNav = !showNav"
       @click-dice="showDiceModal = !showDiceModal"
     />

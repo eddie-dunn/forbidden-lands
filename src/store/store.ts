@@ -34,7 +34,7 @@ export const store = new Vuex.Store({
     [MP_CHARS]: <(CharacterData | null)[]>[],
     client: new FLPlayer(),
     host: new FLHost(),
-    [PAGE_TITLE]: "Forbidden Lands Companion",
+    [PAGE_TITLE]: { title: "Forbidden Lands Companion", translate: false },
     [PAGE_SUBTITLE]: "",
   },
   getters: {
@@ -57,7 +57,7 @@ export const store = new Vuex.Store({
     [GET_MP_PLAYERS](state): UserData[] {
       return state.client.users
     },
-    [GET_PAGE_TITLE](state) {
+    [GET_PAGE_TITLE](state): { title: string; translate: boolean } {
       return state[PAGE_TITLE]
     },
     [GET_PAGE_SUBTITLE](state) {
@@ -83,8 +83,15 @@ export const store = new Vuex.Store({
       state.client.notifyCharUpdate(charData)
     },
     /** Other */
-    [SET_PAGE_TITLE](state, title: string) {
-      state[PAGE_TITLE] = title
+    [SET_PAGE_TITLE](
+      state,
+      title: string | { title: string; translate?: boolean }
+    ) {
+      if (typeof title === "string") {
+        state[PAGE_TITLE] = { title, translate: true }
+      } else {
+        state[PAGE_TITLE] = { title: title.title, translate: !!title.translate }
+      }
     },
     [SET_PAGE_SUBTITLE](state, title: string) {
       state[PAGE_SUBTITLE] = title
