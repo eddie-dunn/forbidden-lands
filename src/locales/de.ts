@@ -237,7 +237,6 @@ const weapons = {
   "scimitar": "Krummsäbel",
   "short bow": "Kurzbogen",
   "short spear": "Speer",
-  "shortbow": "Kurzbogen",
   "shortsword": "Kurzschwert",
   "sling": "Schleuder",
   "small shield": "Schild, klein",
@@ -254,21 +253,14 @@ const weapons = {
   "wooden club": "Holzkeule",
 }
 
-export default {
-  ...age,
-  ...attributes,
-  ...kin,
-  ...professions,
-  ...skills,
-  ...talents,
-  ...GearDescriptions,
-  ...weapons,
+const keyedTranslations = {
+  ATTRIB_REMAINING: "Aktuell",
+  CONFIRM_DELETE_CHAR: "Willst du den Charakter wirklich löschen?",
+  GENERATE_DOWNLOAD_LINK: "Download-Link erstellen",
+  PHB_ref: "Seite {page} im Spielerhandbuch",
+}
 
-  // Keys
-  "ATTRIB_REMAINING": "Aktuell",
-
-  // Mixed case
-
+const mixedCase = {
   "About FLC": "Über FLC",
   "About": "Über",
   "Activate": "Aktivieren",
@@ -397,9 +389,9 @@ export default {
   "Willpower": "Willenskraft",
   "WP": "WP",
   "XP": "EP",
+}
 
-  // lowercase
-
+const lowercase = {
   "animal companion": "Tiergefährte",
   "armor": "Rüstung",
   "armslength": "Armeslänge",
@@ -409,7 +401,6 @@ export default {
   "childhood": "Kindheit",
   "confirm": "Bestätigen",
   "create from template": "Aus Vorlage erstellen",
-  "current": "Aktuell",
   "description": "Beschreibung",
   "dmg": "Schdn",
   "edged": "Scharf",
@@ -422,7 +413,6 @@ export default {
   "long": "Weit",
   "male": "männlich",
   "melee weapons": "Nahkampfwaffen",
-  "message": "Hallo i18n !!",
   "mighty": "Machtvoll",
   "movement rate": "Bewegungsrate",
   "name": "Name",
@@ -442,14 +432,9 @@ export default {
   "slow_loading": "langsames laden",
   "talents": "Talente",
   "unarmed": "Unbewaffnet",
+}
 
-  // Param
-  "PHB_ref": "Seite {page} im Spielerhandbuch",
-
-  // Key
-  "CONFIRM_DELETE_CHAR": "Willst du den Charakter wirklich löschen?",
-
-  // Longer
+const multiLine = {
   "Roll dice before session starts": "vor der ersten Sitzung auswürfeln",
   "XP_DESCR": `
     Du erhältst EP am Ende jeder Spielsitzung. Sprich mit den anderen Spielern darüber, was passiert ist. Für jede der folgenden Fragen, die du mit „Ja“ beantworten kannst, erhältst du einen EP:
@@ -499,7 +484,21 @@ export default {
     However, even if the stats are invalid it is still possible to save and
     activate your character, should you wish to do so.
   `,
-  "GENERATE_DOWNLOAD_LINK": "Download-Link erstellen",
   "IMPORT_WARNING":
     "Achtung: Der Import eines Backups überschreibt alle aktuellen Einstellungen und Charaktere.",
+}
+
+export default {
+  ...age,
+  ...attributes,
+  ...kin,
+  ...professions,
+  ...skills,
+  ...talents,
+  ...GearDescriptions,
+  ...weapons,
+  ...keyedTranslations,
+  ...mixedCase,
+  ...lowercase,
+  ...multiLine,
 }

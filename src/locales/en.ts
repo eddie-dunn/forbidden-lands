@@ -244,7 +244,6 @@ const weapons = {
   "scimitar": "scimitar",
   "short bow": "short bow",
   "short spear": "short spear",
-  "shortbow": "shortbow",
   "shortsword": "shortsword",
   "sling": "sling",
   "small shield": "small shield",
@@ -294,31 +293,84 @@ const combatActionsFast: { [value in ACTION_FAST]: string } = {
   "action-use_item": "use item",
 }
 
-export default {
-  ...age,
-  ...attributes,
-  ...kin,
-  ...professions,
-  ...skills,
-  ...talents,
-  ...GearDescriptions,
-  ...weapons,
-  ...combatActionsFast,
-  ...combatActionsSlow,
+const keyedTranslations = {
+  ATTRIB_REMAINING: "Current",
+  CONFIRM_DELETE_CHAR: "Are you sure you wish to delete this character?",
+  PHB_ref: "Page {page} in the Player's Handbook",
+  GENERATE_DOWNLOAD_LINK: "Genererate download link",
+}
 
-  // Keys
-  "ATTRIB_REMAINING": "Current",
+const multiLine = {
+  "Roll dice before session starts": "Roll dice before session starts",
+  "XP_DESCR": `
+    You receive XP after the end of each game session. Talk it through and let
+    the whole group discuss what has happened. For each of the below questions
+    that you can reply “yes” to, you get one XP:
 
-  // Mixed case
+    Did you participate in the game session? You get one XP just for being
+    there.
 
+    Did you travel through at least one hex on the game map that you had not
+    visited before?
+
+    Did you discover a new adventure site?
+
+    Did you defeat one or more monsters?
+
+    Did you find a treasure (1 gold or more)?
+
+    Did you build a function in your stronghold?
+
+    Did you activate your Pride?
+
+    Did you suffer from your Dark Secret?
+
+    Did you risk your life for another PC?
+
+    Did you perform an extraordinary action of some kind?
+  `,
+  "REP_DESCR": `
+    During the game, your Reputation score will increase. After a game
+    session, if you have performed one or more great or terrible deeds of
+    some kind, your Reputation score increases one point. What counts as a
+    "great or terrible deed" is up to the GM, but here are some examples:
+
+    A prominent NPC was killed, or saved from certain death.
+
+    A feared monster was slain.
+
+    A legendary treasure or artifact was found or stolen.
+
+    The deed permanently altered the overall situation in an adventure site.
+
+    The deed will have significant consequences for one of the major powers
+    in the Forbidden Lands.
+
+    You have built a certain function in your stronghold (see page 160).
+  `,
+  "CONFIRM_ACTIVATE_INVALID_CHAR": `
+    Your character does not validate; are you sure you wish to activate it?
+  `,
+  "TEMPLATE_VALID_WARNING": `
+    N.B: Creating a character from a template may result in a character that
+    does not validate according to the character creation rules.
+
+    However, even if the stats are invalid it is still possible to save and
+    activate your character, should you wish to do so.
+  `,
+  "IMPORT_WARNING":
+    "Warning: Importing a backup will replace all your current settings and characters",
+}
+
+const mixedCase = {
   "About FLC": "About FLC",
   "About": "About",
   "Activate": "Activate",
   "Active": "Active",
   "Add XP/Reputation": "Add XP/Reputation",
   "Add item": "Add item",
-  "Add": "Add",
   "Add talent": "Add Talent",
+  "Add": "Add",
   "Appearance": "Appearance",
   "Armor": "Armor",
   "Armslength": "Arm's length",
@@ -414,8 +466,8 @@ export default {
   "Reset": "Reset",
   "Roll dice": "Roll dice",
   "Sandbox": "Sandbox",
-  "Save": "Save",
   "Save & Close": "Save & Close",
+  "Save": "Save",
   "Select import file": "Select import file",
   "Select picture": "Select picture",
   "Select talent": "Select talent",
@@ -433,16 +485,16 @@ export default {
   "Type": "Type",
   "Use gear": "Use gear",
   "View": "View",
+  "WP": "WP",
   "Water": "Water",
   "Weapon": "Weapon",
   "Weapons": "Weapons",
   "Weight": "Weight",
   "Willpower": "Willpower",
-  "WP": "WP",
   "XP": "XP",
+}
 
-  // lowercase
-
+const lowercase = {
   "action": "action",
   "animal companion": "animal companion",
   "armor": "armor",
@@ -462,7 +514,6 @@ export default {
   "confirm": "confirm",
   "create from template": "create from template",
   "crossbow": "crossbow",
-  "current": "current",
   "description": "description",
   "dmg": "dmg",
   "edged": "edged",
@@ -486,8 +537,10 @@ export default {
   "near": "near",
   "next round": "next round",
   "no character": "no character",
+  "no suitable weapon equipped": "no suitable weapon equipped",
   "none": "none",
   "opponent": "target",
+  "options": "options",
   "or more": "or more",
   "other": "other",
   "parry": "parry",
@@ -507,72 +560,21 @@ export default {
   "talents": "talents",
   "thrown": "thrown",
   "unarmed": "unarmed",
+}
 
-  // Param
-  "PHB_ref": "Page {page} in the Player's Handbook",
-
-  // Key
-  "CONFIRM_DELETE_CHAR": "Are you sure you wish to delete this character?",
-
-  // Longer
-  "Roll dice before session starts": "Roll dice before session starts",
-  "XP_DESCR": `
-    You receive XP after the end of each game session. Talk it through and let
-    the whole group discuss what has happened. For each of the below questions
-    that you can reply “yes” to, you get one XP:
-
-    Did you participate in the game session? You get one XP just for being
-    there.
-
-    Did you travel through at least one hex on the game map that you had not
-    visited before?
-
-    Did you discover a new adventure site?
-
-    Did you defeat one or more monsters?
-
-    Did you find a treasure (1 gold or more)?
-
-    Did you build a function in your stronghold?
-
-    Did you activate your Pride?
-
-    Did you suffer from your Dark Secret?
-
-    Did you risk your life for another PC?
-
-    Did you perform an extraordinary action of some kind?
-  `,
-  "REP_DESCR": `
-    During the game, your Reputation score will increase. After a game
-    session, if you have performed one or more great or terrible deeds of
-    some kind, your Reputation score increases one point. What counts as a
-    "great or terrible deed" is up to the GM, but here are some examples:
-
-    A prominent NPC was killed, or saved from certain death.
-
-    A feared monster was slain.
-
-    A legendary treasure or artifact was found or stolen.
-
-    The deed permanently altered the overall situation in an adventure site.
-
-    The deed will have significant consequences for one of the major powers
-    in the Forbidden Lands.
-
-    You have built a certain function in your stronghold (see page 160).
-  `,
-  "CONFIRM_ACTIVATE_INVALID_CHAR": `
-    Your character does not validate; are you sure you wish to activate it?
-  `,
-  "TEMPLATE_VALID_WARNING": `
-    N.B: Creating a character from a template may result in a character that
-    does not validate according to the character creation rules.
-
-    However, even if the stats are invalid it is still possible to save and
-    activate your character, should you wish to do so.
-  `,
-  "GENERATE_DOWNLOAD_LINK": "Genererate download link",
-  "IMPORT_WARNING":
-    "Warning: Importing a backup will replace all your current settings and characters",
+export default {
+  ...age,
+  ...attributes,
+  ...kin,
+  ...professions,
+  ...skills,
+  ...talents,
+  ...GearDescriptions,
+  ...weapons,
+  ...combatActionsFast,
+  ...combatActionsSlow,
+  ...keyedTranslations,
+  ...mixedCase,
+  ...lowercase,
+  ...multiLine,
 }
