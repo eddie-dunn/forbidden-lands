@@ -261,6 +261,7 @@ const weapons = {
 }
 
 const combatActionsSlow: { [value in ACTION_SLOW]: string } = {
+  "": "",
   "action-break_free": "break free",
   "action-cast": "cast spell",
   "action-charge": "charge",
@@ -276,6 +277,7 @@ const combatActionsSlow: { [value in ACTION_SLOW]: string } = {
 }
 
 const combatActionsFast: { [value in ACTION_FAST]: string } = {
+  "": "",
   "action-aim": "aim",
   "action-disarm": "disarm",
   "action-dodge": "dodge",
@@ -510,8 +512,10 @@ const lowercase = {
   "character": "character",
   "childhood": "childhood",
   "combat": "combat",
-  "combat-action-fast": "fast",
-  "combat-action-slow": "slow",
+  "combat-action-fast": "fast action",
+  "combat-action-fast-performed": "fast action performed",
+  "combat-action-slow": "slow action",
+  "combat-action-slow-performed": "slow action performed",
   "confirm": "confirm",
   "create from template": "create from template",
   "crossbow": "crossbow",
@@ -520,6 +524,7 @@ const lowercase = {
   "edged": "edged",
   "epic": "epic",
   "female": "female",
+  "fighting monster": "fighting monster",
   "formative event": "formative event",
   "helmets": "helmets",
   "hook": "hook",

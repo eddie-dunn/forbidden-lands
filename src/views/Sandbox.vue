@@ -149,7 +149,7 @@ import { Notification, notify } from "@/util/notifications"
 import DiceRoller from "@/components/dice/DiceRoller.vue"
 import SvgIcon from "@/components/SvgIcon.vue"
 import IconButton from "@/components/base/IconButton.vue"
-import { Combat } from "@/components/combat/CombatBox.vue"
+import { Combat } from "@/components/CombatBox/CombatBox.vue"
 import { Caesar } from "Tests/unit/data/personas"
 import { FLToggle } from "@/components/base/FLToggle.vue"
 

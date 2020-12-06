@@ -7,7 +7,7 @@ import {
   actionsFast,
   actionsAll,
   TARGET,
-} from "@/data/combat/combat.ts"
+} from "@/data/combat/combatActions"
 import ExpandableSection from "@/components/ExpandableSection.vue"
 import { FLSelect, Option, Optgroup } from "@/components/base/FLSelect.vue"
 import { FLNumberInput } from "@/components/base/FLNumberInput.vue"

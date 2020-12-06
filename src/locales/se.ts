@@ -277,6 +277,7 @@ const combatActionsSlow: { [value in ACTION_SLOW]: string } = {
   "action-stab": "stöt",
   "action-taunt": "håna",
   "action-unarmed_attack": "slag/spark/bett",
+  "": "",
 }
 
 const combatActionsFast: { [value in ACTION_FAST]: string } = {
@@ -295,6 +296,7 @@ const combatActionsFast: { [value in ACTION_FAST]: string } = {
   "action-shove": "knuffa",
   "action-swing_weapon": "tag sats",
   "action-use_item": "använda föremål",
+  "": "",
 }
 
 const keyedTranslations = {
@@ -512,13 +514,16 @@ const lowercase = {
   "character": "karaktär",
   "childhood": "uppväxt",
   "combat": "strid",
-  "combat-action-fast": "kort",
-  "combat-action-slow": "lång",
+  "combat-action-fast": "kort handling",
+  "combat-action-fast-performed": "kort handling utförd",
+  "combat-action-slow": "lång handling",
+  "combat-action-slow-performed": "lång handling utförd",
   "confirm": "bekräfta",
   "create from template": "skapa från mall",
   "crossbow": "armborst",
   "description": "beskrivning",
   "dmg": "skada",
+  "fighting monster": "attackera monster",
   "edged": "egg",
   "epic": "episk",
   "female": "kvinna",

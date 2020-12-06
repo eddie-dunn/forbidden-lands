@@ -1,11 +1,19 @@
 import { CharData } from "@/data/character/characterData"
-import { Item, ItemWeapon } from "@/data/items/itemTypes"
+import {
+  Item,
+  ItemWeapon,
+  ItemWeight,
+  WEAPON_CATEGORY,
+} from "@/data/items/itemTypes"
+import { isMeleeWeapon } from "src/data/items/logic/weaponLogic"
 import {
   ICombatAction,
   ACTION_FAST,
   ACTION_SLOW,
   ICombatState,
   ACTION_ALL,
+  ICombatActionFast,
+  ICombatActionSlow,
 } from "./typesCombat"
 
 const weaponEquipped = (item: Item): ItemWeapon | null => {
@@ -44,6 +52,20 @@ export const isMeleeAttack = (actionId?: ACTION_ALL): boolean =>
 export const isAttack = (actionId?: ACTION_ALL): boolean =>
   isMeleeAttack(actionId) || ACTION_SLOW.shoot === actionId
 
+export const isRangedWeapon = (item: Item | null): boolean => {
+  if (
+    item?.type === "weapon" &&
+    [
+      WEAPON_CATEGORY.bow,
+      WEAPON_CATEGORY.crossbow,
+      WEAPON_CATEGORY.thrown,
+    ].includes(item.category)
+  ) {
+    return true
+  }
+  return false
+}
+
 /*
 ACTION            PREREQUISITE                    SKILL
 Slash             Edged or Blunt weapon           Melee
@@ -60,7 +82,7 @@ Flee              No enemy at Arm’s Length        Move
 Crawl             You are prone                   None
 Charge            At Near range                   Melee, Charge talent
 */
-export const actionsSlow: (ICombatAction & { id: ACTION_SLOW })[] = [
+export const actionsSlow: ICombatActionSlow[] = [
   // ACTION            PREREQUISITE                    SKILL
   // Slash             Edged or Blunt weapon           Melee
   {
@@ -111,10 +133,7 @@ export const actionsSlow: (ICombatAction & { id: ACTION_SLOW })[] = [
     id: ACTION_SLOW.shoot,
     prerequisite: () => "ranged weapon",
     prereqOk: (c: CharData) =>
-      !!c.gear.inventory.find(
-        (item) => (weaponEquipped(item)?.range || 0) > 1
-        // Improve validation with 'ranged' field on weapon?
-      ),
+      !!c.gear.inventory.find((item) => isRangedWeapon(weaponEquipped(item))),
     skill: "marksmanship",
   },
   // Persuade          The opponent can hear you       Manipulation
@@ -139,6 +158,9 @@ export const actionsSlow: (ICombatAction & { id: ACTION_SLOW })[] = [
     prereqOk: (c: CharData) => {
       return Boolean(c.profession === "druid" || c.profession === "sorcerer")
     },
+    hidden: (c: CharData) => {
+      return !Boolean(c.profession === "druid" || c.profession === "sorcerer")
+    },
     skill: null,
   },
   // Flee              No enemy at Arm’s Length        Move
@@ -161,6 +183,9 @@ export const actionsSlow: (ICombatAction & { id: ACTION_SLOW })[] = [
     prerequisite: () => "enemy at Near range, Melee Charge talent",
     prereqOk: (c: CharData) => {
       return Boolean(c.talents.find((talent) => talent.id === "melee charge"))
+    },
+    hidden: (c: CharData) => {
+      return !Boolean(c.talents.find((talent) => talent.id === "melee charge"))
     },
     skill: "melee",
   },
@@ -186,7 +211,7 @@ Aim               Ranged, Short distance or more  –
 Power Word        You are a Druid or a Sorcerer   None, see Chapter 6
 Use Item          Varies                          Varies
 */
-export const actionsFast: (ICombatAction & { id: ACTION_FAST })[] = [
+export const actionsFast: ICombatActionFast[] = [
   // FAST ACTION       PREREQUISITE                    SKILL
   // Dodge             –                               Move
   {
@@ -224,7 +249,12 @@ export const actionsFast: (ICombatAction & { id: ACTION_FAST })[] = [
     prerequisite: () =>
       "Heavy weapon, must be performed right before a close combat attack",
     prereqOk: (c: CharData, state?: ICombatState) =>
-      !!c.gear.inventory.find((item) => weaponEquipped(item)?.range === 0) &&
+      !state?.slowActionPerformed &&
+      !!c.gear.inventory
+        .filter((i) => i.equipped)
+        .find(
+          (item) => isMeleeWeapon(item) && item.weight >= ItemWeight.HEAVY
+        ) &&
       !state?.slowActionPerformed,
     skill: null,
   },
@@ -281,21 +311,28 @@ export const actionsFast: (ICombatAction & { id: ACTION_FAST })[] = [
   {
     id: ACTION_FAST.ready_weapon,
     prerequisite: () => "Ranged weapon",
-    prereqOk: () => true, // TODO
+    prereqOk: (c: CharData) =>
+      !!c.gear.inventory.find((item) => isRangedWeapon(weaponEquipped(item))),
     skill: null,
   },
   //Aim               Ranged, Short distance or more  –
   {
     id: ACTION_FAST.aim,
     prerequisite: () => "Ranged, Short distance or more",
-    prereqOk: () => true, // TODO
+    prereqOk: (c: CharData) =>
+      !!c.gear.inventory.find((item) => isRangedWeapon(weaponEquipped(item))),
     skill: null,
   },
   //Power Word        You are a Druid or a Sorcerer   None, see Chapter 6
   {
     id: ACTION_FAST.power_word,
     prerequisite: () => "you are a Druid or a Sorcerer",
-    prereqOk: () => true, // TODO
+    prereqOk: (c: CharData) => {
+      return Boolean(c.profession === "druid" || c.profession === "sorcerer")
+    },
+    hidden: (c: CharData) => {
+      return !Boolean(c.profession === "druid" || c.profession === "sorcerer")
+    },
     skill: null,
   },
   //Use Item          Varies                          Varies

@@ -7,6 +7,7 @@ import {
   CharData,
   CharacterMetaDataStatus,
 } from "@/data/character/characterData"
+import { COMBAT_BOX_KEY } from "src/util/const"
 
 import SvgIcon from "@/components/SvgIcon.vue"
 import FLButton from "@/components/base/FLButton.vue"
@@ -89,6 +90,10 @@ export default class CharacterEditor extends Vue {
     return !this.charData.name
   }
 
+  get combatCardEnabled(): boolean {
+    return !!localStorage.getItem(COMBAT_BOX_KEY)
+  }
+
   closeClicked() {
     if (
       this.charDataUpdated &&
@@ -152,7 +157,7 @@ export default class CharacterEditor extends Vue {
       />
 
       <CardCombat
-        v-if="this.$BETA && !viewOnly && status === 'active'"
+        v-if="combatCardEnabled && !viewOnly && status === 'active'"
         class="row full print-hide"
         :charData="charData"
         v-on:updated-chardata="handleCharDataUpdate"

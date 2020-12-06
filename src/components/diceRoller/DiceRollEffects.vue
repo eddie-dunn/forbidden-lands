@@ -12,7 +12,7 @@ import { WEAPON_CATEGORY } from "src/data/items/itemTypes"
 import { TSkillId } from "src/types"
 import { rollDiceType } from "src/dice/diceRoller.ts"
 import { ACTION_ALL } from "src/data/combat/typesCombat"
-import { isDmgAttack } from "src/data/combat/combat.ts"
+import { isDmgAttack } from "src/data/combat/combatActions.ts"
 
 @Component({
   components: {

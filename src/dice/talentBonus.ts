@@ -2,7 +2,7 @@ import { ACTION_ALL, ACTION_FAST, ACTION_SLOW } from "@/data/combat/typesCombat"
 import { Item, WEAPON_CATEGORY } from "@/data/items/itemTypes"
 import { IDiceConfigLogEntry } from "@/dice/diceTypes"
 import { TalentAll, TalentGeneral } from "@/types"
-import { isMeleeAttack, isAttack } from "src/data/combat/combat.ts"
+import { isMeleeAttack, isAttack } from "src/data/combat/combatActions"
 
 type TalentConfigLog = (IDiceConfigLogEntry & { id: TalentGeneral })[]
 

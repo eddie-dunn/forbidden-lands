@@ -1,5 +1,6 @@
 import { TSkillId } from "@/types"
 import { CharData } from "@/data/character/characterData"
+import { ItemRange } from "src/data/items/itemTypes"
 
 export enum ACTION_SLOW {
   slash = "action-slash",
@@ -14,6 +15,7 @@ export enum ACTION_SLOW {
   flee = "action-flee",
   crawl = "action-crawl",
   charge = "action-charge",
+  none = "",
 }
 
 export enum ACTION_FAST {
@@ -32,6 +34,7 @@ export enum ACTION_FAST {
   aim = "action-aim",
   power_word = "action-power_word",
   use_item = "action-use_item",
+  none = "",
 }
 
 export type ACTION_ALL = ACTION_FAST | ACTION_SLOW | ""
@@ -39,6 +42,11 @@ export type ACTION_ALL = ACTION_FAST | ACTION_SLOW | ""
 export interface ICombatState {
   fastActionPerformed: boolean
   slowActionPerformed: boolean
+  prone: boolean
+  grappled: boolean
+  grappling: boolean
+  opponent: "monster" | "humanoid"
+  targetDistance: ItemRange
 }
 
 export interface ICombatAction {
@@ -46,5 +54,14 @@ export interface ICombatAction {
   skill: TSkillId | null // skillId used to perform action
   prerequisite: (c: CharData) => string
   prereqOk: (c: CharData, state?: ICombatState) => boolean
+  hidden?: (c: CharData) => boolean
   name?: string // translated string
+}
+
+export interface ICombatActionFast extends ICombatAction {
+  id: ACTION_FAST
+}
+
+export interface ICombatActionSlow extends ICombatAction {
+  id: ACTION_SLOW
 }

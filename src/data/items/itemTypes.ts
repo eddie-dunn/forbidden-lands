@@ -54,6 +54,13 @@ export enum Range {
   "long",
 }
 
+export enum ItemRange {
+  "armslength",
+  "near",
+  "short",
+  "long",
+}
+
 export interface ItemOther extends BaseItem {
   type: "other" | ""
 }
@@ -105,3 +112,4 @@ export interface ItemHelmet extends BaseItem {
 }
 
 export type Item = ItemOther | ItemWeapon | ItemArmor | ItemShield | ItemHelmet
+export type TItem = Item
