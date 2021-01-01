@@ -28,7 +28,7 @@ export default GearMoney
         id="copper"
         fontSize="1.4rem"
         min="0"
-        max="300"
+        max="999"
         v-model="charData.gear.money.copper"
         :disabled="viewOnly"
       />
@@ -39,7 +39,7 @@ export default GearMoney
         id="silver"
         fontSize="1.4rem"
         min="0"
-        max="300"
+        max="999"
         v-model="charData.gear.money.silver"
         :disabled="viewOnly"
       />
@@ -50,7 +50,7 @@ export default GearMoney
         id="gold"
         fontSize="1.4rem"
         min="0"
-        max="300"
+        max="999"
         v-model="charData.gear.money.gold"
         :disabled="viewOnly"
       />

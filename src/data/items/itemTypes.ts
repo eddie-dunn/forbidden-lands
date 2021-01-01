@@ -10,15 +10,12 @@ export enum ITEM_TYPE {
   "other" = "other",
 }
 
-type Weight = 0 | 0.5 | 1 | 2 | 10 /* -> can't be carried normally */
-
-// TODO: Use this instead
-export enum ITEM_WEIGHT {
-  tiny = 0,
-  light = 0.5,
-  normal = 1,
-  heavy = 2,
-  massive = 10, // can't be carried normally
+export enum ItemWeight {
+  TINY = 0,
+  LIGHT = 0.5,
+  NORMAL = 1,
+  HEAVY = 2,
+  MASSIVE = 10, // can't be carried normally
 }
 
 type SkillMod = { id: Skill; mod: number }
@@ -29,7 +26,7 @@ type BaseItem = {
   bonusType: BonusType // rename to dice type?
   id: string
   name: string
-  weight: Weight
+  weight: ItemWeight
 
   // Inventory management
   equipped?: boolean
