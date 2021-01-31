@@ -1,17 +1,15 @@
 <script lang="ts">
 import Vue from "vue"
-import { Component, Prop, Watch } from "vue-property-decorator"
+import { Component, Prop } from "vue-property-decorator"
 
 import SvgIcon from "@/components/SvgIcon.vue"
-import FLButton from "@/components/base/FLButton.vue"
 
 @Component({
   components: {
-    FLButton,
     SvgIcon,
   },
 })
-export default class NavDrawer extends Vue {
+export class NavDrawer extends Vue {
   @Prop({ default: "" }) title!: string
   @Prop({ default: false }) visible!: boolean
 
@@ -19,6 +17,7 @@ export default class NavDrawer extends Vue {
     this.$emit("close")
   }
 }
+export default NavDrawer
 </script>
 
 <template>
@@ -27,16 +26,15 @@ export default class NavDrawer extends Vue {
       :class="['overlay', visible ? 'visible' : '']"
       @click.self="close"
     ></div>
+
     <nav :class="['nav-drawer', visible ? 'nav-show' : '']">
       <h2 v-if="title" class="title">{{ title }}</h2>
       <div @click="close" class="nav-show-button">
-        <SvgIcon name="close" title="Show options" />
+        <SvgIcon name="close" title="close" />
       </div>
-      <div class="body">
-        <slot>
-          content
-        </slot>
-      </div>
+      <slot>
+        content
+      </slot>
     </nav>
   </div>
 </template>
@@ -62,6 +60,9 @@ h2 {
 }
 
 .nav-drawer {
+  display: flex;
+  flex-direction: column;
+
   position: fixed;
   top: 0;
   right: 0;

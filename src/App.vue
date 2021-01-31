@@ -2,15 +2,11 @@
 /* eslint-disable no-console */
 import Vue from "vue"
 
-import LocaleChanger from "@/components/LocaleChanger.vue"
 import Notify from "@/components/base/Notify.vue"
 import NavBar from "@/components/base/NavBar.vue"
-import NavDrawer from "@/components/base/NavDrawer.vue"
-import Backup from "@/components/Backup.vue"
 import DiceModal, { defaultDice } from "@/components/dice/DiceModal.vue"
 import { Updater } from "@/components/base/Updater.vue"
-
-const CONSTANTS = require("@/util/const.js")
+import { SideNav } from "src/components/nav/SideNav.vue"
 
 const DEFAULT_DICE_MODAL_CONF = {
   title: "",
@@ -21,12 +17,10 @@ const DEFAULT_DICE_MODAL_CONF = {
 
 export default Vue.extend({
   components: {
-    Backup,
     DiceModal,
-    LocaleChanger,
-    NavDrawer,
     NavBar,
     Notify,
+    SideNav,
     Updater,
   },
   data() {
@@ -34,7 +28,6 @@ export default Vue.extend({
       showNav: false,
       showDiceModal: false,
       diceModalConfig: DEFAULT_DICE_MODAL_CONF,
-      buildVersion: CONSTANTS.APP_VERSION,
     }
   },
   methods: {
@@ -82,38 +75,11 @@ export default Vue.extend({
       @click-menu="showNav = !showNav"
       @click-dice="showDiceModal = !showDiceModal"
     />
+    <SideNav :visible="showNav" @close="showNav = false" />
 
     <Updater />
 
     <router-view />
-
-    <NavDrawer :visible="showNav" @close="showNav = false" class="nav-body">
-      <section class="nav-section">
-        <h2>Navigation</h2>
-        <div class="route-links" @click="showNav = false">
-          <router-link to="/" exact>{{ $t("Characters") }}</router-link>
-          <router-link v-if="$betaMode || true" to="/multiplayer" exact>
-            {{ $t("Multiplay") + " (beta)" }}
-          </router-link>
-          <router-link to="/options" v-if="$BETA">
-            Options
-          </router-link>
-          <router-link to="/sandbox" exact v-if="$debugMode">
-            Sandbox
-          </router-link>
-          <router-link to="/dice">{{ $t("Dice") }}</router-link>
-          <router-link to="/about">{{ $t("About") }}</router-link>
-        </div>
-      </section>
-      <section class="nav-section">
-        <h2>Options</h2>
-        <LocaleChanger />
-        <Backup />
-      </section>
-      <section class="nav-section-footer">
-        {{ buildVersion }}
-      </section>
-    </NavDrawer>
 
     <DiceModal
       v-if="showDiceModal"
@@ -133,46 +99,6 @@ body {
   margin: 0;
   color: @color-text;
   background-color: @color-background;
-}
-
-.page-title {
-  margin: 0;
-  min-width: 0;
-  display: inline-block;
-  font-size: 1.4em;
-  white-space: nowrap;
-}
-
-.nav-body {
-  .body {
-    height: 100%;
-    display: grid;
-    grid-template-rows: auto auto 1fr;
-  }
-
-  a {
-    font-weight: bold;
-    color: @color-text;
-    text-decoration: none;
-    &.router-link-active {
-      color: @color-main;
-    }
-  }
-}
-
-.nav-section {
-  padding: 0 0.4rem;
-}
-
-.nav-section-footer {
-  font-size: 0.75rem;
-  align-self: end;
-  justify-self: center;
-}
-
-.route-links {
-  display: flex;
-  flex-direction: column;
 }
 
 #app {
