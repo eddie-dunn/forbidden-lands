@@ -7,6 +7,8 @@ import NavBar from "@/components/base/NavBar.vue"
 import DiceModal, { defaultDice } from "@/components/dice/DiceModal.vue"
 import { Updater } from "@/components/base/Updater.vue"
 import { SideNav } from "src/components/nav/SideNav.vue"
+import { LOCALE_KEY } from "@/i18n"
+import { getDefaultLocale } from "src/locales/localeUtil.ts"
 
 const DEFAULT_DICE_MODAL_CONF = {
   title: "",
@@ -54,9 +56,16 @@ export default Vue.extend({
     removeEventListener(name: string) {
       this.$root.$off(name)
     },
+    useLocale() {
+      if (localStorage.getItem(LOCALE_KEY)) {
+        return // locale has been set by user
+      }
+      this.$i18n.locale = getDefaultLocale(navigator.languages)
+    },
   },
   created() {
     this.addEventListener("open-dice-modal")
+    this.useLocale()
   },
   mounted() {
     const d = document.getElementById("splash-screen")
