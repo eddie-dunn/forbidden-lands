@@ -226,6 +226,7 @@ h3 {
 }
 
 .placeholder {
+  text-align: center;
   cursor: pointer;
   color: @pastel-green;
   flex-grow: 1;
