@@ -9,27 +9,32 @@ import SvgIcon from "@/components/SvgIcon.vue"
     SvgIcon,
   },
 })
-export default class FLCheckbox extends Vue {
+export class FLCheckbox extends Vue {
   @Prop({ default: false }) value!: boolean
   @Prop({ default: "" }) label!: string
   @Prop({ default: "" }) iconName!: string
   @Prop({ default: false }) required!: boolean
   @Prop({ default: () => {} }) enterCb!: Function
-  @Prop({ default: "flcheckbox" }) id!: string
+  @Prop({ default: "left" }) labelPosition!: "left" | "right"
   @Prop({ default: false }) column!: boolean
+
+  id = `${this.label}-flcheckbox`
 
   inputEvent($event: any) {
     this.$emit("input", $event.target.checked)
   }
 }
+export default FLCheckbox
 </script>
 
 <template>
-  <div :class="['fl-input', column ? 'column' : '']">
-    <label class="label" :for="id">
+  <div :class="['fl-input', column ? 'column' : 'row']">
+    <label v-if="labelPosition === 'left'" class="label" :for="id">
       <SvgIcon v-if="iconName" class="" :name="iconName" />
-      <span>{{ label }}</span>
-      <span v-if="required" class="required-sign">*</span>
+      <div class="inline-block capitalize-first">
+        {{ label }}
+        <span v-if="required" class="required-sign">*</span>
+      </div>
     </label>
     <input
       class="input"
@@ -40,6 +45,13 @@ export default class FLCheckbox extends Vue {
       @input="inputEvent"
       :checked="value"
     />
+    <label v-if="labelPosition === 'right'" class="label" :for="id">
+      <SvgIcon v-if="iconName" class="" :name="iconName" />
+      <div class="inline-block capitalize-first">
+        {{ label }}
+        <span v-if="required" class="required-sign">*</span>
+      </div>
+    </label>
   </div>
 </template>
 
@@ -50,6 +62,10 @@ export default class FLCheckbox extends Vue {
   display: inline-flex;
 }
 
+.row {
+  align-items: center;
+}
+
 .column {
   flex-direction: column;
 }
@@ -58,11 +74,13 @@ export default class FLCheckbox extends Vue {
   display: inline-block;
 }
 
+.inline-block {
+  display: inline-block;
+}
+
 .input {
   display: inline-block;
   box-sizing: border-box;
-  height: 20px;
-  width: 20px;
 }
 
 .required-sign {
