@@ -5,3 +5,4 @@ export const DEBUG_KEY = "FLC_DEBUG_MODE"
 export const BETA_KEY = "__FLC_BETA_ACTIVATED"
 
 export const COMBAT_BOX_KEY = "__FLC_COMBATBOT_ENABLED"
+export const MULTIPLAY_KEY = "__FLC_ENABLE_MULTIPLAY"

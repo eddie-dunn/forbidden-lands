@@ -5,14 +5,14 @@ import { SET_PAGE_TITLE } from "@/store/store-types"
 import Backup from "@/components/Backup.vue"
 import LocaleChanger from "@/components/LocaleChanger.vue"
 import { FLButton } from "src/components/base/FLButton.vue"
-import { FLCheckbox } from "src/components/base/FLCheckbox.vue"
-import { COMBAT_BOX_KEY } from "src/util/const"
+import { FLToggle } from "@/components/base/FLToggle.vue"
+import { COMBAT_BOX_KEY, MULTIPLAY_KEY } from "src/util/const"
 
 @Component({
   components: {
     Backup,
     FLButton,
-    FLCheckbox,
+    FLToggle,
     LocaleChanger,
   },
 })
@@ -36,6 +36,18 @@ export default class DiceView extends Vue {
       localStorage.removeItem(COMBAT_BOX_KEY)
     }
   }
+
+  get multiplayEnabled() {
+    return !!localStorage.getItem(MULTIPLAY_KEY)
+  }
+  setMultiplay(val: boolean) {
+    if (val) {
+      localStorage.setItem(MULTIPLAY_KEY, String(val))
+    } else {
+      localStorage.removeItem(MULTIPLAY_KEY)
+    }
+    this.update()
+  }
 }
 </script>
 
@@ -53,11 +65,18 @@ export default class DiceView extends Vue {
     </div>
 
     <h2>Beta features</h2>
-    <FLCheckbox
-      :label="'Show combat card on character sheet'"
-      :value="combatBoxEnabled"
-      @input="setCombatBox"
-    />
+    <div class="toggle-grid">
+      <FLToggle
+        suffix="Show combat card on character sheet"
+        :value="combatBoxEnabled"
+        @input="setCombatBox"
+      />
+      <FLToggle
+        suffix="Multiplayer"
+        :value="multiplayEnabled"
+        @input="setMultiplay"
+      />
+    </div>
   </div>
 </template>
 
@@ -72,5 +91,11 @@ export default class DiceView extends Vue {
 
 .options-language {
   margin: 1rem;
+}
+
+.toggle-grid {
+  display: grid;
+  grid-template-columns: auto;
+  grid-gap: 1rem;
 }
 </style>

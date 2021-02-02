@@ -1,10 +1,15 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator"
+import { MULTIPLAY_KEY } from "src/util/const"
 
 @Component({
   components: {},
 })
-export class NavContent extends Vue {}
+export class NavContent extends Vue {
+  get multiplayEnabled() {
+    return !!localStorage.getItem(MULTIPLAY_KEY)
+  }
+}
 
 export default NavContent
 </script>
@@ -14,7 +19,7 @@ export default NavContent
     <h2>Navigation</h2>
     <div class="route-links" @click="$emit('close')">
       <router-link to="/" exact>{{ $t("Characters") }}</router-link>
-      <router-link v-if="$betaMode || true" to="/multiplayer" exact>
+      <router-link v-if="multiplayEnabled" to="/multiplayer" exact>
         {{ $t("Multiplay") + " (beta)" }}
       </router-link>
       <router-link to="/options">
