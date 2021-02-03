@@ -12,6 +12,8 @@ module.exports = {
   },
   configureWebpack: {
     module: {
+      // Remove parcel <> webpack warning triggered by peerjs:
+      exprContextCritical: false, // https://stackoverflow.com/a/65857316/955014
       rules: [
         {
           test: /\.less$/,
