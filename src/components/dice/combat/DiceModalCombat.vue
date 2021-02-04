@@ -13,13 +13,11 @@ import { DiceCombat } from "@/components/dice/combat/DiceCombat.vue"
 import { DiceRollerCombat } from "@/components/dice/combat/DiceRollerCombat.vue"
 import { FLNumberInput } from "@/components/base/FLNumberInput.vue"
 import { IDiceConfig } from "@/dice/diceTypes"
-import { Notification, notify } from "@/util/notifications"
-import { SkillObj } from "@/skills"
 import { ACTION_ALL, ACTION_FAST } from "@/data/combat/typesCombat"
 import { TSkillId } from "@/types"
-import { Item } from "@/data/items/itemTypes"
 import { IResultSummary } from "src/components/dice/diceTypes"
 import { DiceRollEffects } from "src/components/diceRoller/DiceRollEffects.vue"
+import { rollDiceType } from "src/dice/diceRoller"
 
 function defaultDice(): IDiceConfig {
   return {
@@ -55,9 +53,11 @@ export class DiceModal extends Vue {
   @Prop({ default: "" }) itemId!: ""
   @Prop({ default: false }) isMonster!: boolean
 
-  canPush = this.disablePush
+  arrowRoll: number = 6
 
+  canPush = this.disablePush
   canRoll = true
+
   mDice = { ...this.dice }
   mDiceKey = "0"
 
@@ -67,10 +67,11 @@ export class DiceModal extends Vue {
     return this.charData && this.charData.willpower !== null
   }
 
-  close(ev: any) {
+  close() {
     this.$emit("close")
   }
   onRoll() {
+    this.arrowRoll = rollDiceType(this.charData.gear.consumables.arrows)
     this.rollCb()
   }
   onPush() {
@@ -132,6 +133,11 @@ export class DiceModal extends Vue {
   onResult(result: IResultSummary) {
     this.rollResult = result
   }
+
+  effectsApplied() {
+    this.canPush = false
+    this.canRoll = false
+  }
 }
 export default DiceModal
 </script>
@@ -183,6 +189,8 @@ export default DiceModal
           :skillId="skillId"
           :actionId="actionId"
           :charData="charData"
+          :arrowRoll="arrowRoll"
+          @applied="effectsApplied"
         />
       </ExpandableSection>
     </div>

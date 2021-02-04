@@ -9,10 +9,20 @@ import { CharData } from "@/data/character/characterData"
 import { IDiceConfigLogEntry } from "src/dice/diceTypes"
 import { IResultSummary } from "src/components/dice/diceTypes"
 import { WEAPON_CATEGORY } from "src/data/items/itemTypes"
-import { TSkillId } from "src/types"
+import { DiceSides, TSkillId } from "src/types"
 import { rollDiceType } from "src/dice/diceRoller.ts"
 import { ACTION_ALL } from "src/data/combat/typesCombat"
 import { isDmgAttack } from "src/data/combat/combatActions.ts"
+import { TranslateResult } from "vue-i18n"
+import { capitalize } from "src/util/util"
+
+interface IEffect {
+  id: string
+  value: number | null
+  label: string | TranslateResult
+  description: string
+  apply?: () => void
+}
 
 @Component({
   components: {
@@ -29,6 +39,9 @@ export class DiceRollEffects extends Vue {
   @Prop({ default: "" }) itemId!: ""
   @Prop({ default: "" }) skillId!: TSkillId | ""
   @Prop({ default: "" }) actionId!: ACTION_ALL
+  @Prop({ required: true }) arrowRoll!: number
+
+  effectsApplied = false
 
   get item() {
     const item = this.charData.gear.inventory.find((i) => i.id === this.itemId)
@@ -61,7 +74,7 @@ export class DiceRollEffects extends Vue {
     )
   }
 
-  get effectDmgInflicted() {
+  get attackDmgEffect() {
     if (!isDmgAttack(this.actionId)) {
       return { value: null }
     }
@@ -71,68 +84,100 @@ export class DiceRollEffects extends Vue {
     return { value: dmg, name: "Damage" }
   }
 
-  // damage to attribute if white skulls
-  get attributeDamage() {
-    const whiteSkulls = this.rollResult.whiteSkulls
+  get attributeDamage(): IEffect {
+    const value = this.rollResult.whiteSkulls || 0
     const id = this.skillId ? this.charData.skills[this.skillId].attribute : ""
-    const effect = `-${whiteSkulls}`
-    return { value: whiteSkulls, name: "Attribute damage", id, effect }
-  }
-
-  // damage to item if black skulls
-  get itemDamage() {
-    if (!this.item) {
-      return { name: "Item damage", value: null, id: "Item" }
+    const label = capitalize(String(this.$t(id)))
+    const description = `-${value}`
+    const apply = () => {
+      const newAttrDmg =
+        (this.charData.attributeDmg[this.attributeDamage.id] || 0) + value
+      this.charData.attributeDmg[this.attributeDamage.id] = newAttrDmg
     }
-    const blackSkulls = this.rollResult.blackSkulls
-    const effect = `-${blackSkulls}`
-    return { value: blackSkulls, id: this.item.name || "Item", effect }
+    return { id, value, label, description, apply }
   }
 
-  // effect ammo (if bow/crossbow)
-  get arrowChange() {
+  get willpowerEffect(): IEffect {
+    const value = this.attributeDamage.value || 0
+    const id = "Willpower"
+    const label = this.$t(id)
+    const description = `+${value}`
+    const apply = () => {
+      this.charData.willpower += value
+    }
+    return { id, value, label, description, apply }
+  }
+
+  get itemDamage(): IEffect {
+    const value = this.rollResult.blackSkulls || 0
+    const id = "item-dmg"
+    const label = this.item?.name || "Item"
+    const description = `-${value}`
+    const apply = () => {
+      const item = this.charData.gear.inventory.find(
+        (i) => i.id === this.itemId
+      )
+      if (item) {
+        item.bonus -= value
+      }
+    }
+    return { id, value, label, description, apply }
+  }
+
+  oldArrows = this.charData.gear.consumables.arrows
+  get arrowChange(): IEffect {
+    const id = "Arrows"
+    const label = this.$t(id)
     if (!this.isBow) {
-      return { roll: null, id: "Arrows" }
+      return { id, value: 0, label, description: "" }
     }
-    const oldArrows = this.charData.gear.consumables.arrows
-    const roll = rollDiceType(oldArrows)
+    const oldArrows = this.oldArrows
+    const roll = this.arrowRoll
     const newArrows = roll <= 2 ? oldArrows - 2 : oldArrows
-    const newValue = newArrows < 6 ? "0" : this.$t("D") + String(newArrows)
+    const newValue = newArrows < 6 ? "" : this.$t("D") + String(newArrows)
     const oldValue = this.$t("D") + String(oldArrows)
-    const effect = `${oldValue} => ${newValue}`
+    const description = `${oldValue} => ${newValue || 0} (🎲 = ${roll})`
+    const value = roll
+    if (oldArrows === newArrows) {
+      return { id, value, label, description }
+    }
 
-    return { id: "Arrows", effect, roll }
+    const apply = () => {
+      this.charData.gear.consumables.arrows = newArrows as DiceSides
+    }
+
+    return { id, value, label, description, apply }
   }
 
   get canApply() {
-    return false
-    // return Boolean(
-    //   this.attributeDamage.value ||
-    //     this.itemDamage.value ||
-    //     this.arrowChange.roll
-    // )
+    return !!this.selfEffects.some((e) => !!e.apply)
   }
 
   get anyEffects() {
-    return Boolean(
-      this.effectDmgInflicted.value ||
-        this.attributeDamage.value ||
-        this.itemDamage.value ||
-        this.arrowChange.roll
-    )
+    return Boolean(this.attackDmgEffect.value || !!this.selfEffects.length)
+  }
+
+  get selfEffects() {
+    return [
+      this.attributeDamage,
+      this.willpowerEffect,
+      this.itemDamage,
+      this.arrowChange,
+    ].filter((e) => e.value)
   }
 
   applyEffects() {
-    const attributeDamage = this.attributeDamage
-    const itemDamage = this.itemDamage
-    const arrowChange = this.arrowChange
-    const message = [
-      `${this.$t(attributeDamage.id)}: ${attributeDamage.effect}`,
-      `${this.$t("WP")}: +${-attributeDamage.effect}`,
-      `${this.$t(itemDamage.id)}: ${itemDamage.effect}`,
-      `${this.$t(arrowChange.id)}: ${arrowChange.effect}`,
-    ].join("\n")
-    this.$notify({ type: "info", message, displayTime: 5000 })
+    const message = this.selfEffects
+      .map((e) => `${e.label}: ${e.description}`)
+      .join(" | ")
+    this.$notify({ type: "info", message, displayTime: 10000 })
+    this.selfEffects.forEach((e) => {
+      if (e.apply) {
+        e.apply()
+      }
+    })
+    this.effectsApplied = true
+    this.$emit("applied")
   }
 }
 
@@ -141,39 +186,38 @@ export default DiceRollEffects
 
 <template>
   <div v-if="anyEffects" class="Box-DiceRollEffects">
-    <div v-if="effectDmgInflicted.value" class="damage-box">
-      Damage: {{ effectDmgInflicted.value }}
-      {{ (isCrit && effectDmgInflicted.value > 0 && " +CRIT") || "" }}
+    <div v-if="attackDmgEffect.value" class="damage-box">
+      Damage: {{ attackDmgEffect.value }}
+      {{ (isCrit && attackDmgEffect.value > 0 && " +CRIT") || "" }}
     </div>
 
-    <h4>Effects on self</h4>
-    <div v-if="attributeDamage.value">
-      <span class="capitalize">{{ $t(attributeDamage.id) }}:</span>
-      <span> {{ attributeDamage.effect }}</span>
-    </div>
-
-    <div v-if="attributeDamage.value">
-      {{ $t("WP") }}:
-      <span>+{{ attributeDamage.value }}</span>
-    </div>
-
-    <div v-if="itemDamage.value">
-      {{ itemDamage.id }}:
-      <span> {{ itemDamage.effect }}</span>
-    </div>
-
-    <div v-if="arrowChange.roll">
-      <span class="capitalize">{{ $t(arrowChange.id) }}:</span>
-      <span> {{ arrowChange.effect }} </span>
-      <span>(roll: {{ arrowChange.roll }})</span>
+    <div v-for="effect in selfEffects" :key="effect.id">
+      <span class="capitalize">{{ effect.label }}: </span>
+      <span> {{ effect.description }}</span>
     </div>
 
     <div class="effect-action-box">
-      <IconButton v-if="canApply" @click="applyEffects" color="danger">
+      <IconButton
+        v-if="canApply"
+        @click="applyEffects"
+        color="danger"
+        :disabled="effectsApplied"
+      >
         Apply
       </IconButton>
     </div>
+
+    <div v-if="$DEBUG">
+      <div v-if="item">{{ item.name }} {{ item.bonus }}</div>
+      <div v-if="isBow">Arrows {{ charData.gear.consumables.arrows }}</div>
+      <div>
+        {{ attributeDamage.id }} dmg
+        {{ charData.attributeDmg[this.attributeDamage.id] }}
+      </div>
+      <div>WP {{ charData.willpower }}</div>
+    </div>
   </div>
+
   <div v-else class="Box-DiceRollEffects">
     No effects
   </div>
